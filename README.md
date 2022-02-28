@@ -1,5 +1,5 @@
 # KaLunWA
-Repository for Group 4 CMSC129
+Repository for ManaTech CMSC129
 
 Members:
 Almario, Jovannie |

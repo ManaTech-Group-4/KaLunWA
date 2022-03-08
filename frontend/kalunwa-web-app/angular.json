@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "kalunwa-web-app"
+  "defaultProject": "kalunwa-web-app",
+  "cli": {
+    "analytics": "61900fe0-758d-4673-bb38-f2021911e7c6"
+  }
 }

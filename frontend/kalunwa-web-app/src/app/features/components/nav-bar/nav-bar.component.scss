@@ -1,0 +1,12 @@
+#container{
+  background-color: rgb(174, 174, 184);
+  display: flex;
+  flex-direction: row;
+  ul{
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    li{
+    }
+  }
+}

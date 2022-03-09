@@ -11,5 +11,18 @@ export class NavBarComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  menu:boolean = false;
+  displayMenu:string = "flex";
+
+  onMenuClick(){
+    if(this.menu == false){
+      this.displayMenu = "flex";
+      this.menu = !this.menu;
+    }
+    else{
+      this.displayMenu = "none";
+      this.menu = !this.menu;
+    }
+  }
 
 }

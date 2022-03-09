@@ -1,0 +1,32 @@
+<mat-toolbar color="secondary" id="container">
+  <button mat-icon-button color="primary" id="mobileMenu" aria-label="Example icon button with a home icon" (click)="onMenuClick()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <a mat-button href ="#" id="logo"><img src="assets/images/KL.png" alt="KL Logo"/></a>
+
+  <ul id="mobileNav" [style.display] = "displayMenu">
+    <li><a mat-button>What we do</a>
+      <div class="dropdowns">
+        <button mat-button>News & Announcements</button>
+        <button mat-button>Projects</button>
+        <button mat-button>Events</button>
+      </div>
+    </li>
+    <li><a mat-button href ="#">About Us</a>
+      <div class="dropdowns">
+        <button mat-button>Organization Overview</button>
+        <button mat-button class="submenu">Mission, Vision, Values</button>
+        <button mat-button class="submenu">History</button>
+        <button mat-button class="submenu">Advocates Covenant</button>
+        <button mat-button class="submenu">Camps</button>
+        <button mat-button>Finances</button>
+        <button mat-button>FAQs</button>
+        <button mat-button>Organization Structure</button>
+        <button mat-button>Member Demographics</button>
+      </div>
+    </li>
+    <li><a mat-button href ="#">Contact Us</a></li>
+  </ul>
+  <button mat-flat-button color="primary">Join Us</button>
+</mat-toolbar>
+

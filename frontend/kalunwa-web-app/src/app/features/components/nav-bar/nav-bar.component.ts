@@ -8,21 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class NavBarComponent implements OnInit {
 
   constructor() { }
-
+  whatWeDo : boolean = false
+  about: boolean = false;
+  orgOverview : boolean = false;
   ngOnInit(): void {
-  }
-  menu:boolean = false;
-  displayMenu:string = "flex";
-
-  onMenuClick(){
-    if(this.menu == false){
-      this.displayMenu = "flex";
-      this.menu = !this.menu;
-    }
-    else{
-      this.displayMenu = "none";
-      this.menu = !this.menu;
-    }
   }
 
 }

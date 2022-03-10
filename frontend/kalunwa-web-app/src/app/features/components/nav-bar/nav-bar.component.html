@@ -33,7 +33,10 @@
       <button mat-icon-button color="primary" id="mobileMenu" mat-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <a mat-button href ="#" id="logo"><img src="assets/images/KL.png" alt="KL Logo"/></a>
+      <a mat-button href ="#" id="logo">
+        <img src="assets/images/KL.png" alt="KL Logo" class="desktopImg"/>
+        <img src="assets/images/kl_icon2.svg" alt="KL Logo" class="mobileImg"/>
+      </a>
 
       <ul id="desktopNav">
         <li><a mat-button>What we do</a>

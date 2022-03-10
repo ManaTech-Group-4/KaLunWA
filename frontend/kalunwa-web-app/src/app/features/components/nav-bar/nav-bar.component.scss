@@ -74,8 +74,12 @@
         margin-left:30px;
         height:100%;
         padding:2px;
-        img{
+        .desktopImg{
+          display:block;
           height:100%;
+        }
+        .mobileImg{
+          display:none;
         }
       }
       ul{
@@ -164,7 +168,6 @@
         transform: rotateX(0deg);
       }
     }
-
     @media screen and (max-width: 786px){
       #container{
         #mobileMenu{
@@ -173,7 +176,17 @@
         #desktopNav{
           display: none !important;
         }
+
+        .desktopImg{
+          display:none !important;
+        }
+        .mobileImg{
+          display:block !important;
+          margin: auto;
+          height:100%;
+        }
       }
     }
   }
 }
+

@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import get_object_or_404, render
 from .models import Image
 from .serializers import ImageSerializer
@@ -18,7 +19,7 @@ class ImageViewSet(viewsets.ViewSet):
     """
     def list(self,request):
         queryset = Image.objects.all()
-        serializer = ImageSerializer(queryset, many=True)
+        serializer = ImageSerializer(queryset, many=True, context={'request':request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):

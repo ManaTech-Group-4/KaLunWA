@@ -19,7 +19,7 @@ class ImageViewSet(viewsets.ViewSet):
     """
     def list(self,request):
         queryset = Image.objects.all()
-        serializer = ImageSerializer(queryset, many=True, context={'request':request})
+        serializer = ImageSerializer(queryset, many=True, context={'request':request})#context={'request':request}
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):

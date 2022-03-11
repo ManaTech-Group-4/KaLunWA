@@ -22,7 +22,7 @@ class Tag(ContentModel):
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/')
-    tags = models.ManyToManyField(Tag, related_name='tags', null=True) 
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # warning for image tag, 0 to many tags
 
     def __str__(self) -> str:
         return self.title

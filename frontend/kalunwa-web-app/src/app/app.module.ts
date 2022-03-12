@@ -5,17 +5,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './features/components/nav-bar/nav-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JumbotronComponent } from './features/components/jumbotron/jumbotron.component';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { HomepageComponent } from './features/components/homepage/homepage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent
+    NavBarComponent,
+    JumbotronComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatDesignModule
+    MatDesignModule,
+    MatCarouselModule.forRoot()
+
   ],
   providers: [],
   bootstrap: [AppComponent]

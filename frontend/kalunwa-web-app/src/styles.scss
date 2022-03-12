@@ -68,4 +68,16 @@ $kalunwa-web-app-theme: mat-light-theme((
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; background-color: #cacaca; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: monserrat, "Helvetica Neue", sans-serif; }
+@font-face {
+  font-family: header-font;
+  src: url(./assets/fonts/youth-touch.ttf) format("truetype");
+}
+@font-face {
+  font-family: monserrat-light;
+  src: url(./assets/fonts/Montserrat-Light.ttf) format("truetype");
+}
+@font-face {
+  font-family: monserrat;
+  src: url(./assets/fonts/Montserrat-Regular.ttf) format("truetype");
+}

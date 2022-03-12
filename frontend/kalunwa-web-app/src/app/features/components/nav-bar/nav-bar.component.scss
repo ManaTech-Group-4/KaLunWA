@@ -1,11 +1,9 @@
 .mat-drawer-container{
-  position:static;
   overflow:visible;
+  box-shadow: 0px 2px 15px #00000050;
   .sidemenu{
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
 
+    position: fixed;
     img{
       width:200px;
       padding:5px 25px;
@@ -62,8 +60,11 @@
 
     #container{
       display: flex;
+      position: fixed;
+      width:100%;
       justify-content:space-between;
       box-shadow:1px 1px 5px rgba(223, 223, 223, 0.067);
+      z-index:100;
       .example-container{
         position:relative;
       }
@@ -169,6 +170,11 @@
       }
     }
     @media screen and (max-width: 786px){
+
+      .sidemenu
+      {
+        background:black;
+      }
       #container{
         #mobileMenu{
           display:block;

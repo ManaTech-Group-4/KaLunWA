@@ -3,8 +3,8 @@
   display: flex;
   position: fixed;
   width:100%;
+  box-shadow:1px 2px 10px rgba(0, 0, 0, 0.643);
   justify-content:space-between;
-  box-shadow:1px 1px 5px rgba(223, 223, 223, 0.067);
   z-index:100;
   .example-container{
     position:relative;

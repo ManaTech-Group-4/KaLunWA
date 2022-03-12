@@ -47,8 +47,10 @@ class Event(ContentModel):
     # start_date
     # end_date
     # camp
+        # enums
     # featured_image
     #status
+        # dynamic, configured via function  
     pass
 
 class Project(ContentModel):

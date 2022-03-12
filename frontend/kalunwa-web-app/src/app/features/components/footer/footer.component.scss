@@ -1,0 +1,27 @@
+.footer{
+    background: #6A912F;
+    color: white;
+    height: 623px;
+    position:relative;
+}
+
+.footer .footer-content{
+    height: 523px;
+    display:flex;
+}
+.footer .footer-content .footer-section{
+    flex: 1;
+    padding: 25px;
+}
+
+.footer .footer-copyright{
+    background: #405d27;
+    color: white;
+    height: 100px;
+    width: 100%;
+    text-align: center;
+    position:absolute;
+    bottom: 0px;
+    left: 0px;
+    padding-top: 20px;
+}

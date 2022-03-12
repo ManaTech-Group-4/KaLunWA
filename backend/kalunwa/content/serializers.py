@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Image, Tag
+from .models import Image, Jumbotron, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -16,7 +16,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
-    image = serializers.ImageField(use_url=True)
 
     class Meta:
         model = Image
@@ -27,5 +26,18 @@ class ImageSerializer(serializers.ModelSerializer):
             'tags',
             'created_at',
             'updated_at',
-             )
+        )
+
+class JumbotronSerializer(serializers.ModelSerializer):
+    featured_image = ImageSerializer() # or make it return the image resource
+    class Meta:
+        model = Jumbotron
+        fields = (
+            'id',
+            'header_title',
+            'featured_image',
+            'short_description',
+            'created_at',
+            'updated_at',
+        )
 

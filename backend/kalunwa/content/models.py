@@ -28,10 +28,12 @@ class Image(ContentModel):
         return self.title
 
 class Jumbotron(ContentModel):
-    # featured_image
-    # header_title
-    # short_description
-    pass
+    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    header_title = models.CharField(max_length=50)
+    short_description = models.CharField(max_length=225)
+
+    def __str__(self) -> str:
+        return f'{self.header_title} jumbotron'
 
 class Homepage(ContentModel):
     # fk - jumbotron

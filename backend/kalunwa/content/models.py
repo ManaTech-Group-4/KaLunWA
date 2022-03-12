@@ -22,16 +22,18 @@ class Tag(ContentModel):
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/')
-    tags = models.ManyToManyField(Tag, related_name='tags') 
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # warning for image tag, 0 to many tags
 
     def __str__(self) -> str:
         return self.title
 
 class Jumbotron(ContentModel):
-    # featured_image
-    # header_title
-    # short_description
-    pass
+    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    header_title = models.CharField(max_length=50)
+    short_description = models.CharField(max_length=225)
+
+    def __str__(self) -> str:
+        return f'{self.header_title} jumbotron'
 
 class Homepage(ContentModel):
     # fk - jumbotron

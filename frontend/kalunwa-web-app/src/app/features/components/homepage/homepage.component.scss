@@ -44,7 +44,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   text-align: center;
-  padding: 80px 0px;
+  padding: 80px 0px 30px 0px;
   background-color: #628A3A;
 
 
@@ -102,7 +102,23 @@
     }
   }
 
-  :hover{
+  div.see-more{
+    margin-top:30px;
+    flex-grow: 5;
+    width:100%;
+    color: #233620;
+    font-family: monserrat;
+    font-size:18px;
+
+    p{
+      margin:0;
+    }
+  }
+  div.see-more:hover{
+    color:#a1ff63;
+  }
+
+  .mat-card:hover{
     cursor: pointer;
   }
   .mat-card:hover > div img{
@@ -136,6 +152,10 @@
   .mat-card:hover > .mat-card-actions p{
     margin-left:21px;
     color:#233620;
+  }
+
+  div.see-more:hover{
+    color:#628A3A;
   }
 }
 
@@ -174,7 +194,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   text-align: center;
-  padding: 80px 0px;
+  padding: 50px 0px;
   background-color: #fafafa;
 
   h1{
@@ -253,6 +273,21 @@
       }
 
     }
+  }
+  div.see-more{
+    margin-top:30px;
+    flex-grow: 5;
+    width:100%;
+    color: black;
+    font-family: monserrat;
+    font-size:18px;
+
+    p{
+      margin:0;
+    }
+  }
+  div.see-more:hover{
+    color:#628A3A;
   }
 
   :hover{

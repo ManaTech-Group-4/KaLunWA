@@ -1,7 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import get_object_or_404, render
-from .models import Image, Jumbotron
-from .serializers import ImageSerializer, JumbotronSerializer
+from .models import Image, Jumbotron, Announcement
+from .serializers import ImageSerializer, JumbotronSerializer, AnnouncementSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -40,7 +40,17 @@ class JumbotronViewSet(viewsets.ViewSet):
         serializer = JumbotronSerializer(jumbotron)
         return Response(serializer.data)
 
+class AnnouncementViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Announcement.objects.all()
+        serializer = AnnouncementSerializer(queryset, many=True)
+        return Response(serializer.data)
 
+    def retrieve(self, request, pk=None):
+        queryset = Announcement.objects.all()
+        jumbotron = get_object_or_404(queryset, pk=pk)
+        serializer = AnnouncementSerializer(jumbotron)
+        return Response(serializer.data)
 
 
 #-------------------------------------------------------

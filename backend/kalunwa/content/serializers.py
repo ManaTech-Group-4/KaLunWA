@@ -1,5 +1,6 @@
+from dataclasses import field
 from rest_framework import serializers
-from .models import Image, Jumbotron, Tag
+from .models import Image, Jumbotron, Tag, Announcement
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -41,3 +42,14 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+class AnnouncementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Announcement
+        fields = (
+            'id',
+            'title',
+            'description',
+            'created_at',
+            'updated_at',
+        )

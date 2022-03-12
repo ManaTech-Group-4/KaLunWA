@@ -70,6 +70,8 @@ class News(ContentModel):
     pass
 
 class Announcement(ContentModel):
-    # title
-    # description
-    pass
+    title = models.CharField(max_length=50, default='some value') 
+    description = models.CharField(max_length=225, default='some value')
+    
+    def __str__(self) -> str:
+        return self.title

@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 from django.db import models
+from django.forms import DateField
 from kalunwa.core.models import TimestampedModel
 
 
@@ -52,12 +53,12 @@ class Event(ContentModel):
     pass
 
 class Project(ContentModel):
-    # title
-    # description
-    # start_date
-    # end_date
+    title = models.CharField(max_length=50)  
+    description = models.CharField(max_length=225)
+    start_date = DateField(auto_now=False, auto_now_add=False)    #notinERD
+    end_date = DateField(auto_now=False, auto_now_add=False)
     # camp
-    # featured_image
+    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
     #status    
     pass
 

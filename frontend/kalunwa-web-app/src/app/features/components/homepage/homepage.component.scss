@@ -79,10 +79,10 @@
 
     .mat-card-content{
       h1{
-        font-size:30px;
+        font-size:27px;
         width: 100%;
         flex-grow: 5;
-        font-family: monserrat;
+        font-family: monserrat-light;
       }
     }
 
@@ -162,7 +162,11 @@
 .camp-display{
 
   .mat-card{
+
+    margin-top:20px;
     div{
+      width:170px;
+      height:170px;
       border-radius: 50%;
       background-color: rgba(255, 255, 255, 0);
       transition: .2s ease-in-out;
@@ -172,6 +176,16 @@
         transform: scale(1);
         transition: .2s ease-in-out;
         margin:0px;
+        width:170px;
+        height:170px;
+      }
+    }
+
+    .mat-card:nth-child(4){
+      .mat-card-content{
+        h1{
+          font-size:20px;
+        }
       }
     }
   }
@@ -336,12 +350,21 @@
     }
   }
 
+
+  .camp-display{
+
+    .mat-card{
+      padding: 0px 71px;
+    }
+  }
+
   .events{
 
     h1{
       font-size:120px;
     }
   }
+
 
   .news{
     .mat-card{

@@ -1,10 +1,15 @@
-from django.db import models
-
-# Create your models here.
+from datetime import datetime
 from django.db import models
 from django.forms import DateField
 from kalunwa.core.models import TimestampedModel
 
+class CampEnum(models.TextChoices):
+    SUBA = 'SB', 'Suba'
+    LASANG = 'LSNG', 'Lasang'
+    BAYBAYON = 'BYBYN', 'Baybayon'
+    ZEROWASTE = 'ZW', 'Zero Waste'
+    GENERAL = 'GNRL', 'General'
+    
 
 class ContentModel(TimestampedModel):
     is_published = (models.BooleanField)
@@ -22,7 +27,7 @@ class Tag(ContentModel):
 
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/content/')
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # warning for image tag, 0 to many tags
 
     def __str__(self) -> str:
@@ -38,19 +43,23 @@ class Jumbotron(ContentModel):
 
 class Homepage(ContentModel):
     # fk - jumbotron
-    # fk - featured event
-    # fk - featured project
+    # fk - featured event (strict 3 event count)
+    # fk - featured project (strict 3 event count)
     pass
 
 class Event(ContentModel):
-    # title
-    # description
-    # start_date
-    # end_date
-    # camp
-    # featured_image
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    featured_image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT)
     #status
-    pass
+        # dynamic, configured via function in serializers 
+    def __str__(self) -> str:
+        return self.title
+        
+print(datetime.now())
 
 class Project(ContentModel):
     title = models.CharField(max_length=50)  

@@ -1,6 +1,8 @@
-from dataclasses import field
+from datetime import datetime
+from django.utils import timezone
 from rest_framework import serializers
-from .models import Image, Jumbotron, Tag, Announcement
+from .models import Image, Jumbotron, Tag, Announcement, Event
+
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -53,3 +55,40 @@ class AnnouncementSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
+class EventSerializer(serializers.ModelSerializer):
+    featured_image = ImageSerializer()
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'description',
+            'featured_image',
+            'start_date',
+            'end_date',            
+            'camp', # choices serializer            
+            'created_at',
+            'updated_at',  
+            'status',
+        )
+
+    def get_status(self, obj)->str:
+        # add check if no dates
+
+        # past
+            # now_date > start_date && now_date > end date 
+        date_now = timezone.now()
+        if date_now > obj.start_date and date_now > obj.end_date:
+            return 'past' 
+        # ongoing
+            # now_date >= start_date && now_date < end_date
+        if date_now >= obj.start_date and date_now < obj.end_date:
+            return 'ongoing'             
+        # upcoming
+            # now_date < start_date && now_date < end_date
+        if date_now < obj.start_date and date_now < obj.end_date:
+            return 'upcoming'    
+

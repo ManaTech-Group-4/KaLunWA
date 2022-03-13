@@ -1,7 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import get_object_or_404, render
-from .models import Image, Jumbotron, Announcement
-from .serializers import ImageSerializer, JumbotronSerializer, AnnouncementSerializer
+from .models import Event, Image, Jumbotron, Announcement
+from .serializers import EventSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -31,7 +31,7 @@ class ImageViewSet(viewsets.ViewSet):
 class JumbotronViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = Jumbotron.objects.all()
-        serializer = JumbotronSerializer(queryset, many=True, context={'request':request})
+        serializer = JumbotronSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -39,6 +39,19 @@ class JumbotronViewSet(viewsets.ViewSet):
         jumbotron = get_object_or_404(queryset, pk=pk)
         serializer = JumbotronSerializer(jumbotron)
         return Response(serializer.data)
+
+class EventViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Event.objects.all()
+        serializer = EventSerializer(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Event.objects.all()
+        event = get_object_or_404(queryset, pk=pk)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+
 
 class AnnouncementViewSet(viewsets.ViewSet):
     def list(self,request):

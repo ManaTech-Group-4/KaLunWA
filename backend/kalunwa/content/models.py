@@ -62,14 +62,17 @@ class Project(ContentModel):
     pass
 
 class News(ContentModel):
-    # title
-    # description
-    #featured_image
-    pass
+    title = models.CharField(max_length=50)  
+    description = models.CharField(max_length=225)
+    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+
+    def __str__(self) -> str:
+        return self.title
+
 
 class Announcement(ContentModel):
-    title = models.CharField(max_length=50, default='some value') 
-    description = models.CharField(max_length=225, default='some value')
+    title = models.CharField(max_length=50, default=' ')  #try without default
+    description = models.CharField(max_length=225, default=' ')
     
     def __str__(self) -> str:
         return self.title

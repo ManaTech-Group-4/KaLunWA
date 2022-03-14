@@ -325,6 +325,17 @@
 
 
 //------------------MEDIA QUERY-----------------------------------
+
+@media screen and (max-width: 920px){
+  .camp-display{
+
+    .mat-card{
+      padding: 20px 100px;
+    }
+  }
+}
+
+
 @media screen and (max-width: 786px){
   .subhead{
     padding: 30px 0px;
@@ -354,7 +365,7 @@
   .camp-display{
 
     .mat-card{
-      padding: 0px 71px;
+      padding: 0px 70px;
     }
   }
 
@@ -434,4 +445,6 @@
     }
   }
 }
+
+
 

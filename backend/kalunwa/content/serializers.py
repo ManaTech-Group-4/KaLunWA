@@ -33,7 +33,7 @@ class ImageURLSerializer(serializers.Serializer):
     
     def get_url(self, obj):
         # obj -> the object with an image field, can access model fields
-        image = Image.objects.get(pk=obj.pk)
+        image = Image.objects.get(pk=obj.image.pk)
         serializer = ImageSerializer(image, context=self.context)
         # serializer.data -> returns key dictionary pairs
         # accessing the key to get value (URL)
@@ -59,27 +59,26 @@ class ImageSerializer(serializers.ModelSerializer):
 #  serializes needed fields for website homepage view
 
 class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
-    featured_image = serializers.SerializerMethodField(method_name='get_url')
+    image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
         model = Jumbotron
         fields = (
             'id',
             'header_title',
-            'featured_image',
+            'image',
             'short_description',            
-            'featured_image'
         )
 
 # project
 # event
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
-    featured_image = serializers.SerializerMethodField(method_name='get_url')
+    image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
         model = Event
         fields = (
             'id',
             'title',
-            'featured_image'
+            'image'
         )
 
 # news
@@ -88,13 +87,13 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
 #  serializes all data fields
 
 class JumbotronSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer() # or make it return the image resource
+    image = ImageSerializer() # or make it return the image resource
     class Meta:
         model = Jumbotron
         fields = (
             'id',
             'header_title',
-            'featured_image',
+            'image',
             'short_description',
             'created_at',
             'updated_at',
@@ -113,7 +112,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         )
 
 class EventSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer()
+    image = ImageSerializer()
     status = serializers.SerializerMethodField()
 
     class Meta:
@@ -122,7 +121,7 @@ class EventSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
-            'featured_image',
+            'image',
             'start_date',
             'end_date',            
             'camp', # choices serializer            

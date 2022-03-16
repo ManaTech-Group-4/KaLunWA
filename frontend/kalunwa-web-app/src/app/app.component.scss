@@ -58,5 +58,25 @@
   .mat-drawer-content{
     overflow: hidden;
     width:100vw;
+
+    .space{
+      height:64px;
+      width:100%;
+      background:black;
+    }
+
+  }
+}
+
+
+@media screen and (max-width: 599px){
+  .mat-drawer-container{
+    .mat-drawer-content{
+      .space{
+        height:55px;
+        width:100%;
+        background:black;
+      }
+    }
   }
 }

@@ -1,13 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatDesignModule } from './features/shared/mat-design.module';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, routeComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './features/components/nav-bar/nav-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JumbotronComponent } from './features/components/jumbotron/jumbotron.component';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
-import { HomepageComponent } from './features/components/homepage/homepage.component';
 import { FooterComponent } from './features/components/footer/footer.component';
 
 @NgModule({
@@ -15,8 +14,8 @@ import { FooterComponent } from './features/components/footer/footer.component';
     AppComponent,
     NavBarComponent,
     JumbotronComponent,
-    HomepageComponent,
-    FooterComponent
+    FooterComponent,
+    routeComponents
   ],
   imports: [
     BrowserModule,

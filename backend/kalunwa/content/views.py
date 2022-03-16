@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from .models import Event, Homepage, Image, Jumbotron, Announcement
-from .serializers import EventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
+from .serializers import EventSerializer, HomepageEventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -9,7 +9,7 @@ from rest_framework.decorators import action
 
 # Create your views here.
 # url should be /admin
-
+#-------------------------------------------------------
 # homepage views
 
 class HomepageViewSet(viewsets.ViewSet):
@@ -23,12 +23,19 @@ class HomepageViewSet(viewsets.ViewSet):
 
     @action(detail=False)
     def events(self, request):
-        pass
+        events = Event.objects.filter(is_featured=True)[:3]
+        serializer = HomepageEventSerializer(events, many=True,context={'request':request})
+        return Response(serializer.data)
+    
+    # projects here
 
- 
+    # news (order by, get latest 3)
+
+#------------------------------------------------------- 
+
 class ImageViewSet(viewsets.ViewSet):
     """
-    A simple ViewSet for listing or retrieving users.
+    A simple ViewSet for listing or retrieving images.
     """
     def list(self,request):
         queryset = Image.objects.all()

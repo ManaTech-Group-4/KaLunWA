@@ -1,34 +1,31 @@
 from django.shortcuts import get_object_or_404
-from .models import Event, Image, Jumbotron, Announcement
+from .models import Event, Homepage, Image, Jumbotron, Announcement
 from .serializers import EventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from rest_framework.decorators import action
 
 # Create your views here.
 # url should be /admin
 
 # homepage views
 
-class HomepageJumbotronViewSet(viewsets.ViewSet):
-    """
-    Returns necessary fields for Jumbotron Display on Homepage.
-    """
-    def list(self,request):
-        queryset = Jumbotron.objects.all()
-        serializer = HomepageJumbotronSerializer(queryset, many=True, context={'request':request})
+class HomepageViewSet(viewsets.ViewSet):
+
+    @action(detail=False)
+    def jumbotrons(self, request):
+        jumbotrons = Jumbotron.objects.all()
+        # passing context from the request, for the serializer to use
+        serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Jumbotron.objects.all()
-        jumbotron = get_object_or_404(queryset, pk=pk)
-        serializer = HomepageJumbotronSerializer(jumbotron)
-        return Response(serializer.data)
+    @action(detail=False)
+    def events(self, request):
+        pass
 
-
-
+ 
 class ImageViewSet(viewsets.ViewSet):
     """
     A simple ViewSet for listing or retrieving users.
@@ -44,6 +41,7 @@ class ImageViewSet(viewsets.ViewSet):
         serializer = ImageSerializer(image)
         return Response(serializer.data)
 
+
 class JumbotronViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = Jumbotron.objects.all()
@@ -55,6 +53,7 @@ class JumbotronViewSet(viewsets.ViewSet):
         jumbotron = get_object_or_404(queryset, pk=pk)
         serializer = JumbotronSerializer(jumbotron)
         return Response(serializer.data)
+
 
 class EventViewSet(viewsets.ViewSet):
     def list(self,request):

@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event
@@ -15,6 +16,29 @@ class TagSerializer(serializers.ModelSerializer):
             'updated_at',
             )
        
+
+class ImageURLSerializer(serializers.Serializer):
+    """
+    This serializer gets the absolute url of images, and returns
+    only that field.
+     Will be recycled for all serializers that will only require
+    the complete url (exclude extra image data e.g. title, tags)
+    """
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'url'
+        )
+    
+    def get_url(self, obj):
+        # obj -> the object with an image field, can access model fields
+        image = Image.objects.get(pk=obj.pk)
+        serializer = ImageSerializer(image, context=self.context)
+        # serializer.data -> returns key dictionary pairs
+        # accessing the key to get value (URL)
+        return serializer.data['image']        
+
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
@@ -34,9 +58,8 @@ class ImageSerializer(serializers.ModelSerializer):
 #-------------------------------------------------------------------------------
 #  serializes needed fields for website homepage view
 
-
-class HomepageJumbotronSerializer(serializers.ModelSerializer):
-    featured_image = serializers.SerializerMethodField(read_only=True)
+class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    featured_image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
         model = Jumbotron
         fields = (
@@ -47,14 +70,19 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer):
             'featured_image'
         )
 
-    def get_featured_image(self, obj): 
-        # extra and experimental implementation in extracting full img URL
-        #obj -> actual jumbotron object; can access model fields
-        # serializer.data -> returns key dictionary pairs
-        image = Image.objects.get(pk=obj.pk)
-        serializer = ImageSerializer(image, context=self.context)
-        return serializer.data['image'] # accessing the key to get value
+# project
+# event
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    featured_image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'featured_image'
+        )
 
+# news
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

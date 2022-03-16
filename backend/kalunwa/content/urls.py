@@ -1,13 +1,16 @@
 from rest_framework.routers import DefaultRouter
 
-from .views import EventViewSet, HomepageJumbotronViewSet, ImageViewSet, JumbotronViewSet, AnnouncementViewSet
+from .views import EventViewSet, ImageViewSet, JumbotronViewSet, AnnouncementViewSet, HomepageViewSet
 
 router = DefaultRouter()
 
-# for homepage onlies
-router.register(r'homepage-jumbotrons', HomepageJumbotronViewSet, basename='homepage-jumbotron')
+router.register(r'homepage', HomepageViewSet, basename='homepage')
 
-
+# /jumbotron/homepage_info
+# /homepage_jumbotrons
+# /homepage_events
+# /homepage_projects
+# /homepage_news
 
 # for complete detail
 router.register(r'images', ImageViewSet, basename='image')

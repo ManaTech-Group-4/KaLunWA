@@ -18,11 +18,13 @@ class ContentModel(TimestampedModel):
     class Meta:
         abstract=True
 
+
 class Tag(ContentModel):
     name = models.CharField(db_index=True, unique=True, max_length=50)
 
     def __str__(self) -> str:
         return self.name
+
 
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
@@ -32,6 +34,7 @@ class Image(ContentModel):
     def __str__(self) -> str:
         return self.title
 
+
 class Jumbotron(ContentModel):
     featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
     header_title = models.CharField(max_length=50)
@@ -40,11 +43,13 @@ class Jumbotron(ContentModel):
     def __str__(self) -> str:
         return f'{self.header_title} jumbotron'
 
+
 class Homepage(ContentModel):
     # fk - jumbotron
     # fk - featured event (strict 3 event count)
     # fk - featured project (strict 3 event count)
     pass
+
 
 class Event(ContentModel):
     title = models.CharField(max_length=50)
@@ -58,7 +63,6 @@ class Event(ContentModel):
     def __str__(self) -> str:
         return self.title
         
-print(datetime.now())
 
 class Project(ContentModel):
     # title
@@ -70,11 +74,13 @@ class Project(ContentModel):
     #status    
     pass
 
+
 class News(ContentModel):
     # title
     # description
     #featured_image
     pass
+
 
 class Announcement(ContentModel):
     title = models.CharField(max_length=50, default='some value') 

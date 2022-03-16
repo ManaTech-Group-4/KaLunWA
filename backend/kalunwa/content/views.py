@@ -1,7 +1,6 @@
-from multiprocessing import context
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement
-from .serializers import EventSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
+from .serializers import EventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -11,7 +10,24 @@ from rest_framework.parsers import MultiPartParser, FormParser
 # Create your views here.
 # url should be /admin
 
-# stuff here are crammed pa
+# homepage views
+
+class HomepageJumbotronViewSet(viewsets.ViewSet):
+    """
+    Returns necessary fields for Jumbotron Display on Homepage.
+    """
+    def list(self,request):
+        queryset = Jumbotron.objects.all()
+        serializer = HomepageJumbotronSerializer(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Jumbotron.objects.all()
+        jumbotron = get_object_or_404(queryset, pk=pk)
+        serializer = HomepageJumbotronSerializer(jumbotron)
+        return Response(serializer.data)
+
+
 
 class ImageViewSet(viewsets.ViewSet):
     """
@@ -43,7 +59,7 @@ class JumbotronViewSet(viewsets.ViewSet):
 class EventViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = Event.objects.all()
-        serializer = EventSerializer(queryset, many=True, context={'request':request})
+        serializer = EventSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):

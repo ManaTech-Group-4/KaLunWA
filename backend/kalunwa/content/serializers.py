@@ -4,7 +4,6 @@ from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event
 
 
-
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta: # add tag ordering by name
@@ -19,6 +18,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
+    image = serializers.ImageField(use_url=True)
 
     class Meta:
         model = Image
@@ -30,6 +30,34 @@ class ImageSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
+#-------------------------------------------------------------------------------
+#  serializes needed fields for website homepage view
+
+
+class HomepageJumbotronSerializer(serializers.ModelSerializer):
+    featured_image = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Jumbotron
+        fields = (
+            'id',
+            'header_title',
+            'featured_image',
+            'short_description',            
+            'featured_image'
+        )
+
+    def get_featured_image(self, obj): 
+        # extra and experimental implementation in extracting full img URL
+        #obj -> actual jumbotron object; can access model fields
+        # serializer.data -> returns key dictionary pairs
+        image = Image.objects.get(pk=obj.pk)
+        serializer = ImageSerializer(image, context=self.context)
+        return serializer.data['image'] # accessing the key to get value
+
+
+#-------------------------------------------------------------------------------
+#  serializes all data fields
 
 class JumbotronSerializer(serializers.ModelSerializer):
     featured_image = ImageSerializer() # or make it return the image resource

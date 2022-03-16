@@ -12,6 +12,8 @@ export class NavBarComponent implements OnInit {
   whatWeDo : boolean = false
   about: boolean = false;
   orgOverview : boolean = false;
+
+
   ngOnInit(): void {
   }
 

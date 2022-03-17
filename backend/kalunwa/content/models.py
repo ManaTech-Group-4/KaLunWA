@@ -48,33 +48,33 @@ class Homepage(ContentModel):
     pass
 
 class Event(ContentModel):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
+    title = models.CharField(max_length=50, null=True)
+    description = models.TextField(default=' ')
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    featured_image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT)
+    featured_image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT, default =' ')
     #status
         # dynamic, configured via function in serializers 
     def __str__(self) -> str:
         return self.title
         
-print(datetime.now())
 
 class Project(ContentModel):
-    title = models.CharField(max_length=50)  
-    description = models.CharField(max_length=225)
-    start_date = DateField(auto_now=False, auto_now_add=False)    #notinERD
-    end_date = DateField(auto_now=False, auto_now_add=False)
-    # camp
-    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    title = models.CharField(max_length=50, null=True)  
+    description = models.TextField(default=' ')
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    featured_image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, default =' ')
     #status    
-    pass
+    def __str__(self) -> str:
+        return self.title
 
 class News(ContentModel):
-    title = models.CharField(max_length=50)  
-    description = models.CharField(max_length=225)
-    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    title = models.CharField(max_length=50, null=True)  
+    description = models.TextField(default=' ')
+    featured_image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
 
     def __str__(self) -> str:
         return self.title
@@ -82,7 +82,7 @@ class News(ContentModel):
 
 class Announcement(ContentModel):
     title = models.CharField(max_length=50, default=' ')  #try without default
-    description = models.CharField(max_length=225, default=' ')
+    description = models.TextField(default=' ')
     
     def __str__(self) -> str:
         return self.title

@@ -12,7 +12,7 @@ class CampEnum(models.TextChoices):
     
 
 class ContentModel(TimestampedModel):
-    is_published = (models.BooleanField)
+    is_published = models.BooleanField(default=False)
     # created_by (User)
     # last_updated_by (User)
 
@@ -37,7 +37,7 @@ class Image(ContentModel):
 
 
 class Jumbotron(ContentModel):
-    image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    image = models.ForeignKey(Image, on_delete=models.PROTECT) 
     header_title = models.CharField(max_length=50)
     short_description = models.CharField(max_length=225)
 
@@ -86,9 +86,10 @@ class News(ContentModel):
         return self.title
 
 class Announcement(ContentModel):
-    title = models.CharField(max_length=50, default=' ')  #try without default
-    description = models.TextField(default=' ')
-    
+
+    title = models.CharField(max_length=50) 
+    description = models.CharField(max_length=225)
+
     def __str__(self) -> str:
         return self.title
 

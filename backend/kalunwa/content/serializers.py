@@ -54,7 +54,7 @@ class EventSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
-            'featured_image',
+            'image',
             'start_date',
             'end_date',            
             'camp', # choices serializer            
@@ -90,7 +90,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
-            'featured_image',
+            'image',
             'start_date',
             'end_date',            
             'camp',         

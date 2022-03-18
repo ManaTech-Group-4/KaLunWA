@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # django packages
+    # 3rd party
     'rest_framework',
+    'corsheaders',
+
 
     # user apps
     'kalunwa.core',
@@ -47,6 +49,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,3 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # where files uplaoded using FileField go
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # plan to change api to cms/admin_panel
 MEDIA_URL = '/media/'
+
+# CORS
+CORS_ORIGIN_WHITELIST = (
+'http://localhost:4200', # angular
+'http://localhost:8000',
+)

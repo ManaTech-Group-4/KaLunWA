@@ -142,8 +142,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # plan to change api to cms/admin_panel
 MEDIA_URL = '/media/'
 
+<<<<<<< HEAD
+=======
 # CORS
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:4200', # angular
 'http://localhost:8000',
 )
+>>>>>>> 67317a0f3ea7e2edd643e5650bfd5c0177146d41

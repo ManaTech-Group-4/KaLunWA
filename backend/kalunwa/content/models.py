@@ -37,18 +37,12 @@ class Image(ContentModel):
 
 
 class Jumbotron(ContentModel):
-    image = models.ForeignKey(Image, on_delete=models.PROTECT) 
+    image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
     header_title = models.CharField(max_length=50)
     short_description = models.CharField(max_length=225)
 
     def __str__(self) -> str:
         return f'{self.header_title} jumbotron'
-
-
-class Homepage(ContentModel):
-    # fk - featured event (strict 3 event count)
-    # fk - featured project (strict 3 event count)
-    pass
 
 
 class Event(ContentModel):
@@ -57,7 +51,7 @@ class Event(ContentModel):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT)
+    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT)
     is_featured = models.BooleanField(default=False)
     #status
         # dynamic, configured via function in serializers 
@@ -86,11 +80,10 @@ class News(ContentModel):
     def __str__(self) -> str:
         return self.title
 
-class Announcement(ContentModel):
 
+class Announcement(ContentModel):
     title = models.CharField(max_length=50) 
     description = models.CharField(max_length=225)
 
     def __str__(self) -> str:
         return self.title
-

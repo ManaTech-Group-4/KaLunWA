@@ -72,6 +72,7 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
             'short_description',            
         )
 
+
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
@@ -104,7 +105,7 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'description',
             'image'
         )
-# news
+
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

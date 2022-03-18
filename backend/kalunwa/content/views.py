@@ -1,3 +1,4 @@
+from django import views
 from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement, Project, News
 from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
@@ -41,83 +42,37 @@ class HomepageViewSet(viewsets.ViewSet):
 
 #------------------------------------------------------- 
 
-class ImageViewSet(viewsets.ViewSet):
+class ImageViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving images.
     """
-    def list(self,request):
-        queryset = Image.objects.all()
-        serializer = ImageSerializer(queryset, many=True, context={'request':request})
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Image.objects.all()
-        image = get_object_or_404(queryset, pk=pk)
-        serializer = ImageSerializer(image)
-        return Response(serializer.data)
+    serializer_class = ImageSerializer
+    queryset = Image.objects.all()
 
 
-class JumbotronViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset = Jumbotron.objects.all()
-        serializer = JumbotronSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Jumbotron.objects.all()
-        jumbotron = get_object_or_404(queryset, pk=pk)
-        serializer = JumbotronSerializer(jumbotron)
-        return Response(serializer.data)
+class JumbotronViewSet(viewsets.ModelViewSet):
+    serializer_class = JumbotronSerializer
+    queryset = Jumbotron.objects.all()
 
 
-class EventViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset = Event.objects.all()
-        serializer = EventSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Event.objects.all()
-        event = get_object_or_404(queryset, pk=pk)
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
+class EventViewSet(viewsets.ModelViewSet):
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()
 
 
-class ProjectViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset = Project.objects.all()
-        serializer = ProjectSerializer(queryset, many=True, context={'request':request})
-        return Response(serializer.data)
+class ProjectViewSet(viewsets.ModelViewSet):
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
 
-    def retrieve(self, request, pk=None):
-        queryset = Project.objects.all()
-        project = get_object_or_404(queryset, pk=pk)
-        serializer = ProjectSerializer(project)
-        return Response(serializer.data)
 
-class NewsViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset = News.objects.all()
-        serializer = NewsSerializer(queryset, many=True, context={'request':request})
-        return Response(serializer.data)
+class NewsViewSet(viewsets.ModelViewSet):
+    serializer_class = NewsSerializer
+    queryset = News.objects.all()
+    
 
-    def retrieve(self, request, pk=None):
-        queryset = News.objects.all()
-        news = get_object_or_404(queryset, pk=pk)
-        serializer = EventSerializer(news)
-        return Response(serializer.data)
-
-class AnnouncementViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset = Announcement.objects.all()
-        serializer = AnnouncementSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Announcement.objects.all()
-        announcement = get_object_or_404(queryset, pk=pk)
-        serializer = AnnouncementSerializer(announcement)
-        return Response(serializer.data)
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    serializer_class = AnnouncementSerializer
+    queryset = Announcement.objects.all()
 
 
 #-------------------------------------------------------

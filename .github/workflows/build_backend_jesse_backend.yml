@@ -1,0 +1,41 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Kalunwa server backend (jesse_backend)
+
+on:
+  push:
+    branches: [ jesse_backend ]
+  pull_request:
+    branches: [ jesse_backend ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      working-directory: ./backend    
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Coverage report
+      working-directory: ./backend
+      run: |
+        pip install coverage
+        coverage run manage.py test
+        coverage report
+    - name: Django Testing
+      working-directory: ./backend    
+      run: |
+        python3 manage.py test

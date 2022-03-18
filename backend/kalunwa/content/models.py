@@ -31,7 +31,6 @@ class Image(ContentModel):
     title = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/content/')
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # warning for image tag, 0 to many tags
-
     def __str__(self) -> str:
         return self.title
 
@@ -46,28 +45,27 @@ class Jumbotron(ContentModel):
 
 
 class Event(ContentModel):
-    title = models.CharField(max_length=50)
-    description = models.TextField(default=' ')
+    title = models.CharField(max_length=50, null=True)
+    description = models.TextField(null=True)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT)
+    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) # null=true
     is_featured = models.BooleanField(default=False)
     #status
-        # dynamic, configured via function in serializers 
     def __str__(self) -> str:
         return self.title
         
 
 class Project(ContentModel):
-    title = models.CharField(max_length=50)  
-    description = models.TextField(default=' ')
+    title = models.CharField(max_length=50, null=True)  
+    description = models.TextField(null=True)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)# null=true
     is_featured = models.BooleanField(default=False)
-    #status    
+
     def __str__(self) -> str:
         return self.title
 

@@ -3,7 +3,7 @@
   <button mat-icon-button color="primary" id="mobileMenu" mat-button (click)="navService.openNav()">
     <mat-icon>menu</mat-icon>
   </button>
-  <a mat-button href ="#" id="logo">
+  <a mat-button routerLink="/home" id="logo">
     <img src="assets/images/KL.png" alt="KL Logo" class="desktopImg"/>
     <img src="assets/images/kl_icon2.svg" alt="KL Logo" class="mobileImg"/>
   </a>
@@ -16,9 +16,9 @@
         <button mat-button>Events</button>
       </div>
     </li>
-    <li><a mat-button>About Us</a>
+    <li><a mat-button routerLink="/about" routerLinkActive="active">About Us</a>
       <div class="dropdowns">
-        <button mat-button>Organization Overview</button>
+        <button mat-button routerLink="/about">Organization Overview</button>
         <button mat-button class="submenu">Mission, Vision, Values</button>
         <button mat-button class="submenu">History</button>
         <button mat-button class="submenu">Advocates Covenant</button>

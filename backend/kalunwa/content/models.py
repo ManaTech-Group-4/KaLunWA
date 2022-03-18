@@ -19,11 +19,13 @@ class ContentModel(TimestampedModel):
     class Meta:
         abstract=True
 
+
 class Tag(ContentModel):
     name = models.CharField(db_index=True, unique=True, max_length=50)
 
     def __str__(self) -> str:
         return self.name
+
 
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
@@ -32,19 +34,21 @@ class Image(ContentModel):
     def __str__(self) -> str:
         return self.title
 
+
 class Jumbotron(ContentModel):
-    featured_image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    image = models.OneToOneField(Image, on_delete=models.PROTECT)
     header_title = models.CharField(max_length=50)
     short_description = models.CharField(max_length=225)
 
     def __str__(self) -> str:
         return f'{self.header_title} jumbotron'
 
+
 class Homepage(ContentModel):
-    # fk - jumbotron
     # fk - featured event (strict 3 event count)
     # fk - featured project (strict 3 event count)
     pass
+
 
 class Event(ContentModel):
     title = models.CharField(max_length=50, null=True)
@@ -52,7 +56,11 @@ class Event(ContentModel):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+<<<<<<< HEAD
     image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT, null=True)
+=======
+    image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT)
+>>>>>>> 67317a0f3ea7e2edd643e5650bfd5c0177146d41
     is_featured = models.BooleanField(default=False)
     #status
     def __str__(self) -> str:
@@ -71,6 +79,7 @@ class Project(ContentModel):
     def __str__(self) -> str:
         return self.title
 
+
 class News(ContentModel):
     title = models.CharField(max_length=50, null=True)  
     description = models.TextField(default=' ')
@@ -79,10 +88,10 @@ class News(ContentModel):
     def __str__(self) -> str:
         return self.title
 
-
 class Announcement(ContentModel):
     title = models.CharField(max_length=50, default=' ')  #try without default
     description = models.TextField(default=' ')
     
     def __str__(self) -> str:
         return self.title
+

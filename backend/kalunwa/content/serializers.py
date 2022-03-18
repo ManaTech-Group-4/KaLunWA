@@ -1,8 +1,8 @@
 from datetime import datetime
+from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
-
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -17,8 +17,32 @@ class TagSerializer(serializers.ModelSerializer):
             )
        
 
+class ImageURLSerializer(serializers.Serializer):
+    """
+    This serializer gets the absolute url of images, and returns
+    only that field.
+     Will be recycled for all serializers that will only require
+    the complete url (exclude extra image data e.g. title, tags)
+    """
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'url'
+        )
+    
+    def get_url(self, obj):
+        # obj -> the object with an image field, can access model fields
+        image = Image.objects.get(pk=obj.image.pk)
+        serializer = ImageSerializer(image, context=self.context)
+        # serializer.data -> returns key dictionary pairs
+        # accessing the key to get value (URL)
+        return serializer.data['image']        
+
+
 class ImageSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
+    image = serializers.ImageField(use_url=True)
 
     class Meta:
         model = Image
@@ -31,21 +55,52 @@ class ImageSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-class JumbotronSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer() # or make it return the image resource
+#-------------------------------------------------------------------------------
+#  serializes needed fields for website homepage view
+
+class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
         model = Jumbotron
         fields = (
             'id',
             'header_title',
-            'featured_image',
+            'image',
+            'short_description',            
+        )
+
+# project
+# event
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+
+# news
+
+#-------------------------------------------------------------------------------
+#  serializes all data fields
+
+class JumbotronSerializer(serializers.ModelSerializer):
+    image = ImageSerializer() # or make it return the image resource
+    class Meta:
+        model = Jumbotron
+        fields = (
+            'id',
+            'header_title',
+            'image',
             'short_description',
             'created_at',
             'updated_at',
         )
 
 class EventSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer()
+    image = ImageSerializer()
     status = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,21 +1,41 @@
-from multiprocessing import context
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement, Project, News
-from .serializers import EventSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer,ProjectSerializer, NewsSerializer
+from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from rest_framework.decorators import action
 
 # Create your views here.
 # url should be /admin
+#-------------------------------------------------------
+# homepage views
 
-# stuff here are crammed pa
+class HomepageViewSet(viewsets.ViewSet):
+
+    @action(detail=False)
+    def jumbotrons(self, request):
+        jumbotrons = Jumbotron.objects.all()
+        # passing context from the request, for the serializer to use
+        serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def events(self, request):
+        events = Event.objects.filter(is_featured=True)[:3]
+        serializer = HomepageEventSerializer(events, many=True,context={'request':request})
+        return Response(serializer.data)
+    
+    # projects here
+
+    # news (order by, get latest 3)
+
+#------------------------------------------------------- 
 
 class ImageViewSet(viewsets.ViewSet):
     """
-    A simple ViewSet for listing or retrieving users.
+    A simple ViewSet for listing or retrieving images.
     """
     def list(self,request):
         queryset = Image.objects.all()
@@ -27,6 +47,7 @@ class ImageViewSet(viewsets.ViewSet):
         image = get_object_or_404(queryset, pk=pk)
         serializer = ImageSerializer(image)
         return Response(serializer.data)
+
 
 class JumbotronViewSet(viewsets.ViewSet):
     def list(self,request):
@@ -40,10 +61,11 @@ class JumbotronViewSet(viewsets.ViewSet):
         serializer = JumbotronSerializer(jumbotron)
         return Response(serializer.data)
 
+
 class EventViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = Event.objects.all()
-        serializer = EventSerializer(queryset, many=True, context={'request':request})
+        serializer = EventSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):

@@ -36,6 +36,7 @@ class ModelTest(TestCase):
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(str(jumbotron_model),"jumbotron_title"+" jumbotron")
 
+<<<<<<< HEAD
     def test_news_model(self):
         news_model = News.objects.create(
             title="news_title",
@@ -44,6 +45,8 @@ class ModelTest(TestCase):
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(str(news_model),"news_title")
 
+=======
+>>>>>>> 1dd60df43efd13e008bfc68d94b342a6f56eb87b
     def test_event_model(self):
         date_sample = timezone.now()
         event_model = Event.objects.create(
@@ -75,6 +78,14 @@ class ModelTest(TestCase):
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(project_model.camp,"camp_sample")
         self.assertFalse(project_model.is_featured)
+        
+    def test_news_model(self):
+        news_model = News.objects.create(
+            title="news_title",
+            description="news_description",
+            image=self.create_image_sample())
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(str(news_model),"news_title")
 
     def test_announcement_model(self):
         announcement_model = Announcement.objects.create(

@@ -6,12 +6,6 @@ router = DefaultRouter()
 
 router.register(r'homepage', HomepageViewSet, basename='homepage')
 
-# /jumbotron/homepage_info
-# /homepage_jumbotrons
-# /homepage_events
-# /homepage_projects
-# /homepage_news
-
 # for complete detail
 router.register(r'images', ImageViewSet, basename='image')
 router.register(r'jumbotrons', JumbotronViewSet, basename='jumbotron')

@@ -12,7 +12,7 @@ class CampEnum(models.TextChoices):
     
 
 class ContentModel(TimestampedModel):
-    is_published = (models.BooleanField)
+    is_published = models.BooleanField(default=False)
     # created_by (User)
     # last_updated_by (User)
 
@@ -36,18 +36,12 @@ class Image(ContentModel):
 
 
 class Jumbotron(ContentModel):
-    image = models.OneToOneField(Image, on_delete=models.PROTECT)
+    image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
     header_title = models.CharField(max_length=50)
     short_description = models.CharField(max_length=225)
 
     def __str__(self) -> str:
         return f'{self.header_title} jumbotron'
-
-
-class Homepage(ContentModel):
-    # fk - featured event (strict 3 event count)
-    # fk - featured project (strict 3 event count)
-    pass
 
 
 class Event(ContentModel):
@@ -56,11 +50,7 @@ class Event(ContentModel):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-<<<<<<< HEAD
-    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT, null=True)
-=======
-    image = models.ForeignKey(Image, related_name='events', on_delete=models.PROTECT)
->>>>>>> 67317a0f3ea7e2edd643e5650bfd5c0177146d41
+    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) # null=true
     is_featured = models.BooleanField(default=False)
     #status
     def __str__(self) -> str:
@@ -73,9 +63,9 @@ class Project(ContentModel):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, null=True)
+    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)# null=true
     is_featured = models.BooleanField(default=False)
-    #status
+
     def __str__(self) -> str:
         return self.title
 
@@ -83,15 +73,15 @@ class Project(ContentModel):
 class News(ContentModel):
     title = models.CharField(max_length=50, null=True)  
     description = models.TextField(default=' ')
-    featured_image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
 
     def __str__(self) -> str:
         return self.title
+
 
 class Announcement(ContentModel):
-    title = models.CharField(max_length=50, default=' ')  #try without default
-    description = models.TextField(default=' ')
-    
+    title = models.CharField(max_length=50) 
+    description = models.CharField(max_length=225)
+
     def __str__(self) -> str:
         return self.title
-

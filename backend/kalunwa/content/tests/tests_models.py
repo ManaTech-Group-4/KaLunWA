@@ -29,7 +29,7 @@ class ModelTest(TestCase):
 
     def test_jumbotron_model(self):
         jumbotron_model = Jumbotron.objects.create(
-            image=self.create_image_sample(), 
+            featured_image=self.create_image_sample(), 
             header_title="jumbotron_title",
             short_description="jumbotron_description")
         self.assertTrue(isinstance(jumbotron_model,Jumbotron)) 
@@ -40,7 +40,7 @@ class ModelTest(TestCase):
         news_model = News.objects.create(
             title="news_title",
             description="news_description",
-            image=self.create_image_sample())
+            featured_image=self.create_image_sample())
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(str(news_model),"news_title")
 

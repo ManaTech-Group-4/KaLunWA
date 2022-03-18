@@ -1,5 +1,5 @@
 # API's
-path | url configuration location | short description| extra des|
+url pattern | url configuration location | [base-name]+[type]| extra des|
 |:---|:--------------------------:|:-----------:|--------------:|
 |/api/ |  rest_framework.routers.view|    api-root|
 |/api/announcements/| kalunwa.content.views.AnnouncementViewSet| announcement-list

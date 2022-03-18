@@ -22,7 +22,10 @@ class ImageURLSerializer(serializers.Serializer):
     This serializer gets the absolute url of images, and returns
     only that field.
      Will be recycled for all serializers that will only require
-    the complete url (exclude extra image data e.g. title, tags)
+    the complete url (exclude extra image data e.g. title, tags).
+    note: 
+    Serializer Models that will inherit this should have their models 
+    use `image` as the field name.
     """
     url = serializers.SerializerMethodField()
 
@@ -36,7 +39,7 @@ class ImageURLSerializer(serializers.Serializer):
         image = Image.objects.get(pk=obj.image.pk)
         serializer = ImageSerializer(image, context=self.context)
         # serializer.data -> returns key dictionary pairs
-        # accessing the key to get value (URL)
+        # accessing the 'image' key to get value (URL)
         return serializer.data['image']        
 
 
@@ -69,12 +72,21 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
             'short_description',            
         )
 
-# project
-# event
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
         model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+# project
+
+class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Project
         fields = (
             'id',
             'title',

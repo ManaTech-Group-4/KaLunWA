@@ -71,7 +71,8 @@ class Project(ContentModel):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    featured_image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, default =' ')
+    is_featured = models.BooleanField(default=False)
     #status    
     def __str__(self) -> str:
         return self.title

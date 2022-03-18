@@ -81,7 +81,7 @@ class Project(ContentModel):
 class News(ContentModel):
     title = models.CharField(max_length=50, null=True)  
     description = models.TextField(default=' ')
-    featured_image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
 
     def __str__(self) -> str:
         return self.title

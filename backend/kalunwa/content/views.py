@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement, Project, News
-from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -33,7 +33,11 @@ class HomepageViewSet(viewsets.ViewSet):
         serializer = HomepageProjectSerializer(projects, many=True,context={'request':request})
         return Response(serializer.data)    
     
-    # news (query order by, get latest 3)
+    @action(detail=False)
+    def news(self, request):
+        news = News.objects.order_by('-created_at')[:3]
+        serializer = HomepageNewsSerializer (news, many=True,context={'request':request})
+        return Response(serializer.data)    
 
 #------------------------------------------------------- 
 
@@ -114,8 +118,6 @@ class AnnouncementViewSet(viewsets.ViewSet):
         announcement = get_object_or_404(queryset, pk=pk)
         serializer = AnnouncementSerializer(announcement)
         return Response(serializer.data)
-
-
 
 
 #-------------------------------------------------------

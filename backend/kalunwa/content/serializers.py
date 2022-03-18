@@ -81,7 +81,7 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'title',
             'image'
         )
-# project
+
 
 class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -93,6 +93,17 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
             'image'
         )
 
+
+class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = News
+        fields = (
+            'id',
+            'title',
+            'description',
+            'image'
+        )
 # news
 
 #-------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.forms import DateField
 from kalunwa.core.models import TimestampedModel
 
 class CampEnum(models.TextChoices):
@@ -51,8 +52,8 @@ class Homepage(ContentModel):
 
 
 class Event(ContentModel):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
+    title = models.CharField(max_length=50, null=True)
+    description = models.TextField(default=' ')
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
@@ -65,26 +66,28 @@ class Event(ContentModel):
         
 
 class Project(ContentModel):
-    # title
-    # description
-    # start_date
-    # end_date
-    # camp
-    # image
+    title = models.CharField(max_length=50, null=True)  
+    description = models.TextField(default=' ')
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    featured_image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT, default =' ')
     #status    
-    pass
+    def __str__(self) -> str:
+        return self.title
 
 
 class News(ContentModel):
-    # title
-    # description
-    #image
-    pass
+    title = models.CharField(max_length=50, null=True)  
+    description = models.TextField(default=' ')
+    featured_image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
 
+    def __str__(self) -> str:
+        return self.title
 
 class Announcement(ContentModel):
-    title = models.CharField(max_length=50, default='some value') 
-    description = models.CharField(max_length=225, default='some value')
+    title = models.CharField(max_length=50, default=' ')  #try without default
+    description = models.TextField(default=' ')
     
     def __str__(self) -> str:
         return self.title

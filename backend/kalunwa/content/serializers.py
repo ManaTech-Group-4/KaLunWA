@@ -2,7 +2,7 @@ from datetime import datetime
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
-from .models import Image, Jumbotron, Tag, Announcement, Event
+from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -99,18 +99,6 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-class AnnouncementSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Announcement
-        fields = (
-            'id',
-            'title',
-            'description',
-            'created_at',
-            'updated_at',
-        )
-
 class EventSerializer(serializers.ModelSerializer):
     image = ImageSerializer()
     status = serializers.SerializerMethodField()
@@ -147,3 +135,56 @@ class EventSerializer(serializers.ModelSerializer):
         if date_now < obj.start_date and date_now < obj.end_date:
             return 'upcoming'    
 
+class ProjectSerializer(serializers.ModelSerializer):
+    featured_image = ImageSerializer()
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'title',
+            'description',
+            'featured_image',
+            'start_date',
+            'end_date',            
+            'camp',         
+            'created_at',
+            'updated_at',  
+            'status',
+        )
+    def get_status(self, obj)->str:
+        date_now = timezone.now()
+        if date_now > obj.start_date and date_now > obj.end_date:
+            return 'past' 
+        # ongoing
+        if date_now >= obj.start_date and date_now < obj.end_date:
+            return 'ongoing'             
+        # upcoming
+        if date_now < obj.start_date and date_now < obj.end_date:
+            return 'upcoming'    
+
+class NewsSerializer(serializers.ModelSerializer):
+    featured_image = ImageSerializer()
+    class Meta:
+        model = News
+        fields = (
+            'id',
+            'title',
+            'description',
+            'featured_image',
+            'created_at',
+            'updated_at',
+        )
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Announcement
+        fields = (
+            'id',
+            'title',
+            'description',
+            'created_at',
+            'updated_at',
+        )

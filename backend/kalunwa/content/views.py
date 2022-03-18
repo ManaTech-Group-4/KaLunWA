@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
-from .models import Event, Homepage, Image, Jumbotron, Announcement
-from .serializers import EventSerializer, HomepageEventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer
+from .models import Event, Image, Jumbotron, Announcement, Project, News
+from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -75,6 +75,30 @@ class EventViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+class ProjectViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = Project.objects.all()
+        serializer = ProjectSerializer(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Project.objects.all()
+        project = get_object_or_404(queryset, pk=pk)
+        serializer = ProjectSerializer(project)
+        return Response(serializer.data)
+
+class NewsViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = News.objects.all()
+        serializer = NewsSerializer(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = News.objects.all()
+        news = get_object_or_404(queryset, pk=pk)
+        serializer = EventSerializer(news)
+        return Response(serializer.data)
+
 class AnnouncementViewSet(viewsets.ViewSet):
     def list(self,request):
         queryset = Announcement.objects.all()
@@ -83,9 +107,11 @@ class AnnouncementViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         queryset = Announcement.objects.all()
-        jumbotron = get_object_or_404(queryset, pk=pk)
-        serializer = AnnouncementSerializer(jumbotron)
+        announcement = get_object_or_404(queryset, pk=pk)
+        serializer = AnnouncementSerializer(announcement)
         return Response(serializer.data)
+
+
 
 
 #-------------------------------------------------------

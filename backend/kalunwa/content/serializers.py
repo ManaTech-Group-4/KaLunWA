@@ -1,9 +1,10 @@
 from datetime import datetime
+from email.mime import image
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
-
+from django.urls import path, reverse
 
 class TagSerializer(serializers.ModelSerializer):
 
@@ -15,7 +16,7 @@ class TagSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             )
-       
+
 
 class ImageURLSerializer(serializers.Serializer):
     """
@@ -83,6 +84,16 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'image'
         )
 
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+
 
 class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -94,6 +105,8 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
             'image'
         )
 
+    # image object has 'image' attribute which is the file. 
+    
 
 class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -107,6 +120,7 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
         )
 
 
+serializers.ImageField(use_url=True)
 #-------------------------------------------------------------------------------
 #  serializes all data fields
 

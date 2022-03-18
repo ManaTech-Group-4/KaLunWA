@@ -46,7 +46,7 @@ class Jumbotron(ContentModel):
 
 
 class Event(ContentModel):
-    title = models.CharField(max_length=50, null=True)
+    title = models.CharField(max_length=50)
     description = models.TextField(default=' ')
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -60,7 +60,7 @@ class Event(ContentModel):
         
 
 class Project(ContentModel):
-    title = models.CharField(max_length=50, null=True)  
+    title = models.CharField(max_length=50)  
     description = models.TextField(default=' ')
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)

@@ -9,6 +9,7 @@ export class AboutPageComponent implements OnInit {
 
   constructor() { }
 
+  public members: number = 189;
   ngOnInit(): void {
   }
 

@@ -9,7 +9,6 @@ import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
 })
 export class JumbotronComponent implements OnInit {
 
-
   constructor() {
   }
 

@@ -15,7 +15,7 @@ import { FooterComponent } from './features/components/footer/footer.component';
     NavBarComponent,
     JumbotronComponent,
     FooterComponent,
-    routeComponents
+    routeComponents,
   ],
   imports: [
     BrowserModule,

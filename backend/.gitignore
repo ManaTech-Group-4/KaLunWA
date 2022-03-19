@@ -184,3 +184,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,django
+
+# therese files
+kalunwa/content/query_practice.py
+kalunwa\content\query_practice.py

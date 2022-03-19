@@ -36,8 +36,9 @@ class ImageURLSerializer(serializers.Serializer):
         )
     
     def get_url(self, obj):
-        # obj -> the object with an image field, can access model fields
+        # get Image attribute from the object (e.g. jumbotron, event)
         image = Image.objects.get(pk=obj.image.pk)
+        # pass context needed to generate full URL
         serializer = ImageSerializer(image, context=self.context)
         # serializer.data -> returns key dictionary pairs
         # accessing the 'image' key to get value (URL)
@@ -83,6 +84,7 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'title',
             'image'
         )
+
 
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -137,6 +139,7 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+
 class EventSerializer(serializers.ModelSerializer):
     image = ImageSerializer()
     status = serializers.SerializerMethodField()
@@ -173,6 +176,7 @@ class EventSerializer(serializers.ModelSerializer):
         if date_now < obj.start_date and date_now < obj.end_date:
             return 'upcoming'    
 
+
 class ProjectSerializer(serializers.ModelSerializer):
     featured_image = ImageSerializer()
     status = serializers.SerializerMethodField()
@@ -202,6 +206,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         if date_now < obj.start_date and date_now < obj.end_date:
             return 'upcoming'    
 
+
 class NewsSerializer(serializers.ModelSerializer):
     featured_image = ImageSerializer()
     class Meta:
@@ -214,6 +219,7 @@ class NewsSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
 
 class AnnouncementSerializer(serializers.ModelSerializer):
 

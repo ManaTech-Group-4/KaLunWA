@@ -76,15 +76,16 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
 
 #-------------------------------------------------------
+# Prep for file uploading
+# 
+# class ImageUploadView(APIView): 
+#     parser_classes = [MultiPartParser, FormParser]
 
-class ImageUploadView(APIView): # untested
-    parser_classes = [MultiPartParser, FormParser]
-
-    def post(self, request, format=None):
-#        print(request.data)
-        serializer = ImageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request, format=None):
+# #        print(request.data)
+#         serializer = ImageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         else: 
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

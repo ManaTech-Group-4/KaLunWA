@@ -1,0 +1,177 @@
+.section-header{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 5% 0%;
+    background-color: #628A3A;
+    font-size: 10vw;
+    flex-grow: 5;
+    font-family: header-font;
+    color:white;
+}
+
+.VMC{
+    width: 100%;
+    height: auto;
+    position: relative;
+    .vmc-content{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 5%;
+        
+        .vision{
+            margin: 0% 7% 5%;
+            padding: 3%;
+            flex: 1;
+            color:#628A3A;
+            text-align: center;
+            h2{
+                font-family: header-font;
+                font-size: 10vw;
+                padding-bottom: 3%;
+            }
+            hr{
+                width: 75%;
+                color: #628A3A;
+            }
+            p{
+                font-family: monserrat;
+                font-size: 150%;
+                line-height: 150%;
+                padding-top: 3%;
+            }
+        }
+        .mission{
+            margin: 0% 7% 5%;
+            padding: 3%;
+            flex: 1;
+            color:#628A3A;
+            text-align: center;
+            h2{
+                font-family: header-font;
+                font-size: 10vw;
+                padding-bottom: 3%;
+            }
+            hr{
+                width: 75%;
+                color: #628A3A;
+            }
+            p{
+                font-family: monserrat;
+                font-size: 150%;
+                line-height: 150%;
+                padding-top: 3%;
+            }
+        }
+        .core-values{
+            margin: 0% 7% 5%;
+            padding: 3%;
+            flex: 1;
+            color:#628A3A;
+            text-align: center;
+            h2{
+                font-family: header-font;
+                font-size: 10vw;
+                padding-bottom: 3%;
+            }
+            hr{
+                width: 50%;
+                color: #628A3A;
+            }
+            p{
+                font-family: monserrat;
+                font-size: 150%;
+                line-height: 150%;
+                padding-top: 3%;
+            }
+        }
+    }
+
+}
+
+.ad-cov{
+    width: 100%;
+    height: auto;
+    position: relative;
+
+    .ad-cov-content{
+        padding: 3% 25%;
+        color: #628A3A;
+        hr{
+            width: 20%;
+        }
+        p{
+            font-family: monserrat;
+            font-size: 150%;
+            line-height: 150%;
+            padding: 3%;
+            text-align: center;
+        }
+    }
+}
+
+.org-struct{
+    width: 100%;
+    height: auto;
+    position: relative;
+
+    .org-struct-content{
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content:center;
+        padding: 10%;
+        .carousel{  
+            border-radius: 50%;
+            max-width:200px;
+            max-height:200px;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            flex: 1;
+        }
+        .box{
+            margin: 3%;
+            padding: 5%;
+            flex: 1;
+            h3{
+                margin-left: 5%;
+                color: #233620;
+                font-size: 250%;
+                font-family: monserrat;
+            }
+
+            .button{
+                button{
+                    min-width: 100px;
+                    min-height: 50px;
+                    width: 10vw;
+                    height: 10vh;
+                    font-size: 2.5vh;
+                    background-color: #628A3A;
+                    color: white;
+                    font-weight: 100;
+                    text-align: center;
+                    perspective: 1000px;
+                    opacity: 1;
+                    border-radius: 5px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 780px){
+
+    .VMC{
+  
+      .vmc-content{
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  
+  }

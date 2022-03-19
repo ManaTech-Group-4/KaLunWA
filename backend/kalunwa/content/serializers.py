@@ -106,8 +106,6 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
             'title',
             'image'
         )
-
-    # image object has 'image' attribute which is the file. 
     
 
 class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):

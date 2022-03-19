@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JumbotronComponent } from './features/components/jumbotron/jumbotron.component';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { FooterComponent } from './features/components/footer/footer.component';
-import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +15,7 @@ import { AboutCampComponent } from './features/components/about-camp/about-camp.
     NavBarComponent,
     JumbotronComponent,
     FooterComponent,
-    routeComponents,
-    AboutCampComponent
+    routeComponents
   ],
   imports: [
     BrowserModule,

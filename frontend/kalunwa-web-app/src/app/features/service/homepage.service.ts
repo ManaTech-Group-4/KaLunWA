@@ -56,4 +56,5 @@ export class HomepageService {
   public getNews(): HomeNewsModel[] {
     return this.featuredNews;
   }
+
 }

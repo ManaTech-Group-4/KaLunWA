@@ -5,6 +5,13 @@ from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
 from django.urls import path, reverse
+from enum import Enum
+
+class StatusEnum(Enum):
+    PAST = 'past'
+    ONGOING = 'ongoing'
+    UPCOMING = 'upcoming'
+
 
 class TagSerializer(serializers.ModelSerializer):
 
@@ -164,19 +171,19 @@ class EventSerializer(serializers.ModelSerializer):
             # now_date > start_date && now_date > end date 
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
-            return 'past' 
+            return StatusEnum.PAST.value 
         # ongoing
             # now_date >= start_date && now_date < end_date
         if date_now >= obj.start_date and date_now < obj.end_date:
-            return 'ongoing'             
+            return StatusEnum.ONGOING.value             
         # upcoming
             # now_date < start_date && now_date < end_date
         if date_now < obj.start_date and date_now < obj.end_date:
-            return 'upcoming'    
+            return StatusEnum.UPCOMING.value    
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer()
+    image = ImageSerializer()
     status = serializers.SerializerMethodField()
 
     class Meta:
@@ -196,13 +203,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_status(self, obj)->str:
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
-            return 'past' 
+            return StatusEnum.PAST.value 
         # ongoing
         if date_now >= obj.start_date and date_now < obj.end_date:
-            return 'ongoing'             
+            return StatusEnum.ONGOING.value             
         # upcoming
         if date_now < obj.start_date and date_now < obj.end_date:
-            return 'upcoming'    
+            return StatusEnum.UPCOMING.value    
 
 
 class NewsSerializer(serializers.ModelSerializer):

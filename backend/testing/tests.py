@@ -1,7 +1,7 @@
 
 from django.test import TestCase
 from django.utils import timezone
-from kalunwa.content.models import Image, Jumbotron, Tag, Event, Project, News, Announcement #model class name
+from kalunwa.content.models import Image, Jumbotron, Tag, Event, Project, News, Announcement, CampEnum
 import tempfile
 
 #https://docs.python.org/3/library/unittest.html 
@@ -43,13 +43,13 @@ class ModelTest(TestCase):
             description="event_description",
             start_date=date_sample,
             end_date=date_sample,
-            camp="camp_sample",
+            camp=CampEnum.GENERAL,
             image=self.create_image_sample(),
             is_featured=False)
         self.assertTrue(isinstance(event_model,Event)) 
         self.assertEqual(str(event_model),"event_title")
         self.assertEqual(Image.objects.count(), 1)
-        self.assertEqual(event_model.camp,"camp_sample")
+        self.assertEqual(event_model.camp,"GNRL")
         self.assertFalse(event_model.is_featured)
         
     def test_project_model(self):
@@ -59,13 +59,13 @@ class ModelTest(TestCase):
             description="project_description",
             start_date=date_sample,
             end_date=date_sample,
-            camp="camp_sample",
+            camp=CampEnum.GENERAL,
             image=self.create_image_sample(),
             is_featured=False)
         self.assertTrue(isinstance(project_model,Project)) 
         self.assertEqual(str(project_model),"project_title")
         self.assertEqual(Image.objects.count(), 1)
-        self.assertEqual(project_model.camp,"camp_sample")
+        self.assertEqual(project_model.camp,"GNRL")
         self.assertFalse(project_model.is_featured)
         
     def test_news_model(self):

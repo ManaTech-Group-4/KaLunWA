@@ -108,7 +108,7 @@ class StatusSerializerTestCase(TestCase):
 
         image_file = get_test_image_file()
  
-        for _ in range(3): 
+        for _ in range(4): 
             Image.objects.create(
                 pk=_,
                 title=f'image_{_}',
@@ -174,6 +174,15 @@ class StatusSerializerTestCase(TestCase):
             image = Image.objects.get(pk=2),
             is_featured=True,
         ) 
+            #no_end date, ongoing
+        cls.project_ongoing_no_end_date = Project.objects.create(
+            title= 'ongoing project no end date', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            camp=CampEnum.GENERAL,
+            image = Image.objects.get(pk=3),
+            is_featured=True,
+        ) 
 
             #  past            
         cls.project_past = Project.objects.create(
@@ -182,7 +191,7 @@ class StatusSerializerTestCase(TestCase):
             start_date=date_yesterday,
             end_date=date_yesterday,
             camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=3),
+            image = Image.objects.get(pk=4),
             is_featured=True,
         ) 
 
@@ -205,6 +214,11 @@ class StatusSerializerTestCase(TestCase):
     def test_ongoing_status_project(self):
         serializer = ProjectSerializer(self.project_ongoing)
         self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
+
+    def test_ongoing_no_date_status_project(self):
+        serializer = ProjectSerializer(self.project_ongoing_no_end_date)
+        self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
+
 
     def test_upcoming_status_project(self):
         serializer = ProjectSerializer(self.project_upcoming)

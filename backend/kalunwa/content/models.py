@@ -48,8 +48,8 @@ class Jumbotron(ContentModel):
 class Event(ContentModel):
     title = models.CharField(max_length=50)
     description = models.TextField()
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) 
     is_featured = models.BooleanField(default=False)
@@ -61,7 +61,7 @@ class Event(ContentModel):
 class Project(ContentModel):
     title = models.CharField(max_length=50)  
     description = models.TextField()
-    start_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)

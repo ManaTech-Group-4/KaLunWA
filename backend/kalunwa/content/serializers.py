@@ -1,10 +1,6 @@
-from datetime import datetime
-from email.mime import image
-from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
-from django.urls import path, reverse
 from enum import Enum
 
 class StatusEnum(Enum):
@@ -201,6 +197,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'status',
         )
     def get_status(self, obj)->str:
+        if not obj.end_date: # if end_date does not exist
+            return StatusEnum.ONGOING.value
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
             return StatusEnum.PAST.value 

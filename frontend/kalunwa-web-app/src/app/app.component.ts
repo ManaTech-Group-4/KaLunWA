@@ -8,18 +8,20 @@ import { NavService } from './features/service/nav.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements AfterViewInit {
+  title = 'kalunwa-web-app';
   @ViewChild('sidenav') sidenav: ElementRef | undefined;
 
 
   constructor(private navService: NavService) { }
 
 
-  whatWeDo : boolean = false
+  whatWeDo : boolean = false;
   about: boolean = false;
   orgOverview : boolean = false;
 
   ngAfterViewInit() {
     this.navService.sidenav = this.sidenav;
   }
+
 
 }

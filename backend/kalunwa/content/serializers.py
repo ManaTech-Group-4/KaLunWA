@@ -1,8 +1,10 @@
+from django.forms import CharField
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
 from enum import Enum
-
+from .validators import validate_start_date_and_end_date
 class StatusEnum(Enum):
     PAST = 'past'
     ONGOING = 'ongoing'
@@ -10,6 +12,14 @@ class StatusEnum(Enum):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        max_length=50,
+        validators=[
+            drf_validators.UniqueValidator(
+                queryset=Tag.objects.all(),
+                message="A tag name should be unique."
+                )]
+    )
 
     class Meta: # add tag ordering by name
         model = Tag
@@ -89,17 +99,6 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
         )
 
 
-class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
-    image = serializers.SerializerMethodField(method_name='get_url')
-    class Meta:
-        model = Event
-        fields = (
-            'id',
-            'title',
-            'image'
-        )
-
-
 class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
@@ -113,6 +112,7 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
 
 class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
+
     class Meta:
         model = News
         fields = (
@@ -122,8 +122,6 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'image'
         )
 
-
-serializers.ImageField(use_url=True)
 #-------------------------------------------------------------------------------
 #  serializes all data fields
 
@@ -162,20 +160,24 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj)->str:
         # add check if no dates
-
         # past
-            # now_date > start_date && now_date > end date 
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
             return StatusEnum.PAST.value 
         # ongoing
-            # now_date >= start_date && now_date < end_date
         if date_now >= obj.start_date and date_now < obj.end_date:
             return StatusEnum.ONGOING.value             
         # upcoming
-            # now_date < start_date && now_date < end_date
         if date_now < obj.start_date and date_now < obj.end_date:
             return StatusEnum.UPCOMING.value    
+    
+    def validate(self, data): # object-level validation
+        data = self.get_initial() # gets pre-validation data
+        start_date = data['start_date']
+        end_date = data['end_date']
+        validate_start_date_and_end_date(start_date, end_date)
+
+        return data
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -199,6 +201,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_status(self, obj)->str:
         if not obj.end_date: # if end_date does not exist
             return StatusEnum.ONGOING.value
+
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
             return StatusEnum.PAST.value 
@@ -209,6 +212,13 @@ class ProjectSerializer(serializers.ModelSerializer):
         if date_now < obj.start_date and date_now < obj.end_date:
             return StatusEnum.UPCOMING.value    
 
+    def validate(self, data): # object-level validation
+        data = self.get_initial() # gets unvalidated data being posted
+        start_date = data['start_date']
+        end_date = data['end_date']
+        validate_start_date_and_end_date(start_date, end_date)
+
+        return data
 
 class NewsSerializer(serializers.ModelSerializer):
     featured_image = ImageSerializer()

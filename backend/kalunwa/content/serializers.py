@@ -1,8 +1,16 @@
 from datetime import datetime
+from email.mime import image
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
+from django.urls import path, reverse
+from enum import Enum
+
+class StatusEnum(Enum):
+    PAST = 'past'
+    ONGOING = 'ongoing'
+    UPCOMING = 'upcoming'
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -15,7 +23,7 @@ class TagSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             )
-       
+
 
 class ImageURLSerializer(serializers.Serializer):
     """
@@ -35,8 +43,9 @@ class ImageURLSerializer(serializers.Serializer):
         )
     
     def get_url(self, obj):
-        # obj -> the object with an image field, can access model fields
+        # get Image attribute from the object (e.g. jumbotron, event)
         image = Image.objects.get(pk=obj.image.pk)
+        # pass context needed to generate full URL
         serializer = ImageSerializer(image, context=self.context)
         # serializer.data -> returns key dictionary pairs
         # accessing the 'image' key to get value (URL)
@@ -84,6 +93,17 @@ class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
         )
 
 
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+
+
 class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
@@ -93,7 +113,7 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
             'title',
             'image'
         )
-
+    
 
 class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -107,6 +127,7 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
         )
 
 
+serializers.ImageField(use_url=True)
 #-------------------------------------------------------------------------------
 #  serializes all data fields
 
@@ -122,6 +143,7 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
 
 class EventSerializer(serializers.ModelSerializer):
     image = ImageSerializer()
@@ -149,18 +171,19 @@ class EventSerializer(serializers.ModelSerializer):
             # now_date > start_date && now_date > end date 
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
-            return 'past' 
+            return StatusEnum.PAST.value 
         # ongoing
             # now_date >= start_date && now_date < end_date
         if date_now >= obj.start_date and date_now < obj.end_date:
-            return 'ongoing'             
+            return StatusEnum.ONGOING.value             
         # upcoming
             # now_date < start_date && now_date < end_date
         if date_now < obj.start_date and date_now < obj.end_date:
-            return 'upcoming'    
+            return StatusEnum.UPCOMING.value    
+
 
 class ProjectSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer()
+    image = ImageSerializer()
     status = serializers.SerializerMethodField()
 
     class Meta:
@@ -180,13 +203,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_status(self, obj)->str:
         date_now = timezone.now()
         if date_now > obj.start_date and date_now > obj.end_date:
-            return 'past' 
+            return StatusEnum.PAST.value 
         # ongoing
         if date_now >= obj.start_date and date_now < obj.end_date:
-            return 'ongoing'             
+            return StatusEnum.ONGOING.value             
         # upcoming
         if date_now < obj.start_date and date_now < obj.end_date:
-            return 'upcoming'    
+            return StatusEnum.UPCOMING.value    
+
 
 class NewsSerializer(serializers.ModelSerializer):
     featured_image = ImageSerializer()
@@ -200,6 +224,7 @@ class NewsSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
 
 class AnnouncementSerializer(serializers.ModelSerializer):
 

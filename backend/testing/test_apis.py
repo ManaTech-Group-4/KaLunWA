@@ -1,3 +1,4 @@
+from math import exp
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -143,41 +144,71 @@ class HomapageActionsTestCase(APITestCase):
 
     def test_get_expected_homepage_jumbotron_data(self):
         # need request to build image full url (request scheme, host)
-        response = self.client.get(reverse("homepage-jumbotrons"))  
         request = self.request_factory.get(reverse("homepage-jumbotrons"))
+        response = self.client.get(reverse("homepage-jumbotrons")) 
+        # gets the earliest object created within the range 
+        expected_jumbotron = Jumbotron.objects.get(pk=self.jumbotrons[0].pk)
+        response_jumbotron = response.data[0]
         image_url = get_expected_image_url(self.image_file_name, request)
-        self.assertEqual(response.data[0]['header_title'], 'Jumbotron 0')
-        self.assertEqual(response.data[0]['short_description'], 'short description 0')
-        self.assertEqual(response.data[0]['image'], image_url)
+        self.assertEqual(
+            response_jumbotron['header_title'],
+            expected_jumbotron.header_title
+        )
+        self.assertEqual(
+            response_jumbotron['short_description'], 
+            expected_jumbotron.short_description
+            )
+        self.assertEqual(response_jumbotron['image'], image_url)
 
     def test_get_expected_homepage_event_data(self):
-        # need request to build image full url (request scheme, host)
-        response = self.client.get(reverse("homepage-events"))  
         request = self.request_factory.get(reverse("homepage-events"))
-        image_url = get_expected_image_url(self.image_file_name, request)
-        self.assertEqual(response.data[0]['title'], 'Event 0')
-        self.assertEqual(response.data[0]['image'], image_url)
+        response = self.client.get(reverse("homepage-events"))  
+        expected_event = Event.objects.get(pk=self.featured_events[0].pk)  
+        response_event = response.data[0]
+        image_url = get_expected_image_url(expected_event.image.image.name, request)
+        self.assertEqual(response_event['title'],expected_event.title)
+        self.assertEqual(response_event['image'], image_url)
 
     def test_get_expected_homepage_project_data(self):
-        # need request to build image full url (request scheme, host)
-        response = self.client.get(reverse("homepage-projects"))  
         request = self.request_factory.get(reverse("homepage-projects"))
-        image_url = get_expected_image_url(self.image_file_name, request)
-        self.assertEqual(response.data[0]['title'], 'Project 0')
-        self.assertEqual(response.data[0]['image'], image_url)
+        response = self.client.get(reverse("homepage-projects"))  
+        # latest featured project (1-3) (earliest -> latest)
+        expected_project = Project.objects.get(pk=self.featured_projects[0].pk)  
+        response_project = response.data[0]
+        image_url = get_expected_image_url(expected_project.image.image.name, request)
+        self.assertEqual(response_project['title'], expected_project.title)
+        self.assertEqual(response_project['image'], image_url)
         
     def test_get_expected_homepage_news_data(self):
-        # need request to build image full url (request scheme, host)
-        response = self.client.get(reverse("homepage-news"))  
         request = self.request_factory.get(reverse("homepage-news"))
-        # since news fetches the latest first, a different image file name
-            # is generated (because the rest fetches from oldest)
-        news = News.objects.get(pk=response.data[0]['id'])
-        image_file_name = news.image.image.name
-        image_url = get_expected_image_url(image_file_name, request)
-        self.assertEqual(response.data[0]['title'], 'News 2')
-        self.assertEqual(response.data[0]['description'], 'description 2')
-        self.assertEqual(response.data[0]['image'], image_url)
-       
-  
+        response = self.client.get(reverse("homepage-news"))  
+        expected_news = News.objects.latest('created_at')
+        response_news = response.data[0] 
+        image_url = get_expected_image_url(expected_news.image.image.name, request)
+        self.assertEqual(response_news['title'], expected_news.title)
+        self.assertEqual(response_news['description'], expected_news.description)
+        self.assertEqual(response_news['image'], image_url)
+        self.assertEqual(response_news['date'], expected_news.created_at.date())
+
 # ---------------------------------------------------------------------------        
+# Post end-points
+# covers post serializer 
+
+class NewsSerializerTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        # create image
+        image = Image.objects.create(
+                title='image_1',
+                image=get_test_image_file(),
+            )          
+
+        cls.news = News.objects.create(
+                title = 'News 1',
+                description= 'description 1',
+                image = Image.objects.get(pk=1),
+            )        
+        
+    def test_news_validation_post(self):
+        response = self.client.post(reverse('news-list'))
+

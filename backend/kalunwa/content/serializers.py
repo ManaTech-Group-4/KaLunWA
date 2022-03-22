@@ -112,6 +112,7 @@ class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer)
 
 class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
+    date = serializers.SerializerMethodField()
 
     class Meta:
         model = News
@@ -119,8 +120,12 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
             'id',
             'title',
             'description',
+            'date',
             'image'
         )
+    
+    def get_date(self, obj):
+        return obj.created_at.date()
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields
@@ -221,14 +226,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         return data
 
 class NewsSerializer(serializers.ModelSerializer):
-    featured_image = ImageSerializer()
+    image = ImageSerializer()
     class Meta:
         model = News
         fields = (
             'id',
             'title',
             'description',
-            'featured_image',
+            'image',
             'created_at',
             'updated_at',
         )

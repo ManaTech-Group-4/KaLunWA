@@ -30,7 +30,8 @@ class Tag(ContentModel):
 class Image(ContentModel):
     title = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/content/')
-    tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # warning for image tag, 0 to many tags
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # blank=true allows 0 tags
+
     def __str__(self) -> str:
         return self.title
 
@@ -45,25 +46,25 @@ class Jumbotron(ContentModel):
 
 
 class Event(ContentModel):
-    title = models.CharField(max_length=50, null=True)
-    description = models.TextField(null=True)
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) # null=true
+    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) 
     is_featured = models.BooleanField(default=False)
-    #status
+
     def __str__(self) -> str:
         return self.title
         
 
 class Project(ContentModel):
-    title = models.CharField(max_length=50, null=True)  
-    description = models.TextField(null=True)
-    start_date = models.DateTimeField(null=True, blank=True)
+    title = models.CharField(max_length=50)  
+    description = models.TextField()
+    start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)# null=true
+    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)
     is_featured = models.BooleanField(default=False)
 
     def __str__(self) -> str:
@@ -71,9 +72,9 @@ class Project(ContentModel):
 
 
 class News(ContentModel):
-    title = models.CharField(max_length=50, null=True)  
-    description = models.TextField(default=' ')
-    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+    title = models.CharField(max_length=50)  
+    description = models.TextField()
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return self.title

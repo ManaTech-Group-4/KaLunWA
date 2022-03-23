@@ -3,7 +3,7 @@ from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
-from .utils import get_test_image_file
+from .utils import get_test_image_file, get_expected_image_url
 from kalunwa.content.models import CampEnum, Image, Jumbotron, News, Project, Tag, Event
 from kalunwa.content.serializers import EventSerializer, HomepageJumbotronSerializer, HomepageEventSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
@@ -55,7 +55,10 @@ class ImageURLSerializerTestCase(APITestCase):
             )
 
         cls.request_factory = RequestFactory()
+        cls.image_file_name = cls.image.image.name
 
+    # def get_expected_image_url(self, request):
+    #     return f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
 
     def test_get_object_image_pk(self):
         """
@@ -74,26 +77,23 @@ class ImageURLSerializerTestCase(APITestCase):
             # request.scheme -> http
             # request.get_host() -> testserver        
             # self.image.image.name ->  images/content/test_U5U97df.jpg
-        url = f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
-        self.assertEqual(url, serializer.data['image'])
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 
     def test_event_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-events"))
         serializer = HomepageEventSerializer(self.event, context={'request':request})
-        url = f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
-        self.assertEqual(url, serializer.data['image'])
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 
     def test_project_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-projects"))
         serializer = HomepageProjectSerializer(self.project, context={'request':request})
-        url = f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
-        self.assertEqual(url, serializer.data['image'])
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 
     def test_news_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-news"))
+        response = self.client.get(reverse("homepage-news"))
         serializer = HomepageNewsSerializer(self.news, context={'request':request})
-        url = f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
-        self.assertEqual(url, serializer.data['image'])
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
         
 
 class StatusSerializerTestCase(TestCase):
@@ -108,7 +108,7 @@ class StatusSerializerTestCase(TestCase):
 
         image_file = get_test_image_file()
  
-        for _ in range(3): 
+        for _ in range(4): 
             Image.objects.create(
                 pk=_,
                 title=f'image_{_}',
@@ -174,6 +174,15 @@ class StatusSerializerTestCase(TestCase):
             image = Image.objects.get(pk=2),
             is_featured=True,
         ) 
+            #no_end date, ongoing
+        cls.project_ongoing_no_end_date = Project.objects.create(
+            title= 'ongoing project no end date', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            camp=CampEnum.GENERAL,
+            image = Image.objects.get(pk=3),
+            is_featured=True,
+        ) 
 
             #  past            
         cls.project_past = Project.objects.create(
@@ -182,7 +191,7 @@ class StatusSerializerTestCase(TestCase):
             start_date=date_yesterday,
             end_date=date_yesterday,
             camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=3),
+            image = Image.objects.get(pk=4),
             is_featured=True,
         ) 
 
@@ -205,6 +214,11 @@ class StatusSerializerTestCase(TestCase):
     def test_ongoing_status_project(self):
         serializer = ProjectSerializer(self.project_ongoing)
         self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
+
+    def test_ongoing_no_date_status_project(self):
+        serializer = ProjectSerializer(self.project_ongoing_no_end_date)
+        self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
+
 
     def test_upcoming_status_project(self):
         serializer = ProjectSerializer(self.project_upcoming)

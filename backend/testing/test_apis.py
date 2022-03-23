@@ -1,8 +1,8 @@
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase #removed this from main
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone 
 from rest_framework.test import APITestCase
-from kalunwa.content.serializers import StatusEnum
+from kalunwa.content.serializers import StatusEnum #removed from main
 from .utils import get_test_image_file
 from kalunwa.content.models import CampEnum, Image, Jumbotron, News, Project, Tag, Event
 from rest_framework import status

@@ -34,7 +34,21 @@ class Image(AuthoredModel):
         return self.name
 
 
+<<<<<<< HEAD
 class Jumbotron(AuthoredModel):
+=======
+class Image(ContentModel):
+    title = models.CharField(max_length=50) 
+    image = models.ImageField(upload_to='images/content/')
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True) # blank=true allows 0 tags
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Jumbotron(ContentModel):
+    image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
+>>>>>>> 2fd88ca172eda58ac7a538d95fcc64ca113a0b0d
     header_title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=225)
     image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
@@ -43,6 +57,7 @@ class Jumbotron(AuthoredModel):
         return f'{self.header_title} jumbotron'
 
 
+<<<<<<< HEAD
 class ContentBase(AuthoredModel):
     is_published = models.BooleanField(default=False)
     title = models.CharField(max_length=50)
@@ -53,6 +68,38 @@ class ContentBase(AuthoredModel):
 
 class News(ContentBase):
     image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+=======
+class Event(ContentModel):
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    image = models.OneToOneField(Image, related_name='events', on_delete=models.PROTECT) 
+    is_featured = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.title
+        
+
+class Project(ContentModel):
+    title = models.CharField(max_length=50)  
+    description = models.TextField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField(null=True, blank=True)
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)
+    is_featured = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class News(ContentModel):
+    title = models.CharField(max_length=50)  
+    description = models.TextField()
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT)
+>>>>>>> 2fd88ca172eda58ac7a538d95fcc64ca113a0b0d
 
     def __str__(self) -> str:
         return self.title

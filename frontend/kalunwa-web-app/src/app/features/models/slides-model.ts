@@ -1,6 +1,6 @@
 export interface JumbotronModel{
   id: number;
   header_title: string;
-  featured_img: string;
+  image: string;
   short_description: string;
 }

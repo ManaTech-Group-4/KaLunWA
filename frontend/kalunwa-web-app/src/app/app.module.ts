@@ -9,6 +9,7 @@ import { JumbotronComponent } from './features/components/jumbotron/jumbotron.co
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AboutCampComponent } from './features/components/about-camp/about-camp.
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDesignModule,
-    MatCarouselModule.forRoot()
+    MatCarouselModule.forRoot(),
+    HttpClientModule
 
   ],
   providers: [],

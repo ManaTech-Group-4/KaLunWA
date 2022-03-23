@@ -48,7 +48,7 @@ to populate database, run the script ONCE:
     python manage.py shell
             - this opens the interactive python shell. Then enter  
     
-    exec(open("dev_utils/auto_populate/auto_populate.py").read())    
+    exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())    
 """
 
 #-------------------------------------------------------------------------------

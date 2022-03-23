@@ -55,8 +55,32 @@
     </div>
 </div>
 
+<div class="history">
+    <div class="section-header">History</div>
+    <div class="histo-content">
+            <img src="assets/images/KL.png" alt="KL logo"/>
+            <p>
+                Kabiling Lunhaw's (KL) name comes from the combination of two Cebuano words: kabilin and lunhaw, where kabilin means heritage or legacy, and lunhaw means green. Combined together, the name Kabiling Lunhaw translates in English to 'green legacy' or 'green heritage', a testament to what we, the youth of Bohol, envision for our dear home province. 
+                The movement started off as a mangrove reforestation project initiated by Senior Scouts of Bohol Council’s Outfit 235 under Tagbilaran City Science High School (TCSHS) in the last quarter of 2019.
+                It primarily aimed to plant 1 million upland trees at Haguilanan, Balilihan but the Outfit ruled it out because of logistical constraints. Hence, after weeks of discussions with different government and non-government entities, they narrowed it down to planting 10,000 mangrove propagules at Pangangan Island, Calape, Bohol, aptly named Project Diyes Mil. 
+                The location was strategic given that the island boasts the longest man-made causeway in the Philippines stretching 3.5 kilometers from mainland Bohol. It was also a historically significant place for the scouts because the first mangroves at the causeway were planted also by Scouts back in the 1950s.
+            </p>
+            
+            <ng-container *ngIf="visible">
+                <p>
+                    On September 21, 2019, Project Diyes Mil was participated by approximately 200 students from TCSHS from its various school clubs and organizations--TCSHS Supreme Student Government, Math and Science Clubs, Peer Counseling Program, BSP and GSP, etc.--and was able to plant 13,000 mangrove propagules.
+                    Then the COVID-19 pandemic came early during 2020 and forced students into their homes. Come May 2020 when the same Boy Scouts and other student advocates from TCSHS decided to formalize the movement into an independent youth organization with the ratification of its First Constitution on May 21, 2020. 
+                </p>
+            </ng-container>
+            <button (click)="onClick()" type="button" class="button">
+                {{ShowMore?"Show More":"Show Less"}}
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+    </div>
+</div>
+
 <div class="ad-cov">
-    <div class="section-header">The Advocates' Coventant</div>
+    <div class="section-header">Advocates' Coventant</div>
     <div class="ad-cov-content">
         <p>We, the young and bold, commit to the development and implementation of an ambitious and transformational biodiversity framework.</p>
         <hr>

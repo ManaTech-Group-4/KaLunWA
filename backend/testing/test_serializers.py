@@ -15,14 +15,14 @@ class ImageURLSerializerTestCase(APITestCase):
     def setUpTestData(cls):
 
         cls.image = Image.objects.create(
-            title='eating_me',
+            name='eating_me',
             image=get_test_image_file(),
         )
 
         cls.jumbotron = Jumbotron.objects.create(
             id=1, 
             header_title= 'J1', 
-            short_description= 'short description 1',
+            subtitle= 'short description 1',
             image = cls.image
         )
 
@@ -36,6 +36,7 @@ class ImageURLSerializerTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=1),
             is_featured=True,
+            is_published=True,
             ) 
 
         cls.project = Project.objects.create(
@@ -46,12 +47,14 @@ class ImageURLSerializerTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=1),
             is_featured=False,
+            is_published=True,
             )   
 
         cls.news = News.objects.create(
                 title = 'News 1',
                 description= 'description 1',
                 image = Image.objects.get(pk=1),
+                is_published=True,
             )
 
         cls.request_factory = RequestFactory()
@@ -111,12 +114,12 @@ class StatusSerializerTestCase(TestCase):
         for _ in range(4): 
             Image.objects.create(
                 pk=_,
-                title=f'image_{_}',
+                name=f'image_{_}',
                 image=image_file,
             )
 
         image = Image.objects.create(
-                title='image_1',
+                name='image_1',
                 image=get_test_image_file(),            
 
         )
@@ -130,6 +133,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=1),
             is_featured=True,
+            is_published=True,
         ) 
             #  ongoing            
         cls.event_ongoing = Event.objects.create(
@@ -140,6 +144,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=2),
             is_featured=True,
+            is_published=True,
         ) 
 
             #  past            
@@ -151,6 +156,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=3),
             is_featured=True,
+            is_published=True,
         ) 
 
         #projects 
@@ -163,6 +169,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=1),
             is_featured=True,
+            is_published=True,
         ) 
             #  ongoing            
         cls.project_ongoing = Project.objects.create(
@@ -173,6 +180,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=2),
             is_featured=True,
+            is_published=True,
         ) 
             #no_end date, ongoing
         cls.project_ongoing_no_end_date = Project.objects.create(
@@ -182,6 +190,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=3),
             is_featured=True,
+            is_published=True,
         ) 
 
             #  past            
@@ -193,6 +202,7 @@ class StatusSerializerTestCase(TestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=4),
             is_featured=True,
+            is_published=True,
         ) 
 
     def test_past_status_event(self):

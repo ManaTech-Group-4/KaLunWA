@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { EventsModel } from '../models/events';
 import { HomeNewsModel } from '../models/home-news';
+import { JumbotronModel } from '../models/slides-model';
 
 
 @Injectable({
@@ -8,24 +11,6 @@ import { HomeNewsModel } from '../models/home-news';
 })
 export class HomepageService {
 
-  featuredEvents: EventsModel[] = [
-    { title: "Event 1",
-      img: "assets/images/event.jpg"},
-    { title: "Event 2",
-      img: "assets/images/event.jpg"},
-    { title: "Event 3",
-      img: "assets/images/event.jpg"}
-  ];
-
-
-  featuredProjects: EventsModel[] = [
-    { title: "Projects 1",
-      img: "assets/images/project.jpg"},
-    { title: "Projects 2",
-      img: "assets/images/project.jpg"},
-    { title: "Projects 3",
-      img: "assets/images/project.jpg"}
-  ];
 
   featuredNews: HomeNewsModel[] = [
     { title: "News Headline 1",
@@ -42,19 +27,23 @@ export class HomepageService {
       shortDescription: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip..."}
   ];
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
 
-  public getEvents(): EventsModel[] {
-    return this.featuredEvents;
+  public getEvents(): Observable<EventsModel[]>{
+    return this.http.get<EventsModel[]>('http://127.0.0.1:8000/api/homepage/events');
   }
 
-  public getProjects(): EventsModel[] {
-    return this.featuredProjects;
+  public getProjects(): Observable<EventsModel[]> {
+    return this.http.get<EventsModel[]>('http://127.0.0.1:8000/api/homepage/projects');
   }
 
   public getNews(): HomeNewsModel[] {
     return this.featuredNews;
+  }
+
+  public getJumbotron():Observable<JumbotronModel[]> {
+    return this.http.get<JumbotronModel[]>('http://127.0.0.1:8000/api/homepage/jumbotrons');
   }
 
 }

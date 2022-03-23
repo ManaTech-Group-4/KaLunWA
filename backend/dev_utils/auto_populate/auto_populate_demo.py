@@ -120,7 +120,7 @@ for _ in range(1,4): # to make primary keys (pk's) start at count 1
         start_date=timezone.now(),
         end_date=timezone.now(),
         camp=CampEnum.GENERAL,
-        image = Image.objects.get(title=f'event default {_}'),
+        image = Image.objects.get(name=f'event default {_}'),
         is_featured=True,        
     )
 
@@ -135,7 +135,7 @@ for _ in range(1,4): # to make primary keys (pk's) start at count 1
         start_date=timezone.now(),
         end_date=timezone.now(),
         camp=CampEnum.GENERAL,
-        image = Image.objects.get(title=f'project default {_}'),
+        image = Image.objects.get(name=f'project default {_}'),
         is_featured=True,
     )
 print('populated featured events & projects')

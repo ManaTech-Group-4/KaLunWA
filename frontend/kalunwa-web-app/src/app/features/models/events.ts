@@ -1,4 +1,5 @@
 export interface EventsModel{
+  id: number;
   title: string;
-  img: string;
+  image: string;
 }

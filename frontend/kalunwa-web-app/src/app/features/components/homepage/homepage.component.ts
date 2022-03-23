@@ -46,23 +46,17 @@ export class HomepageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.getEventsDisplay();
-    this.getProjectsDisplay();
+    this.homeService.getEvents()
+      .subscribe(data => this.events = data);
+
+    this.homeService.getProjects()
+      .subscribe(data => this.projects = data);
     this.getNewsDisplay();
   }
 
-  getEventsDisplay(): void {
-    this.events = this.homeService.getEvents();
-    console.log(this.events);
-  }
 
-  getProjectsDisplay(): void {
-    this.projects = this.homeService.getProjects();
-    console.log(this.projects);
-  }
 
   getNewsDisplay(): void {
     this.news = this.homeService.getNews();
-    console.log(this.news);
   }
 }

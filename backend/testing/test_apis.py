@@ -1,9 +1,6 @@
-from math import exp
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory
 from django.urls import reverse
-from django.utils import timezone
 from rest_framework.test import APITestCase
-from kalunwa.content.serializers import StatusEnum
 from .utils import get_expected_image_url, get_test_image_file
 from kalunwa.content.models import CampEnum, Image, Jumbotron, News, Project, Tag, Event
 from rest_framework import status
@@ -32,7 +29,7 @@ class HomapageActionsTestCase(APITestCase):
         for _ in range(7): # create 6 for featured & unfeatured content
             Image.objects.create(
                 pk=_,
-                title=f'image_{_}',
+                name=f'image_{_}',
                 image=image_file,
             )            
 
@@ -45,7 +42,7 @@ class HomapageActionsTestCase(APITestCase):
         # create Jumbotrons
             Jumbotron.objects.create(
             header_title= f'Jumbotron {_}', 
-            short_description= f'short description {_}',
+            subtitle= f'short description {_}',
             image = Image.objects.get(pk=_)
             )
 
@@ -58,6 +55,7 @@ class HomapageActionsTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=_),
             is_featured=True,
+            is_published=True,
             )            
 
         # create Projects (featured) 
@@ -69,6 +67,7 @@ class HomapageActionsTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=_),
             is_featured=True,
+            is_published=True,
             )            
 
         # create News 
@@ -76,6 +75,7 @@ class HomapageActionsTestCase(APITestCase):
                 title = f'News {_}',
                 description= f'description {_}',
                 image = Image.objects.get(pk=_),
+                is_published=True,
             )
 
         # create non-featured Events and Projects
@@ -88,6 +88,7 @@ class HomapageActionsTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=_),
             is_featured=False,
+            is_published=True,
             )   
 
             Project.objects.create(
@@ -98,6 +99,7 @@ class HomapageActionsTestCase(APITestCase):
             camp=CampEnum.GENERAL,
             image = Image.objects.get(pk=_),
             is_featured=False,
+            is_published=True,
             )   
 
         ## class attributes: lists of respective objects
@@ -155,8 +157,8 @@ class HomapageActionsTestCase(APITestCase):
             expected_jumbotron.header_title
         )
         self.assertEqual(
-            response_jumbotron['short_description'], 
-            expected_jumbotron.short_description
+            response_jumbotron['subtitle'], 
+            expected_jumbotron.subtitle
             )
         self.assertEqual(response_jumbotron['image'], image_url)
 
@@ -199,7 +201,7 @@ class NewsSerializerTestCase(APITestCase):
     def setUpTestData(cls) -> None:
         # create image
         image = Image.objects.create(
-                title='image_1',
+                name='image_1',
                 image=get_test_image_file(),
             )          
 
@@ -207,6 +209,7 @@ class NewsSerializerTestCase(APITestCase):
                 title = 'News 1',
                 description= 'description 1',
                 image = Image.objects.get(pk=1),
+                is_published=True,
             )        
         
     def test_news_validation_post(self):

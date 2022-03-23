@@ -59,14 +59,15 @@ class ImageURLSerializer(serializers.Serializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, required=False)
     image = serializers.ImageField(use_url=True)
+    tags = TagSerializer(many=True, required=False)
+
 
     class Meta:
         model = Image
         fields = (
             'id',
-            'title',
+            'name',
             'image',
             'tags',
             'created_at',
@@ -83,8 +84,8 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
         fields = (
             'id',
             'header_title',
-            'image',
-            'short_description',            
+            'subtitle',
+            'image',         
         )
 
 
@@ -137,8 +138,8 @@ class JumbotronSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'header_title',
+            'subtitle',
             'image',
-            'short_description',
             'created_at',
             'updated_at',
         )

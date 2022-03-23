@@ -13,6 +13,18 @@ export class AboutPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //history
+
+  ShowMore:boolean=true
+  visible:boolean=false
+
+  onClick(){
+    this.ShowMore=!this.ShowMore
+    this.visible=!this.visible
+  }
+
+
+  //carousel
   white = "#00000";
   slides = [{'image': 'assets/images/people/BoT/BoT-1.jpg'},
             {'image': 'assets/images/people/BoT/BoT-2.jpg'},

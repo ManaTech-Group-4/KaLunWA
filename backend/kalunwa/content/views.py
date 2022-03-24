@@ -1,11 +1,10 @@
-from django import views
 from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement, Project, News
+from .models import Demographics, CampPage, OrgLeader, CampOfficer
 from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
-from rest_framework.views import APIView
+from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CampOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import status, viewsets
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import action
 
 # Create your views here.
@@ -89,3 +88,25 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #             return Response(serializer.data, status=status.HTTP_200_OK)
 #         else: 
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
+
+class DemographicsViewSet(viewsets.ModelViewSet):
+    serializer_class = DemographicsSerializer
+    queryset = Demographics.objects.all()
+
+class CampPageViewSet(viewsets.ModelViewSet):
+    serializer_class = CampPageSerializer
+    queryset = CampPage.objects.all()
+
+class OrgLeaderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrgLeaderSerializer
+    queryset = OrgLeader.objects.all()
+
+class CampOfficerViewSet(viewsets.ModelViewSet):
+    serializer_class = CampOfficerSerializer
+    queryset = CampOfficer.objects.all()

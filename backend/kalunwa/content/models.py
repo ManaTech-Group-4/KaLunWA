@@ -85,3 +85,60 @@ class Project(ContentBase):
         return self.title
 
 
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
+
+
+
+class OfficerEnum(models.TextChoices):
+    PRESIDENT = 'PR', 'President'
+    VICE_PRESIDENT = 'VP', 'Vice-President'
+    SECRETARY = 'SEC', 'Secretary'
+    TREASURER = 'TRE', 'Treasurer'
+    AUDITOR = 'AUD', 'Auditor'
+    PIO = 'PIO', 'Public Information Officer'
+    OVERSEER = 'OVRS', 'Overseer'
+    BOARD_OF_TRUSTEES = 'BOR', 'Board of Trustees'
+    CAMP_LEADER = 'CL', 'Camp Leader'
+    OTHER = 'OTHR', 'Other'
+
+
+class Demographics(AuthoredModel):
+    location = models.CharField(max_length=50)
+    member_count = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.location #what should i return???
+
+class CampPage(AuthoredModel):
+    name = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    description = models.TextField()
+    image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) #not sure with related_image should it be the specific camp?
+    
+    def __str__(self) -> str:
+        return self.name #returns the 'key letters', should be name
+
+class OfficerBase(AuthoredModel):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    position = models.CharField(choices=OfficerEnum.choices, max_length=9, default=OfficerEnum.OTHER)
+    background = models.TextField()
+
+    class Meta:
+        abstract=True
+
+class OrgLeader(OfficerBase):
+    image = models.OneToOneField(Image, related_name='org_leader', on_delete=models.PROTECT) #or add in officerBase w/ related_name = officer for both orgleader&campOfficer
+
+    def __str__(self) -> str:
+        return self.last_name + ', ' + self.first_name #or should I just return the position
+
+class CampOfficer(OfficerBase):
+    motto = models.TextField()
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    image = models.OneToOneField(Image, related_name='camp_officer', on_delete=models.PROTECT)
+ 
+
+    def __str__(self) -> str:
+        return self.last_name + ', ' + self.first_name
+

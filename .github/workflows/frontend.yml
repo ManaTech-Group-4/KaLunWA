@@ -13,6 +13,7 @@ jobs:
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
         run: |
+          rm package-lock.json
           npm cache clean -f
           npm install -g n
           sudo n 14

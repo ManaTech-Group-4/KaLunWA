@@ -2,7 +2,7 @@ div{
   .header{
     width:100%;
     overflow:hidden;
-    height:26vw;
+    height:250px;
     img{
       width:100%;
     }
@@ -17,7 +17,7 @@ div{
     padding: 90px 0px;
     h1{
       font-family: header-font;
-      font-size: 150px;
+      font-size: 200px;
       line-height: 70px;
       padding: 20px 0px;
       color:#233620;
@@ -75,9 +75,9 @@ div{
   width:100%;
   text-align:center;
   font-family: header-font;
-  font-size: 150px;
-  line-height: 100px;
-  padding: 70px 0px;
+  font-size: 100px;
+  line-height: 70px;
+  padding: 50px 0px;
   color:white;
   background-color: #628A3A;
 }
@@ -222,9 +222,9 @@ div{
 @media screen and (max-width: 786px){
 
   .section-header{
-    font-size: 100px;
+    font-size: 80px;
     padding:30px 0px;
-    line-height: 70px;
+    line-height: 50px;
   }
   div{
     .subhead{
@@ -348,7 +348,7 @@ div{
   }
 
   .section-header{
-    font-size: 70px;
+    font-size: 60px;
     padding:30px 0px;
     line-height: 50px;
   }

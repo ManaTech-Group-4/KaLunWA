@@ -18,6 +18,10 @@ export class JumbotronComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getJumbotron();
+  }
+
+  getJumbotron(){
     this.homeService.getJumbotron()
       .subscribe(data => this.slides = data);
   }

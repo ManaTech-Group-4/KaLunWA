@@ -23,10 +23,16 @@ jobs:
           rm package-lock.json
           npm cache clean -f
           npm install -g n
-          if matrix.os == 'ubuntu-latest'
+
+          if [ "$RUNNER_OS" == "Linux" ]; then
             sudo n 14
-          if matrix.os == 'windows-latest'
+          elif [ "$RUNNER_OS" == "Windows" ]; then
             n 14
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
+
           npm install          
           npm ci
         shell: bash

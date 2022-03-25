@@ -11,8 +11,10 @@ jobs:
           node-version: 14.x
 
       - name: Setup
+        working-directory: ./frontend/kalunwa-web-app
         run: npm ci
 
       - name: Test
+        working-directory: ./frontend/kalunwa-web-app
         run: |
           npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI

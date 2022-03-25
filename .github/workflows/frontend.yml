@@ -25,7 +25,7 @@ jobs:
           npm install -g n
           if matrix.os == 'ubuntu-latest'
             sudo n 14
-          elif matrix.os == 'windows-latest'
+          if matrix.os == 'windows-latest'
             n 14
           npm install          
           npm ci

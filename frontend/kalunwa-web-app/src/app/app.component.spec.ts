@@ -26,10 +26,4 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('kalunwa-web-app');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('kalunwa-web-app app is running!');
-  });
 });

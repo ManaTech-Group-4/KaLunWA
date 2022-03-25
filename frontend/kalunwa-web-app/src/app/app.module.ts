@@ -17,16 +17,16 @@ import { HttpClientModule } from '@angular/common/http';
     NavBarComponent,
     JumbotronComponent,
     FooterComponent,
+    AboutCampComponent,
     routeComponents,
-    AboutCampComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDesignModule,
-    MatCarouselModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    MatCarouselModule.forRoot()
 
   ],
   providers: [],

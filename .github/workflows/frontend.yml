@@ -1,0 +1,33 @@
+name: Kalunwa server frontend (main) 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup
+        working-directory: ./frontend/kalunwa-web-app
+        run: |
+          rm package-lock.json
+          npm cache clean -f
+          npm install -g n
+          sudo n 14
+          npm install          
+          npm ci
+
+      - name: Test
+        working-directory: ./frontend/kalunwa-web-app
+        run: |
+          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI

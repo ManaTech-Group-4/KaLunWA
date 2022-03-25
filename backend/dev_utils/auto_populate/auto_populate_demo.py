@@ -48,7 +48,7 @@ to populate database, run the script ONCE:
     python manage.py shell
             - this opens the interactive python shell. Then enter  
     
-    exec(open("dev_utils/auto_populate/auto_populate.py").read())    
+    exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())    
 """
 
 #-------------------------------------------------------------------------------
@@ -62,38 +62,38 @@ print('populated superuser')
 # create sample jumbotrons
 Jumbotron.objects.create(
     image= Image.objects.create(
-        title = 'carousel image 1',
+        name = 'carousel image 1',
         image = 'images/content/carousel1.jpg'
     ),
     header_title = 'Plant.',
-    short_description = "Let's grow and foster together."
+    subtitle = "Let's grow and foster together."
 )
 
 Jumbotron.objects.create(
     image= Image.objects.create(
-        title = 'carousel image 2',
+        name = 'carousel image 2',
         image = 'images/content/carousel2.jpg'
     ),
     header_title = 'Pursue.',
-    short_description = "Onwards with a goal to achieve."
+    subtitle = "Onwards with a goal to achieve."
 )
 
 Jumbotron.objects.create(
     image= Image.objects.create(
-        title = 'carousel image 3',
+        name = 'carousel image 3',
         image = 'images/content/carousel3.jpg'
     ),
     header_title = 'Teamwork.',
-    short_description = "Unity is the key."
+    subtitle = "Unity is the key."
 )
 
 Jumbotron.objects.create(
     image= Image.objects.create(
-        title = 'carousel image 4',
+        name = 'carousel image 4',
         image = 'images/content/carousel4.jpg'
     ),
     header_title = 'Home.',
-    short_description = "Sharing the warmth of family."
+    subtitle = "Sharing the warmth of family."
 )
 print('populated homepage jumbotrons')
 #-------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ for _ in range(1,4): # to make primary keys (pk's) start at count 1
 
     #events
     event_image = Image.objects.create(
-        title = f'event default {_}',
+        name = f'event default {_}',
         image = 'images/content/event.jpg'
     )
 
@@ -120,13 +120,13 @@ for _ in range(1,4): # to make primary keys (pk's) start at count 1
         start_date=timezone.now(),
         end_date=timezone.now(),
         camp=CampEnum.GENERAL,
-        image = Image.objects.get(title=f'event default {_}'),
+        image = Image.objects.get(name=f'event default {_}'),
         is_featured=True,        
     )
 
     # featured projects
     project_image = Image.objects.create(
-        title = f'project default {_}',
+        name = f'project default {_}',
         image = 'images/content/project.jpg'       
     ) 
     Project.objects.create(
@@ -135,7 +135,7 @@ for _ in range(1,4): # to make primary keys (pk's) start at count 1
         start_date=timezone.now(),
         end_date=timezone.now(),
         camp=CampEnum.GENERAL,
-        image = Image.objects.get(title=f'project default {_}'),
+        image = Image.objects.get(name=f'project default {_}'),
         is_featured=True,
     )
 print('populated featured events & projects')
@@ -147,7 +147,7 @@ News.objects.create(
     title = f'News Headline 1',
     description=description ,
     image = Image.objects.create(
-        title = 'news image 1',
+        name = 'news image 1',
         image = 'images/content/news1.jpg'
     )
 )
@@ -156,7 +156,7 @@ News.objects.create(
     title = 'News Headline 2',
     description= description,
     image = Image.objects.create(
-        title = 'news image 2',
+        name = 'news image 2',
         image = 'images/content/news2.jpeg'
     )
 )
@@ -165,7 +165,7 @@ News.objects.create(
     title = 'News Headline 3',
     description= description,
     image = Image.objects.create(
-        title = 'news image 3',
+        name = 'news image 3',
         image = 'images/content/news3.jpg'
     )
 )

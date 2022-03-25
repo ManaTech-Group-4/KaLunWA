@@ -23,7 +23,10 @@ jobs:
           rm package-lock.json
           npm cache clean -f
           npm install -g n
-          sudo n 14
+          if matrix.os == 'ubuntu-latest'
+            sudo n 14
+          elif matrix.os == 'windows-latest'
+            n 14
           npm install          
           npm ci
 

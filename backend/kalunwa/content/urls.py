@@ -14,10 +14,17 @@ router.register(r'events', EventViewSet, basename='event')
 router.register(r'projects', ProjectViewSet, basename='project')
 router.register(r'news', NewsViewSet, basename='news')
 router.register(r'announcements', AnnouncementViewSet, basename='announcement')
+<<<<<<< HEAD
 router.register(r'demographics', DemographicsViewSet, basename='demographic')
 router.register(r'camppages', CampPageViewSet, basename='camp')
 router.register(r'orgleaders', OrgLeaderViewSet, basename='orgleader')
 router.register(r'commissioners', CommissionerViewSet, basename='commissioner')
 router.register(r'campleaders', CampLeaderViewSet, basename='campleader')
 router.register(r'cabinofficers', CabinOfficerViewSet, basename='cabinofficer')
+=======
+router.register(r'demographics', DemographicsViewSet, basename='announcement')
+router.register(r'camppages', CampPageViewSet, basename='announcement')
+router.register(r'orgleaders', OrgLeaderViewSet, basename='announcement')
+router.register(r'campofficers', CampOfficerViewSet, basename='announcement')
+>>>>>>> 3a103f791ad73717be68ddcc2f336e79b9343d23
 urlpatterns = router.urls

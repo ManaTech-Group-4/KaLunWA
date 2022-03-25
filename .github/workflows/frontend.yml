@@ -1,8 +1,8 @@
-name: CI Angular app through Github Actions
+name: Kalunwa server frontend (main) 
 on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x

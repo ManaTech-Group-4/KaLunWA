@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDesignModule } from '../../shared/mat-design.module';
 
 import { AboutCampComponent } from './about-camp.component';
 
@@ -8,7 +9,8 @@ describe('AboutCampComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AboutCampComponent ]
+      declarations: [ AboutCampComponent ],
+      imports: [ MatDesignModule ]
     })
     .compileComponents();
   });

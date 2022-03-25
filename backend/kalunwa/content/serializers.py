@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
@@ -87,7 +88,7 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
             'subtitle',
             'image',         
         )
-
+    
 
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -127,6 +128,9 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     
     def get_date(self, obj):
         return obj.created_at.date()
+
+
+
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

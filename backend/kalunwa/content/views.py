@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
 from .models import Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
@@ -7,10 +8,9 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-# Create your views here.
-# url should be /admin
-#-------------------------------------------------------
+#-------------------------------------------------------------------------------
 # homepage views
+
 
 class HomepageViewSet(viewsets.ViewSet):
 
@@ -38,6 +38,17 @@ class HomepageViewSet(viewsets.ViewSet):
         news = News.objects.order_by('-created_at')[:3]
         serializer = HomepageNewsSerializer (news, many=True,context={'request':request})
         return Response(serializer.data)    
+
+#-------------------------------------------------------------------------------
+# about us view
+
+class AboutUsViewset(viewsets.ViewSet):
+    @action(detail=False)
+    def total_members(self,request):
+        return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
+    
+    # camps
+    # org_leader_images
 
 #------------------------------------------------------- 
 

@@ -17,6 +17,7 @@ jobs:
           npm cache clean -f
           npm install -g n
           sudo n 14
+          npm install          
           npm ci
 
       - name: Test

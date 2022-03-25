@@ -12,7 +12,11 @@ jobs:
 
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
-        run: npm ci
+        run: |
+          npm cache clean -f
+          npm install -g n
+          sudo n stable
+          npm ci
 
       - name: Test
         working-directory: ./frontend/kalunwa-web-app

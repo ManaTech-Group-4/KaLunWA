@@ -90,19 +90,6 @@ class Project(ContentBase):
 
 
 
-class OfficerEnum(models.TextChoices):
-    PRESIDENT = 'PR', 'President'
-    VICE_PRESIDENT = 'VP', 'Vice-President'
-    SECRETARY = 'SEC', 'Secretary'
-    TREASURER = 'TRE', 'Treasurer'
-    AUDITOR = 'AUD', 'Auditor'
-    PIO = 'PIO', 'Public Information Officer'
-    OVERSEER = 'OVRS', 'Overseer'
-    BOARD_OF_TRUSTEES = 'BOR', 'Board of Trustees'
-    CAMP_LEADER = 'CL', 'Camp Leader'
-    OTHER = 'OTHR', 'Other'
-
-
 class Demographics(AuthoredModel):
     location = models.CharField(max_length=50)
     member_count = models.IntegerField()
@@ -118,27 +105,112 @@ class CampPage(AuthoredModel):
     def __str__(self) -> str:
         return self.name #returns the 'key letters', should be name
 
-class OfficerBase(AuthoredModel):
+
+class OrgLeaderEnum(models.TextChoices):
+    PRESIDENT = 'PR', 'President'
+    VICE_PRESIDENT = 'VP', 'Vice-President'
+    SECRETARY = 'SEC', 'Secretary'
+    TREASURER = 'TRE', 'Treasurer'
+    AUDITOR = 'AUD', 'Auditor'
+    PIO = 'PIO', 'Public Information Officer'
+    OVERSEER = 'OVRS', 'Overseer'
+    DIRECTOR = 'DIR', 'Director'
+    OTHER = 'OTHR', 'Other'
+
+class CommissionEnum(models.TextChoices):
+    CHIEF = 'CHF', 'Chief Commissioner'
+    COMMISSIONER = 'CMSR', 'Commissioner'
+    OTHER = 'OTHR', 'Other'
+
+class CommissionCategEnum(models.TextChoices):
+    ELECTION = 'ELCT', 'Chief Commissioner'
+    GRIEVANCE_AND_ETHICS = 'GAE', 'Grievance and Ethics'
+    OTHER = 'OTHR', 'Other'
+
+class CampLeaderEnum(models.TextChoices):
+    LEADER = 'LDR', 'Camp Leader'
+    ASSISTANT_LEADER = 'ALDR', 'Assistant Camp Leader'
+    OTHER = 'OTHR', 'Other'
+
+class CabinOfficerEnum(models.TextChoices):
+    HEAD = 'HD', 'Cabin Head'
+    ASSISTANT_HEAD = 'AHD', 'Assistant Cabin Head'
+    SCRIBE = 'SCRB', 'Scribe'
+    OTHER = 'OTHR', 'Other'
+
+class CabinCategEnum(models.TextChoices):
+    SECRETARIAT = 'SCRT', 'Secretariat Cabin'
+    FINANCES = 'FNC', 'Finance Cabin'
+    WAYS_AND_MEANS = 'WAM', 'Ways and Means Cabin'
+    PUBLICITY = 'PBL', 'Publicity Cabin'
+    PROGRAMS = 'PRG', 'Programs Cabin'
+    RESEARCH = 'RSR', 'Research Cabin'
+    OTHER = 'OTHR', 'Other'
+
+
+class LeaderBase(AuthoredModel):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    position = models.CharField(choices=OfficerEnum.choices, max_length=9, default=OfficerEnum.OTHER)
     background = models.TextField()
+    advocacy = models.TextField()
+    image = models.OneToOneField(Image, on_delete=models.PROTECT)
 
     class Meta:
         abstract=True
 
-class OrgLeader(OfficerBase):
-    image = models.OneToOneField(Image, related_name='org_leader', on_delete=models.PROTECT) #or add in officerBase w/ related_name = officer for both orgleader&campOfficer
+class OrgLeader(LeaderBase):
+    position = models.CharField(choices=OrgLeaderEnum.choices, max_length=5, default=OrgLeaderEnum.OTHER)
+    def __str__(self) -> str:
+        self.find_enum()
+        return self.position + ' : ' + self.last_name
+
+
+class Commissioner(LeaderBase):
+    category = models.CharField(choices=CommissionCategEnum.choices, max_length=5, default=CommissionCategEnum.OTHER)
+    position = models.CharField(choices=CommissionEnum.choices, max_length=5, default=CommissionEnum.OTHER)
 
     def __str__(self) -> str:
-        return self.last_name + ', ' + self.first_name #or should I just return the position
+        return '(' + self.category + ') ' + self.position + ' : ' + self.last_name
 
-class CampOfficer(OfficerBase):
-    motto = models.TextField()
+
+class CampLeader(LeaderBase):
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    image = models.OneToOneField(Image, related_name='camp_officer', on_delete=models.PROTECT)
- 
+    position = models.CharField(choices=CampLeaderEnum.choices, max_length=5, default=CampLeaderEnum.OTHER)
+    motto = models.TextField()
 
     def __str__(self) -> str:
-        return self.last_name + ', ' + self.first_name
+        return '(Camp: ' + self.camp + ') ' + self.position + ' : ' + self.last_name
 
+
+class CabinOfficer(LeaderBase):
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    category = models.CharField(choices=CabinCategEnum.choices, max_length=5, default=CabinCategEnum.OTHER)
+    position = models.CharField(choices=CabinOfficerEnum.choices, max_length=5, default=CabinOfficerEnum.OTHER)
+
+
+    def __str__(self) -> str:
+        return '(Camp: ' + self.camp + ') ' + self.position + ' : ' + self.last_name
+
+#serializer logic to enums onetoone
+
+#content
+#add serializer
+#add admin
+#add views
+#add url
+
+
+#testing
+#models
+#url
+#api
+
+#auto_populate
+
+
+
+#camp must be used only once in Camp Page or must be ready made
+#combine all leaders? or not
+
+
+#https://stackoverflow.com/questions/4143886/django-admin-disable-the-add-action-for-a-specific-model 

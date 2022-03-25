@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
 from .models import Event, Image, Jumbotron, Announcement, Project, News
-from .models import Demographics, CampPage, OrgLeader, CampOfficer
+from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
-from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CampOfficerSerializer
+from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
 
 # Create your views here.
@@ -107,6 +107,14 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
     queryset = OrgLeader.objects.all()
 
-class CampOfficerViewSet(viewsets.ModelViewSet):
-    serializer_class = CampOfficerSerializer
-    queryset = CampOfficer.objects.all()
+class CommissionerViewSet(viewsets.ModelViewSet):
+    serializer_class = CommissionerSerializer
+    queryset = Commissioner.objects.all()
+
+class CampLeaderViewSet(viewsets.ModelViewSet):
+    serializer_class = CampLeaderSerializer
+    queryset = CampLeader.objects.all()
+
+class CabinOfficerViewSet(viewsets.ModelViewSet):
+    serializer_class = CabinOfficerSerializer
+    queryset = CabinOfficer.objects.all()

@@ -2,7 +2,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
-from .models import Demographics, CampPage, OrgLeader, CampOfficer
+from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
 class StatusEnum(Enum):
@@ -291,28 +291,65 @@ class OrgLeaderSerializer(serializers.ModelSerializer):
             'id',
             'first_name',
             'last_name',
-            'position',
             'background',
+            'advocacy',
             'image',
+            'position',
             'created_at',
             'updated_at',
         )
 
 
-
-class CampOfficerSerializer(serializers.ModelSerializer):
+class CommissionerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CampOfficer
+        model = Commissioner
         fields = (
             'id',
             'first_name',
             'last_name',
-            'position',
             'background',
-            'motto',
-            'camp',
+            'advocacy',
             'image',
+            'position',
+            'category',
+            'created_at',
+            'updated_at',
+        )
+
+
+class CampLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CampLeader
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'motto',
+            'created_at',
+            'updated_at',
+        )
+
+class CabinOfficerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CabinOfficer
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'category',
             'created_at',
             'updated_at',
         )

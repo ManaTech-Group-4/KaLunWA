@@ -23,5 +23,10 @@ export class AppComponent implements AfterViewInit {
     this.navService.sidenav = this.sidenav;
   }
 
+  onSelect(){
+    this.whatWeDo = false;
+    this.about = false;
+    this.orgOverview = false;
+  }
 
 }

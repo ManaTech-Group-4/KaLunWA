@@ -1,9 +1,9 @@
+from unicodedata import category
 from django.test import TestCase
 from django.utils import timezone
 from kalunwa.content.models import Image, Jumbotron, Tag, Event, Project, News, Announcement, CampEnum
+from kalunwa.content.models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 import tempfile
-
-#https://docs.python.org/3/library/unittest.html 
 
 
 class ModelTest(TestCase):
@@ -37,7 +37,7 @@ class ModelTest(TestCase):
             subtitle="jumbotron_description")
         self.assertTrue(isinstance(jumbotron_model,Jumbotron)) 
         self.assertEqual(Image.objects.count(), 1)
-        self.assertEqual(str(jumbotron_model),"jumbotron_title"+" jumbotron")
+        self.assertEqual(str(jumbotron_model),f'{jumbotron_model.header_title} jumbotron')
 
 
     def test_news_model(self):
@@ -97,5 +97,110 @@ class ModelTest(TestCase):
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(project_model.camp,"GNRL")
         self.assertFalse(project_model.is_featured)
+    
+
+    def test_demographics_model(self):
+        demographics_model = Demographics.objects.create(
+            location = "sample_location",
+            member_count = 20)
+        self.assertTrue(isinstance(demographics_model,Demographics))
+        self.assertEqual(str(demographics_model),"sample_location") 
+        self.assertEqual(demographics_model.member_count,20)
+    
+
+    def test_camp_page_model(self):
+        camp_page_model = CampPage.objects.create(
+            name = CampEnum.GENERAL,
+            description = "camp_page_description",
+            image=self.create_image_sample(),)
+        self.assertTrue(isinstance(camp_page_model,CampPage))
+        self.assertEqual(str(camp_page_model),CampEnum.GENERAL.label) 
+        self.assertEqual(camp_page_model.description,"camp_page_description")
+        self.assertEqual(Image.objects.count(), 1)
+
+
+    def test_org_leader_model(self):
+        org_leader_model = OrgLeader.objects.create(
+            first_name = "leader_first_name",
+            last_name = "leader_last_name",
+            background = "leader_background",
+            advocacy = "leader_advocacy",
+            image=self.create_image_sample(),
+            position = OrgLeader.Positions.OTHER)
+        self.assertTrue(isinstance(org_leader_model,OrgLeader))
+        self.assertEqual(org_leader_model.first_name,"leader_first_name")
+        self.assertEqual(org_leader_model.last_name,"leader_last_name")
+        self.assertEqual(org_leader_model.background,"leader_background")
+        self.assertEqual(org_leader_model.advocacy,"leader_advocacy")
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(org_leader_model.position, OrgLeader.Positions.OTHER)
+        self.assertEqual(str(org_leader_model),f'{OrgLeader.Positions.OTHER.label} : {org_leader_model.last_name}')
+        
+
+    def test_commissioner_model(self):
+        commissioner_model = Commissioner.objects.create(
+            first_name = "commissioner_first_name",
+            last_name = "commissioner_last_name",
+            background = "commissioner_background",
+            advocacy = "commissioner_advocacy",
+            image=self.create_image_sample(),
+            category = Commissioner.Categories.OTHER,
+            position = Commissioner.Positions.OTHER)
+        self.assertTrue(isinstance(commissioner_model,Commissioner))
+        self.assertEqual(commissioner_model.first_name,"commissioner_first_name")
+        self.assertEqual(commissioner_model.last_name,"commissioner_last_name")
+        self.assertEqual(commissioner_model.background,"commissioner_background")
+        self.assertEqual(commissioner_model.advocacy,"commissioner_advocacy")
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(commissioner_model.category, Commissioner.Categories.OTHER)
+        self.assertEqual(commissioner_model.position, Commissioner.Positions.OTHER)
+        self.assertEqual(str(commissioner_model),f'{Commissioner.Categories.OTHER.label} {Commissioner.Positions.OTHER.label}: {commissioner_model.last_name}')
+
+
+    def test_camp_leader_model(self):
+        camp_leader_model = CampLeader.objects.create(
+            first_name = "camp_leader_first_name",
+            last_name = "camp_leader_last_name",
+            background = "camp_leader_background",
+            advocacy = "camp_leader_advocacy",
+            image=self.create_image_sample(),
+            camp = CampEnum.GENERAL,
+            position = Commissioner.Positions.OTHER,
+            motto = "camp_leader_motto")
+        self.assertTrue(isinstance(camp_leader_model,CampLeader))
+        self.assertEqual(camp_leader_model.first_name,"camp_leader_first_name")
+        self.assertEqual(camp_leader_model.last_name,"camp_leader_last_name")
+        self.assertEqual(camp_leader_model.background,"camp_leader_background")
+        self.assertEqual(camp_leader_model.advocacy,"camp_leader_advocacy")
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(camp_leader_model.camp, CampEnum.GENERAL)
+        self.assertEqual(camp_leader_model.position, CampLeader.Positions.OTHER)
+        self.assertEqual(camp_leader_model.motto,"camp_leader_motto")
+        self.assertEqual(str(camp_leader_model),f'Camp {CampEnum.GENERAL.label}, {CampLeader.Positions.OTHER.label}: {camp_leader_model.last_name}')        
+
+
+    def test_cabin_officer_model(self):
+        cabin_officer_model = CabinOfficer.objects.create(
+            first_name = "cabin_officer_first_name",
+            last_name = "cabin_officer_last_name",
+            background = "cabin_officer_background",
+            advocacy = "cabin_officer_advocacy",
+            image=self.create_image_sample(),
+            camp = CampEnum.GENERAL,
+            category = CabinOfficer.Categories.OTHER,
+            position = CabinOfficer.Positions.OTHER)
+        self.assertTrue(isinstance(cabin_officer_model,CabinOfficer))
+        self.assertEqual(cabin_officer_model.first_name,"cabin_officer_first_name")
+        self.assertEqual(cabin_officer_model.last_name,"cabin_officer_last_name")
+        self.assertEqual(cabin_officer_model.background,"cabin_officer_background")
+        self.assertEqual(cabin_officer_model.advocacy,"cabin_officer_advocacy")
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(cabin_officer_model.camp, CampEnum.GENERAL)
+        self.assertEqual(cabin_officer_model.category, CabinOfficer.Categories.OTHER)
+        self.assertEqual(cabin_officer_model.position, CabinOfficer.Positions.OTHER)
+        self.assertEqual(str(cabin_officer_model),f'Camp {CampEnum.GENERAL.label} {CabinOfficer.Categories.OTHER.label}, {CampLeader.Positions.OTHER.label}: {cabin_officer_model.last_name}')            
+
+    
+
 
         

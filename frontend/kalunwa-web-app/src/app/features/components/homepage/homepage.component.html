@@ -64,12 +64,12 @@
 
 <div class="news">
   <h1>News</h1>
-  <mat-card class="events-card"  *ngFor="let soloNews of news" style="background-image: url('{{soloNews.img}}');background-size: cover;background-position: center;" >
+  <mat-card class="events-card"  *ngFor="let soloNews of news" style="background-image: url('{{soloNews.image}}');background-size: cover;background-position: center;" >
     <div>
       <mat-card-content>
         <h1>{{soloNews.title}}</h1>
         <p>{{soloNews.date}}</p>
-        <p class="desc">{{soloNews.shortDescription}}</p>
+        <p class="desc">{{soloNews.description}}</p>
         <div class="read">
           <p>Read More</p>
           <mat-icon>arrow_forward_ios</mat-icon>

@@ -194,7 +194,6 @@ class HomapageActionsTestCase(APITestCase):
         self.assertEqual(response_news['image'], image_url)
         self.assertEqual(response_news['date'], expected_news.homepage_date())
 
-
 #-------------------------------------------------------------------------------
 # About Us Website
 class AboutUsActionsTestCase(APITestCase):

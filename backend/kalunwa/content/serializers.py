@@ -135,6 +135,7 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
 
 #-------------------------------------------------------------------------------
 #  serializers for aboutus homepage view
+
 class AboutUsCampLeaderSerializer(serializers.ModelSerializer, ImageURLSerializer):
     name = serializers.CharField(max_length=100, source='get_fullname')
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -187,7 +188,6 @@ class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializ
             'image_url'
         )
     
-
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

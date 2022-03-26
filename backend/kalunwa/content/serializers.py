@@ -1,8 +1,8 @@
-from django.forms import CharField
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
-from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
+from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
+from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
 
@@ -256,6 +256,108 @@ class AnnouncementSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
+            'created_at',
+            'updated_at',
+        )
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#-----------------------------newly added serializer as of 23/3/2022-----------------------------------------------
+
+class DemographicsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Demographics
+        fields = (
+            'id',
+            'location',
+            'member_count',
+            'created_at',
+            'updated_at',
+        )
+
+
+class CampPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CampPage
+        fields = (
+            'id',
+            'name',
+            'description',
+            'image',
+            'created_at',
+            'updated_at',
+        )
+
+
+class OrgLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrgLeader
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'position',
+            'created_at',
+            'updated_at',
+        )
+
+
+class CommissionerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Commissioner
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'position',
+            'category',
+            'created_at',
+            'updated_at',
+        )
+
+
+class CampLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CampLeader
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'motto',
+            'created_at',
+            'updated_at',
+        )
+
+class CabinOfficerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CabinOfficer
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'category',
             'created_at',
             'updated_at',
         )

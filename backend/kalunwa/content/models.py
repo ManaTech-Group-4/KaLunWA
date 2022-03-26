@@ -98,7 +98,7 @@ class Demographics(AuthoredModel):
 
 
 class CampPage(AuthoredModel):
-    name = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
@@ -117,6 +117,9 @@ class LeaderBase(AuthoredModel):
 
     class Meta:
         abstract=True
+    
+    def get_fullname(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class OrgLeader(LeaderBase):

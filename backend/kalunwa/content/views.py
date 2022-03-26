@@ -1,16 +1,16 @@
 from django.shortcuts import get_object_or_404
-from .models import Event, Image, Jumbotron, Announcement, Project, News
+from django.db.models import Sum
+from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-# Create your views here.
-# url should be /admin
-#-------------------------------------------------------
+#-------------------------------------------------------------------------------
 # homepage views
+
 
 class HomepageViewSet(viewsets.ViewSet):
 
@@ -38,6 +38,34 @@ class HomepageViewSet(viewsets.ViewSet):
         news = News.objects.order_by('-created_at')[:3]
         serializer = HomepageNewsSerializer (news, many=True,context={'request':request})
         return Response(serializer.data)    
+
+#-------------------------------------------------------------------------------
+# about us view
+
+class AboutUsViewset(viewsets.ViewSet):
+    @action(detail=False)
+    def demographics(self, request):
+        return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
+    
+    @action(detail=False)
+    def camps(self, request):
+        # ensures 1 of each camp incase of duplicates
+        suba = CampPage.objects.filter(name=CampEnum.SUBA) [:1]
+        baybayon = CampPage.objects.filter(name=CampEnum.BAYBAYON) [:1]
+        zero_waste = CampPage.objects.filter(name=CampEnum.ZEROWASTE) [:1]
+        lasang = CampPage.objects.filter(name=CampEnum.LASANG) [:1]
+
+        camps = suba | baybayon | zero_waste | lasang # combines into one queryset
+
+        serializer = AboutUsCampSerializer(camps, many=True, context={'request':request})
+        return Response(serializer.data)
+    
+    @action(detail=False)
+    def organization_leaders(self, request):
+        org_leaders = OrgLeader.objects.all()[:5]
+        serializer = AboutUsLeaderImageSerializer(org_leaders, many=True, context={'request':request})
+        return  Response(serializer.data)
+
 
 #------------------------------------------------------- 
 

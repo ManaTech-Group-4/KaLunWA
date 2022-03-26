@@ -1,4 +1,6 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
@@ -89,7 +91,7 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
             'subtitle',
             'image',         
         )
-
+    
 
 class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -134,7 +136,58 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
 #-------------------------------------------------------------------------------
 #  serializers for aboutus homepage view
 
+class AboutUsCampLeaderSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    name = serializers.CharField(max_length=100, source='get_fullname')
+    image = serializers.SerializerMethodField(method_name='get_url')
 
+    class Meta:
+        model = CampLeader
+        fields = (
+            'name',
+            'motto',
+            'image'
+        )
+    
+    
+
+class AboutUsCampSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    camp_name = serializers.CharField(max_length=5, source='get_name_display')
+    camp_image = serializers.SerializerMethodField(method_name='get_url')
+    camp_leader = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = CampPage
+        fields = (
+            'camp_name',
+            'description',
+            'camp_image',
+            'camp_leader',
+        )
+    
+    def get_camp_leader(self, obj):
+        try:
+            camp_leader = CampLeader.objects.get(
+                camp=obj.name,
+                position=CampLeader.Positions.LEADER
+            )
+            serializer = AboutUsCampLeaderSerializer(camp_leader, context=self.context)
+            return serializer.data
+
+        except ObjectDoesNotExist:
+            return None
+
+
+class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    leader_id =  serializers.IntegerField(required=True, source='id')
+    image_url = serializers.SerializerMethodField(method_name='get_url')
+
+    class Meta:
+        model = OrgLeader
+        fields = (
+            'leader_id',
+            'image_url'
+        )
+    
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields
@@ -187,9 +240,7 @@ class EventSerializer(serializers.ModelSerializer):
     
     def validate(self, data): # object-level validation
         data = self.get_initial() # gets pre-validation data
-        start_date = data['start_date']
-        end_date = data['end_date']
-        validate_start_date_and_end_date(start_date, end_date)
+        validate_start_date_and_end_date(data['start_date'], data['end_date'])
 
         return data
 
@@ -226,11 +277,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         if date_now < obj.start_date and date_now < obj.end_date:
             return StatusEnum.UPCOMING.value    
 
-    def validate(self, data): # object-level validation
-        data = self.get_initial() # gets unvalidated data being posted
-        start_date = data['start_date']
-        end_date = data['end_date']
-        validate_start_date_and_end_date(start_date, end_date)
+    def validate(self, data):
+        data = self.get_initial()
+        validate_start_date_and_end_date(data['start_date'], data['end_date'])
 
         return data
 

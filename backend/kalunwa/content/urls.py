@@ -1,11 +1,12 @@
 from rest_framework.routers import DefaultRouter
 
-from .views import EventViewSet, ImageViewSet, JumbotronViewSet, ProjectViewSet, NewsViewSet, AnnouncementViewSet,  HomepageViewSet
+from .views import AboutUsViewset, EventViewSet, ImageViewSet, JumbotronViewSet, ProjectViewSet, NewsViewSet, AnnouncementViewSet,  HomepageViewSet
 from .views import DemographicsViewSet, CampPageViewSet, OrgLeaderViewSet, CommissionerViewSet, CampLeaderViewSet, CabinOfficerViewSet
 
 router = DefaultRouter()
 
 router.register(r'homepage', HomepageViewSet, basename='homepage')
+router.register(r'about-us', AboutUsViewset, basename='about-us')
 
 # for complete detail
 router.register(r'images', ImageViewSet, basename='image')

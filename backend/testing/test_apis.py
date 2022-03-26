@@ -190,7 +190,7 @@ class HomapageActionsTestCase(APITestCase):
         self.assertEqual(response_news['title'], expected_news.title)
         self.assertEqual(response_news['description'], expected_news.description)
         self.assertEqual(response_news['image'], image_url)
-        self.assertEqual(response_news['date'], expected_news.created_at.date())
+        self.assertEqual(response_news['date'], expected_news.homepage_date())
 
 # ---------------------------------------------------------------------------        
 # Post end-points

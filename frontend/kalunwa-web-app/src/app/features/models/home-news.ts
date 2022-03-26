@@ -1,6 +1,7 @@
 export interface HomeNewsModel{
+  id: number;
   title: string;
-  img: string;
+  image: string;
   date: string;
-  shortDescription: string;
+  description: string;
 }

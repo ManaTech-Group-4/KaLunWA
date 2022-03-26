@@ -51,12 +51,10 @@ export class HomepageComponent implements OnInit {
 
     this.homeService.getProjects()
       .subscribe(data => this.projects = data);
-    this.getNewsDisplay();
+
+    this.homeService.getNews()
+    .subscribe(data => this.news = data);
   }
 
 
-
-  getNewsDisplay(): void {
-    this.news = this.homeService.getNews();
-  }
 }

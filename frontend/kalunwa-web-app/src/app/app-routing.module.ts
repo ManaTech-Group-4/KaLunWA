@@ -7,11 +7,7 @@ import { PageNotFoundComponent } from './features/components/page-not-found/page
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomepageComponent},
-  {path: 'about',  component: AboutPageComponent,
-    children: [
-      {path: 'vmc', redirectTo: '#vmc-section', pathMatch: 'full'}
-    ]},
-  {path: 'about#vmc', redirectTo: 'about#vmc-section', pathMatch: 'full'},
+  {path: 'about',  component: AboutPageComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({

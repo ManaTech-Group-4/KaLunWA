@@ -56,6 +56,10 @@ class News(ContentBase):
 
     def __str__(self) -> str:
         return self.title
+    
+    def homepage_date(self)->str:
+        date = self.created_at
+        return f'{date.strftime("%B")} {date.day}, {date.year}'
 
 
 class Announcement(ContentBase):
@@ -85,67 +89,23 @@ class Project(ContentBase):
         return self.title
 
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
-
-
-
 class Demographics(AuthoredModel):
     location = models.CharField(max_length=50)
     member_count = models.IntegerField()
 
     def __str__(self) -> str:
-        return self.location #what should i return???
+        return self.location 
+
 
 class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     description = models.TextField()
-    image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) #not sure with related_image should it be the specific camp?
-    
+    image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
+    # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
+        # use case: image.Suba -> expectedly returns a single CampPage, Suba
+
     def __str__(self) -> str:
-        return self.name #returns the 'key letters', should be name
-
-
-class OrgLeaderEnum(models.TextChoices):
-    PRESIDENT = 'PR', 'President'
-    VICE_PRESIDENT = 'VP', 'Vice-President'
-    SECRETARY = 'SEC', 'Secretary'
-    TREASURER = 'TRE', 'Treasurer'
-    AUDITOR = 'AUD', 'Auditor'
-    PIO = 'PIO', 'Public Information Officer'
-    OVERSEER = 'OVRS', 'Overseer'
-    DIRECTOR = 'DIR', 'Director'
-    OTHER = 'OTHR', 'Other'
-
-class CommissionEnum(models.TextChoices):
-    CHIEF = 'CHF', 'Chief Commissioner'
-    COMMISSIONER = 'CMSR', 'Commissioner'
-    OTHER = 'OTHR', 'Other'
-
-class CommissionCategEnum(models.TextChoices):
-    ELECTION = 'ELCT', 'Chief Commissioner'
-    GRIEVANCE_AND_ETHICS = 'GAE', 'Grievance and Ethics'
-    OTHER = 'OTHR', 'Other'
-
-class CampLeaderEnum(models.TextChoices):
-    LEADER = 'LDR', 'Camp Leader'
-    ASSISTANT_LEADER = 'ALDR', 'Assistant Camp Leader'
-    OTHER = 'OTHR', 'Other'
-
-class CabinOfficerEnum(models.TextChoices):
-    HEAD = 'HD', 'Cabin Head'
-    ASSISTANT_HEAD = 'AHD', 'Assistant Cabin Head'
-    SCRIBE = 'SCRB', 'Scribe'
-    OTHER = 'OTHR', 'Other'
-
-class CabinCategEnum(models.TextChoices):
-    SECRETARIAT = 'SCRT', 'Secretariat Cabin'
-    FINANCES = 'FNC', 'Finance Cabin'
-    WAYS_AND_MEANS = 'WAM', 'Ways and Means Cabin'
-    PUBLICITY = 'PBL', 'Publicity Cabin'
-    PROGRAMS = 'PRG', 'Programs Cabin'
-    RESEARCH = 'RSR', 'Research Cabin'
-    OTHER = 'OTHR', 'Other'
+        return self.get_name_display()
 
 
 class LeaderBase(AuthoredModel):
@@ -158,59 +118,81 @@ class LeaderBase(AuthoredModel):
     class Meta:
         abstract=True
 
+
 class OrgLeader(LeaderBase):
-    position = models.CharField(choices=OrgLeaderEnum.choices, max_length=5, default=OrgLeaderEnum.OTHER)
+    class Positions(models.TextChoices):
+        PRESIDENT = 'PR', 'President'
+        VICE_PRESIDENT = 'VP', 'Vice-President'
+        SECRETARY = 'SEC', 'Secretary'
+        TREASURER = 'TRE', 'Treasurer'
+        AUDITOR = 'AUD', 'Auditor'
+        PIO = 'PIO', 'Public Information Officer'
+        OVERSEER = 'OVRS', 'Overseer'
+        DIRECTOR = 'DIR', 'Director'
+        OTHER = 'OTHR', 'Other'
+
+    position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
     def __str__(self) -> str:
-        self.find_enum()
-        return self.position + ' : ' + self.last_name
+
+        return f'{self.get_position_display()} : {self.last_name}'
 
 
 class Commissioner(LeaderBase):
-    category = models.CharField(choices=CommissionCategEnum.choices, max_length=5, default=CommissionCategEnum.OTHER)
-    position = models.CharField(choices=CommissionEnum.choices, max_length=5, default=CommissionEnum.OTHER)
+    class Categories(models.TextChoices):
+        ELECTION = 'ELCT', 'Election'
+        GRIEVANCE_AND_ETHICS = 'GAE', 'Grievance and Ethics'
+        OTHER = 'OTHR', 'Other'    
+
+    class Positions(models.TextChoices):
+        CHIEF = 'CHF', 'Chief Commissioner'
+        COMMISSIONER = 'CMSR', 'Commissioner'
+        OTHER = 'OTHR', 'Other'        
+
+    category = models.CharField(choices=Categories.choices, max_length=5, default=Categories.OTHER)
+    position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
 
     def __str__(self) -> str:
-        return '(' + self.category + ') ' + self.position + ' : ' + self.last_name
+        return f'{self.get_category_display()} {self.get_position_display()}: {self.last_name}'
+        # e.g. Election Chief Commissioner: Junel
 
 
 class CampLeader(LeaderBase):
+    class Positions(models.TextChoices):
+        LEADER = 'LDR', 'Camp Leader'
+        ASSISTANT_LEADER = 'ALDR', 'Assistant Camp Leader'
+        OTHER = 'OTHR', 'Other'    
+
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    position = models.CharField(choices=CampLeaderEnum.choices, max_length=5, default=CampLeaderEnum.OTHER)
+    position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
     motto = models.TextField()
 
     def __str__(self) -> str:
-        return '(Camp: ' + self.camp + ') ' + self.position + ' : ' + self.last_name
+        return f'Camp {self.get_camp_display()}, {self.get_position_display()}: {self.last_name}'
+        # e.g. Camp Suba, Camp Leader: Junel  
 
 
 class CabinOfficer(LeaderBase):
-    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
-    category = models.CharField(choices=CabinCategEnum.choices, max_length=5, default=CabinCategEnum.OTHER)
-    position = models.CharField(choices=CabinOfficerEnum.choices, max_length=5, default=CabinOfficerEnum.OTHER)
+    class Positions(models.TextChoices):
+        HEAD = 'HD', 'Cabin Head'
+        ASSISTANT_HEAD = 'AHD', 'Assistant Cabin Head'
+        SCRIBE = 'SCRB', 'Scribe'
+        OTHER = 'OTHR', 'Other'
 
+    class Categories(models.TextChoices):
+        SECRETARIAT = 'SCRT', 'Secretariat Cabin'
+        FINANCES = 'FNC', 'Finance Cabin'
+        WAYS_AND_MEANS = 'WAM', 'Ways and Means Cabin'
+        PUBLICITY = 'PBL', 'Publicity Cabin'
+        PROGRAMS = 'PRG', 'Programs Cabin'
+        RESEARCH = 'RSR', 'Research Cabin'
+        OTHER = 'OTHR', 'Other'
+        
+    camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    category = models.CharField(choices=Categories.choices, max_length=5, default=Categories.OTHER)
+    position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
 
     def __str__(self) -> str:
-        return '(Camp: ' + self.camp + ') ' + self.position + ' : ' + self.last_name
-
-#serializer logic to enums onetoone
-
-#content
-#add serializer
-#add admin
-#add views
-#add url
+        return f'Camp {self.get_camp_display()} {self.get_category_display()}, {self.get_position_display()}: {self.last_name}'
+        # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
 
 
-#testing
-#models
-#url
-#api
-
-#auto_populate
-
-
-
-#camp must be used only once in Camp Page or must be ready made
-#combine all leaders? or not
-
-
-#https://stackoverflow.com/questions/4143886/django-admin-disable-the-add-action-for-a-specific-model 

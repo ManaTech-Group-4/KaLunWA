@@ -5,6 +5,8 @@ from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News
 from enum import Enum
 from .validators import validate_start_date_and_end_date
+
+
 class StatusEnum(Enum):
     PAST = 'past'
     ONGOING = 'ongoing'
@@ -75,7 +77,7 @@ class ImageSerializer(serializers.ModelSerializer):
         )
 
 #-------------------------------------------------------------------------------
-#  serializes needed fields for website homepage view
+#  serializers for website homepage view
 
 class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
@@ -126,7 +128,13 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
         )
     
     def get_date(self, obj):
-        return obj.created_at.date()
+        return obj.homepage_date()
+
+
+#-------------------------------------------------------------------------------
+#  serializers for aboutus homepage view
+
+
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

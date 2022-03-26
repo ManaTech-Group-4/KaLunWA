@@ -56,6 +56,10 @@ class News(ContentBase):
 
     def __str__(self) -> str:
         return self.title
+    
+    def homepage_date(self)->str:
+        date = self.created_at
+        return f'{date.strftime("%B")} {date.day}, {date.year}'
 
 
 class Announcement(ContentBase):

@@ -85,22 +85,18 @@ class Project(ContentBase):
         return self.title
 
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
-
-
 class Demographics(AuthoredModel):
     location = models.CharField(max_length=50)
     member_count = models.IntegerField()
 
     def __str__(self) -> str:
-        return self.location #what should i return???
+        return self.location 
 
 
 class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     description = models.TextField()
-    image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) #not sure with related_image should it be the specific camp?
+    image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
         # use case: image.Suba -> expectedly returns a single CampPage, Suba
 
@@ -196,34 +192,3 @@ class CabinOfficer(LeaderBase):
         # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
 
 
-
-# thery slight changes
-    # refactored enum use
-    # str configuration 
-        # suggestions pa, feel free to change them as you like
-
-
-
-#serializer logic to enums onetoone
-
-#content
-    #add serializer
-    #add admin
-    #add views
-    #add url
-
-
-#testing
-    #models
-    #url
-    #api
-
-#auto_populate
-
-
-
-#camp must be used only once in Camp Page or must be ready made
-#combine all leaders? or not
-
-
-#https://stackoverflow.com/questions/4143886/django-admin-disable-the-add-action-for-a-specific-model 

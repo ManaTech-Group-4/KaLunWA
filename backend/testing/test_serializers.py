@@ -1,11 +1,12 @@
 
+from multiprocessing import context
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
 from .utils import get_test_image_file, get_expected_image_url
-from kalunwa.content.models import CampEnum, Image, Jumbotron, News, Project, Tag, Event
-from kalunwa.content.serializers import EventSerializer, HomepageJumbotronSerializer, HomepageEventSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
+from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Jumbotron, News, Project, Tag, Event
+from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageEventSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
@@ -73,7 +74,6 @@ class ImageURLSerializerTestCase(APITestCase):
         
 
     def test_jumbotron_image_full_url(self):
-        #print(self.client.)
         request = self.request_factory.get(reverse("homepage-jumbotrons"))
         serializer = HomepageJumbotronSerializer(self.jumbotron, context={'request':request})
         ## build complete url 
@@ -94,10 +94,79 @@ class ImageURLSerializerTestCase(APITestCase):
 
     def test_news_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-news"))
-        response = self.client.get(reverse("homepage-news"))
         serializer = HomepageNewsSerializer(self.news, context={'request':request})
         self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+
+
+class AboutUsCampSerializertestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None: 
+        # create camp -> Suba
+        # create leader -> Suba, Cl
+        test_image = get_test_image_file()
+
+        CampPage.objects.create(
+            name=CampEnum.SUBA.value,
+            description = 'default description',
+            image = Image.objects.create(
+                name='suba',
+                image=test_image
+            )
+        )
         
+        CampPage.objects.create(
+            name=CampEnum.BAYBAYON.value,
+            description = 'default description',
+            image = Image.objects.create(
+                name='camp',
+                image=test_image
+            )
+        )        
+
+        CampLeader.objects.create(
+            first_name = 'Suba',
+            last_name = 'Asub',
+            background = 'background',
+            advocacy = 'advocacy',
+            position = CampLeader.Positions.LEADER,
+            camp=CampEnum.SUBA,
+            image= Image.objects.create(
+                name='suba_lead',
+                image=test_image
+            )
+        )
+
+        CampLeader.objects.create(
+            first_name = 'Baybayon',
+            last_name = 'Noyabyab',
+            background = 'background',
+            advocacy = 'advocacy',
+            position = CampLeader.Positions.ASSISTANT_LEADER,
+            camp=CampEnum.BAYBAYON,
+            image= Image.objects.create(
+                name='baybayon_AL',
+                image=test_image
+            )
+        )        
+        # create camp that has no Camp leader -> Baybayon
+        # create leader -> Suba, Al
+    def test_serialize_with_camp_leader(self):
+        """
+        test to serialize camp details when a camp leader exists
+        """
+        camp_with_leader = CampPage.objects.get(name=CampEnum.SUBA)
+        serializer = AboutUsCampSerializer(camp_with_leader)
+        
+        self.assertTrue(serializer.data['camp_leader']) # exists
+
+    def test_serialize_without_camp_leader(self):
+        """
+        test to serialize camp details when a camp leader does not exists.
+        returns none, or a non-truthy value (false)
+        """
+        camp_without_leader = CampPage.objects.get(name=CampEnum.BAYBAYON)
+        serializer = AboutUsCampSerializer(camp_without_leader)
+        self.assertFalse(serializer.data['camp_leader']) # does not exist (null)
 
 class StatusSerializerTestCase(TestCase):
     """

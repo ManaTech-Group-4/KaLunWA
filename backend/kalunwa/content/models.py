@@ -56,6 +56,10 @@ class News(ContentBase):
 
     def __str__(self) -> str:
         return self.title
+    
+    def homepage_date(self)->str:
+        date = self.created_at
+        return f'{date.strftime("%B")} {date.day}, {date.year}'
 
 
 class Announcement(ContentBase):
@@ -98,7 +102,7 @@ class Demographics(AuthoredModel):
 
 
 class CampPage(AuthoredModel):
-    name = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
+    name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) #not sure with related_image should it be the specific camp?
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
@@ -117,6 +121,9 @@ class LeaderBase(AuthoredModel):
 
     class Meta:
         abstract=True
+    
+    def get_fullname(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class OrgLeader(LeaderBase):

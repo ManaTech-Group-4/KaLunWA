@@ -4,27 +4,27 @@
     <ul id="mobileNav">
       <li><a mat-button (click)="whatWeDo = !whatWeDo">What we do</a>
         <div class="dropdowns" *ngIf="whatWeDo">
-          <button mat-button>News & Announcements</button>
-          <button mat-button>Projects</button>
-          <button mat-button>Events</button>
+          <a mat-button (click)="sidenav.close(); onSelect()" >News & Announcements</a>
+          <a mat-button (click)="sidenav.close(); onSelect()" >Projects</a>
+          <a mat-button (click)="sidenav.close(); onSelect()" >Events</a>
         </div>
       </li>
       <li><a mat-button (click)="about = !about" >About Us</a>
         <div class="dropdowns" *ngIf="about">
-          <button mat-button (click)="orgOverview = !orgOverview">Organization Overview</button>
+          <a mat-button (click)="orgOverview = !orgOverview">Organization Overview</a>
           <div *ngIf="orgOverview">
-            <button mat-button routerLink="/about" (click)="sidenav.close()" class="submenu">Mission, Vision, Values</button>
-            <button mat-button routerLink="/about" (click)="sidenav.close()" class="submenu">History</button>
-            <button mat-button routerLink="/about" (click)="sidenav.close()" class="submenu">Advocates Covenant</button>
-            <button mat-button routerLink="/about" (click)="sidenav.close()" class="submenu">Camps</button>
+            <a mat-button href="about#vmc-section" (click)="sidenav.close(); onSelect()" class="submenu">Mission, Vision, Values</a>
+            <a mat-button href="about#history" (click)="sidenav.close(); onSelect()" class="submenu">History</a>
+            <a mat-button href="about#advocate" (click)="sidenav.close(); onSelect()" class="submenu">Advocates Covenant</a>
+            <a mat-button href="about#camps" (click)="sidenav.close(); onSelect()" class="submenu">Camps</a>
           </div>
-          <button mat-button>Finances</button>
-          <button mat-button>FAQs</button>
-          <button mat-button>Organization Structure</button>
-          <button mat-button>Member Demographics</button>
+          <a mat-button (click)="sidenav.close(); onSelect()" >Finances</a>
+          <a mat-button (click)="sidenav.close(); onSelect()" >FAQs</a>
+          <a mat-button (click)="sidenav.close(); onSelect()" >Organization Structure</a>
+          <a mat-button (click)="sidenav.close(); onSelect()" >Member Demographics</a>
         </div>
       </li>
-      <li><a mat-button href ="#">Contact Us</a></li>
+      <li><a mat-button href ="#"  (click)="sidenav.close(); onSelect()">Contact Us</a></li>
     </ul>
   </mat-sidenav>
 

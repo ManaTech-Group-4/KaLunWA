@@ -298,7 +298,6 @@ class StatusSerializerTestCase(TestCase):
         serializer = ProjectSerializer(self.project_ongoing_no_end_date)
         self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
 
-
     def test_upcoming_status_project(self):
         serializer = ProjectSerializer(self.project_upcoming)
         self.assertEqual(serializer.data['status'], StatusEnum.UPCOMING.value)

@@ -1,5 +1,3 @@
-from calendar import c
-from typing import OrderedDict
 from django.test import RequestFactory
 from django.urls import reverse
 from django.db.models import Sum

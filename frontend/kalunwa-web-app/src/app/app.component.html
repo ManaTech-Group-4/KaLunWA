@@ -2,7 +2,7 @@
   <mat-sidenav #sidenav mode="over" class="sidemenu">
     <img src="assets/images/word_logo.png"/>
     <ul id="mobileNav">
-      <li><a mat-button (click)="whatWeDo = !whatWeDo">What we do</a>
+      <li><a mat-button  class="drop-triggers" (click)="whatWeDo = !whatWeDo">What we do</a>
         <div class="dropdowns" *ngIf="whatWeDo">
           <a mat-button (click)="sidenav.close(); onSelect()" >News & Announcements</a>
           <a mat-button (click)="sidenav.close(); onSelect()" >Projects</a>

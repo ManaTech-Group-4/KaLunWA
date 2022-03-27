@@ -14,21 +14,127 @@
 <div class="tree-container">
     <div class="tree">
         <ul>
-            <li><a><span>General Assembly</span></a></li>
-            <ul>
-                <li><a><span>Board of Trustees</span></a></li>
+            <li><a><span>General Assembly</span></a>
                 <ul>
-                    <li><a><span>Campers</span></a></li>
-                    <ul>
-                        <li><a><span>Baybayon</span></a></li>
-                        <li><a><span>Lasang</span></a></li>
-                        <li><a><span>Suba</span></a></li>
-                        <li><a><span>Zero Waste</span></a></li>
-                    </ul>
+                    <li ><a id="BoT" (click)="clickBoT()"><span>Board of Trustees</span></a>
+                        <ul>
+                            <li><a><span>Campers</span></a>
+                                <ul>
+                                    <li (click)="clickBaybayon()"><a id="Baybayon"><span>Baybayon</span></a></li>
+                                    <li (click)="clickLasang()"><a id="Lasang"><span>Lasang</span></a></li>
+                                    <li (click)="clickSuba()"><a id="Suba"><span>Suba</span></a></li>
+                                    <li (click)="clickZW()"><a id="ZW"><span>Zero Waste</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
-                <li><a><span>Board of Trustees2</span></a></li>
-            </ul>
+            </li>
+            
         </ul>
+
+        <ul *ngIf="showBaybayon" id="Baybayon">
+            <li><a (click)="clickBaybayon()"><span>Baybayon</span></a>
+                <ul>
+                    <li><a><span>Camp Leader</span></a>
+                        <ul>
+                            <li><a><span>Asst. Camp Leader</span></a>
+                                <ul>
+                                    <li><a><span>Finance Cabin</span></a></li>
+                                    <li><a><span>Publicity Cabin</span></a></li>
+                                    <li><a><span>Ways and Means Cabin</span></a></li>
+                                    <li><a><span>Secretariat Cabin</span></a></li>
+                                    <li><a><span>Programs Cabin</span></a></li>
+                                    <li><a><span>Research Cabin</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul *ngIf="showLasang">
+            <li><a (click)="clickLasang()"><span>Lasang</span></a>
+                <ul>
+                    <li><a><span>Camp Leader</span></a>
+                        <ul>
+                            <li><a><span>Asst. Camp Leader</span></a>
+                                <ul>
+                                    <li><a><span>Finance Cabin</span></a></li>
+                                    <li><a><span>Publicity Cabin</span></a></li>
+                                    <li><a><span>Ways and Means Cabin</span></a></li>
+                                    <li><a><span>Secretariat Cabin</span></a></li>
+                                    <li><a><span>Programs Cabin</span></a></li>
+                                    <li><a><span>Research Cabin</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul *ngIf="showSuba">
+            <li><a (click)="clickSuba()"><span>Suba</span></a>
+                <ul>
+                    <li><a><span>Camp Leader</span></a>
+                        <ul>
+                            <li><a><span>Asst. Camp Leader</span></a>
+                                <ul>
+                                    <li><a><span>Finance Cabin</span></a></li>
+                                    <li><a><span>Publicity Cabin</span></a></li>
+                                    <li><a><span>Ways and Means Cabin</span></a></li>
+                                    <li><a><span>Secretariat Cabin</span></a></li>
+                                    <li><a><span>Programs Cabin</span></a></li>
+                                    <li><a><span>Research Cabin</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul *ngIf="showZW">
+            <li><a (click)="clickZW()"><span>Zero Waste</span></a>
+                <ul>
+                    <li><a><span>Camp Leader</span></a>
+                        <ul>
+                            <li><a><span>Asst. Camp Leader</span></a>
+                                <ul>
+                                    <li><a><span>Finance Cabin</span></a></li>
+                                    <li><a><span>Publicity Cabin</span></a></li>
+                                    <li><a><span>Ways and Means Cabin</span></a></li>
+                                    <li><a><span>Secretariat Cabin</span></a></li>
+                                    <li><a><span>Programs Cabin</span></a></li>
+                                    <li><a><span>Research Cabin</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul *ngIf="showBoT">
+            <li><a (click)="clickBoT()"><span>Board of Trustees</span></a>
+                <ul>
+                    <li><a><span>Directors</span></a></li>
+                    <li><a><span>Executive Committee</span></a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul>
+            <li><a><span>Constitutional Committees</span></a>
+                <ul>
+                    <li><a><span>Grievances Committee</span></a></li>
+                    <li><a><span>Election Committee</span></a></li>
+                </ul>
+            </li>
+        </ul>
+
     </div>
     
 </div>

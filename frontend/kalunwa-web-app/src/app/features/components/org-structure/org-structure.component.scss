@@ -17,14 +17,14 @@ div{
         padding: 90px 0px;
         h1{
         font-family: header-font;
-        font-size: 200px;
-        line-height: 70px;
+        font-size: 180px;
+        line-height: 125px;
         padding: 20px 0px;
         color:#233620;
         }
 
         p{
-        font-size: 16px;
+        font-size: 20px;
         color:#233620;
         font-family: monserrat;
         }
@@ -185,3 +185,98 @@ hr{
     }
 
 }
+
+//--------------------------MEDIA QUERY-----------------------------------
+
+@media screen and (max-width: 786px){
+
+    div{
+        .header{
+            height:150px;
+        }
+        .subhead{
+            padding: 50px 0px;
+            h1{
+            font-size: 100px;
+            line-height: 85px;
+            padding: 20px 0px;
+            }
+    
+            p{
+            font-size: 16px;
+            }
+        }
+    }
+    hr{
+        border-top:20px solid #628A3A;
+    }
+
+    .tree-container { 
+        .tree {
+            ul {
+                padding-top: 15px;
+                ul {
+                    &::before {
+                        height: 15px;
+                    }
+                }
+            }
+            li {
+                padding: 7px;
+                &::before {
+                    height: 7px;
+                }
+                &::after {
+                    height: 7px;
+                }
+                a {
+                    padding: 7px;
+                    img {
+                        width: 40px;
+                        height: 40px;
+                        margin-bottom: 7px !important;
+                    }
+                    span {
+                        padding: 6px;
+                        font-size: 8px;
+                        line-height: 8px;
+                    }
+                    
+                }
+            }
+        }
+    
+    }
+  
+   
+  }
+  
+  
+  @media screen and (max-width: 450px){
+
+    div{
+        .header{
+            height:125px;
+        }
+        .subhead{
+            padding: 30px 20px;
+            h1{
+            font-size: 80px;
+            line-height: 60px;
+            padding: 10px 0px;
+            }
+    
+            p{
+            font-size: 13px;
+            }
+        }
+    }
+    hr{
+        border-top:15px solid #628A3A;
+    }
+
+    
+    
+  }
+  
+  

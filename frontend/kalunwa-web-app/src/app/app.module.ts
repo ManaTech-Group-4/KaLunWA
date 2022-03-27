@@ -10,6 +10,8 @@ import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
+import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
+import { NgxOrgChartModule } from 'ngx-org-chart';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     FooterComponent,
     AboutCampComponent,
     routeComponents,
+    OrgStructureComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
+    NgxOrgChartModule,
     MatCarouselModule.forRoot()
 
   ],

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { TotalDemographicsModel } from '../../models/demographics-total-model';
+import { AboutpageService } from '../../service/aboutpage.service';
 
 @Component({
   selector: 'app-about-page',
@@ -7,10 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private aboutService: AboutpageService) { }
 
-  public members: number = 189;
+  public members: TotalDemographicsModel=
+  {total_members: 180};
   ngOnInit(): void {
+    this.aboutService.getDemographics()
+      .subscribe(data => this.members = data);
   }
 
   //history

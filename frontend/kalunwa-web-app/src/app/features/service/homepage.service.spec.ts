@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from "@angular/common/
 import { HomepageService } from './homepage.service';
 import { EventsModel } from '../models/events';
 import { JumbotronModel } from '../models/slides-model';
+import { HomeNewsModel } from '../models/home-news';
 
 describe('HomepageService', () => {
   let homepageService: HomepageService,
@@ -85,5 +86,42 @@ describe('HomepageService', () => {
 
   });
 
+
+  it('should retrieve all news', () => {
+    const testNews: HomeNewsModel[] = [
+      {
+        id: 3,
+        title: "News Headline 3",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+        date: "March 25, 2022",
+        image: "http://127.0.0.1:8000/media/images/content/news3.jpg"
+    },
+    {
+        id: 2,
+        title: "News Headline 2",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+        date: "March 25, 2022",
+        image: "http://127.0.0.1:8000/media/images/content/news2.jpeg"
+    },
+    {
+        id: 1,
+        title: "News Headline 1",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco",
+        date: "March 25, 2022",
+        image: "http://127.0.0.1:8000/media/images/content/news1.jpg"
+    }];
+
+    homepageService.getNews().subscribe((news)=>{
+      expect(testNews).toBe(news,'should check mocked data');
+    });
+
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/homepage/news');
+
+    expect(req.cancelled).toBeFalsy();
+    expect(req.request.responseType).toEqual('json');
+
+    req.flush(testNews);
+
+  });
 
 });

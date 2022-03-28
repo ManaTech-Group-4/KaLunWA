@@ -24,4 +24,9 @@ describe('AboutCampComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should switch to other camp after click', () => {
+    component.onSelect(2);
+    expect(component.displayCamp.header).toEqual('Suba');
+  });
 });

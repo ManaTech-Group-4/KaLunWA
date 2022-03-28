@@ -17,10 +17,11 @@ jobs:
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
         run: |
-          echo ----------> check node version
-          node --version
-          npm install
+          echo ----------> "install peer deps"
+          npm install -g install-peerdeps      
+          echo ----------> "audit fix"          
           npm audit fix
+          echo ----------> "npm CI"               
           npm ci
 
       - name: Test

@@ -19,7 +19,8 @@ jobs:
         run: |
           echo ----------> "npm install"
           npm install      
-
+          echo ----------> "npm audit"
+          npm audit 
           echo ----------> "npm CI"               
           npm ci
 

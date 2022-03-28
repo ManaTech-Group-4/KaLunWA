@@ -17,21 +17,9 @@ jobs:
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
         run: |
-          rm package-lock.json
           echo ----------> "npm install"
           npm install      
-          echo ----------> "install peer deps"
-          npm install -g install-peerdeps          
-          echo ----------> "install dependencies manually"
-          npm install --save-dev jasmine-core@3.8
-          npm install --save-dev hammerjs@^2.0.8
-          npm install --save-dev rxjs@~6.3.3
-          npm install --save-dev @angular/material@~10.1.0
-          npm install --save-dev @angular/common@~10.0.4
-          npm install --save-dev @angular/core@~10.0.4
-          npm install --save-dev 
-          echo ----------> "audit fix"          
-          npm audit fix
+
           echo ----------> "npm CI"               
           npm ci
 

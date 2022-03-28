@@ -1,10 +1,8 @@
+import { CampLeaderModel } from "./camp-leader-model";
+
 export interface AboutCampModel{
-  id: number;
-  header: string;
-  featured_img: string;
-  camp_leader: string;
-  camp_leader_img: string;
-  short_description: string;
-  quote: string;
-  color: string;
+  camp_name: string;
+  description: string;
+  camp_image: string;
+  camp_leader: CampLeaderModel;
 }

@@ -17,6 +17,7 @@ jobs:
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
         run: |
+          rm package-lock.json
           echo ----------> "install peer deps"
           npm install -g install-peerdeps      
           echo ----------> "audit fix"          

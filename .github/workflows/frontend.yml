@@ -22,8 +22,8 @@ jobs:
           npm install      
           echo ----------> "install peer deps"
           npm install -g install-peerdeps          
-          echo ----------> "install jasmine-core@>=3.8"
-          npm install --save-dev jasmine-core@>=3.8
+          echo ----------> "install jasmine-core@3.8"
+          npm install --save-dev jasmine-core@3.8
           echo ----------> "audit fix"          
           npm audit fix
           echo ----------> "npm CI"               

@@ -20,6 +20,8 @@ jobs:
           rm package-lock.json
           echo ----------> "npm install"
           npm install      
+          echo ----------> "install peer deps"
+          npm install -g install-peerdeps          
           echo ----------> "audit fix"          
           npm audit fix
           echo ----------> "npm CI"               

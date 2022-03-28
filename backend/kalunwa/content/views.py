@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer

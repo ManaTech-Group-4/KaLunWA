@@ -1,6 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django.db.models import Sum
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 

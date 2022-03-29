@@ -33,7 +33,7 @@ export class OrgStructureComponent implements OnInit {
   }
   clickLasang(){
     this.showLasang=!this.showLasang
-    
+
     if((this.showBaybayon=true) && (this.showSuba=true) && (this.showZW=true)){
       this.showBaybayon=!this.showBaybayon
       this.showSuba=!this.showSuba
@@ -46,7 +46,7 @@ export class OrgStructureComponent implements OnInit {
   }
   clickSuba(){
     this.showSuba=!this.showSuba
-    
+
     if((this.showLasang=true) && (this.showBaybayon=true) && (this.showZW=true)){
       this.showLasang=!this.showLasang
       this.showBaybayon=!this.showBaybayon
@@ -59,7 +59,7 @@ export class OrgStructureComponent implements OnInit {
   }
   clickZW(){
     this.showZW=!this.showZW
-    
+
     if((this.showLasang=true) && (this.showSuba=true) && (this.showBaybayon=true)){
       this.showLasang=!this.showLasang
       this.showSuba=!this.showSuba

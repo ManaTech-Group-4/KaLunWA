@@ -16,12 +16,7 @@ jobs:
 
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
-        run: |
-          echo ----------> "npm install"
-          npm install      
-          echo ----------> "npm audit"
-          npm audit 
-          echo ----------> "npm CI"               
+        run: |           
           npm ci
 
       - name: Test

@@ -1,9 +1,9 @@
 name: Kalunwa server frontend (test_flow) 
 on:
   push:
-    branches: [ test_flow ]
+    branches: [ main ]
   pull_request:
-    branches: [ test_flow ]
+    branches: [ main ]
 jobs:
   build:
     runs-on: windows-latest

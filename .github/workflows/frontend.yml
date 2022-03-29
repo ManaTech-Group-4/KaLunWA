@@ -1,4 +1,4 @@
-name: Kalunwa server frontend (test_flow) 
+name: Kalunwa server frontend (main) 
 on:
   push:
     branches: [ main ]

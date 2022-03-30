@@ -1,7 +1,7 @@
 from django.db.models import Sum
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventListSerializer, EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -84,6 +84,10 @@ class JumbotronViewSet(viewsets.ModelViewSet):
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        serializer = EventListSerializer(self.queryset, many=True, context={'request':request})
+        return Response(serializer.data)        
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

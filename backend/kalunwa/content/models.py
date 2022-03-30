@@ -76,6 +76,11 @@ class Event(ContentBase):
 
     def __str__(self) -> str:
         return self.title
+
+    def month_day_year_format(self)->str:
+        date = self.created_at
+        return f'{date.strftime("%B")} {date.day}, {date.year}'
+
         
 
 class Project(ContentBase):

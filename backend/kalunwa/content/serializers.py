@@ -187,6 +187,41 @@ class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializ
             'image_url'
         )
     
+#-------------------------------------------------------------------------------
+#  serializers for lists views
+
+class EventListSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    date = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'description',
+            'image',
+            'date',
+            'camp', # choices serializer            
+            'status',
+        )
+
+    def get_date(self, obj):
+        return obj.month_day_year_format()
+
+    def get_status(self, obj)->str:
+        # add check if no dates
+        # past
+        date_now = timezone.now()
+        if date_now > obj.start_date and date_now > obj.end_date:
+            return StatusEnum.PAST.value 
+        # ongoing
+        if date_now >= obj.start_date and date_now < obj.end_date:
+            return StatusEnum.ONGOING.value             
+        # upcoming
+        if date_now < obj.start_date and date_now < obj.end_date:
+            return StatusEnum.UPCOMING.value    
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

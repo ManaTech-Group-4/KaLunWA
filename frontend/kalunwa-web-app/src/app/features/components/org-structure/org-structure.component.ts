@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 
 @Component({
   selector: 'app-org-structure',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrgStructureComponent implements OnInit {
 
-  constructor() { }
+  constructor(private matDialog:MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -21,7 +23,7 @@ export class OrgStructureComponent implements OnInit {
   clickBaybayon(){
     this.showBaybayon=!this.showBaybayon
 
-    if((this.showLasang=true) && (this.showSuba=true) && (this.showZW=true)){
+    if((this.showLasang==true) && (this.showSuba==true) && (this.showZW==true)){
       this.showLasang=!this.showLasang
       this.showSuba=!this.showSuba
       this.showZW=!this.showZW
@@ -34,7 +36,7 @@ export class OrgStructureComponent implements OnInit {
   clickLasang(){
     this.showLasang=!this.showLasang
     
-    if((this.showBaybayon=true) && (this.showSuba=true) && (this.showZW=true)){
+    if((this.showBaybayon==true) && (this.showSuba==true) && (this.showZW==true)){
       this.showBaybayon=!this.showBaybayon
       this.showSuba=!this.showSuba
       this.showZW=!this.showZW
@@ -47,7 +49,7 @@ export class OrgStructureComponent implements OnInit {
   clickSuba(){
     this.showSuba=!this.showSuba
     
-    if((this.showLasang=true) && (this.showBaybayon=true) && (this.showZW=true)){
+    if((this.showLasang==true) && (this.showBaybayon==true) && (this.showZW==true)){
       this.showLasang=!this.showLasang
       this.showBaybayon=!this.showBaybayon
       this.showZW=!this.showZW
@@ -60,7 +62,7 @@ export class OrgStructureComponent implements OnInit {
   clickZW(){
     this.showZW=!this.showZW
     
-    if((this.showLasang=true) && (this.showSuba=true) && (this.showBaybayon=true)){
+    if((this.showLasang==true) && (this.showSuba==true) && (this.showBaybayon==true)){
       this.showLasang=!this.showLasang
       this.showSuba=!this.showSuba
       this.showBaybayon=!this.showBaybayon
@@ -72,5 +74,24 @@ export class OrgStructureComponent implements OnInit {
   }
   clickBoT(){
     this.showBoT=!this.showBoT
+
+    if (this.showBaybayon==true){
+      this.showBaybayon=!this.showBaybayon
+    } else if (this.showLasang==true){
+      this.showLasang=!this.showLasang
+    } else if (this.showSuba==true){
+      this.showSuba=!this.showSuba
+    } else if(this.showZW==true){
+      this.showZW=!this.showZW
+    }
+  }
+
+  openDialog(members:number){
+    this.matDialog.open(MembersDialogComponent,
+      {
+        data: members
+      });
+
+    
   }
 }

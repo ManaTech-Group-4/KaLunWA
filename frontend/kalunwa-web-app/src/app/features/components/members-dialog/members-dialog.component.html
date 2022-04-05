@@ -1,0 +1,12 @@
+<mat-icon (click)="ngOnDestroy()">close</mat-icon>
+
+<div class="member" *ngFor="let num of members | slice: 0:getLimit()">
+
+  <img src="{{num.member_img}}"/>
+  <span>
+  <p>{{num.name}}</p>
+  <hr>
+  <h2>{{num.position}}</h2>
+  </span>
+
+</div>

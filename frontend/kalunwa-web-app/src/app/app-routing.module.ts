@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AboutPageComponent } from './features/components/about-page/about-page.component';
+import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { HomepageComponent } from './features/components/homepage/homepage.component';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { PageNotFoundComponent } from './features/components/page-not-found/page-not-found.component';
@@ -10,6 +11,7 @@ export const routes: Routes = [
   {path: 'home', component: HomepageComponent},
   {path: 'about',  component: AboutPageComponent},
   {path: 'org-struct',  component: OrgStructureComponent},
+  {path: 'events', component:EventsPageComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -20,4 +22,5 @@ export class AppRoutingModule { }
 export const routeComponents = [HomepageComponent,
                                 AboutPageComponent,
                                 OrgStructureComponent,
-                                PageNotFoundComponent];
+                                PageNotFoundComponent,
+                                EventsPageComponent];

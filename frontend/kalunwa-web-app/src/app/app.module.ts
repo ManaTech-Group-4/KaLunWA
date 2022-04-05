@@ -11,6 +11,8 @@ import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
+import { EventsPageComponent } from './features/components/events-page/events-page.component';
+import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { OrgStructureComponent } from './features/components/org-structure/org-s
     FooterComponent,
     AboutCampComponent,
     routeComponents,
-    OrgStructureComponent
+    OrgStructureComponent,
+    EventsPageComponent,
+    EventPageListComponent
   ],
   imports: [
     BrowserModule,

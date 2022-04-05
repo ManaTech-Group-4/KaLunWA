@@ -1,0 +1,39 @@
+
+.event-card{
+  width:700px;
+  height: 250px;
+  display: flex;
+  flex-direction: row;
+  padding:0;
+
+  img{
+    width:250px;
+    height:250px;
+    object-fit: cover;
+    margin:0;
+
+  }
+  .mat-card-content{
+    padding-left:20px;
+    .event-header{
+      display: flex;
+      flex-direction: column;
+
+      .tags{
+        align-self: flex-end;
+        span{
+          padding:3px 5px;
+          font-size:10px;
+          color:white;
+          border-radius: 10px;
+          margin-left:2px;
+        }
+      }
+
+      .mat-card-title{
+        font-family: monserrat;
+        font-weight:700;
+      }
+    }
+  }
+}

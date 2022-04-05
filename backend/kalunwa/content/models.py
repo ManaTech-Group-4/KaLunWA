@@ -122,7 +122,7 @@ class LeaderBase(AuthoredModel):
         return f'{self.first_name} {self.last_name}'
 
 
-class OrgLeader(LeaderBase):
+class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
         PRESIDENT = 'PR', 'President'
         VICE_PRESIDENT = 'VP', 'Vice-President'

@@ -15,7 +15,7 @@ class HomepageViewSet(viewsets.ViewSet):
 
     @action(detail=False)
     def jumbotrons(self, request):
-        jumbotrons = Jumbotron.objects.all()
+        jumbotrons = Jumbotron.objects.all()[:5] # need is_featured?
         # passing context from the request, for the serializer to use
         serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
         return Response(serializer.data)
@@ -61,7 +61,10 @@ class AboutUsViewset(viewsets.ViewSet):
     
     @action(detail=False)
     def organization_leaders(self, request):
-        org_leaders = OrgLeader.objects.all()[:5]
+        """
+        return only people from execomm -> pres to overseer
+        """
+        org_leaders = OrgLeader.objects.all()
         serializer = AboutUsLeaderImageSerializer(org_leaders, many=True, context={'request':request})
         return  Response(serializer.data)
 

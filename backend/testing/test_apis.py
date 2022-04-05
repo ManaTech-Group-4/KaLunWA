@@ -379,7 +379,10 @@ class AboutUsCampsTestCase(APITestCase):
     Test about-us endpoints:    
         about-us-camps    
 
-        # 3 camps, lacking 1   
+        # no test if 3 camps, lacking 1; what is the expected behavior
+        # tried testing for getting duplicate camps
+            # not possible, since  the unique constraint stops model creation
+            #  with the same name    
     """    
 
     @classmethod
@@ -409,7 +412,7 @@ class AboutUsCampsTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)  
         self.assertEqual( self.camp_count, len(response.data))   
 
-    def test_get_expected_camps_general(self):
+    def test_get_expected_camps(self):
         """
         - expected camps returned (Suba, Baybayon, Lasang, ZeroWaste)
         mock: 5 camps (expected + general)     
@@ -422,34 +425,6 @@ class AboutUsCampsTestCase(APITestCase):
                 description = 'default description',
                 image = Image.objects.create(name = 'name', image = self.test_image)
             )   
-        expected_camps = self.camp_labels
-        expected_camps.remove(CampEnum.GENERAL.label)
-
-        response = self.client.get(reverse("about-us-camps"))       
-        response_camps = []
-        for camp in response.data:
-            response_camps.append(camp['camp_name']) 
-        
-        self.assertListEqual(sorted(expected_camps), sorted(response_camps))
-
-    def test_get_expected_camps_duplicate(self):
-        """
-        - expected camps returned (Suba, Baybayon, Lasang, ZeroWaste)
-        mock: # 5 camps + duplicate on 1 camp (suba)     
-        """
-        # mock data
-        for _ in range(5):
-            # camp pages    
-            CampPage.objects.create(
-                name=self.camps_values[_],
-                description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
-            )                  
-        CampPage.objects.create(
-            name=CampEnum.SUBA.value,
-            description='default',
-                image = Image.objects.create(name = 'name', image = self.test_image)            
-        )
         expected_camps = self.camp_labels
         expected_camps.remove(CampEnum.GENERAL.label)
 

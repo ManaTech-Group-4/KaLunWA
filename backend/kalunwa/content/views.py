@@ -1,4 +1,4 @@
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
@@ -64,7 +64,10 @@ class AboutUsViewset(viewsets.ViewSet):
         """
         return only people from execomm -> pres to overseer
         """
-        org_leaders = OrgLeader.objects.all()
+        org_leaders = OrgLeader.objects.exclude(
+            Q(position=OrgLeader.Positions.DIRECTOR.value) |
+            Q(position=OrgLeader.Positions.OTHER.value)
+            )
         serializer = AboutUsLeaderImageSerializer(org_leaders, many=True, context={'request':request})
         return  Response(serializer.data)
 

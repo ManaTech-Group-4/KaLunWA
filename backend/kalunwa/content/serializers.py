@@ -2,11 +2,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
+from django_restql.mixins import DynamicFieldsMixin
+from rest_flex_fields import FlexFieldsModelSerializer
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
-
+from kalunwa.core.utils import to_formal_mdy
 
 class StatusEnum(Enum):
     PAST = 'past'
@@ -61,7 +63,7 @@ class ImageURLSerializer(serializers.Serializer):
         return serializer.data['image']        
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(FlexFieldsModelSerializer):
     image = serializers.ImageField(use_url=True)
     tags = TagSerializer(many=True, required=False)
 
@@ -91,18 +93,6 @@ class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerialize
             'image',         
         )
     
-
-class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
-    image = serializers.SerializerMethodField(method_name='get_url')
-    class Meta:
-        model = Event
-        fields = (
-            'id',
-            'title',
-            'image'
-        )
-
-
 class HomepageProjectSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
@@ -189,39 +179,7 @@ class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializ
     
 #-------------------------------------------------------------------------------
 #  serializers for lists views
-
-class EventListSerializer(serializers.ModelSerializer, ImageURLSerializer):
-    image = serializers.SerializerMethodField(method_name='get_url')
-    date = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Event
-        fields = (
-            'id',
-            'title',
-            'description',
-            'image',
-            'date',
-            'camp', # choices serializer            
-            'status',
-        )
-
-    def get_date(self, obj):
-        return obj.month_day_year_format()
-
-    def get_status(self, obj)->str:
-        # add check if no dates
-        # past
-        date_now = timezone.now()
-        if date_now > obj.start_date and date_now > obj.end_date:
-            return StatusEnum.PAST.value 
-        # ongoing
-        if date_now >= obj.start_date and date_now < obj.end_date:
-            return StatusEnum.ONGOING.value             
-        # upcoming
-        if date_now < obj.start_date and date_now < obj.end_date:
-            return StatusEnum.UPCOMING.value    
+ 
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields
@@ -239,18 +197,22 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+# DynamicFieldsMixin -> restql
+# FlexFieldsModelSerializer
 
-class EventSerializer(serializers.ModelSerializer):
-    image = ImageSerializer()
+class EventSerializer(FlexFieldsModelSerializer):
     status = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
 
+    # different fields for start & end date post request
     class Meta:
         model = Event
         fields = (
             'id',
             'title',
-            'description',
             'image',
+            'description',
             'start_date',
             'end_date',            
             'camp', # choices serializer            
@@ -258,6 +220,17 @@ class EventSerializer(serializers.ModelSerializer):
             'updated_at',  
             'status',
         )
+
+        expandable_fields = {
+            'image' : (ImageSerializer)
+        }
+
+    def get_start_date(self, obj):
+            #print(self.dynamic_fields_mixin_kwargs)
+            return to_formal_mdy(obj.start_date)
+
+    def get_end_date(self, obj):
+            return to_formal_mdy(obj.end_date)
 
     def get_status(self, obj)->str:
         # add check if no dates
@@ -275,7 +248,6 @@ class EventSerializer(serializers.ModelSerializer):
     def validate(self, data): # object-level validation
         data = self.get_initial() # gets pre-validation data
         validate_start_date_and_end_date(data['start_date'], data['end_date'])
-
         return data
 
 

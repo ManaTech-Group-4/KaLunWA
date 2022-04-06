@@ -1,12 +1,29 @@
 from django.db.models import Sum
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventListSerializer, EventSerializer,HomepageEventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
+  
+class EventViewSet(viewsets.ModelViewSet): 
+    model = Event
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()
+
+    @action(detail=False)
+    def homepage(self, request):
+         # possible to filter data in url, but limit would have to be implemented in finalize response
+         # or have limit implemented inside via a pagination (limitoffsetpagination)
+        queryset= Event.objects.filter(is_featured=True)[:3]
+        serializer = self.serializer_class(queryset, many=True, context={'request':request})
+        return Response(serializer.data)
+
+
+    # might need to add new serializer field for non-read only stuff that needs
+    # to be posted data on (or let frontend manipulate the dates nlng)
 #-------------------------------------------------------------------------------
 # homepage views
 
@@ -18,12 +35,6 @@ class HomepageViewSet(viewsets.ViewSet):
         jumbotrons = Jumbotron.objects.all()
         # passing context from the request, for the serializer to use
         serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
-        return Response(serializer.data)
-
-    @action(detail=False)
-    def events(self, request):
-        events = Event.objects.filter(is_featured=True)[:3]
-        serializer = HomepageEventSerializer(events, many=True,context={'request':request})
         return Response(serializer.data)
 
     @action(detail=False)
@@ -79,15 +90,6 @@ class ImageViewSet(viewsets.ModelViewSet):
 class JumbotronViewSet(viewsets.ModelViewSet):
     serializer_class = JumbotronSerializer
     queryset = Jumbotron.objects.all()
-
-
-class EventViewSet(viewsets.ModelViewSet):
-    serializer_class = EventSerializer
-    queryset = Event.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        serializer = EventListSerializer(self.queryset, many=True, context={'request':request})
-        return Response(serializer.data)        
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

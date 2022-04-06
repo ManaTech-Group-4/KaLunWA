@@ -127,7 +127,7 @@ hr{
                 }
             }
             a {
-                border: 1px solid #ccc;
+                border: 1px solid #91ad75;
                 padding: 10px;
                 display: inline-grid;
                 border-radius: 5px;
@@ -144,9 +144,9 @@ hr{
                     margin: auto;
                 }
                 span {
-                    border: 1px solid #ccc;
+                    border: 1px solid #91ad75;
                     border-radius: 5px;
-                    color: #666;
+                    color: #628A3A;
                     padding: 8px;
                     font-size: 12px;
                     text-transform: uppercase;
@@ -198,7 +198,7 @@ hr{
 
 //--------------------------MEDIA QUERY-----------------------------------
 
-@media screen and (max-width: 786px){
+@media screen and (max-width: 936px){
 
     div{
         .header{

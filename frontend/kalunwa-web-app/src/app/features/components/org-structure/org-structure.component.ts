@@ -23,9 +23,15 @@ export class OrgStructureComponent implements OnInit {
   clickBaybayon(){
     this.showBaybayon=!this.showBaybayon
 
-    if((this.showLasang==true) && (this.showSuba==true) && (this.showZW==true)){
+    if (this.showLasang){
       this.showLasang=!this.showLasang
+    }
+
+    if (this.showSuba){
       this.showSuba=!this.showSuba
+    }
+
+    if (this.showZW){
       this.showZW=!this.showZW
     }
 
@@ -36,9 +42,15 @@ export class OrgStructureComponent implements OnInit {
   clickLasang(){
     this.showLasang=!this.showLasang
     
-    if((this.showBaybayon==true) && (this.showSuba==true) && (this.showZW==true)){
+    if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
+    }
+
+    if (this.showSuba){
       this.showSuba=!this.showSuba
+    }
+
+    if (this.showZW){
       this.showZW=!this.showZW
     }
 
@@ -49,9 +61,15 @@ export class OrgStructureComponent implements OnInit {
   clickSuba(){
     this.showSuba=!this.showSuba
     
-    if((this.showLasang==true) && (this.showBaybayon==true) && (this.showZW==true)){
-      this.showLasang=!this.showLasang
+    if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
+    }
+
+    if (this.showLasang){
+      this.showLasang=!this.showLasang
+    }
+
+    if (this.showZW){
       this.showZW=!this.showZW
     }
 
@@ -62,10 +80,16 @@ export class OrgStructureComponent implements OnInit {
   clickZW(){
     this.showZW=!this.showZW
     
-    if((this.showLasang==true) && (this.showSuba==true) && (this.showBaybayon==true)){
-      this.showLasang=!this.showLasang
-      this.showSuba=!this.showSuba
+    if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
+    }
+
+    if (this.showSuba){
+      this.showSuba=!this.showSuba
+    }
+
+    if (this.showLasang){
+      this.showLasang=!this.showLasang
     }
 
     if (this.showBoT){
@@ -88,9 +112,9 @@ export class OrgStructureComponent implements OnInit {
 
   openDialog(members:number){
     this.matDialog.open(MembersDialogComponent,
-      {
-        data: members
-      });
+    {
+      data: members
+    });
 
     
   }

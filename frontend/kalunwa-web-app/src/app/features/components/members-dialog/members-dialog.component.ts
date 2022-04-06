@@ -16,57 +16,65 @@ export class MembersDialogComponent implements OnInit {
     {
       id: 1,
       member_img: "assets/images/person-icon.jpg",
+      quote: "I just wanna tell you how I'm feeling",
       name: "Member Name",
-      position:"Camp Leader",
+      position:"Position",
     },
     {
       id: 2,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Gotta make you understand",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 3,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna give you up",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 4,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna let you down",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 5,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna run around and desert you",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 6,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna make you cry",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 7,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna say goodbye",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
     {
       id: 8,
       member_img: "assets/images/person-icon.jpg",
+      quote: "Never gonna tell a lie and hurt you",
       name: "Member Name",
-      position:"Cabin Leader",
+      position:"Position",
     },
   ];
 
   ngOnInit(): void {
   }
 
-  ngOnDestroy(){
+  close(){
     this.matDialogRef.close();
   }
 

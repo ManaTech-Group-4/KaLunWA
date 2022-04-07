@@ -10,6 +10,7 @@ pillow = "*"
 django-cors-headers = "*"
 django-extensions = "*"
 coverage = "*"
+django-filter = "*"
 
 [dev-packages]
 

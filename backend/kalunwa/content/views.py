@@ -6,18 +6,20 @@ from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSe
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
 
   
 class EventViewSet(viewsets.ModelViewSet): 
     model = Event
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['is_featured']
 
     @action(detail=False)
     def homepage(self, request):
-         # possible to filter data in url, but limit would have to be implemented in finalize response
          # or have limit implemented inside via a pagination (limitoffsetpagination)
-        queryset= Event.objects.filter(is_featured=True)[:3]
+        queryset= Event.objects.filter(is_featured=True)[:3] 
         serializer = self.serializer_class(queryset, many=True, context={'request':request})
         return Response(serializer.data)
 

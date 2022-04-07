@@ -6,8 +6,9 @@ mat-icon{
   cursor: pointer;
 }
 
-mat-dialog-content {
-  max-height: 70vh !important;
+mat-dialog-content{
+  margin: 0px;
+  padding-left: 20%;
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -26,46 +27,60 @@ mat-dialog-content {
 }
 
 .member{
+    
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
     margin: 25px 0px;
-    img{
-
-    width:70px;
-    height:70px;
-    border-radius: 50%;
-    }
-    span{
-      width:250px;
-      margin: 7px;
-      text-align: center;
-      color: white;
-      
-      
-      p{
-        font-family: monserrat;
-        font-size: 12px;
-        line-height: 1;
-      }
-      hr{
-        width: 100%;
-        height: 2px;
-        border: none;
-        background-color: white;
-      }
-      h2{
-        font-family: monserrat;
-        font-size:10px;
-        margin:0;
-        line-height: 0.5;
-      }
+    
+    a{
+      width: 13vw;
+      background-color: #3b5c1e;
+      border: 1px solid #fafcf8;
+      padding: 20px 10px;
+      border-radius: 5px;
+      display: inline-grid;
+      margin: 0 30px 0 20px;
+      img{
+        width:70px;
+        height:70px;
+        margin-bottom: 10px !important;
+        border-radius: 50%;
+        margin: auto;
+        }
+        span{
+          margin: 7px;
+          text-align: center;
+          color: white;
+          padding: 8px;
+          letter-spacing: 1px;
+          font-weight: 500;
+          
+          p{
+            font-family: monserrat;
+            font-size: 12px;
+            line-height: 1;
+          }
+          hr{
+            width: 100%;
+            height: 2px;
+            border: none;
+            background-color: white;
+          }
+          h2{
+            font-family: monserrat;
+            font-size:10px;
+            margin:0;
+            line-height: 0.5;
+          }
+        }
     }
   }
 
 //--------------------------MEDIA QUERY-----------------------------------
 
-@media screen and (max-width: 786px){
+@media screen and (max-width: 936px){
 
   mat-icon{
     top:-13px;
@@ -75,6 +90,7 @@ mat-dialog-content {
 
   mat-dialog-content {
     max-height: 60vh !important;
+    padding-left: 25%;
   
     &::-webkit-scrollbar {
       width: 8px;
@@ -88,71 +104,90 @@ mat-dialog-content {
   }
 
   .member{
-    margin: 13px;
-    img{
-
-    width:50px;
-    height:50px;
-    }
-    span{
-      width:200px;
-      margin: 5px;
-
-      p{
-        font-size: 9.5px;
-      }
-      h2{
-        font-size:8px;
+    margin: 13px 0px;
+    
+    a{
+      width: 15vw;
+      margin: 0 27px 0 17px;
+      img{
+        width:45px;
+        height:45px;
+        margin-bottom: 8px !important;
+        }
+      span{
+        margin: 5px;
+        p{
+          font-size: 10px;
+        }
+        h2{
+          font-size:8px;
+        }
       }
     }
   }
 
-  @media screen and (max-width: 450px){
+  @media screen and (max-width: 649px){
 
     mat-icon{
       top:-8px;
       right:-8px;
-      font-size: 15px;
+      font-size: 20px;
     }
-
-    mat-dialog-content {
-      cursor: default;
-    
+    mat-dialog-content{
+      width:40vw;
+      padding: 0 7px 0 13px;
+  
       &::-webkit-scrollbar {
-        width: 5px;
+        visibility: hidden;
       }
       &::-webkit-scrollbar-track {
-        border-radius: 5px;
+        visibility: hidden;
       }
       &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
+        visibility: hidden;
       }
     }
-
     .member{
-      margin: 5px;
-      img{
-  
-      width:40px;
-      height:40px;
-      }
-      span{
-        width:175px;
-        margin: 3px;
-  
-        p{
-          font-size: 8px;
-        }
-        hr{
-          height: 1.5px;
-        }
-        h2{
-          font-size:6px;
-        }
+      margin: 0;
+      a{
+        width: 25vw;
+        margin: 10px 10px 10px 15px;
+        img{
+          margin-bottom: 7px !important;
+          width:40px;
+          height:40px;
+          }
+          span{
+            margin: 5px;
+            padding: 7px;
+            p{
+              font-size: 10px;
+            }
+            hr{
+              height: 1.5px;
+            }
+            h2{
+              font-size:8px;
+            }
+          }
       }
     }
-
+  
+    @media screen and (max-width: 475px){
+  
+      mat-dialog-content{
+        padding: 0 5px 0 10px;
+        width: 37vw;
+      }
+      .member{
+        a{
+          width: 23vw;
+          margin: 5px 5px 5px 12px;
+        }
+      }
+  
+    }
+  
   }
-
 }
 

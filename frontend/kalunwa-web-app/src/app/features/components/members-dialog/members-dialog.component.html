@@ -3,13 +3,15 @@
 <mat-dialog-content>
   <div class="member" *ngFor="let member of members | slice: 0:getLimit()">
 
-    <img src="{{member.member_img}}"/>
-    <span>
-      <p>{{member.quote}}</p>
-      <hr>
-      <p>{{member.name}}</p>
-      <h2>{{member.position}}</h2>
-    </span>
+    <a>
+      <img src="{{member.member_img}}"/>
+      <span>
+        <p>{{member.quote}}</p>
+        <hr>
+        <p>{{member.name}}</p>
+        <h2>{{member.position}}</h2>
+      </span>
+    </a>
   
   </div>
 </mat-dialog-content>

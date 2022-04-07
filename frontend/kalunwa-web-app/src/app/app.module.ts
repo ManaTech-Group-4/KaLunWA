@@ -13,6 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
+import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
+import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { EventPageListComponent } from './features/components/event-page-list/ev
     routeComponents,
     OrgStructureComponent,
     EventsPageComponent,
-    EventPageListComponent
+    EventPageListComponent,
+    ProjectPageComponent,
+    ProjectListComponent
   ],
   imports: [
     BrowserModule,

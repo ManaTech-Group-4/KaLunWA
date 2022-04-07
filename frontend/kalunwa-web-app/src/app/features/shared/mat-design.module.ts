@@ -8,7 +8,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-
+import {MatChipsModule} from '@angular/material/chips';
 const MATERIAL = [
   MatToolbarModule,
   MatButtonModule,
@@ -17,7 +17,8 @@ const MATERIAL = [
   MatSidenavModule,
   MatCardModule,
   MatButtonToggleModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatChipsModule
 ];
 
 @NgModule({

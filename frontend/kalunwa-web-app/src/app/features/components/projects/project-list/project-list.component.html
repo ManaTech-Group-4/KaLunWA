@@ -1,11 +1,11 @@
-<mat-card class="event-card" *ngFor="let event of eventsList">
+<mat-card class="project-card" *ngFor="let project of projectList">
 
-  <img mat-card-image src="{{event.image}}">
+  <img mat-card-image src="{{project.image}}">
 
   <mat-card-content>
-    <div class="event-header">
+    <div class="project-header">
       <mat-chip-list class ="tags" aria-label="Fish selection">
-        <div *ngFor="let tag of event.tags">
+        <div *ngFor="let tag of project.tags">
           <mat-chip *ngIf ="tag == 'general'" [style.background-color]="'#121212'" selected>General</mat-chip>
           <mat-chip *ngIf ="tag == 'baybayon'" [style.background-color]="'#D9B863'" selected>Baybayon</mat-chip>
           <mat-chip *ngIf ="tag == 'lasang'" [style.background-color]="'#3F6218'" selected>Lasang</mat-chip>
@@ -15,12 +15,12 @@
           <mat-chip *ngIf ="tag == 'past'"[style.background-color]="'#C4C4C4'" selected>Past</mat-chip>
         </div>
       </mat-chip-list>
-      <mat-card-title>{{event.title}}</mat-card-title>
-      <p>{{event.start_date}}</p>
+      <mat-card-title>{{project.title}}</mat-card-title>
+      <p>{{project.start_date}}</p>
     </div>
 
 
-        <p>{{event.description}}</p>
+        <p>{{project.description}}</p>
 
 
     <mat-card-actions class="course-actions">
@@ -32,4 +32,5 @@
   </mat-card-content>
 
 </mat-card>
+
 

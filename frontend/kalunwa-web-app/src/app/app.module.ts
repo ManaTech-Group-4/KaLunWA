@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MatDesignModule } from './features/shared/mat-design.module';
 import { AppRoutingModule, routeComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,9 +36,10 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     MatDesignModule,
     HttpClientModule,
     MatDialogModule,
-    MatCarouselModule.forRoot()
 
+    MatCarouselModule.forRoot()
   ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],
   bootstrap: [AppComponent]
 })

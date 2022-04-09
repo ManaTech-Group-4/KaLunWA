@@ -1,19 +1,35 @@
 # API's
-url pattern | url configuration location | [base-name]+[type]| extra des|
-|:---|:--------------------------:|:-----------:|--------------:|
+### homepage
+url pattern | url configuration location | [base-name]+[type]| 
+|:---|:--------------------------:|:-----------:|
 /api/                       |rest_framework.routers.view                |api-root|
 /api/homepage/events/       |kalunwa.content.views.HomepageViewSet      |homepage-events|
 /api/homepage/jumbotrons/   |kalunwa.content.views.HomepageViewSet      |homepage-jumbotrons|
 /api/homepage/news/         |kalunwa.content.views.HomepageViewSet      |homepage-news|
 /api/homepage/projects/     |kalunwa.content.views.HomepageViewSet      |homepage-projects|
+<br>
+---
+<br>
+
+### about us
+url pattern | url configuration location | [base-name]+[type]|
+|:---|:--------------------------:|:-----------:|
+/api/about-us/total_members/|kalunwa.content.views.AboutUsViewSet       |about-us-total-members|
+<br>
+---
+<br>
+
+### content
+url pattern | url configuration location | [base-name]+[type]|
+|:---|:--------------------------:|:-----------:|
 /api/announcements/         |kalunwa.content.views.AnnouncementViewSet  |announcement-list|
 /api/announcements/\<pk>/   |kalunwa.content.views.AnnouncementViewSet  |announcement-detail|
 /api/events/                |kalunwa.content.views.EventViewSet         |event-list|
 /api/events/\<pk>/          |kalunwa.content.views.EventViewSet         |event-detail|
 /api/projects/              |kalunwa.content.views.ProjectViewSet       |project-list|
-/api/projects/<pk>/         |kalunwa.content.views.ProjectViewSet       |project-detail|
+/api/projects/\<pk>/         |kalunwa.content.views.ProjectViewSet       |project-detail|
 /api/news/                  |kalunwa.content.views.NewsViewSet          |news-list|
-/api/news/<pk>/             |kalunwa.content.views.NewsViewSet          |news-detail|
+/api/news/\<pk>/             |kalunwa.content.views.NewsViewSet          |news-detail|
 /api/jumbotrons/            |kalunwa.content.views.JumbotronViewSet     |jumbotron-list|
 /api/jumbotrons/\<pk>/      |kalunwa.content.views.JumbotronViewSet     |jumbotron-detail|
 /api/images/\<pk>/          |kalunwa.content.views.ImageViewSet         |image-detail|

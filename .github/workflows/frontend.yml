@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x
@@ -16,12 +16,7 @@ jobs:
 
       - name: Setup
         working-directory: ./frontend/kalunwa-web-app
-        run: |
-          rm package-lock.json
-          npm cache clean -f
-          npm install -g n
-          sudo n 14
-          npm install          
+        run: |           
           npm ci
 
       - name: Test

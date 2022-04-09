@@ -8,26 +8,34 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 
-  
-class EventViewSet(viewsets.ModelViewSet): 
+
+class QueryLimitViewMixin:
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        """
+        Limits the number of records returned. 
+        """
+        query_limit = self.request.query_params.get('query_limit', None)
+        if query_limit is not None and query_limit.isdigit():
+            query_limit = int(query_limit)
+            response.data = response.data[:query_limit]
+        return super().finalize_response(request, response, *args, **kwargs)
+
+
+class EventViewSet(QueryLimitViewMixin, viewsets.ModelViewSet): 
     model = Event
-    serializer_class = EventSerializer
     queryset = Event.objects.all()
+    serializer_class = EventSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_featured']
 
-    @action(detail=False)
-    def homepage(self, request):
-         # or have limit implemented inside via a pagination (limitoffsetpagination)
-        queryset= Event.objects.filter(is_featured=True)[:3] 
-        serializer = self.serializer_class(queryset, many=True, context={'request':request})
-        return Response(serializer.data)
 
 
     # might need to add new serializer field for non-read only stuff that needs
     # to be posted data on (or let frontend manipulate the dates nlng)
 #-------------------------------------------------------------------------------
 # homepage views
+
 
 
 class HomepageViewSet(viewsets.ViewSet):
@@ -54,7 +62,7 @@ class HomepageViewSet(viewsets.ViewSet):
 #-------------------------------------------------------------------------------
 # about us view
 
-class AboutUsViewset(viewsets.ViewSet):
+class AboutUsViewset(viewsets.ViewSet): # leaders
     @action(detail=False)
     def demographics(self, request):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))

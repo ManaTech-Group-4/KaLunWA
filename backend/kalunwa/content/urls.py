@@ -9,7 +9,7 @@ router.register(r'homepage', HomepageViewSet, basename='homepage')
 router.register(r'about-us', AboutUsViewset, basename='about-us')
 
 # for complete detail
-router.register(r'images', ImageViewSet, basename='image')
+router.register(r'gallery', ImageViewSet, basename='image')
 router.register(r'jumbotrons', JumbotronViewSet, basename='jumbotron')
 router.register(r'events', EventViewSet, basename='event')
 router.register(r'projects', ProjectViewSet, basename='project')

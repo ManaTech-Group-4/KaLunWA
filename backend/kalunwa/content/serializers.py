@@ -237,6 +237,7 @@ class AboutUsCampSerializer(serializers.ModelSerializer, ImageURLSerializer):
     class Meta:
         model = CampPage
         fields = (
+            'id',
             'camp_name',
             'description',
             'camp_image',

@@ -1,5 +1,5 @@
 
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
@@ -99,7 +99,7 @@ class HomepageViewSet(viewsets.ViewSet):
 
     @action(detail=False)
     def jumbotrons(self, request):
-        jumbotrons = Jumbotron.objects.all()
+        jumbotrons = Jumbotron.objects.all()[:5] # need is_featured?
         # passing context from the request, for the serializer to use
         serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
         return Response(serializer.data)
@@ -139,7 +139,13 @@ class AboutUsViewset(viewsets.ViewSet): # leaders
     
     @action(detail=False)
     def organization_leaders(self, request):
-        org_leaders = OrgLeader.objects.all()[:5]
+        """
+        return only people from execomm -> pres to overseer
+        """
+        org_leaders = OrgLeader.objects.exclude(
+            Q(position=OrgLeader.Positions.DIRECTOR.value) |
+            Q(position=OrgLeader.Positions.OTHER.value)
+            )
         serializer = AboutUsLeaderImageSerializer(org_leaders, many=True, context={'request':request})
         return  Response(serializer.data)
 

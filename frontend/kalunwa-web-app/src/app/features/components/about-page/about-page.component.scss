@@ -97,6 +97,7 @@ div{
         .vision, .mission, .core-values{
             padding: 50px 30px;
             width:40%;
+            max-width: 700px;
             color:#628A3A;
             text-align: center;
             h2{
@@ -119,7 +120,7 @@ div{
 
         .core-values{
           flex-grow: 2;
-
+          max-width: 1400px;
           hr{
               width: 40%;
           }
@@ -129,8 +130,13 @@ div{
 }
 
 .history{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .histo-content{
-    margin: 5%;
+    margin:5%;
+    max-width: 1350px;
     img {
       float:left;
       margin: 2%;

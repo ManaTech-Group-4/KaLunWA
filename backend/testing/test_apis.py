@@ -1,11 +1,10 @@
 import json
-from django.test import RequestFactory
 from django.urls import reverse
 from django.db.models import Sum
 from django.utils import timezone
-from rest_framework.test import APITestCase
-from .utils import get_camp_value_via_label, get_expected_image_url, get_test_image_file, to_formal_mdy
-from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Tag, Event
+from rest_framework.test import APITestCase, APIRequestFactory
+from .utils import  HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
 #-------------------------------------------------------------------------------
 # HomePage Website
@@ -24,7 +23,8 @@ class HomepageJumbotronsTestCase(APITestCase):
     def setUpTestData(cls):
         cls.jumbotron_limit = 5
         cls.image_file = get_test_image_file()
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
+        cls.url = HOMEPAGE_JUMBOTRON_URL
     
     def test_get_homepage_jumbotrons(self):
         """
@@ -36,13 +36,40 @@ class HomepageJumbotronsTestCase(APITestCase):
             Jumbotron.objects.create(
                 header_title= f'Jumbotron {_}', 
                 subtitle= f'short description {_}',
-                image = Image.objects.create(name=f'image_{_}', image=self.image_file)  
+                image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
+                is_featured=True,                
             )
 
-        response = self.client.get(reverse("homepage-jumbotrons"))
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertLessEqual( len(response.data), self.jumbotron_limit) # a <= b
-    
+
+    def test_get_homepage_featured_jumbotrons(self):
+        """
+        Test if only featured jumbotrons are returned. 
+        mock: 2 featured and 3 non-featured.
+        """        
+        for _ in range(5): 
+            if _ == [0,1]: # first 2 events are featured, rest are not
+                featured = True
+            else:
+                featured = False      
+
+            Jumbotron.objects.create(
+            header_title= f'Jumbotron {_}', 
+            subtitle= f'short description {_}',
+            image = Image.objects.create(name=f'image_{_}', image=self.image_file),
+            is_featured=featured,
+        )                     
+
+        response = self.client.get(self.url) 
+        jumbotrons = response.data       
+
+        for jumbotron in jumbotrons:
+            fetched_jumbotron = Event.objects.get(pk=jumbotron['id'])
+            self.assertTrue(fetched_jumbotron.is_featured)         
+
+
     def test_get_homepage_jumbotron_data(self):
         """
         Given no variation with serializing jumbotron data, retrieving and 
@@ -53,12 +80,12 @@ class HomepageJumbotronsTestCase(APITestCase):
         Jumbotron.objects.create(
             header_title= 'Jumbotron 1', 
             subtitle= 'short description',
-            image = Image.objects.create(name=f'image_1', image=self.image_file)          
+            image = Image.objects.create(name=f'image_1', image=self.image_file),  
+            is_featured=True,        
         )
         # need request to build image full url (request scheme, host)
-        request = self.request_factory.get(reverse("homepage-jumbotrons"))
-        response = self.client.get(reverse("homepage-jumbotrons")) 
-       
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url) 
         response_jumbotron = json.loads(response.content)[0] # json to python 
         expected_jumbotron = Jumbotron.objects.get(pk=response_jumbotron['id'])
 
@@ -68,7 +95,7 @@ class HomepageJumbotronsTestCase(APITestCase):
             'id' : expected_jumbotron.id, 
             'header_title' : expected_jumbotron.header_title,
             'subtitle' : expected_jumbotron.subtitle,
-            'image' : image_url
+            'image' : {'image':image_url}
         }
 
         self.assertDictEqual(response_jumbotron, expected_jumbotron_data)
@@ -77,7 +104,7 @@ class HomepageJumbotronsTestCase(APITestCase):
 class HomepageEventsTestCase(APITestCase):
     """
     Test homepage endpoints:
-        homepage-events 
+        /api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3
 
         - test if request limit (3) is implemented
         - test if events are featured
@@ -90,8 +117,8 @@ class HomepageEventsTestCase(APITestCase):
         """
         cls.event_limit = 3
         cls.image_file = get_test_image_file()
-        cls.request_factory = RequestFactory()
-        cls.homepage_url = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
+        cls.request_factory = APIRequestFactory()
+        cls.url = HOMEPAGE_EVENT_URL
 
     
     def test_get_homepage_events(self):
@@ -110,7 +137,7 @@ class HomepageEventsTestCase(APITestCase):
             is_featured=True,
             )   
 
-        response = self.client.get(self.homepage_url)
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         self.assertLessEqual( len(response.data), self.event_limit) # a <= b
@@ -136,7 +163,7 @@ class HomepageEventsTestCase(APITestCase):
             is_featured=featured,
         )                
 
-        response = self.client.get(self.homepage_url) 
+        response = self.client.get(self.url) 
         events = response.data
 
         for event in events:
@@ -153,8 +180,8 @@ class HomepageEventsTestCase(APITestCase):
         is_featured=True,
         )       
 
-        request = self.request_factory.get(self.homepage_url)
-        response = self.client.get(self.homepage_url) 
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url) 
         
         event = json.loads(response.content)[0]
         expected_event = Event.objects.get(pk=event['id'])
@@ -184,7 +211,8 @@ class HomepageProjectsTestCase(APITestCase):
         """
         cls.project_limit = 3
         cls.image_file = get_test_image_file()
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
+        cls.url = HOMEPAGE_PROJECT_URL
     
     def test_get_homepage_projects(self):
         """
@@ -199,18 +227,19 @@ class HomepageProjectsTestCase(APITestCase):
             image=self.image_file,
         )       
 
-        Project.objects.create(
-        title= f'Project {_}', 
-        description= f'description {_}',
-        start_date=timezone.now(),
-        end_date=timezone.now(),
-        image = Image.objects.get(pk=_),
-        is_featured=True,
-        )   
+            Project.objects.create(
+            title= f'Project {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.get(pk=_),
+            is_featured=True,
+            )   
 
-        response = self.client.get(reverse("homepage-projects"))
+        
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertLessEqual( len(response.data), self.project_limit) # a <= b
+        self.assertLessEqual(len(response.data), self.project_limit) # a <= b
 
     def test_get_homepage_featured_projects(self):
         """
@@ -232,14 +261,14 @@ class HomepageProjectsTestCase(APITestCase):
             is_featured=featured,
         )                 
 
-        response = self.client.get(reverse("homepage-projects")) 
+        response = self.client.get(self.url) 
         projects = response.data
 
         for project in projects:
             fetched_project = Project.objects.get(pk=project['id'])
             self.assertTrue(fetched_project.is_featured)
     
-    def test_get_homepage_event_data(self):
+    def test_get_homepage_project_data(self):
         Project.objects.create(
         title= 'Project 1', 
         description= 'description 1',
@@ -249,8 +278,8 @@ class HomepageProjectsTestCase(APITestCase):
         is_featured=True,
         )       
 
-        request = self.request_factory.get(reverse("homepage-projects"))
-        response = self.client.get(reverse("homepage-projects")) 
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url) 
         
         project = json.loads(response.content)[0]
         expected_project = Project.objects.get(pk=project['id'])
@@ -259,7 +288,7 @@ class HomepageProjectsTestCase(APITestCase):
         expected_project_data = {
             'id' : expected_project.id,
             'title' : expected_project.title,
-            'image' : image_url
+            'image' : {'image' : image_url}
         } 
         self.assertDictEqual(project, expected_project_data)
 
@@ -280,13 +309,14 @@ class HomepageNewsTestCase(APITestCase):
         """
         cls.news_limit = 3
         cls.image_file = get_test_image_file()
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
+        cls.url = HOMEPAGE_NEWS_URL
 
     
     def test_get_homepage_news(self):
         """
         Tests list endpoints for homepage news, return OK code. Tests list limit. 
-        mock: all 4 are featured
+        mock: create 4
         """
         # create 4 news
         for _ in range(4): 
@@ -296,9 +326,9 @@ class HomepageNewsTestCase(APITestCase):
             image = Image.objects.create( name=f'image_{_}', image=self.image_file)               
             )   
 
-        response = self.client.get(reverse("homepage-news"))
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertLessEqual( len(response.data), self.news_limit) # a <= b
+        self.assertLessEqual(len(response.data), self.news_limit) # a <= b
 
     def test_get_homepage_latest_news(self):
         """
@@ -313,7 +343,7 @@ class HomepageNewsTestCase(APITestCase):
             image = Image.objects.create(name=f'image_{_}', image=self.image_file), 
         )                
 
-        response = self.client.get(reverse("homepage-news")) 
+        response = self.client.get(self.url) 
         news_set = response.data
 
         pk = 4
@@ -328,8 +358,8 @@ class HomepageNewsTestCase(APITestCase):
         image = Image.objects.create(name='image_1', image=self.image_file),
         )   
 
-        request = self.request_factory.get(reverse("homepage-news"))
-        response = self.client.get(reverse("homepage-news")) 
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url) 
         
         news = json.loads(response.content)[0]
         expected_news = News.objects.get(pk=news['id'])
@@ -340,7 +370,7 @@ class HomepageNewsTestCase(APITestCase):
             'title' : expected_news.title,
             'description' : expected_news.description,
             'date' : to_formal_mdy(expected_news.created_at),
-            'image' : image_url
+            'image' : {'image' : image_url}
         } 
         self.assertDictEqual(news, expected_news_data)
 
@@ -365,7 +395,7 @@ class AboutUsDemographics(APITestCase):
 
         # class attribute
         cls.total_members = loc_1 + loc_2 + loc_3
-        cls.request_factory = RequestFactory()        
+        cls.request_factory = APIRequestFactory()        
 
     def test_get_demographics(self):
         response = self.client.get(reverse("about-us-demographics"))
@@ -393,7 +423,7 @@ class AboutUsCampsTestCase(APITestCase):
         cls.test_image = get_test_image_file()
         cls.camps_values = CampEnum.values
         cls.camp_labels = CampEnum.labels
-        cls.request_factory = RequestFactory()        
+        cls.request_factory = APIRequestFactory()        
 
     def test_get_camps(self):
         """
@@ -469,7 +499,7 @@ class AboutUsLeadersTestCase(APITestCase):
     def setUpTestData(cls):
         cls.leaders_limit = 7 # Pres to overseer (execomm)
         cls.image_file = get_test_image_file()
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
         positions = OrgLeader.Positions.labels
         positions.remove(OrgLeader.Positions.DIRECTOR.label)
         positions.remove(OrgLeader.Positions.OTHER.label)

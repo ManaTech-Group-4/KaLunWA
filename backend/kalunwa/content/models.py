@@ -37,6 +37,7 @@ class Image(AuthoredModel):
 class Jumbotron(AuthoredModel):
     header_title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=225)
+    is_featured = models.BooleanField(default=False)    
     image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
 
     def __str__(self) -> str:

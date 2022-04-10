@@ -1,11 +1,12 @@
 
-from django.test import RequestFactory, TestCase
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.views import APIView
 from .utils import get_test_image_file, get_expected_image_url
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Jumbotron, News, Project, Tag, Event
-from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageEventSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
+from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
@@ -57,7 +58,7 @@ class ImageURLSerializerTestCase(APITestCase):
                 is_published=True,
             )
 
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
         cls.image_file_name = cls.image.image.name
 
     # def get_expected_image_url(self, request):
@@ -74,6 +75,8 @@ class ImageURLSerializerTestCase(APITestCase):
 
     def test_jumbotron_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-jumbotrons"))
+        request = APIView().initialize_request(request)
+        print(request)
         serializer = HomepageJumbotronSerializer(self.jumbotron, context={'request':request})
         ## build complete url 
             # request.scheme -> http
@@ -82,17 +85,20 @@ class ImageURLSerializerTestCase(APITestCase):
         self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 
     def test_event_image_full_url(self):
-        request = self.request_factory.get(reverse("homepage-events"))
-        serializer = HomepageEventSerializer(self.event, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+        request = self.request_factory.get("/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3")
+        request = APIView().initialize_request(request) # convert to DRF request to pass tests       
+        serializer = EventSerializer(self.event, context={'request':request})
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image']) # might do image.url
 
     def test_project_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-projects"))
+        request = APIView().initialize_request(request)        
         serializer = HomepageProjectSerializer(self.project, context={'request':request})
         self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 
     def test_news_image_full_url(self):
         request = self.request_factory.get(reverse("homepage-news"))
+        request = APIView().initialize_request(request)             
         serializer = HomepageNewsSerializer(self.news, context={'request':request})
         self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 

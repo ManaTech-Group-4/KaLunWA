@@ -91,6 +91,7 @@ class HomepageEventsTestCase(APITestCase):
         cls.event_limit = 3
         cls.image_file = get_test_image_file()
         cls.request_factory = RequestFactory()
+        cls.homepage_url = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 
     
     def test_get_homepage_events(self):
@@ -109,8 +110,9 @@ class HomepageEventsTestCase(APITestCase):
             is_featured=True,
             )   
 
-        response = self.client.get(reverse("homepage-events"))
+        response = self.client.get(self.homepage_url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
         self.assertLessEqual( len(response.data), self.event_limit) # a <= b
 
     def test_get_homepage_featured_events(self):
@@ -134,7 +136,7 @@ class HomepageEventsTestCase(APITestCase):
             is_featured=featured,
         )                
 
-        response = self.client.get(reverse("homepage-events")) 
+        response = self.client.get(self.homepage_url) 
         events = response.data
 
         for event in events:
@@ -151,8 +153,8 @@ class HomepageEventsTestCase(APITestCase):
         is_featured=True,
         )       
 
-        request = self.request_factory.get(reverse("homepage-events"))
-        response = self.client.get(reverse("homepage-events")) 
+        request = self.request_factory.get(self.homepage_url)
+        response = self.client.get(self.homepage_url) 
         
         event = json.loads(response.content)[0]
         expected_event = Event.objects.get(pk=event['id'])
@@ -161,7 +163,7 @@ class HomepageEventsTestCase(APITestCase):
         expected_event_data = {
             'id' : expected_event.id,
             'title' : expected_event.title,
-            'image' : image_url
+            'image' : { 'image' : image_url}
         } 
         self.assertDictEqual(event, expected_event_data)
     

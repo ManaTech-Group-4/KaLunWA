@@ -36,33 +36,6 @@ class TagSerializer(serializers.ModelSerializer):
             )
 
 
-class ImageURLSerializer(serializers.Serializer):
-    """
-    This serializer gets the absolute url of images, and returns
-    only that field.
-     Will be recycled for all serializers that will only require
-    the complete url (exclude extra image data e.g. title, tags).
-    note: 
-    Serializer Models that will inherit this should have their models 
-    use `image` as the field name.
-    """
-    url = serializers.SerializerMethodField()
-
-    class Meta:
-        fields = (
-            'url'
-        )
-    
-    def get_url(self, obj):
-        # get Image attribute from the object (e.g. jumbotron, event)
-        image = Image.objects.get(pk=obj.image.pk)
-        # pass context needed to generate full URL
-        serializer = ImageSerializer(image, context=self.context)
-        # serializer.data -> returns key dictionary pairs
-        # accessing the 'image' key to get value (URL)
-        return serializer.data['image']        
-
-
 class ImageSerializer(FlexFieldsModelSerializer):
     image = serializers.ImageField(use_url=True)
     tags = TagSerializer(many=True, required=False)
@@ -83,7 +56,27 @@ class ImageSerializer(FlexFieldsModelSerializer):
             'projects' : ('kalunwa.content.ProjectSerializer', {'many': True, 'source': 'gallery_projects','fields':['id','title']}),
             'camps' : ('kalunwa.content.CampPageSerializer', {'many': True, 'source': 'gallery_camps','fields':['id','name']}),
         }
-    
+
+class JumbotronSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = Jumbotron
+        fields = (
+            'id',
+            'header_title',
+            'subtitle',
+            'image',
+            'created_at',
+            'updated_at',
+        )    
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        }
+
 
 class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
     """
@@ -169,9 +162,237 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
             return StatusEnum.ONGOING.value
         return self.determine_status(obj)       
 
+
+class NewsSerializer(FlexFieldsModelSerializer):
+    date = serializers.SerializerMethodField()    
+    class Meta:
+        model = News
+        fields = (
+            'id',
+            'title',
+            'description',
+            'image',
+            'date', # might ask frontend to do the formal format (Month dd, yyyy)
+            'created_at',
+            'updated_at',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        }        
+
+    def get_date(self, obj):
+        return to_formal_mdy(obj.created_at)
+        
+
+# prep for about us 
+class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
+    name = serializers.CharField(max_length=100, source='get_fullname')
+
+    class Meta:
+        model = CampLeader
+        fields = (
+            'id',
+            'name',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'motto',
+            'created_at',
+            'updated_at',
+        )    
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        }           
+
+class CampPageSerializer(FlexFieldsModelSerializer):
+    camp_leader = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CampPage
+        fields = (
+            'id',
+            'name',
+            'description',
+            'image',
+            'camp_leader',
+            'created_at',
+            'updated_at',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        }   
+
+    def get_camp_leader(self, obj): # can't select fields if not related object (e.g. fk or m2m)
+        try: # what if 2 leaders would be returned
+            camp_leader = CampLeader.objects.get(
+                camp=obj.name,
+                position=CampLeader.Positions.LEADER
+            ) 
+
+            serializer = CampLeaderSerializer(
+                camp_leader,
+                context=self.context,
+                fields = ['id', 'name', 'motto']
+                )
+            return serializer.data
+
+        except ObjectDoesNotExist:
+            return None
+
+
+class OrgLeaderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrgLeader
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'position',
+            'created_at',
+            'updated_at',
+        )
 #-------------------------------------------------------------------------------
+#  serializes all data fields
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Announcement
+        fields = (
+            'id',
+            'title',
+            'description',
+            'created_at',
+            'updated_at',
+        )
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#-----------------------------newly added serializer as of 23/3/2022-----------------------------------------------
+
+class DemographicsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Demographics
+        fields = (
+            'id',
+            'location',
+            'member_count',
+            'created_at',
+            'updated_at',
+        )
+
+class CommissionerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Commissioner
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'position',
+            'category',
+            'created_at',
+            'updated_at',
+        )
+
+
+class CabinOfficerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CabinOfficer
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'background',
+            'advocacy',
+            'image',
+            'camp',
+            'position',
+            'category',
+            'created_at',
+            'updated_at',
+        )
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+# to be removed if approved
+#-------------------------------------------------------------------------------
+# would not be needed anymore since image url is returned in convenient requests
+
+class ImageURLSerializer(serializers.Serializer):
+    """
+    This serializer gets the absolute url of images, and returns
+    only that field.
+     Will be recycled for all serializers that will only require
+    the complete url (exclude extra image data e.g. title, tags).
+    note: 
+    Serializer Models that will inherit this should have their models 
+    use `image` as the field name.
+    """
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'url'
+        )
+    
+    def get_url(self, obj):
+        # get Image attribute from the object (e.g. jumbotron, event)
+        image = Image.objects.get(pk=obj.image.pk)
+        # pass context needed to generate full URL
+        serializer = ImageSerializer(image, context=self.context)
+        # serializer.data -> returns key dictionary pairs
+        # accessing the 'image' key to get value (URL)
+        return serializer.data['image']        
+
+
+
 #  serializers for website homepage view
 
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+
+        
 class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
     image = serializers.SerializerMethodField(method_name='get_url')
     class Meta:
@@ -210,6 +431,8 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     
     def get_date(self, obj):
         return obj.homepage_date()
+
+
 
 
 #-------------------------------------------------------------------------------
@@ -266,153 +489,4 @@ class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializ
         fields = (
             'leader_id',
             'image_url'
-        )
-    
-#-------------------------------------------------------------------------------
-#  serializers for lists views
- 
-
-#-------------------------------------------------------------------------------
-#  serializes all data fields
-
-class JumbotronSerializer(serializers.ModelSerializer):
-    image = ImageSerializer() # or make it return the image resource
-    class Meta:
-        model = Jumbotron
-        fields = (
-            'id',
-            'header_title',
-            'subtitle',
-            'image',
-            'created_at',
-            'updated_at',
-        )
-
-
-class NewsSerializer(serializers.ModelSerializer):
-    image = ImageSerializer()
-    class Meta:
-        model = News
-        fields = (
-            'id',
-            'title',
-            'description',
-            'image',
-            'created_at',
-            'updated_at',
-        )
-
-
-class AnnouncementSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Announcement
-        fields = (
-            'id',
-            'title',
-            'description',
-            'created_at',
-            'updated_at',
-        )
-
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added serializer as of 23/3/2022-----------------------------------------------
-
-class DemographicsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Demographics
-        fields = (
-            'id',
-            'location',
-            'member_count',
-            'created_at',
-            'updated_at',
-        )
-
-
-class CampPageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CampPage
-        fields = (
-            'id',
-            'name',
-            'description',
-            'image',
-            'created_at',
-            'updated_at',
-        )
-
-
-class OrgLeaderSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OrgLeader
-        fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'background',
-            'advocacy',
-            'image',
-            'position',
-            'created_at',
-            'updated_at',
-        )
-
-
-class CommissionerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Commissioner
-        fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'background',
-            'advocacy',
-            'image',
-            'position',
-            'category',
-            'created_at',
-            'updated_at',
-        )
-
-
-class CampLeaderSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CampLeader
-        fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'background',
-            'advocacy',
-            'image',
-            'camp',
-            'position',
-            'motto',
-            'created_at',
-            'updated_at',
-        )
-
-class CabinOfficerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CabinOfficer
-        fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'background',
-            'advocacy',
-            'image',
-            'camp',
-            'position',
-            'category',
-            'created_at',
-            'updated_at',
         )

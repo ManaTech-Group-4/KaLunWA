@@ -2,13 +2,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
-from django_restql.mixins import DynamicFieldsMixin
-from rest_flex_fields import FlexFieldsModelSerializer
+from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
 from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
 from kalunwa.core.utils import to_formal_mdy
+
 
 class StatusEnum(Enum):
     PAST = 'past'
@@ -67,7 +67,6 @@ class ImageSerializer(FlexFieldsModelSerializer):
     image = serializers.ImageField(use_url=True)
     tags = TagSerializer(many=True, required=False)
 
-
     class Meta:
         model = Image
         fields = (
@@ -78,6 +77,97 @@ class ImageSerializer(FlexFieldsModelSerializer):
             'created_at',
             'updated_at',
         )
+
+        expandable_fields = {
+            'events' : ('kalunwa.content.EventSerializer', {'many': True, 'source': 'gallery_events','fields':['id','title']}),
+            'projects' : ('kalunwa.content.ProjectSerializer', {'many': True, 'source': 'gallery_projects','fields':['id','title']}),
+            'camps' : ('kalunwa.content.CampPageSerializer', {'many': True, 'source': 'gallery_camps','fields':['id','name']}),
+        }
+    
+
+class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
+    """
+    Inherited by project and event serializers given similar logic
+    """
+    # might just return dates in datetime format. reasons:
+        # methods are view onlies, so client can't make records with start_date
+            # and end_date (work around would involve making another serializer)
+        # might be more appropriate to do display manipulations at the frontend
+    # alternative: another field for datetime (for post/create) and display (get/list)? 
+    status = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()    
+
+    class Meta:
+        fields = (
+            'id',
+            'title',
+            'image',
+            'description',
+            'start_date',
+            'end_date',            
+            'camp', # choices serializer            
+            'created_at',
+            'updated_at',  
+            'status',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+
+            'gallery' : ('kalunwa.content.ImageSerializer',
+                {
+                 'many': True,
+                 'fields':['id','image']
+                 }            
+            )
+        }
+
+    def get_start_date(self, obj):
+            return to_formal_mdy(obj.start_date)
+
+    def get_end_date(self, obj):
+            return to_formal_mdy(obj.end_date)
+
+    def validate(self, data): # object-level validation
+        data = self.get_initial() # gets pre-validation data
+        validate_start_date_and_end_date(data['start_date'], data['end_date'])
+        return data
+
+    def determine_status(self, obj):
+        date_now = timezone.now()
+        if date_now > obj.start_date and date_now > obj.end_date:
+            return StatusEnum.PAST.value 
+        # ongoing
+        if date_now >= obj.start_date and date_now < obj.end_date:
+            return StatusEnum.ONGOING.value             
+        # upcoming
+        if date_now < obj.start_date and date_now < obj.end_date:
+            return StatusEnum.UPCOMING.value   
+        
+
+class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
+
+    class Meta(OccurenceSerializer.Meta):
+        model = Event
+
+    def get_status(self, obj)->str:
+        return self.determine_status(obj)
+           
+
+class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
+
+    class Meta(OccurenceSerializer.Meta):
+        model = Project
+
+    def get_status(self, obj)->str:
+        if not obj.end_date: # if end_date does not exist
+            return StatusEnum.ONGOING.value
+        return self.determine_status(obj)       
 
 #-------------------------------------------------------------------------------
 #  serializers for website homepage view
@@ -197,97 +287,6 @@ class JumbotronSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-# DynamicFieldsMixin -> restql
-# FlexFieldsModelSerializer
-
-class EventSerializer(FlexFieldsModelSerializer):
-    status = serializers.SerializerMethodField()
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()
-
-    # different fields for start & end date post request
-    class Meta:
-        model = Event
-        fields = (
-            'id',
-            'title',
-            'image',
-            'description',
-            'start_date',
-            'end_date',            
-            'camp', # choices serializer            
-            'created_at',
-            'updated_at',  
-            'status',
-        )
-
-        expandable_fields = {
-            'image' : (ImageSerializer)
-        }
-
-    def get_start_date(self, obj):
-            #print(self.dynamic_fields_mixin_kwargs)
-            return to_formal_mdy(obj.start_date)
-
-    def get_end_date(self, obj):
-            return to_formal_mdy(obj.end_date)
-
-    def get_status(self, obj)->str:
-        # add check if no dates
-        # past
-        date_now = timezone.now()
-        if date_now > obj.start_date and date_now > obj.end_date:
-            return StatusEnum.PAST.value 
-        # ongoing
-        if date_now >= obj.start_date and date_now < obj.end_date:
-            return StatusEnum.ONGOING.value             
-        # upcoming
-        if date_now < obj.start_date and date_now < obj.end_date:
-            return StatusEnum.UPCOMING.value    
-    
-    def validate(self, data): # object-level validation
-        data = self.get_initial() # gets pre-validation data
-        validate_start_date_and_end_date(data['start_date'], data['end_date'])
-        return data
-
-
-class ProjectSerializer(serializers.ModelSerializer):
-    image = ImageSerializer()
-    status = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Project
-        fields = (
-            'id',
-            'title',
-            'description',
-            'image',
-            'start_date',
-            'end_date',            
-            'camp',         
-            'created_at',
-            'updated_at',  
-            'status',
-        )
-    def get_status(self, obj)->str:
-        if not obj.end_date: # if end_date does not exist
-            return StatusEnum.ONGOING.value
-
-        date_now = timezone.now()
-        if date_now > obj.start_date and date_now > obj.end_date:
-            return StatusEnum.PAST.value 
-        # ongoing
-        if date_now >= obj.start_date and date_now < obj.end_date:
-            return StatusEnum.ONGOING.value             
-        # upcoming
-        if date_now < obj.start_date and date_now < obj.end_date:
-            return StatusEnum.UPCOMING.value    
-
-    def validate(self, data):
-        data = self.get_initial()
-        validate_start_date_and_end_date(data['start_date'], data['end_date'])
-
-        return data
 
 class NewsSerializer(serializers.ModelSerializer):
     image = ImageSerializer()

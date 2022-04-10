@@ -1,3 +1,4 @@
+
 from django.db.models import Sum
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
@@ -15,24 +16,76 @@ class QueryLimitViewMixin:
         """
         Limits the number of records returned. 
         """
-        query_limit = self.request.query_params.get('query_limit', None)
-        if query_limit is not None and query_limit.isdigit():
-            query_limit = int(query_limit)
-            response.data = response.data[:query_limit]
+        if self.action=='list':
+            query_limit = self.request.query_params.get('query_limit', None)
+            if query_limit is not None and query_limit.isdigit():
+                query_limit = int(query_limit)
+                response.data = response.data[:query_limit]
+
         return super().finalize_response(request, response, *args, **kwargs)
 
 
 class EventViewSet(QueryLimitViewMixin, viewsets.ModelViewSet): 
-    model = Event
-    queryset = Event.objects.all()
+    queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['is_featured']
+    # might need to add new serializer field for non-read only stuff that needs
+    # to be posted data on (or let frontend manipulate the dates nlng)
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_featured']
 
 
+class ReturnRelatedObjectsMixin:
+    def get_queryset(self):
+        pass
 
-    # might need to add new serializer field for non-read only stuff that needs
-    # to be posted data on (or let frontend manipulate the dates nlng)
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for listing or retrieving images.
+    """
+    serializer_class = ImageSerializer
+    queryset = Image.objects.prefetch_related('gallery_events', 'gallery_projects', 'gallery_camps') 
+    filter_backends = [DjangoFilterBackend]
+    related_objects = ['has_event']
+
+    def get_queryset(self):
+        event_pk = self.request.query_params.get(f'has_event', None)      
+        # get event
+        if event_pk is not None: 
+            event = Event.objects.get(pk=event_pk).prefetch_related('gallery')
+            return event.gallery.all()
+        
+        # grab all the images, query for their related objects (projects, events, camps)
+        # image_id
+        # event_id
+        # project_id
+        # camp_id
+
+        return super().get_queryset()
+    # return images where event_id is in events.id
+    # change queryset according to an event_id
+        # returns event_id.gallery
+
+    # has_event=1
+        # get has_event
+        # in gallery
+            # get event with pk 
+            # return objects related to event via event.gallery()
+
+        # cases -> event does not exist
+            # return none or error? -> error 
+        # case -> no related images, return null or empty list? 
+
+
+
 #-------------------------------------------------------------------------------
 # homepage views
 
@@ -89,23 +142,12 @@ class AboutUsViewset(viewsets.ViewSet): # leaders
 
 #------------------------------------------------------- 
 
-class ImageViewSet(viewsets.ModelViewSet):
-    """
-    A simple ViewSet for listing or retrieving images.
-    """
-    serializer_class = ImageSerializer
-    queryset = Image.objects.all()
+
 
 
 class JumbotronViewSet(viewsets.ModelViewSet):
     serializer_class = JumbotronSerializer
     queryset = Jumbotron.objects.all()
-
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    serializer_class = ProjectSerializer
-    queryset = Project.objects.all()
-
 
 class NewsViewSet(viewsets.ModelViewSet):
     serializer_class = NewsSerializer

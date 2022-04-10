@@ -73,6 +73,7 @@ class Event(ContentBase):
     end_date = models.DateTimeField()
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
+    gallery = models.ManyToManyField(Image, related_name='gallery_events', blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -89,7 +90,7 @@ class Project(ContentBase):
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
-
+    gallery = models.ManyToManyField(Image, related_name='gallery_projects', blank=True)
     def __str__(self) -> str:
         return self.title
 
@@ -108,6 +109,7 @@ class CampPage(AuthoredModel):
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
         # use case: image.Suba -> expectedly returns a single CampPage, Suba
+    gallery = models.ManyToManyField(Image, related_name='gallery_camps', blank=True)
 
     def __str__(self) -> str:
         return self.get_name_display()

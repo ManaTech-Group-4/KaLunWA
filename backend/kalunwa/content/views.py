@@ -1,4 +1,5 @@
 
+from posixpath import basename
 from django.db.models import Sum, Q
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
@@ -34,7 +35,7 @@ class EventViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     # might need to add new serializer field for non-read only stuff that needs
     # to be posted data on (or let frontend manipulate the dates nlng)
 
-
+ 
 class ProjectViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -111,6 +112,16 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
                 return execomm_leaders
 
         return OrgLeader.objects.all()
+
+
+class DemographicsViewSet(viewsets.ModelViewSet):
+    serializer_class = DemographicsSerializer
+    queryset = Demographics.objects.all()
+
+    @action(detail=False, url_path='total-members')
+    def total_members(self, request):
+        return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
+
 # -----------------------------------------------------------------------------    
 class ImageViewSet(viewsets.ModelViewSet):
     """
@@ -187,9 +198,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #-----------------------------newly added models as of 23/3/2022-------------------------------------------------
 
-class DemographicsViewSet(viewsets.ModelViewSet):
-    serializer_class = DemographicsSerializer
-    queryset = Demographics.objects.all()
 
 class CommissionerViewSet(viewsets.ModelViewSet):
     serializer_class = CommissionerSerializer

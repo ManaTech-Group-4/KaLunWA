@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
-from .utils import  HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
 #-------------------------------------------------------------------------------
@@ -395,14 +395,15 @@ class AboutUsDemographics(APITestCase):
 
         # class attribute
         cls.total_members = loc_1 + loc_2 + loc_3
-        cls.request_factory = APIRequestFactory()        
+        cls.request_factory = APIRequestFactory()    
+        cls.url = ABOUT_US_TOTAL_MEMBERS # or reverse("demographics-total-members")
 
     def test_get_demographics(self):
-        response = self.client.get(reverse("about-us-demographics"))
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)    
 
     def test_get_demographics_data(self):
-        response = self.client.get(reverse("about-us-demographics"))  
+        response = self.client.get(self.url)  
         self.assertEqual(response.data['total_members'], self.total_members)
 
 
@@ -415,6 +416,8 @@ class AboutUsCampsTestCase(APITestCase):
         # tried testing for getting duplicate camps
             # not possible, since  the unique constraint stops model creation
             #  with the same name    
+        # possible additions:
+            # more than 1 camp leaders -> make campleader an fk nlng kaya 
     """    
 
     @classmethod
@@ -423,7 +426,8 @@ class AboutUsCampsTestCase(APITestCase):
         cls.test_image = get_test_image_file()
         cls.camps_values = CampEnum.values
         cls.camp_labels = CampEnum.labels
-        cls.request_factory = APIRequestFactory()        
+        cls.request_factory = APIRequestFactory() 
+        cls.url = ABOUT_US_CAMP_URL       
 
     def test_get_camps(self):
         """
@@ -440,7 +444,7 @@ class AboutUsCampsTestCase(APITestCase):
                 image = Image.objects.create(name = 'name', image = self.test_image)
         )   
         
-        response = self.client.get(reverse("about-us-camps"))
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)  
         self.assertEqual( self.camp_count, len(response.data))   
 
@@ -460,31 +464,54 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camps = self.camp_labels
         expected_camps.remove(CampEnum.GENERAL.label)
 
-        response = self.client.get(reverse("about-us-camps"))       
+        response = self.client.get(self.url)       
         response_camps = []
         for camp in response.data:
-            response_camps.append(camp['camp_name']) 
+            response_camps.append(camp['name']) 
         
         self.assertListEqual(sorted(expected_camps), sorted(response_camps))
 
     def test_get_camp_data(self):
-        CampPage.objects.create(
+        expected_camp = CampPage.objects.create(
             name=CampEnum.SUBA.value,
             description='default',
             image = Image.objects.create(name = 'name', image = self.test_image)            
         )        
-        request = self.request_factory.get(reverse("about-us-camps"))
-        response = self.client.get(reverse("about-us-camps"))  
+
+        expected_leader = CampLeader.objects.create(
+            first_name='Suba leader',
+            last_name = 'Suba last n',
+            background = 'sunset',
+            advocacy='spread wings',
+            image = Image.objects.create(name = 'name', image = self.test_image),
+            camp = CampEnum.SUBA.value,
+            position = CampLeader.Positions.LEADER,
+            motto = 'all is well'
+        )
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url)  
 
         camp = json.loads(response.content)[0] 
-        expected_camp = CampPage.objects.get(pk=camp['id'])
-        image_url = get_expected_image_url(expected_camp.image.image.name, request)   
+        camp_image_url = get_expected_image_url(expected_camp.image.image.name, request)   
+        leader_image_url = get_expected_image_url(expected_leader.image.image.name, request)           
         expected_camp_data = {
             'id': expected_camp.pk,
-            'camp_name' : expected_camp.get_name_display(),
+            'name' : expected_camp.get_name_display(),
             'description' : expected_camp.description,
-            'camp_image' : image_url,
-            'camp_leader' : None            
+            'image' : {
+                'id' : expected_camp.image.pk,
+                'image' : camp_image_url,
+            },
+            'camp_leader' : { 
+                'id': expected_leader.id, 
+                'name': expected_leader.get_fullname(),
+                'motto' : expected_leader.motto,
+                'image' : {
+                    'id' : 2,
+                    'image': leader_image_url,
+                }
+
+            }            
         }          
         self.assertDictEqual(camp, expected_camp_data)
 
@@ -504,6 +531,7 @@ class AboutUsLeadersTestCase(APITestCase):
         positions.remove(OrgLeader.Positions.DIRECTOR.label)
         positions.remove(OrgLeader.Positions.OTHER.label)
         cls.expected_positions = positions
+        cls.url = ABOUT_US_LEADERS
 
     def test_get_org_leaders(self):
         """
@@ -522,7 +550,7 @@ class AboutUsLeadersTestCase(APITestCase):
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )        
 
-        response = self.client.get(reverse("about-us-organization-leaders"))
+        response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)  
         self.assertLessEqual( len(response.data),  self.leaders_limit)  
     
@@ -541,10 +569,10 @@ class AboutUsLeadersTestCase(APITestCase):
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )             
 
-        response = self.client.get(reverse("about-us-organization-leaders"))
+        response = self.client.get(self.url)
 
         for leader in response.data:
-            response_leader = OrgLeader.objects.get(pk=leader['leader_id'])
+            response_leader = OrgLeader.objects.get(pk=leader['id'])
             self.assertNotIn(response_leader.position,  
                 [OrgLeader.Positions.DIRECTOR.value,
                  OrgLeader.Positions.OTHER.value]

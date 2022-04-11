@@ -219,6 +219,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         }           
 
 class CampPageSerializer(FlexFieldsModelSerializer):
+    name = serializers.CharField(max_length=5, source='get_name_display')
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -259,7 +260,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             return None
 
 
-class OrgLeaderSerializer(serializers.ModelSerializer):
+class OrgLeaderSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = OrgLeader
@@ -274,6 +275,14 @@ class OrgLeaderSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
 #-------------------------------------------------------------------------------
 #  serializes all data fields
 

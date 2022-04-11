@@ -40,3 +40,7 @@ HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_
 HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id&ordering=-created_at&query_limit=3'
+
+ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&one_each=True'
+ABOUT_US_TOTAL_MEMBERS = '/api/demographics/total-members/'
+ABOUT_US_LEADERS = '/api/orgleaders/?expand=image&fields=id,image&is_execomm=True'

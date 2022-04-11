@@ -10,7 +10,9 @@ export class EventspageService {
 
   constructor(private http:HttpClient) { }
 
-  public getEventList() : Observable<EventsResponseModel[]>{
+  getEventList() : Observable<EventsResponseModel[]>{
     return this.http.get<EventsResponseModel[]>('http://127.0.0.1:8000/api/events');
+
   }
+
 }

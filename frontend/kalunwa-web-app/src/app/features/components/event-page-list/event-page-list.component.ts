@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { EventsItemsModel } from '../../models/event-items-model';
 import { EventspageService } from '../../service/eventspage.service';
 
@@ -12,6 +12,9 @@ export class EventPageListComponent implements OnInit {
   constructor( private eventsService: EventspageService) { }
 
   eventsList = [] as EventsItemsModel[];
+  filteredEvents = [] as EventsItemsModel[];
+
+
   ngOnInit(): void {
     this.eventsService.getEventList()
       .subscribe(data => {
@@ -25,6 +28,19 @@ export class EventPageListComponent implements OnInit {
           tags: [event.camp, event.status]
         }));
       });
+  }
+
+
+  filterEvents(camps: string[], status: string)
+  {
+    this.filteredEvents = this.eventsList
+      .filter(event => camps
+        .forEach(camp => {
+          event.tags.includes(camp);
+        })
+      )
+      .filter(statusCamp => statusCamp.tags.includes(status));
+    console.log(this.filteredEvents);
   }
 
 }

@@ -15,6 +15,9 @@ import { EventsPageComponent } from './features/components/events-page/events-pa
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
+import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { ProjectListComponent } from './features/components/projects/project-lis
     EventsPageComponent,
     EventPageListComponent,
     ProjectPageComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    FilterDialogComponent,
+    FilterProjectsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +41,9 @@ import { ProjectListComponent } from './features/components/projects/project-lis
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
-    MatCarouselModule.forRoot()
+    MatCarouselModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

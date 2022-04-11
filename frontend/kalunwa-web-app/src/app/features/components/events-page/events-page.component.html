@@ -13,7 +13,7 @@
 <div class="container">
   <div class="block">
     <div class="announcements">
-      <button mat-button class="filter">
+      <button mat-button  (click)="openDialog(selectedCamp,selectedStatus)" class="filter">
         <mat-icon>filter_list</mat-icon>
         Filter by
       </button>

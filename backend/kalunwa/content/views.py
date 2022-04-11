@@ -1,9 +1,9 @@
 
 from posixpath import basename
 from django.db.models import Sum, Q
-from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
+from .models import CampEnum, Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer, HomepageEventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, ContributorSerializer, EventSerializer, HomepageEventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
 from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -35,7 +35,7 @@ class EventViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     # might need to add new serializer field for non-read only stuff that needs
     # to be posted data on (or let frontend manipulate the dates nlng)
 
- 
+
 class ProjectViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -122,7 +122,13 @@ class DemographicsViewSet(viewsets.ModelViewSet):
     def total_members(self, request):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
 
+
+class ContributorViewset(viewsets.ModelViewSet):
+    serializer_class = ContributorSerializer
+    queryset = Contributor.objects.all()
+
 # -----------------------------------------------------------------------------    
+# tester for gallery 
 class ImageViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving images.

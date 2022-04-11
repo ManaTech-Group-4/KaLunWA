@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
-from .models import Image, Jumbotron, Tag, Announcement, Event, Project, News 
+from .models import Contributor, Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
@@ -95,7 +95,7 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
         fields = (
             'id',
             'title',
-            'image',
+            'image',  # expose image pk or hide, then only access in expand?
             'description',
             'start_date',
             'end_date',            
@@ -117,7 +117,14 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
                  'many': True,
                  'fields':['id','image']
                  }            
-            )
+            ),
+            
+            'contributors' : ('kalunwa.content.ContributorSerializer',
+                {
+                 'many': True,
+                 }                  
+            )               
+
         }
 
     def get_start_date(self, obj):
@@ -219,7 +226,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         }           
 
 class CampPageSerializer(FlexFieldsModelSerializer):
-    name = serializers.CharField(max_length=5, source='get_name_display')
+    name = serializers.CharField(source='get_name_display') # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -283,6 +290,28 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+
+class ContributorSerializer(FlexFieldsModelSerializer):
+    category = serializers.CharField(source='get_category_display') 
+
+    class Meta:
+        model = Contributor
+        fields = (
+            'id',
+            'name',
+            'image', 
+            'category',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
+
+
 #-------------------------------------------------------------------------------
 #  serializes all data fields
 
@@ -350,10 +379,6 @@ class CabinOfficerSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         )
-
-
-
-
 
 
 #-------------------------------------------------------------------------------
@@ -441,9 +466,6 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     def get_date(self, obj):
         return obj.homepage_date()
 
-
-
-
 #-------------------------------------------------------------------------------
 #  serializers for aboutus homepage view
 
@@ -460,7 +482,6 @@ class AboutUsCampLeaderSerializer(serializers.ModelSerializer, ImageURLSerialize
         )
     
     
-
 class AboutUsCampSerializer(serializers.ModelSerializer, ImageURLSerializer):
     camp_name = serializers.CharField(max_length=5, source='get_name_display')
     camp_image = serializers.SerializerMethodField(method_name='get_url')

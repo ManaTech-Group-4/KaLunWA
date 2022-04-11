@@ -75,6 +75,7 @@ class Event(ContentBase):
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
     gallery = models.ManyToManyField(Image, related_name='gallery_events', blank=True)
+    contributors = models.ManyToManyField('content.Contributor', related_name='events', blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -82,7 +83,6 @@ class Event(ContentBase):
     def month_day_year_format(self)->str:
         date = self.created_at
         return f'{date.strftime("%B")} {date.day}, {date.year}'
-
         
 
 class Project(ContentBase):
@@ -92,6 +92,7 @@ class Project(ContentBase):
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
     gallery = models.ManyToManyField(Image, related_name='gallery_projects', blank=True)
+    contributors = models.ManyToManyField('content.Contributor', related_name='projects', blank=True)
     def __str__(self) -> str:
         return self.title
 
@@ -207,3 +208,11 @@ class CabinOfficer(LeaderBase):
         # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
 
 
+class Contributor(models.Model):
+    class Categories(models.TextChoices):
+        SPONSOR = 'SR', 'Sponsor'
+        PARTNER = 'PR', 'Partner'
+        OTHER = 'OTHR', 'Other'        
+    name = models.CharField(max_length=100)
+    image = models.OneToOneField(Image, related_name='contributors', on_delete=models.PROTECT)
+    category = models.CharField(choices=Categories.choices, max_length=4, default=Categories.OTHER)

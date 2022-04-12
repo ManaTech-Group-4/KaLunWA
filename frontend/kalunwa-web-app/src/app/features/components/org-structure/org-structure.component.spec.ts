@@ -1,4 +1,6 @@
+import { Overlay } from '@angular/cdk/overlay';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 
 import { OrgStructureComponent } from './org-structure.component';
@@ -9,6 +11,7 @@ describe('OrgStructureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [MatDialogModule],
       declarations: [ OrgStructureComponent ]
     })
     .compileComponents();

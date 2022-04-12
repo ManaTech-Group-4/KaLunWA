@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.views import APIView
+from kalunwa.content.serializers import EventSerializer, StatusEnum
 from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
@@ -172,12 +174,12 @@ class HomepageEventsTestCase(APITestCase):
     
     def test_get_homepage_event_data(self):
         Event.objects.create(
-        title= 'Event 1', 
-        description= 'description 1',
-        start_date=timezone.now(),
-        end_date=timezone.now(),
-        image = Image.objects.create(name='image_1', image=self.image_file),
-        is_featured=True,
+            title= 'Event 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
         )       
 
         request = self.request_factory.get(self.url)
@@ -604,6 +606,97 @@ class AboutUsLeadersTestCase(APITestCase):
         }
 
         self.assertDictEqual(expected_leader_data, response_leader)
+# ---------------------------------------------------------------------------        
+# EventGetTestCase
+    # covers list and detail views 
+
+    # test_get_event_list
+        # create 5 events, return all
+        # assert length of response data and status code
+
+    # test_get_event_detail
+        # create 1 event
+        # check status code OK 
+        # check if event is returned
+        # check data as well
+            # camp name must be full name
+            # date must be in formal format 
+            # status must be capitalized 
+
+class EventGetTestCase(APITestCase):
+    """
+    tests the get method for list and detail endpoints.
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_event_list(self):
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
+            is_featured=True,
+            )           
+
+        response = self.client.get(reverse('event-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertLessEqual( len(response.data), 5)        
+
+    def test_get_event_detail(self):
+
+        Event.objects.create(
+            title= 'Event 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )       
+
+        response = self.client.get(reverse('event-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response_event = response.data
+        expected_event = Event.objects.get(pk=1)
+        expected_event_data = {
+            'id': expected_event.id,
+            'title': expected_event.title,
+            'image': expected_event.image.pk, 
+            'description' : expected_event.description,
+            'start_date' : to_formal_mdy(expected_event.start_date),
+            'end_date' : to_formal_mdy(expected_event.end_date),
+            'camp' : expected_event.get_camp_display(),
+            'created_at': to_formal_mdy(expected_event.created_at),
+            'updated_at': to_formal_mdy(expected_event.updated_at),
+            'status': StatusEnum.PAST.value # based on dates set
+        }
+        self.assertDictEqual(expected_event_data, response_event)
+
+
+
+# custom -> 
+    # is_execomm -> tested in homepage
+
+    # query_limit 
+        # input
+            # proper -> integer 
+                # test when index is more than queryset size
+                # if 0 -> return none
+                # if negative number -> return normal queryset
+            # alphabet
+            # characters
+            # =<empty>
+            # = empty string ''
+
+
+    # 
+
+
 # ---------------------------------------------------------------------------        
 # Post end-points
 # covers post serializer 

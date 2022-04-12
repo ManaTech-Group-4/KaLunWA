@@ -11,9 +11,9 @@ from kalunwa.core.utils import to_formal_mdy
 
 
 class StatusEnum(Enum):
-    PAST = 'past'
-    ONGOING = 'ongoing'
-    UPCOMING = 'upcoming'
+    PAST = 'Past'
+    ONGOING = 'Ongoing'
+    UPCOMING = 'Upcoming'
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -89,7 +89,10 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
     # alternative: another field for datetime (for post/create) and display (get/list)? 
     status = serializers.SerializerMethodField()
     start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()    
+    end_date = serializers.SerializerMethodField()   
+    created_at =  serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
+    camp = serializers.CharField(source='get_camp_display')
 
     class Meta:
         fields = (
@@ -128,10 +131,16 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
         }
 
     def get_start_date(self, obj):
-            return to_formal_mdy(obj.start_date)
+        return to_formal_mdy(obj.start_date)
 
     def get_end_date(self, obj):
-            return to_formal_mdy(obj.end_date)
+        return to_formal_mdy(obj.end_date)
+
+    def get_created_at(self, obj):
+        return to_formal_mdy(obj.created_at)
+
+    def get_updated_at(self, obj):
+        return to_formal_mdy(obj.updated_at)
 
     def validate(self, data): # object-level validation
         data = self.get_initial() # gets pre-validation data

@@ -57,10 +57,6 @@ class News(ContentBase):
 
     def __str__(self) -> str:
         return self.title
-    
-    def homepage_date(self)->str:
-        date = self.created_at
-        return f'{date.strftime("%B")} {date.day}, {date.year}'
 
 
 class Announcement(ContentBase):
@@ -79,11 +75,7 @@ class Event(ContentBase):
 
     def __str__(self) -> str:
         return self.title
-
-    def month_day_year_format(self)->str:
-        date = self.created_at
-        return f'{date.strftime("%B")} {date.day}, {date.year}'
-        
+       
 
 class Project(ContentBase):
     image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)
@@ -216,3 +208,6 @@ class Contributor(models.Model):
     name = models.CharField(max_length=100)
     image = models.OneToOneField(Image, related_name='contributors', on_delete=models.PROTECT)
     category = models.CharField(choices=Categories.choices, max_length=4, default=Categories.OTHER)
+
+    def __str__(self) -> str:
+        return f'{self.get_category_display()}: {self.name}'

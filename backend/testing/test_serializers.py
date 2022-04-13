@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.views import APIView
 from .utils import HOMEPAGE_EVENT_URL, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_test_image_file, get_expected_image_url
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Jumbotron, News, Project, Tag, Event
-from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, JumbotronSerializer, ProjectSerializer
+from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, JumbotronSerializer, NewsSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
@@ -98,8 +98,8 @@ class ImageURLSerializerTestCase(APITestCase):
     def test_news_image_full_url(self):
         request = self.request_factory.get(HOMEPAGE_NEWS_URL)
         request = APIView().initialize_request(request)             
-        serializer = HomepageNewsSerializer(self.news, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+        serializer = NewsSerializer(self.news, context={'request':request})
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
 
 
 class AboutUsCampSerializertestCase(TestCase):

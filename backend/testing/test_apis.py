@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.views import APIView
-from kalunwa.content.serializers import EventSerializer, StatusEnum
+from kalunwa.content.serializers import StatusEnum
 from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
@@ -607,7 +607,7 @@ class AboutUsLeadersTestCase(APITestCase):
 
         self.assertDictEqual(expected_leader_data, response_leader)
 # ---------------------------------------------------------------------------        
-# EventGetTestCase
+# EventGetTestCase (Similar to event)
     # covers list and detail views 
 
     # test_get_event_list
@@ -678,6 +678,59 @@ class EventGetTestCase(APITestCase):
         self.assertDictEqual(expected_event_data, response_event)
 
 
+class ProjectGetTestCase(APITestCase):
+    """
+    tests the get method for list and detail endpoints.
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_project_list(self):
+        for _ in range(5): 
+            Project.objects.create(
+            title= f'Project {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
+            is_featured=True,
+            )           
+
+        response = self.client.get(reverse('project-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertLessEqual( len(response.data), 5)        
+
+    def test_get_project_detail(self):
+
+        Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )       
+
+        response = self.client.get(reverse('project-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response_project = response.data
+        expected_project = Project.objects.get(pk=1)
+        expected_project_data = {
+            'id': expected_project.id,
+            'title': expected_project.title,
+            'image': expected_project.image.pk, 
+            'description' : expected_project.description,
+            'start_date' : to_formal_mdy(expected_project.start_date),
+            'end_date' : to_formal_mdy(expected_project.end_date),
+            'camp' : expected_project.get_camp_display(),
+            'created_at': to_formal_mdy(expected_project.created_at),
+            'updated_at': to_formal_mdy(expected_project.updated_at),
+            'status': StatusEnum.PAST.value # based on dates set
+        }
+        self.assertDictEqual(expected_project_data, response_project)
 
 # custom -> 
     # is_execomm -> tested in homepage

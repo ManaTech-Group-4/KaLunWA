@@ -37,6 +37,7 @@ class Image(AuthoredModel):
 class Jumbotron(AuthoredModel):
     header_title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=225)
+    is_featured = models.BooleanField(default=False)    
     image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
 
     def __str__(self) -> str:
@@ -73,9 +74,15 @@ class Event(ContentBase):
     end_date = models.DateTimeField()
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
+    gallery = models.ManyToManyField(Image, related_name='gallery_events', blank=True)
 
     def __str__(self) -> str:
         return self.title
+
+    def month_day_year_format(self)->str:
+        date = self.created_at
+        return f'{date.strftime("%B")} {date.day}, {date.year}'
+
         
 
 class Project(ContentBase):
@@ -84,7 +91,7 @@ class Project(ContentBase):
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
-
+    gallery = models.ManyToManyField(Image, related_name='gallery_projects', blank=True)
     def __str__(self) -> str:
         return self.title
 
@@ -103,6 +110,7 @@ class CampPage(AuthoredModel):
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
         # use case: image.Suba -> expectedly returns a single CampPage, Suba
+    gallery = models.ManyToManyField(Image, related_name='gallery_camps', blank=True)
 
     def __str__(self) -> str:
         return self.get_name_display()
@@ -121,7 +129,7 @@ class LeaderBase(AuthoredModel):
         return f'{self.first_name} {self.last_name}'
 
 
-class OrgLeader(LeaderBase):
+class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
         PRESIDENT = 'PR', 'President'
         VICE_PRESIDENT = 'VP', 'Vice-President'

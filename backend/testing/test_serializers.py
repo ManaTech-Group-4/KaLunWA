@@ -1,11 +1,12 @@
 
-from django.test import RequestFactory, TestCase
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from rest_framework.test import APITestCase
-from .utils import get_test_image_file, get_expected_image_url
+from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.views import APIView
+from .utils import HOMEPAGE_EVENT_URL, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_test_image_file, get_expected_image_url
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Jumbotron, News, Project, Tag, Event
-from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageEventSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ProjectSerializer
+from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, JumbotronSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
@@ -57,7 +58,7 @@ class ImageURLSerializerTestCase(APITestCase):
                 is_published=True,
             )
 
-        cls.request_factory = RequestFactory()
+        cls.request_factory = APIRequestFactory()
         cls.image_file_name = cls.image.image.name
 
     # def get_expected_image_url(self, request):
@@ -73,26 +74,30 @@ class ImageURLSerializerTestCase(APITestCase):
         
 
     def test_jumbotron_image_full_url(self):
-        request = self.request_factory.get(reverse("homepage-jumbotrons"))
-        serializer = HomepageJumbotronSerializer(self.jumbotron, context={'request':request})
+        request = self.request_factory.get(HOMEPAGE_JUMBOTRON_URL)
+        request = APIView().initialize_request(request) # convert to DRF request since WSGIRequest has no query params
+        serializer = JumbotronSerializer(self.jumbotron, context={'request':request})
         ## build complete url 
             # request.scheme -> http
             # request.get_host() -> testserver        
             # self.image.image.name ->  images/content/test_U5U97df.jpg
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
 
     def test_event_image_full_url(self):
-        request = self.request_factory.get(reverse("homepage-events"))
-        serializer = HomepageEventSerializer(self.event, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+        request = self.request_factory.get(HOMEPAGE_EVENT_URL)
+        request = APIView().initialize_request(request)       
+        serializer = EventSerializer(self.event, context={'request':request})
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image']) # might do image.url
 
     def test_project_image_full_url(self):
-        request = self.request_factory.get(reverse("homepage-projects"))
-        serializer = HomepageProjectSerializer(self.project, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
+        request = self.request_factory.get(HOMEPAGE_PROJECT_URL)
+        request = APIView().initialize_request(request)        
+        serializer = ProjectSerializer(self.project, context={'request':request})
+        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
 
     def test_news_image_full_url(self):
-        request = self.request_factory.get(reverse("homepage-news"))
+        request = self.request_factory.get(HOMEPAGE_NEWS_URL)
+        request = APIView().initialize_request(request)             
         serializer = HomepageNewsSerializer(self.news, context={'request':request})
         self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image'])
 

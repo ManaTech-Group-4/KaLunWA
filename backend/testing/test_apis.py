@@ -314,7 +314,6 @@ class HomepageNewsTestCase(APITestCase):
         cls.request_factory = APIRequestFactory()
         cls.url = HOMEPAGE_NEWS_URL
 
-    
     def test_get_homepage_news(self):
         """
         Tests list endpoints for homepage news, return OK code. Tests list limit. 
@@ -593,16 +592,18 @@ class AboutUsLeadersTestCase(APITestCase):
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             
-        request = self.request_factory.get(reverse('about-us-organization-leaders'))
-        response = self.client.get(reverse('about-us-organization-leaders'))
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url)
 
         response_leader = json.loads(response.content)[0] 
-        expected_leader = OrgLeader.objects.get(pk=response_leader['leader_id'])
+        expected_leader = OrgLeader.objects.get(pk=response_leader['id'])
         image_url = get_expected_image_url(expected_leader.image.image.name, request)
 
         expected_leader_data = {
-            'leader_id' : expected_leader.id,
-            'image_url' : image_url
+            'id' : expected_leader.id,
+            'image' : {
+                'id' : 1,
+                'image' : image_url}
         }
 
         self.assertDictEqual(expected_leader_data, response_leader)
@@ -732,22 +733,69 @@ class ProjectGetTestCase(APITestCase):
         }
         self.assertDictEqual(expected_project_data, response_project)
 
-# custom -> 
-    # is_execomm -> tested in homepage
 
-    # query_limit 
-        # input
-            # proper -> integer 
-                # test when index is more than queryset size
-                # if 0 -> return none
-                # if negative number -> return normal queryset
-            # alphabet
-            # characters
-            # =<empty>
-            # = empty string ''
+class QueryLimitTestCase(APITestCase):
+    """
+    mock viewset that uses this logic e.g. Event
+    -> test on list endpoint
+        - mock 5 events
+        - query limit is an integer.
+        - query limit values to test: [-1, 0, 3, 5, 6]
+            # negative value
+            # zero
+            # less than total events
+            # exact no. of events
+            # greater than no. of events
+            # strings
+                # empty string
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
 
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            is_featured=True,
+            )           
 
-    # 
+        cls.event_count = len(Event.objects.all())            
+
+    def test_expected_query_integer_input(self):
+        # 0 -> returns 0 or no events
+        query_limit = 0
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), 0)
+        # 3 -> returns 3 events
+        query_limit = 3
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)        
+        # 5 -> returns 5 events
+        query_limit = 5
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)           
+        # 6 -> returns 5 events
+        query_limit = 6
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), self.event_count)
+        # aaa -> strings are ignored
+
+    def test_negative_query_integer_input(self):
+        # -1 -> ignores negative, return all events
+        query_limit = -1
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_string_query_input(self):
+        query_limits = ['aaa', '*&()', '']
+
+        for query_limit in query_limits:
+            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+            self.assertEqual(len(response.data), self.event_count)   
 
 
 # ---------------------------------------------------------------------------        

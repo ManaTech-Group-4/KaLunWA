@@ -111,8 +111,7 @@ class CampPage(AuthoredModel):
 class LeaderBase(AuthoredModel):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    background = models.TextField()
-    advocacy = models.TextField()
+    quote = models.TextField()
     image = models.OneToOneField(Image, on_delete=models.PROTECT)
 
     class Meta:

@@ -16,11 +16,11 @@
         <ul>
             <li><a class="null"><span>General Assembly</span></a>
                 <ul>
-                    <li ><a id="BoT" (click)="clickBoT()"><span>Board of Trustees</span></a>
+                    <li ><a id="BoT" (click)="clickBoT()" class="bot-button"><span>Board of Trustees</span></a>
                         <ul>
                             <li><a class="null"><span>Campers</span></a>
                                 <ul>
-                                    <li (click)="clickBaybayon()"><a id="Baybayon"><span>Baybayon</span></a></li>
+                                    <li (click)="clickBaybayon()" class="camp-button"><a id="Baybayon"><span>Baybayon</span></a></li>
                                     <li (click)="clickLasang()"><a id="Lasang"><span>Lasang</span></a></li>
                                     <li (click)="clickSuba()"><a id="Suba"><span>Suba</span></a></li>
                                     <li (click)="clickZW()"><a id="ZW"><span>Zero Waste</span></a></li>
@@ -30,7 +30,7 @@
                     </li>
                 </ul>
             </li>
-            
+
         </ul>
 
         <ul *ngIf="showBaybayon" id="Baybayon">
@@ -136,7 +136,7 @@
         </ul>
 
     </div>
-    
+
 </div>
 
 <hr>

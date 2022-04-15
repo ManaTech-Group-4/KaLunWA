@@ -5,7 +5,7 @@ import { HomepageComponent } from './features/components/homepage/homepage.compo
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { PageNotFoundComponent } from './features/components/page-not-found/page-not-found.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomepageComponent},
   {path: 'about',  component: AboutPageComponent},
@@ -17,7 +17,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
 export const routeComponents = [HomepageComponent,
                                 AboutPageComponent,
                                 OrgStructureComponent,

@@ -14,14 +14,14 @@ export class OrgStructureComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  showBaybayon:boolean=false
-  showLasang:boolean=false
-  showSuba:boolean=false
-  showZW:boolean=false
-  showBoT:boolean=false
+  showBaybayon:boolean=false;
+  showLasang:boolean=false;
+  showSuba:boolean=false;
+  showZW:boolean=false;
+  showBoT:boolean=false;
 
   clickBaybayon(){
-    this.showBaybayon=!this.showBaybayon
+    this.showBaybayon=!this.showBaybayon;
 
     if (this.showLasang){
       this.showLasang=!this.showLasang
@@ -36,7 +36,7 @@ export class OrgStructureComponent implements OnInit {
     }
 
     if (this.showBoT){
-      this.showBoT=!this.showBoT
+      this.showBoT=!this.showBoT;
     }
   }
   clickLasang(){
@@ -55,7 +55,7 @@ export class OrgStructureComponent implements OnInit {
     }
 
     if (this.showBoT){
-      this.showBoT=!this.showBoT
+      this.showBoT=!this.showBoT;
     }
   }
   clickSuba(){
@@ -74,7 +74,7 @@ export class OrgStructureComponent implements OnInit {
     }
 
     if (this.showBoT){
-      this.showBoT=!this.showBoT
+      this.showBoT=!this.showBoT;
     }
   }
   clickZW(){
@@ -93,7 +93,7 @@ export class OrgStructureComponent implements OnInit {
     }
 
     if (this.showBoT){
-      this.showBoT=!this.showBoT
+      this.showBoT=!this.showBoT;
     }
   }
   clickBoT(){

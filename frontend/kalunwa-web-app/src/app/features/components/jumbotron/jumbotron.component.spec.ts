@@ -1,33 +1,37 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { JumbotronComponent } from './jumbotron.component';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule} from '@angular/common/http/testing';
+import { HomepageService } from '../../service/homepage.service';
 
 describe('JumbotronComponent', () => {
   let component: JumbotronComponent;
   let fixture: ComponentFixture<JumbotronComponent>;
-  let httpClient: HttpClient;
-  let httpTestingController: HttpTestingController;
+  let testBedService : HomepageService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ JumbotronComponent ],
-      imports: [ HttpClientTestingModule ]
+      imports: [ HttpClientTestingModule ],
+      providers: [HomepageService]
     })
     .compileComponents();
-    httpClient = TestBed.get(HttpClient);
-    httpTestingController = TestBed.get(HttpTestingController);
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(JumbotronComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    testBedService = TestBed.get(HomepageService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  it('Service injected via inject() and TestBed.get() should be the same instance (HomepageService)',
+    inject([HomepageService], (injectService: HomepageService) => {
+      expect(injectService).toBe(testBedService);
+  }));
 
 });

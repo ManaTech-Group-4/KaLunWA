@@ -1,108 +1,19 @@
 
 from django.test import TestCase
-from django.urls import reverse
 from django.utils import timezone
-from rest_framework.test import APITestCase, APIRequestFactory
-from rest_framework.views import APIView
-from .utils import HOMEPAGE_EVENT_URL, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_test_image_file, get_expected_image_url
-from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Jumbotron, News, Project, Tag, Event
-from kalunwa.content.serializers import AboutUsCampSerializer, EventSerializer, HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, JumbotronSerializer, NewsSerializer, ProjectSerializer
+from .utils import  get_test_image_file
+from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Project, Event
+from kalunwa.content.serializers import CampPageSerializer, EventSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
-class ImageURLSerializerTestCase(APITestCase):
-
-    @classmethod
-    def setUpTestData(cls):
-
-        cls.image = Image.objects.create(
-            name='eating_me',
-            image=get_test_image_file(),
-        )
-
-        cls.jumbotron = Jumbotron.objects.create(
-            id=1, 
-            header_title= 'J1', 
-            subtitle= 'short description 1',
-            image = cls.image
-        )
-
-        test_date = '2022-03-19 14:35:46.271745+00:00'
-
-        cls.event = Event.objects.create(
-            title= 'Event 1', 
-            description= 'description 1',
-            start_date=test_date,
-            end_date=test_date,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=1),
-            is_featured=True,
-            is_published=True,
-            ) 
-
-        cls.project = Project.objects.create(
-            title= 'Project 1', 
-            description= 'description 1',
-            start_date=test_date,
-            end_date=test_date,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=1),
-            is_featured=False,
-            is_published=True,
-            )   
-
-        cls.news = News.objects.create(
-                title = 'News 1',
-                description= 'description 1',
-                image = Image.objects.get(pk=1),
-                is_published=True,
-            )
-
-        cls.request_factory = APIRequestFactory()
-        cls.image_file_name = cls.image.image.name
-
-    # def get_expected_image_url(self, request):
-    #     return f'{request.scheme}://{request.get_host()}/media/{self.image.image.name}'
-
-    def test_get_object_image_pk(self):
-        """
-        test for:
-        image = Image.objects.get(pk=obj.image.pk)
-        """
-        image = Image.objects.get(pk=self.jumbotron.image.id)
-        self.assertEqual(self.image, image)
-        
-
-    def test_jumbotron_image_full_url(self):
-        request = self.request_factory.get(HOMEPAGE_JUMBOTRON_URL)
-        request = APIView().initialize_request(request) # convert to DRF request since WSGIRequest has no query params
-        serializer = JumbotronSerializer(self.jumbotron, context={'request':request})
-        ## build complete url 
-            # request.scheme -> http
-            # request.get_host() -> testserver        
-            # self.image.image.name ->  images/content/test_U5U97df.jpg
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
-
-    def test_event_image_full_url(self):
-        request = self.request_factory.get(HOMEPAGE_EVENT_URL)
-        request = APIView().initialize_request(request)       
-        serializer = EventSerializer(self.event, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image']) # might do image.url
-
-    def test_project_image_full_url(self):
-        request = self.request_factory.get(HOMEPAGE_PROJECT_URL)
-        request = APIView().initialize_request(request)        
-        serializer = ProjectSerializer(self.project, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
-
-    def test_news_image_full_url(self):
-        request = self.request_factory.get(HOMEPAGE_NEWS_URL)
-        request = APIView().initialize_request(request)             
-        serializer = NewsSerializer(self.news, context={'request':request})
-        self.assertEqual(get_expected_image_url(self.image_file_name, request), serializer.data['image']['image'])
-
-
-class AboutUsCampSerializertestCase(TestCase):
+class CampSerializertestCase(TestCase):
+    """
+    - test to serialize camp details when a camp leader exists
+    - test to serialize camp details when a camp leader does not exists.
+        returns none, or a non-truthy value (false)
+    # test if camp is 
+    """
     @classmethod
     def setUpTestData(cls) -> None: 
         # create camp -> Suba
@@ -159,7 +70,7 @@ class AboutUsCampSerializertestCase(TestCase):
         test to serialize camp details when a camp leader exists
         """
         camp_with_leader = CampPage.objects.get(name=CampEnum.SUBA)
-        serializer = AboutUsCampSerializer(camp_with_leader)
+        serializer = CampPageSerializer(camp_with_leader)
         
         self.assertTrue(serializer.data['camp_leader']) # exists
 
@@ -169,8 +80,9 @@ class AboutUsCampSerializertestCase(TestCase):
         returns none, or a non-truthy value (false)
         """
         camp_without_leader = CampPage.objects.get(name=CampEnum.BAYBAYON)
-        serializer = AboutUsCampSerializer(camp_without_leader)
+        serializer = CampPageSerializer(camp_without_leader)
         self.assertFalse(serializer.data['camp_leader']) # does not exist (null)
+
 
 class StatusSerializerTestCase(TestCase):
     """

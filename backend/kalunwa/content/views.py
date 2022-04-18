@@ -1,10 +1,10 @@
-
-from posixpath import basename
 from django.db.models import Sum, Q
 from .models import CampEnum, Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, ContributorSerializer, EventSerializer, HomepageEventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
-from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
+from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampLeaderSerializer, 
+                        CampPageSerializer, CommissionerSerializer, ContributorSerializer, 
+                        DemographicsSerializer, EventSerializer,ImageSerializer, JumbotronSerializer,
+                         OrgLeaderSerializer, ProjectSerializer, NewsSerializer) 
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -93,7 +93,7 @@ class CampPageViewSet(viewsets.ModelViewSet):
 
         camps = suba | baybayon | zero_waste | lasang # combines into one queryset
 
-        serializer = AboutUsCampSerializer(camps, many=True, context={'request':request})
+        serializer = CampPageSerializer(camps, many=True, context={'request':request})
         return Response(serializer.data)
 
 
@@ -211,77 +211,4 @@ class CommissionerViewSet(viewsets.ModelViewSet):
 
 class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
-    queryset = CabinOfficer.objects.all()
-
-
-
-
-# ------------------------------------------------------------------------------
-# to be removed if approved
-#-------------------------------------------------------------------------------
-# homepage views
-
-
-class HomepageViewSet(viewsets.ViewSet):
-
-    @action(detail=False)
-    def jumbotrons(self, request):
-        jumbotrons = Jumbotron.objects.all()[:5] # need is_featured?
-        # passing context from the request, for the serializer to use
-        serializer = HomepageJumbotronSerializer(jumbotrons, many=True, context={'request':request})
-        return Response(serializer.data)
-
-    @action(detail=False)
-    def events(self, request):
-        events = Event.objects.filter(is_featured=True)[:3]
-        serializer = HomepageEventSerializer(events, many=True,context={'request':request})
-        return Response(serializer.data)
-
-    @action(detail=False)
-    def projects(self, request):
-        projects = Project.objects.filter(is_featured=True)[:3]
-        serializer = HomepageProjectSerializer(projects, many=True,context={'request':request})
-        return Response(serializer.data)    
-    
-    @action(detail=False)
-    def news(self, request):
-        news = News.objects.order_by('-created_at')[:3]
-        serializer = HomepageNewsSerializer (news, many=True,context={'request':request})
-        return Response(serializer.data)    
-
-#-------------------------------------------------------------------------------
-# about us view
-
-class AboutUsViewset(viewsets.ViewSet): # leaders
-    @action(detail=False)
-    def demographics(self, request):
-        return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
-    
-    @action(detail=False)
-    def camps(self, request): # is_about=True -> return these? 
-        # ensures 1 of each camp incase of duplicates
-        suba = CampPage.objects.filter(name=CampEnum.SUBA) [:1]
-        baybayon = CampPage.objects.filter(name=CampEnum.BAYBAYON) [:1]
-        zero_waste = CampPage.objects.filter(name=CampEnum.ZEROWASTE) [:1]
-        lasang = CampPage.objects.filter(name=CampEnum.LASANG) [:1]
-
-        camps = suba | baybayon | zero_waste | lasang # combines into one queryset
-
-        serializer = AboutUsCampSerializer(camps, many=True, context={'request':request})
-        return Response(serializer.data)
-    
-    @action(detail=False)
-    def organization_leaders(self, request):
-        """
-        return only people from execomm -> pres to overseer
-        """
-        org_leaders = OrgLeader.objects.exclude(              #  is_execomm? -> custom filter
-            Q(position=OrgLeader.Positions.DIRECTOR.value) |
-            Q(position=OrgLeader.Positions.OTHER.value)
-            )
-        serializer = AboutUsLeaderImageSerializer(org_leaders, many=True, context={'request':request})
-        return  Response(serializer.data)
-
-
-#------------------------------------------------------- 
-    
+    queryset = CabinOfficer.objects.all()    

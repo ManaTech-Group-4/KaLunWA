@@ -128,6 +128,8 @@ class LeaderBase(AuthoredModel):
     def get_fullname(self):
         return f'{self.first_name} {self.last_name}'
 
+    def get_position(self):
+        return f'{self.get_position_display()}'
 
 class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
@@ -142,8 +144,9 @@ class OrgLeader(LeaderBase): # how to make pres -> overseer unique
         OTHER = 'OTHR', 'Other'
 
     position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
-    def __str__(self) -> str:
 
+
+    def __str__(self) -> str:
         return f'{self.get_position_display()} : {self.last_name}'
 
 
@@ -160,6 +163,7 @@ class Commissioner(LeaderBase):
 
     category = models.CharField(choices=Categories.choices, max_length=5, default=Categories.OTHER)
     position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
+
 
     def __str__(self) -> str:
         return f'{self.get_category_display()} {self.get_position_display()}: {self.last_name}'

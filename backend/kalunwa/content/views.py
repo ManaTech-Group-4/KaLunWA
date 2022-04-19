@@ -3,7 +3,7 @@ from posixpath import basename
 from django.db.models import Sum, Q
 from .models import CampEnum, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer, HomepageEventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, ProjectSerializer, NewsSerializer
+from .serializers import AboutUsCampSerializer, AboutUsLeaderImageSerializer, EventSerializer, HomepageEventSerializer,HomepageJumbotronSerializer, HomepageNewsSerializer, HomepageProjectSerializer, ImageSerializer, ImageURLSerializer, JumbotronSerializer, AnnouncementSerializer, OrgStructOrgLeaderSerializer, ProjectSerializer, NewsSerializer
 from .serializers import DemographicsSerializer, CampPageSerializer, OrgLeaderSerializer, CommissionerSerializer, CampLeaderSerializer, CabinOfficerSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -113,6 +113,14 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
 
         return OrgLeader.objects.all()
 
+#------------> added by jisi
+    @action(detail=False, url_path='directors')
+    def directors(self, request):
+        director = OrgLeader.objects.filter(position=OrgLeader.Positions.DIRECTOR.value)
+        
+        serializer = OrgStructOrgLeaderSerializer(director, many=True, context={'request':request})
+        return  Response(serializer.data)
+#------------> added by jisi
 
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
@@ -210,6 +218,7 @@ class CabinOfficerViewSet(viewsets.ModelViewSet):
 
 
 
+
 # ------------------------------------------------------------------------------
 # to be removed if approved
 #-------------------------------------------------------------------------------
@@ -278,4 +287,5 @@ class AboutUsViewset(viewsets.ViewSet): # leaders
 
 
 #------------------------------------------------------- 
+    
     

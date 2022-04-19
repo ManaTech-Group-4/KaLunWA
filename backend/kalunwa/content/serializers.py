@@ -200,8 +200,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             'name',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
             'camp',
             'position',
@@ -268,8 +267,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
             'id',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
             'position',
             'created_at',
@@ -300,9 +298,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         )
 
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added serializer as of 23/3/2022-----------------------------------------------
-
 class DemographicsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -315,7 +310,7 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-class CommissionerSerializer(serializers.ModelSerializer):
+class CommissionerSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = Commissioner
@@ -331,8 +326,15 @@ class CommissionerSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
 
-class CabinOfficerSerializer(serializers.ModelSerializer):
+class CabinOfficerSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = CabinOfficer
@@ -346,6 +348,70 @@ class CabinOfficerSerializer(serializers.ModelSerializer):
             'position',
             'category',
             'created_at',
+            'updated_at',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
+
+
+#-------------------------------------------------------------------------------
+# to be removed if approved
+#-------------------------------------------------------------------------------
+# would not be needed anymore since image url is returned in convenient requests
+
+class ImageURLSerializer(serializers.Serializer):
+    """
+    This serializer gets the absolute url of images, and returns
+    only that field.
+     Will be recycled for all serializers that will only require
+    the complete url (exclude extra image data e.g. title, tags).
+    note: 
+    Serializer Models that will inherit this should have their models 
+    use `image` as the field name.
+    """
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = (
+            'url'
+        )
+    
+    def get_url(self, obj):
+        # get Image attribute from the object (e.g. jumbotron, event)
+        image = Image.objects.get(pk=obj.image.pk)
+        # pass context needed to generate full URL
+        serializer = ImageSerializer(image, context=self.context)
+        # serializer.data -> returns key dictionary pairs
+        # accessing the 'image' key to get value (URL)
+        return serializer.data['image']        
+
+
+
+#  serializers for website homepage view
+
+class HomepageEventSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Event
+        fields = (
+            'id',
+            'title',
+            'image'
+        )
+
+        
+class HomepageJumbotronSerializer(serializers.ModelSerializer, ImageURLSerializer):
+    image = serializers.SerializerMethodField(method_name='get_url')
+    class Meta:
+        model = Jumbotron
+        fields = (
+            'id',
             'header_title',
             'subtitle',
             'image',         
@@ -378,8 +444,6 @@ class HomepageNewsSerializer(serializers.ModelSerializer, ImageURLSerializer):
     
     def get_date(self, obj):
         return obj.homepage_date()
-
-
 
 
 #-------------------------------------------------------------------------------
@@ -437,3 +501,39 @@ class AboutUsLeaderImageSerializer(serializers.ModelSerializer, ImageURLSerializ
             'leader_id',
             'image_url'
         )
+
+
+
+#------------> added by jisi
+#-------------------------------------------------------------------------------
+#  serializers for organization structure by click
+
+
+
+
+#CampLeaderSerializer
+#OrgLeaderSerializer
+#CabinOfficerSerializer
+#CommissionerSerializer
+
+#not needed anymore
+class OrgStructOrgLeaderSerializer(FlexFieldsModelSerializer):
+    name = serializers.CharField(max_length=100, source='get_fullname')
+    position = serializers.CharField(max_length=100, source='get_position')
+
+    class Meta:
+        model = OrgLeader
+        fields = (
+            'name',
+            'position',
+            'quote',
+            'image',
+        )
+        
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 

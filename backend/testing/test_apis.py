@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.views import APIView
+from kalunwa.content.serializers import StatusEnum
 from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
@@ -172,12 +174,12 @@ class HomepageEventsTestCase(APITestCase):
     
     def test_get_homepage_event_data(self):
         Event.objects.create(
-        title= 'Event 1', 
-        description= 'description 1',
-        start_date=timezone.now(),
-        end_date=timezone.now(),
-        image = Image.objects.create(name='image_1', image=self.image_file),
-        is_featured=True,
+            title= 'Event 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
         )       
 
         request = self.request_factory.get(self.url)
@@ -312,7 +314,6 @@ class HomepageNewsTestCase(APITestCase):
         cls.request_factory = APIRequestFactory()
         cls.url = HOMEPAGE_NEWS_URL
 
-    
     def test_get_homepage_news(self):
         """
         Tests list endpoints for homepage news, return OK code. Tests list limit. 
@@ -591,19 +592,212 @@ class AboutUsLeadersTestCase(APITestCase):
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             
-        request = self.request_factory.get(reverse('about-us-organization-leaders'))
-        response = self.client.get(reverse('about-us-organization-leaders'))
+        request = self.request_factory.get(self.url)
+        response = self.client.get(self.url)
 
         response_leader = json.loads(response.content)[0] 
-        expected_leader = OrgLeader.objects.get(pk=response_leader['leader_id'])
+        expected_leader = OrgLeader.objects.get(pk=response_leader['id'])
         image_url = get_expected_image_url(expected_leader.image.image.name, request)
 
         expected_leader_data = {
-            'leader_id' : expected_leader.id,
-            'image_url' : image_url
+            'id' : expected_leader.id,
+            'image' : {
+                'id' : 1,
+                'image' : image_url}
         }
 
         self.assertDictEqual(expected_leader_data, response_leader)
+# ---------------------------------------------------------------------------        
+# EventGetTestCase (Similar to event)
+    # covers list and detail views 
+
+    # test_get_event_list
+        # create 5 events, return all
+        # assert length of response data and status code
+
+    # test_get_event_detail
+        # create 1 event
+        # check status code OK 
+        # check if event is returned
+        # check data as well
+            # camp name must be full name
+            # date must be in formal format 
+            # status must be capitalized 
+
+class EventGetTestCase(APITestCase):
+    """
+    tests the get method for list and detail endpoints.
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_event_list(self):
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
+            is_featured=True,
+            )           
+
+        response = self.client.get(reverse('event-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertLessEqual( len(response.data), 5)        
+
+    def test_get_event_detail(self):
+
+        Event.objects.create(
+            title= 'Event 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )       
+
+        response = self.client.get(reverse('event-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response_event = response.data
+        expected_event = Event.objects.get(pk=1)
+        expected_event_data = {
+            'id': expected_event.id,
+            'title': expected_event.title,
+            'image': expected_event.image.pk, 
+            'description' : expected_event.description,
+            'start_date' : to_formal_mdy(expected_event.start_date),
+            'end_date' : to_formal_mdy(expected_event.end_date),
+            'camp' : expected_event.get_camp_display(),
+            'created_at': to_formal_mdy(expected_event.created_at),
+            'updated_at': to_formal_mdy(expected_event.updated_at),
+            'status': StatusEnum.PAST.value # based on dates set
+        }
+        self.assertDictEqual(expected_event_data, response_event)
+
+
+class ProjectGetTestCase(APITestCase):
+    """
+    tests the get method for list and detail endpoints.
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_project_list(self):
+        for _ in range(5): 
+            Project.objects.create(
+            title= f'Project {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
+            is_featured=True,
+            )           
+
+        response = self.client.get(reverse('project-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertLessEqual( len(response.data), 5)        
+
+    def test_get_project_detail(self):
+
+        Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )       
+
+        response = self.client.get(reverse('project-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response_project = response.data
+        expected_project = Project.objects.get(pk=1)
+        expected_project_data = {
+            'id': expected_project.id,
+            'title': expected_project.title,
+            'image': expected_project.image.pk, 
+            'description' : expected_project.description,
+            'start_date' : to_formal_mdy(expected_project.start_date),
+            'end_date' : to_formal_mdy(expected_project.end_date),
+            'camp' : expected_project.get_camp_display(),
+            'created_at': to_formal_mdy(expected_project.created_at),
+            'updated_at': to_formal_mdy(expected_project.updated_at),
+            'status': StatusEnum.PAST.value # based on dates set
+        }
+        self.assertDictEqual(expected_project_data, response_project)
+
+
+class QueryLimitTestCase(APITestCase):
+    """
+    mock viewset that uses this logic e.g. Event
+    -> test on list endpoint
+        - mock 5 events
+        - query limit is an integer.
+        - query limit values to test: [-1, 0, 3, 5, 6]
+            # negative value
+            # zero
+            # less than total events
+            # exact no. of events
+            # greater than no. of events
+            # strings
+                # empty string
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            is_featured=True,
+            )           
+
+        cls.event_count = len(Event.objects.all())            
+
+    def test_expected_query_integer_input(self):
+        # 0 -> returns 0 or no events
+        query_limit = 0
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), 0)
+        # 3 -> returns 3 events
+        query_limit = 3
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)        
+        # 5 -> returns 5 events
+        query_limit = 5
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)           
+        # 6 -> returns 5 events
+        query_limit = 6
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), self.event_count)
+        # aaa -> strings are ignored
+
+    def test_negative_query_integer_input(self):
+        # -1 -> ignores negative, return all events
+        query_limit = -1
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_string_query_input(self):
+        query_limits = ['aaa', '*&()', '']
+
+        for query_limit in query_limits:
+            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+            self.assertEqual(len(response.data), self.event_count)   
+
+
 # ---------------------------------------------------------------------------        
 # Post end-points
 # covers post serializer 

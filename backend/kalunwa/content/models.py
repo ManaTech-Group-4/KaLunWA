@@ -14,7 +14,7 @@ class AuthoredModel(TimestampedModel):
     # created_by (User)
     # last_updated_by (User)
 
-    class Meta:
+    class Meta(TimestampedModel.Meta):
         abstract=True
 
 
@@ -49,8 +49,9 @@ class ContentBase(AuthoredModel):
     title = models.CharField(max_length=50)
     description = models.TextField()
 
-    class Meta:
+    class Meta(AuthoredModel.Meta):
         abstract=True
+
 
 class News(ContentBase):
     image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')

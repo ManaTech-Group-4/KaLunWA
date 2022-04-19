@@ -9,8 +9,10 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter
 
+# check if argument is a field in the record's database
+# if true, return database ordering
+    #    -> problem, client would get confused if diff display and saved data
 
 class QueryLimitViewMixin:
 
@@ -53,8 +55,6 @@ class JumbotronViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
 class NewsViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    filter_backends = [OrderingFilter]    
-    odering_fields = ['created_at']
     
 
 # prep for about us
@@ -80,21 +80,6 @@ class CampPageViewSet(viewsets.ModelViewSet):
                 return camps
 
         return CampPage.objects.all()
-
-    @action(detail=False, url_path='about-us')
-    def about_us(self, request): 
-        # alternatives:
-            # provide one_each=True to query string to return this 
-        # ensures 1 of each camp incase of duplicates
-        suba = CampPage.objects.filter(name=CampEnum.SUBA) [:1]
-        baybayon = CampPage.objects.filter(name=CampEnum.BAYBAYON) [:1]
-        zero_waste = CampPage.objects.filter(name=CampEnum.ZEROWASTE) [:1]
-        lasang = CampPage.objects.filter(name=CampEnum.LASANG) [:1]
-
-        camps = suba | baybayon | zero_waste | lasang # combines into one queryset
-
-        serializer = CampPageSerializer(camps, many=True, context={'request':request})
-        return Response(serializer.data)
 
 
 class OrgLeaderViewSet(viewsets.ModelViewSet):
@@ -144,38 +129,6 @@ class ImageViewSet(viewsets.ModelViewSet):
             event = Event.objects.get(pk=event_pk).prefetch_related('gallery')
             return event.gallery.all()
         return super().get_queryset() 
-
-        # expensive ata mo query from the /api/gallery (e.g. get images with related object)
-        #     reasons:
-        #         - querying for an image that is related to a camp, event and project
-        #             - ?camp=<pk>&event=<pk>&project
-        #             - queries from gallery record to see if image_id exists
-        #             - individual queries to fetch related images from camp_id, event_id, and project_id,
-        #               since all are in different tables (img.id,camp.id) - (img.id,event.id)
-        #         - one table made as a junction table for all these records (w/ fields: img.id, camp.id, event.id etc.)
-        #             does not have much of a use case as the other fields can be independent of the other
-
-               
-        # grab all the images, query for their related objects (projects, events, camps)
-        # image_id
-        # event_id
-        # project_id
-        # camp_id
-
-    # return images where event_id is in events.id
-    # change queryset according to an event_id
-        # returns event_id.gallery
-
-    # has_event=1
-        # get has_event
-        # in gallery
-            # get event with pk 
-            # return objects related to event via event.gallery()
-
-        # cases -> event does not exist
-            # return none or error? -> error 
-        # case -> no related images, return null or empty list? -> list 
-
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):

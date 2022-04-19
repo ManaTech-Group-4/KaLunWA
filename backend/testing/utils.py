@@ -39,7 +39,7 @@ def get_camp_value_via_label(label):
 HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5'
 HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
-HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id&ordering=-created_at&query_limit=3'
+HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id&query_limit=3'
 
 ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&one_each=True'
 ABOUT_US_TOTAL_MEMBERS = '/api/demographics/total-members/'

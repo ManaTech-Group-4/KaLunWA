@@ -88,8 +88,8 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # or make custom filter
         if self.action=='list':
-            is_execomm = self.request.query_params.get('is_execomm', False)  
-            if is_execomm:          
+            position = self.request.query_params.get('position', None)  
+            if position is not None:          
                 execomm_leaders = OrgLeader.objects.exclude(              #  is_execomm? -> custom filter
                 Q(position=OrgLeader.Positions.DIRECTOR.value) |
                 Q(position=OrgLeader.Positions.OTHER.value)

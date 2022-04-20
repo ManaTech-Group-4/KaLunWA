@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     # user apps
     'kalunwa.core',
-    'kalunwa.content'
+    'kalunwa.content',
+    'kalunwa.users',
 ]
 
 MIDDLEWARE = [

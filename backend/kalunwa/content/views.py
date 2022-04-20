@@ -10,7 +10,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class QueryLimitViewMixin:
 
@@ -136,45 +136,8 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
     # prefetched so that related objects are cached, and query only hits db once
     queryset = Image.objects.prefetch_related('gallery_events', 'gallery_projects', 'gallery_camps') 
-    related_objects = ['has_event']
+    parser_classes = (MultiPartParser, FormParser)
 
-    def get_queryset(self):
-        event_pk = self.request.query_params.get(f'has_event', None)      
-        if event_pk is not None: 
-            event = Event.objects.get(pk=event_pk).prefetch_related('gallery')
-            return event.gallery.all()
-        return super().get_queryset() 
-
-        # expensive ata mo query from the /api/gallery (e.g. get images with related object)
-        #     reasons:
-        #         - querying for an image that is related to a camp, event and project
-        #             - ?camp=<pk>&event=<pk>&project
-        #             - queries from gallery record to see if image_id exists
-        #             - individual queries to fetch related images from camp_id, event_id, and project_id,
-        #               since all are in different tables (img.id,camp.id) - (img.id,event.id)
-        #         - one table made as a junction table for all these records (w/ fields: img.id, camp.id, event.id etc.)
-        #             does not have much of a use case as the other fields can be independent of the other
-
-               
-        # grab all the images, query for their related objects (projects, events, camps)
-        # image_id
-        # event_id
-        # project_id
-        # camp_id
-
-    # return images where event_id is in events.id
-    # change queryset according to an event_id
-        # returns event_id.gallery
-
-    # has_event=1
-        # get has_event
-        # in gallery
-            # get event with pk 
-            # return objects related to event via event.gallery()
-
-        # cases -> event does not exist
-            # return none or error? -> error 
-        # case -> no related images, return null or empty list? -> list 
 
 
 

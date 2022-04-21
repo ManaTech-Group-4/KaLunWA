@@ -44,3 +44,5 @@ HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id
 ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&one_each=True'
 ABOUT_US_TOTAL_MEMBERS = '/api/demographics/total-members/'
 ABOUT_US_LEADERS = '/api/orgleaders/?expand=image&fields=id,image&position=execomm'
+EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_limit_gallery=10'
+EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'

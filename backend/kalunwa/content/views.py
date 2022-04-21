@@ -1,4 +1,4 @@
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, OuterRef, Subquery, Prefetch
 from .models import CampEnum, Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampLeaderSerializer, 
@@ -9,51 +9,106 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import BaseFilterBackend
 
-# check if argument is a field in the record's database
-# if true, return database ordering
-    #    -> problem, client would get confused if diff display and saved data
 
-class QueryLimitViewMixin:
+class QueryLimitBackend(BaseFilterBackend):
+    """
+    Backend filters are done from left to right, so ensure that this is put
+    at the very right of the list. This is because a queryset cannot be filtered 
+    further after splicing it (e.g. queryset[:limit]). 
+    ps: may be useless when post and validation is implemented.
 
-    def finalize_response(self, request, response, *args, **kwargs):
+    e.g. [DjangoFilter, ..., QueryLimitBackend]
+
+    note: put related names on the viewset.
+    """
+    def filter_queryset(self, request, queryset, view):
+        query_limit = request.query_params.get('query_limit', None)        
+        if view.action in ['list'] and query_limit is not None:
+            queryset = self.limit_query(queryset, request, query_limit)
+
+        query_limit_gallery = request.query_params.get('query_limit_gallery', None)            
+        if view.action in ['list', 'retrieve'] \
+            and query_limit_gallery is not None:          
+            queryset = self.limit_related_gallery(queryset, request, 
+                        query_limit_gallery, view.model)
+        return queryset
+
+    def limit_query(self, queryset, request, limit):
+        if limit is not None and limit.isdigit():
+            limit = int(limit)
+            queryset = queryset[:limit]
+            
+        return queryset
+
+    def limit_related_gallery(self, queryset,request, limit, model):
         """
-        Limits the number of records returned. 
+        use for models that have gallery implementations.
+        viewsets should have a 'model' attribute set. 
         """
-        if self.action=='list':
-            query_limit = self.request.query_params.get('query_limit', None)
-            if query_limit is not None and query_limit.isdigit():
-                query_limit = int(query_limit)
-                response.data = response.data[:query_limit]
+        if limit is not None and limit.isdigit():
+            limit = int(limit)
+            # related_name -> gallery_<content> -> format via user
+            related_name = model._meta.get_field('gallery').related_query_name()
+            # sub_query
+               # (1) gets related images of a content where imageA's event is in [imageB's]
+                #  where imageA is an image from an content's gallery (content
+                #       had been selected/reduced e.g. is_featured filter), and
+                # imageB is an image from the big set (Image.obj.all())     
+                                  
+            # (1) OuterRef -> refers to a field from the main query at Prefetch (3) 
+            # (2) values_list and flat=True (returns list of pks)
+                # return a QuerySet of single values instead of 1-tuples:
+                    # e.g. <QuerySet [1, 2]>    
+            kwargs = {f'{related_name}__in': OuterRef(related_name)} 
+                      # gallery_events__in=OuterRef('gallery_events') -> in filter (1)
+            sub_query = Subquery(Image.objects
+                        .prefetch_related(related_name) 
+                        .filter(**kwargs) # 1
+                        .values_list('id', flat=True)[:limit] # 2               
+                        ) 
 
-        return super().finalize_response(request, response, *args, **kwargs)
+            # (3) Prefetch -> extends prefetch_related by specifying queryset (qs)
+                # in this case, it limits the qs to the images belonging to a content's gallery,
+                # to which its number is limited to `query_limit_gallery`
+
+            # (4) add `distinct` since duplicate image objs are returned for images
+                #  belonging in more than 1 gallery given a many-to-many relationship
+            prefetch = Prefetch('gallery', # 3
+                queryset=Image.objects.filter(id__in=sub_query).distinct()) # 4
+
+            queryset = queryset.prefetch_related(prefetch) 
+
+        return queryset
 
 
-class EventViewSet(QueryLimitViewMixin, viewsets.ModelViewSet): 
+class EventViewSet( viewsets.ModelViewSet):
+    model = Event
     queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, QueryLimitBackend] 
     filterset_fields = ['is_featured']
-    # might need to add new serializer field for non-read only stuff that needs
-    # to be posted data on (or let frontend manipulate the dates nlng)
 
 
-class ProjectViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
+class ProjectViewSet(viewsets.ModelViewSet):
+    model = Project
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, QueryLimitBackend]
     filterset_fields = ['is_featured']
 
 
-class JumbotronViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
+class JumbotronViewSet(viewsets.ModelViewSet):
     queryset = Jumbotron.objects.all()
     serializer_class = JumbotronSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, QueryLimitBackend]
     filterset_fields = ['is_featured']   
 
 
-class NewsViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
+class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
+    filter_backends = [QueryLimitBackend]    
     serializer_class = NewsSerializer
     
 
@@ -64,7 +119,9 @@ class CampLeaderViewSet(viewsets.ModelViewSet): # limit 1 per query
 
 
 class CampPageViewSet(viewsets.ModelViewSet):
+    model = CampPage
     serializer_class = CampPageSerializer
+    filter_backends = [QueryLimitBackend]        
 
     def get_queryset(self):
         # if preferred -> pure url search 

@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.views import APIView
 from kalunwa.content.serializers import StatusEnum
-from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
 from rest_framework import status
 #-------------------------------------------------------------------------------
@@ -678,7 +678,7 @@ class EventGetTestCase(APITestCase):
             'status': StatusEnum.PAST.value # based on dates set
         }
         self.assertDictEqual(expected_event_data, response_event)
-    
+  
     def test_get_event_gallery(self):
         """
         test if status ok,
@@ -730,36 +730,6 @@ class EventGetTestCase(APITestCase):
             'image': get_expected_image_url(image.image.name, request)
         } 
         self.assertDictEqual(gallery[0], expected_gallery_data)
-
-    def test_get_event_detail(self):
-
-        Event.objects.create(
-            title= 'Event 1', 
-            description= 'description 1',
-            start_date=timezone.now(),
-            end_date=timezone.now(),
-            image = Image.objects.create(name='image_1', image=self.image_file),
-            is_featured=True,
-        )       
-
-        response = self.client.get(reverse('event-detail', args=[1]))
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-        response_event = response.data
-        expected_event = Event.objects.get(pk=1)
-        expected_event_data = {
-            'id': expected_event.id,
-            'title': expected_event.title,
-            'image': expected_event.image.pk, 
-            'description' : expected_event.description,
-            'start_date' : to_formal_mdy(expected_event.start_date),
-            'end_date' : to_formal_mdy(expected_event.end_date),
-            'camp' : expected_event.get_camp_display(),
-            'created_at': to_formal_mdy(expected_event.created_at),
-            'updated_at': to_formal_mdy(expected_event.updated_at),
-            'status': StatusEnum.PAST.value # based on dates set
-        }
-        self.assertDictEqual(expected_event_data, response_event)
     
     def test_get_event_contributors(self):
         """
@@ -777,7 +747,7 @@ class EventGetTestCase(APITestCase):
             image = Image.objects.create(name='image_1', image=self.image_file),
             is_featured=True,
         )   
-        for _ in range(11):        
+        for _ in range(5):        
             Contributor.objects.create(
             name= 'Contributor 1', 
             category= Contributor.Categories.SPONSOR,
@@ -787,7 +757,7 @@ class EventGetTestCase(APITestCase):
         response = self.client.get(EVENT_DETAIL_CONTRIBUTORS)
         self.assertEqual(status.HTTP_200_OK, response.status_code)        
         contributors = response.data[0]['contributors']
-        self.assertLessEqual( len(contributors), 5)           
+        self.assertEqual(len(contributors), 5)           
 
     def test_get_event_contributors_data(self):
         event = Event.objects.create(
@@ -872,6 +842,115 @@ class ProjectGetTestCase(APITestCase):
             'status': StatusEnum.PAST.value # based on dates set
         }
         self.assertDictEqual(expected_project_data, response_project)
+
+    def test_get_project_gallery(self):
+        """
+        test if status ok,
+        query limit on this one (10)
+        data:
+            id, image_url
+
+        mock :
+            1 project related to 11 diff images
+        
+        """
+        project = Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )    
+
+        for _ in range(11):
+            Image.objects.create(name='image_1', image=self.image_file)
+        
+        project.gallery.set(Image.objects.all().values_list('id', flat=True))
+        response = self.client.get(PROJECT_DETAIL_GALLERY_LIMIT)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)        
+        
+        gallery = response.data[0]['gallery']
+        self.assertEqual( len(gallery), 10)           
+
+    def test_get_project_gallery_data(self):
+        project = Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )     
+        image = Image.objects.get(pk=1) 
+        project.gallery.add(image)               
+
+        request = self.request_factory.get(PROJECT_DETAIL_GALLERY_LIMIT)
+        response = self.client.get(PROJECT_DETAIL_GALLERY_LIMIT)
+        gallery = json.loads(response.content)[0]['gallery']
+
+        expected_gallery_data = {
+            'id':image.id,
+            'image': get_expected_image_url(image.image.name, request)
+        } 
+        self.assertDictEqual(gallery[0], expected_gallery_data)
+    
+    def test_get_project_contributors(self):
+        """
+        test if status ok, data length
+
+        mock :
+            1 project related to 5 contributors
+        
+        """
+        project = Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )    
+        for _ in range(5):        
+            Contributor.objects.create(
+            name= 'Contributor 1', 
+            category= Contributor.Categories.SPONSOR,
+            image = Image.objects.create(name='image_1', image=self.image_file),
+        )     
+        project.contributors.set(Contributor.objects.all().values_list('id', flat=True))
+        response = self.client.get(PROJECT_DETAIL_CONTRIBUTORS)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)        
+        contributors = response.data[0]['contributors']
+        self.assertLessEqual( len(contributors), 5)           
+
+    def test_get_project_contributors_data(self):
+        project = Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
+        )  
+        contributor  = Contributor.objects.create(
+            name= 'Contributor 1', 
+            category= Contributor.Categories.SPONSOR,
+            image = Image.objects.create(name='image_1', image=self.image_file),
+        )
+        project.contributors.add(contributor)               
+        request = self.request_factory.get(PROJECT_DETAIL_CONTRIBUTORS)
+        response = self.client.get(PROJECT_DETAIL_CONTRIBUTORS)
+        response_contributor = json.loads(response.content)[0]['contributors']
+        expected_contributor_data = {
+            'id':contributor.id,
+            'name': contributor.name,
+            'image': {
+                'id': contributor.image.id,
+                'image': get_expected_image_url(contributor.image.image.name, request)
+            },
+            'category' : contributor.category.label
+        } 
+        self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
 
 class QueryLimitTestCase(APITestCase):

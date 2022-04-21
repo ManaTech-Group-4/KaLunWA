@@ -31,7 +31,7 @@ class Image(AuthoredModel):
     tags = models.ManyToManyField(Tag, related_name='images', blank=True) # blank=true allows 0 tags
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.id) + '. ' + self.name
 
 
 class Jumbotron(AuthoredModel):

@@ -13,7 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
-
+import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     AboutCampComponent,
     routeComponents,
     OrgStructureComponent,
-    MembersDialogComponent
+    MembersDialogComponent,
+    IndiEventComponent
+    
   ],
   entryComponents:[
     MembersDialogComponent
@@ -36,6 +39,7 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     MatDesignModule,
     HttpClientModule,
     MatDialogModule,
+    CarouselModule,
 
     MatCarouselModule.forRoot()
   ],

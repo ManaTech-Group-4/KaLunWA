@@ -1,0 +1,36 @@
+<div class ="header">
+    <h1>{{event.title}}</h1>
+    <p>{{event.tagline}}</p>
+</div>
+
+<div class="content">
+    <div class="date">
+        <h5 class="start">{{event.start_date}}</h5>
+        
+        <h5 class="end">{{event.end_date}}</h5>
+    </div>
+    <img src="{{event.cover_image.image}}" alt="{{event.title}}_img">
+    <p>{{event.description}}</p>
+</div>
+<div class="gallery">
+    <p>Event Gallery</p>
+
+    <owl-carousel-o [options]="customOptions">
+
+        <ng-container *ngFor="let p of event.gallery">
+            <ng-template class="carousel" carouselSlide [id]="p.id">
+                <img src="{{p.image}}" alt="{{p.id}}">
+            </ng-template>
+        </ng-container>
+    
+      </owl-carousel-o>
+</div>
+<div class="partners">
+    <p>Partners & Sponsors</p>
+    <div class="logos" >
+        <span *ngFor="let p of event.contributors">
+            <img src="{{p.image.image}}" alt="{{p.name}}_img">
+            <p>{{p.name}}</p>
+        </span>
+    </div>
+</div>

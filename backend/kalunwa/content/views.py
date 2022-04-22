@@ -36,51 +36,53 @@ class QueryLimitBackend(BaseFilterBackend):
         return queryset
 
     def limit_query(self, queryset, request, limit):
-        if limit is not None and limit.isdigit():
-            limit = int(limit)
-            queryset = queryset[:limit]
+        if limit is None or not limit.isdigit():
+            return queryset
+
+        limit = int(limit)
+        return queryset[:limit]
             
-        return queryset
+
 
     def limit_related_gallery(self, queryset,request, limit, model):
         """
         use for models that have gallery implementations.
         viewsets should have a 'model' attribute set. 
         """
-        if limit is not None and limit.isdigit():
-            limit = int(limit)
-            # related_name -> gallery_<content> -> format via user
-            related_name = model._meta.get_field('gallery').related_query_name()
-            # sub_query
-               # (1) gets related images of a content where imageA's event is in [imageB's]
-                #  where imageA is an image from an content's gallery (content
-                #       had been selected/reduced e.g. is_featured filter), and
-                # imageB is an image from the big set (Image.obj.all())     
-                                  
-            # (1) OuterRef -> refers to a field from the main query at Prefetch (3) 
-            # (2) values_list and flat=True (returns list of pks)
-                # return a QuerySet of single values instead of 1-tuples:
-                    # e.g. <QuerySet [1, 2]>    
-            kwargs = {f'{related_name}__in': OuterRef(related_name)} 
-                      # gallery_events__in=OuterRef('gallery_events') -> in filter (1)
-            sub_query = Subquery(Image.objects
-                        .prefetch_related(related_name) 
-                        .filter(**kwargs) # 1
-                        .values_list('id', flat=True)[:limit] # 2               
-                        ) 
+        if limit is None or not limit.isdigit():
+            return queryset
 
-            # (3) Prefetch -> extends prefetch_related by specifying queryset (qs)
-                # in this case, it limits the qs to the images belonging to a content's gallery,
-                # to which its number is limited to `query_limit_gallery`
+        limit = int(limit)
+        # related_name -> gallery_<content> -> format via user
+        related_name = model._meta.get_field('gallery').related_query_name()
+        # sub_query
+            # (1) gets related images of a content where imageA's event is in [imageB's]
+            #  where imageA is an image from an content's gallery (content
+            #       had been selected/reduced e.g. is_featured filter), and
+            # imageB is an image from the big set (Image.obj.all())     
+                                
+        # (1) OuterRef -> refers to a field from the main query at Prefetch (3) 
+        # (2) values_list and flat=True (returns list of pks)
+            # return a QuerySet of single values instead of 1-tuples:
+                # e.g. <QuerySet [1, 2]>    
+        kwargs = {f'{related_name}__in': OuterRef(related_name)} 
+                    # gallery_events__in=OuterRef('gallery_events') -> in filter (1)
+        sub_query = Subquery(Image.objects
+                    .prefetch_related(related_name) 
+                    .filter(**kwargs) # 1
+                    .values_list('id', flat=True)[:limit] # 2               
+                    ) 
 
-            # (4) add `distinct` since duplicate image objs are returned for images
-                #  belonging in more than 1 gallery given a many-to-many relationship
-            prefetch = Prefetch('gallery', # 3
-                queryset=Image.objects.filter(id__in=sub_query).distinct()) # 4
+        # (3) Prefetch -> extends prefetch_related by specifying queryset (qs)
+            # in this case, it limits the qs to the images belonging to a content's gallery,
+            # to which its number is limited to `query_limit_gallery`
 
-            queryset = queryset.prefetch_related(prefetch) 
+        # (4) add `distinct` since duplicate image objs are returned for images
+            #  belonging in more than 1 gallery given a many-to-many relationship
+        prefetch = Prefetch('gallery', # 3
+            queryset=Image.objects.filter(id__in=sub_query).distinct()) # 4
 
-        return queryset
+        return queryset.prefetch_related(prefetch)        
 
 
 class EventViewSet( viewsets.ModelViewSet):

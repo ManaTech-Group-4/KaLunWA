@@ -41,10 +41,10 @@ HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_f
 HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id&query_limit=3'
 
-ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&one_each=True'
+ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&name__in=Suba,Zero%20Waste,Baybayon,Lasang'
 ABOUT_US_TOTAL_MEMBERS = '/api/demographics/total-members/'
 ABOUT_US_LEADERS = '/api/orgleaders/?expand=image&fields=id,image&position=execomm'
-EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_limit_gallery=10'
+EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_limit_gallery=10' # expected fields for detail
 EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'
 PROJECT_DETAIL_GALLERY_LIMIT = '/api/projects/?expand=gallery,contributors&query_limit_gallery=10'
 PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'

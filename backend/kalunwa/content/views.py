@@ -8,7 +8,7 @@ from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampL
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, ChoiceFilter, CharFilter
 from rest_framework.filters import BaseFilterBackend
 
 
@@ -38,50 +38,46 @@ class QueryLimitBackend(BaseFilterBackend):
     def limit_query(self, queryset, request, limit):
         if limit is None or not limit.isdigit():
             return queryset
-
         limit = int(limit)
         return queryset[:limit]
-            
-
 
     def limit_related_gallery(self, queryset,request, limit, model):
         """
         use for models that have gallery implementations.
         viewsets should have a 'model' attribute set. 
+
+        quick docs:
+        sub_query
+            (1) gets related images of a content where imageA's event is in [imageB's]
+             where imageA is an image from an content's gallery (content
+                  had been selected/reduced e.g. is_featured filter), and
+            imageB is an image from the big set (Image.obj.all())     
+                                
+        (1) OuterRef -> refers to a field from the main query at Prefetch (3) 
+        (2) values_list and flat=True (returns list of pks)
+            return a QuerySet of single values instead of 1-tuples:
+                e.g. <QuerySet [1, 2]>     
+        (3) Prefetch -> extends prefetch_related by specifying queryset (qs)
+            in this case, it limits the qs to the images belonging to a content's gallery,
+            to which its number is limited to `query_limit_gallery`
+
+        (4) add `distinct` since duplicate image objs are returned for images
+             belonging in more than 1 gallery given a many-to-many relationship                       
         """
         if limit is None or not limit.isdigit():
             return queryset
-
         limit = int(limit)
         # related_name -> gallery_<content> -> format via user
         related_name = model._meta.get_field('gallery').related_query_name()
-        # sub_query
-            # (1) gets related images of a content where imageA's event is in [imageB's]
-            #  where imageA is an image from an content's gallery (content
-            #       had been selected/reduced e.g. is_featured filter), and
-            # imageB is an image from the big set (Image.obj.all())     
-                                
-        # (1) OuterRef -> refers to a field from the main query at Prefetch (3) 
-        # (2) values_list and flat=True (returns list of pks)
-            # return a QuerySet of single values instead of 1-tuples:
-                # e.g. <QuerySet [1, 2]>    
+        # gallery_events__in=OuterRef('gallery_events') -> in filter (1)
         kwargs = {f'{related_name}__in': OuterRef(related_name)} 
-                    # gallery_events__in=OuterRef('gallery_events') -> in filter (1)
         sub_query = Subquery(Image.objects
                     .prefetch_related(related_name) 
                     .filter(**kwargs) # 1
                     .values_list('id', flat=True)[:limit] # 2               
                     ) 
-
-        # (3) Prefetch -> extends prefetch_related by specifying queryset (qs)
-            # in this case, it limits the qs to the images belonging to a content's gallery,
-            # to which its number is limited to `query_limit_gallery`
-
-        # (4) add `distinct` since duplicate image objs are returned for images
-            #  belonging in more than 1 gallery given a many-to-many relationship
         prefetch = Prefetch('gallery', # 3
             queryset=Image.objects.filter(id__in=sub_query).distinct()) # 4
-
         return queryset.prefetch_related(prefetch)        
 
 
@@ -120,25 +116,50 @@ class CampLeaderViewSet(viewsets.ModelViewSet): # limit 1 per query
     queryset = CampLeader.objects.all()
 
 
+class CampNameInFilterBackend(BaseFilterBackend):
+    """
+    # expect a list of names here. (e.g. Suba,Lasang,)
+    # urls don't accept whitespaces, so don't have to worry bout that 
+    # spaces are automatically replaced with `%20`
+    # risky inputs
+    #   Suba,,,,General,, -> would be accepted (same behavior for flex fields)
+
+    """
+
+    def filter_queryset(self, request, queryset, view):
+        name_labels = request.query_params.get('name__in', None)     
+        if name_labels is None:
+            return queryset
+        return self.filter_by_names(queryset, name_labels)
+
+    def get_name_values(self, name_labels:str): # returns a list of camp values ['SB', Lasang]
+        camp_values = []
+        for label in name_labels.split(','):
+           camp_value = get_value_by_label(label, CampEnum)
+           if camp_value is None: # not valid camp_label so skip value
+              pass  
+           else:
+               camp_values.append(camp_value)
+        return camp_values     
+
+    def filter_by_names(self, queryset, name_labels:str):
+        camp_values = self.get_name_values(name_labels)
+        return queryset.filter(name__in=camp_values)              
+
+def get_value_by_label(label:str, Enum): # will prolly be put in core/utils
+    if not label in Enum.labels:
+        return None
+    for enum_obj in Enum.__members__.values(): # enum members -> key:name-value:enum_obj { 'PRESIDENT': OrgLeader.Positions.PRESIDENT }
+        if label == enum_obj.label: 
+            value = enum_obj.value
+    return value
+
+
 class CampPageViewSet(viewsets.ModelViewSet):
     model = CampPage
     serializer_class = CampPageSerializer
-    filter_backends = [QueryLimitBackend]        
-
-    def get_queryset(self):
-        # if preferred -> pure url search 
-        if self.action=='list':
-            one_each_flag = self.request.query_params.get('one_each', False)
-            # one_each ensures a limit of 1 instance per camp except general
-            if one_each_flag:
-                suba = CampPage.objects.filter(name=CampEnum.SUBA) [:1]
-                baybayon = CampPage.objects.filter(name=CampEnum.BAYBAYON) [:1]
-                zero_waste = CampPage.objects.filter(name=CampEnum.ZEROWASTE) [:1]
-                lasang = CampPage.objects.filter(name=CampEnum.LASANG) [:1]
-                camps = suba | baybayon | zero_waste | lasang # combines into one queryset
-                return camps
-
-        return CampPage.objects.all()
+    filter_backends = [CampNameInFilterBackend, QueryLimitBackend]   
+    queryset = CampPage.objects.all()
 
 
 class OrgLeaderViewSet(viewsets.ModelViewSet):

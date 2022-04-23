@@ -6,21 +6,28 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.views import APIView
 from kalunwa.content.serializers import StatusEnum
-from .utils import  ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT, HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file, to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
-from kalunwa.content.models import CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, News, OrgLeader, Project, Event
+from .utils import  (
+    ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS,
+    EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT,
+    HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, 
+    PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file,
+    to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+)
+from kalunwa.content.models import(
+    CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, 
+    News, OrgLeader, Project, Event
+)
 from rest_framework import status
 #-------------------------------------------------------------------------------
 # HomePage Website
 
 class HomepageJumbotronsTestCase(APITestCase):
     """
-    Test homepage endpoints:
-        homepage-jumbotrons 
-        reverse() of the above returns /api/homepage/jumbotrons/
-
+    Test jumbotron endpoint for homepage (hp):
     tests:
-        test if request limit (5) is implemented
-    
+        - test list endpoint (status ok) and limit (5)
+        - test if featured jumbotrons are returned for hp
+        - test expected jumbotron data for homepage
     """
     @classmethod
     def setUpTestData(cls):
@@ -80,7 +87,7 @@ class HomepageJumbotronsTestCase(APITestCase):
 
         Assumption: Jumbotron object has the appropriate fields.  
         """
-        Jumbotron.objects.create(
+        expected_jumbotron = Jumbotron.objects.create(
             header_title= 'Jumbotron 1', 
             subtitle= 'short description',
             image = Image.objects.create(name=f'image_1', image=self.image_file),  
@@ -90,7 +97,7 @@ class HomepageJumbotronsTestCase(APITestCase):
         request = self.request_factory.get(self.url)
         response = self.client.get(self.url) 
         response_jumbotron = json.loads(response.content)[0] # json to python 
-        expected_jumbotron = Jumbotron.objects.get(pk=response_jumbotron['id'])
+ 
 
         image_url = get_expected_image_url(expected_jumbotron.image.image.name, request)
         
@@ -106,18 +113,13 @@ class HomepageJumbotronsTestCase(APITestCase):
 
 class HomepageEventsTestCase(APITestCase):
     """
-    Test homepage endpoints:
-        /api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3
-
-        - test if request limit (3) is implemented
-        - test if events are featured
+    Test event endpoint for homepage (hp):
+        - test list endpoint (status ok) and limit (3)    
+        - test if featured events are returned for hp        
+        - test expected events data for homepage
     """
     @classmethod
     def setUpTestData(cls):
-        """
-        - separate test for featured events,
-        - separate test for limit
-        """
         cls.event_limit = 3
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
@@ -142,7 +144,6 @@ class HomepageEventsTestCase(APITestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-
         self.assertLessEqual( len(response.data), self.event_limit) # a <= b
 
     def test_get_homepage_featured_events(self):
@@ -174,7 +175,7 @@ class HomepageEventsTestCase(APITestCase):
             self.assertTrue(fetched_event.is_featured)
     
     def test_get_homepage_event_data(self):
-        Event.objects.create(
+        expected_event = Event.objects.create(
             title= 'Event 1', 
             description= 'description 1',
             start_date=timezone.now(),
@@ -187,7 +188,6 @@ class HomepageEventsTestCase(APITestCase):
         response = self.client.get(self.url) 
         
         event = json.loads(response.content)[0]
-        expected_event = Event.objects.get(pk=event['id'])
         image_url = get_expected_image_url(expected_event.image.image.name, request)
 
         expected_event_data = {
@@ -200,18 +200,13 @@ class HomepageEventsTestCase(APITestCase):
 
 class HomepageProjectsTestCase(APITestCase):
     """
-    Test homepage endpoints:
-        homepage-projects 
-
-        - test if request limit (3) is implemented
-        - test if projects are featured
+    Test project endpoint for homepage (hp):
+        - test list endpoint (status ok) and limit (3)    
+        - test if featured projects are returned for hp        
+        - test expected project data for homepage
     """
     @classmethod
     def setUpTestData(cls):
-        """
-        - separate test for featured projects,
-        - separate test for limit
-        """
         cls.project_limit = 3
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
@@ -272,20 +267,19 @@ class HomepageProjectsTestCase(APITestCase):
             self.assertTrue(fetched_project.is_featured)
     
     def test_get_homepage_project_data(self):
-        Project.objects.create(
-        title= 'Project 1', 
-        description= 'description 1',
-        start_date=timezone.now(),
-        end_date=timezone.now(),
-        image = Image.objects.create(name='image_1', image=self.image_file),
-        is_featured=True,
+        expected_project = Project.objects.create(
+            title= 'Project 1', 
+            description= 'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name='image_1', image=self.image_file),
+            is_featured=True,
         )       
 
         request = self.request_factory.get(self.url)
         response = self.client.get(self.url) 
         
         project = json.loads(response.content)[0]
-        expected_project = Project.objects.get(pk=project['id'])
         image_url = get_expected_image_url(expected_project.image.image.name, request)
 
         expected_project_data = {
@@ -298,11 +292,10 @@ class HomepageProjectsTestCase(APITestCase):
 
 class HomepageNewsTestCase(APITestCase):
     """
-    Test homepage endpoints:
-        homepage-news 
-
-        - test if request limit (3) is implemented
-        - test if news are featured
+    Test news endpoint for homepage (hp):
+        - test list endpoint (status ok) and limit (3)    
+        - test if latest news are returned for hp        
+        - test expected news data for homepage
     """
     @classmethod
     def setUpTestData(cls):
@@ -354,7 +347,7 @@ class HomepageNewsTestCase(APITestCase):
             pk-=1
   
     def test_get_homepage_news_data(self):
-        News.objects.create(
+        expected_news = News.objects.create(
         title= 'News 1', 
         description= 'description 1',
         image = Image.objects.create(name='image_1', image=self.image_file),
@@ -364,7 +357,6 @@ class HomepageNewsTestCase(APITestCase):
         response = self.client.get(self.url) 
         
         news = json.loads(response.content)[0]
-        expected_news = News.objects.get(pk=news['id'])
         image_url = get_expected_image_url(expected_news.image.image.name, request)
 
         expected_news_data = {
@@ -379,10 +371,12 @@ class HomepageNewsTestCase(APITestCase):
 #-------------------------------------------------------------------------------
 # About Us Website
 
-class AboutUsDemographics(APITestCase):
+class AboutUsDemographicsTestCase(APITestCase):
     """
-    Test about-us endpoints:    
-        about-us-demographics    
+    Test demographics endpoints for about us:    
+    tests:
+        - test list endpoint (status ok)     
+        - test if total is correct          
     """
     @classmethod
     def setUpTestData(cls):
@@ -411,67 +405,51 @@ class AboutUsDemographics(APITestCase):
 
 class AboutUsCampsTestCase(APITestCase):
     """
-    Test about-us endpoints:    
-        about-us-camps    
+    Test camps endpoints for about us:    
+        - test camp endpoint (status ok), return all camps 
+        - test if expected camp types are retrieved (SUba, Baybayon, Lasang, Zero Waste)     
+        - test expected news data for homepage
 
-        # no test if 3 camps, lacking 1; what is the expected behavior
         # tried testing for getting duplicate camps
             # not possible, since  the unique constraint stops model creation
             #  with the same name    
         # possible additions:
             # more than 1 camp leaders -> make campleader an fk nlng kaya 
+            # no test if 3 camps, lacking 1; what is the expected behavior            
     """    
 
     @classmethod
     def setUpTestData(cls):    
         cls.camp_count = 4
         cls.test_image = get_test_image_file()
-        cls.camps_values = CampEnum.values
-        cls.camp_labels = CampEnum.labels
+        cls.expected_camps = CampEnum.labels
+        cls.expected_camps.remove(CampEnum.GENERAL.label)
         cls.request_factory = APIRequestFactory() 
         cls.url = ABOUT_US_CAMP_URL       
 
     def test_get_camps(self):
         """
-        - tests endpoint 
-        - number of camps returned (4)
-        mock: 5 camps (expected + general)
+        - test camp endpoint (status ok), return camps 
+        - test if expected camp types are retrieved (Suba, Baybayon, Lasang, Zero Waste)
+        - test expected camp data 
+        mock: 5 camps (expected + general)     
         """
 
         for _ in range(5):
             # camp pages    
             CampPage.objects.create(
-                name=self.camps_values[_],
+                name=CampEnum.values[_],
                 description = 'default description',
                 image = Image.objects.create(name = 'name', image = self.test_image)
         )   
-        
         response = self.client.get(self.url)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)  
-        self.assertEqual( self.camp_count, len(response.data))   
-
-    def test_get_expected_camps(self):
-        """
-        - expected camps returned (Suba, Baybayon, Lasang, ZeroWaste)
-        mock: 5 camps (expected + general)     
-        """
-        # mock data
-        for _ in range(5):
-            # camp pages    
-            CampPage.objects.create(
-                name=self.camps_values[_],
-                description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
-            )   
-        expected_camps = self.camp_labels
-        expected_camps.remove(CampEnum.GENERAL.label)
-
-        response = self.client.get(self.url)       
         response_camps = []
         for camp in response.data:
             response_camps.append(camp['name']) 
-        
-        self.assertListEqual(sorted(expected_camps), sorted(response_camps))
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual( self.camp_count, len(response.data))   
+        self.assertListEqual(sorted(self.expected_camps), sorted(response_camps))
 
     def test_get_camp_data(self):
         expected_camp = CampPage.objects.create(
@@ -520,47 +498,23 @@ class AboutUsCampsTestCase(APITestCase):
 
 class AboutUsLeadersTestCase(APITestCase):
     """
-        about-us-organization_leaders
-
-        # return only execomm (No directors/othr)
+        - test if retrieved leaders are part of the execomm
+        - test expected leader data
     """    
     @classmethod
     def setUpTestData(cls):
-        cls.leaders_limit = 7 # Pres to overseer (execomm)
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
-        positions = OrgLeader.Positions.labels
-        positions.remove(OrgLeader.Positions.DIRECTOR.label)
-        positions.remove(OrgLeader.Positions.OTHER.label)
-        cls.expected_positions = positions
+        cls.execomm_positions = [position for position in OrgLeader.Positions.values
+                            if position not in [OrgLeader.Positions.DIRECTOR.value, 
+                                                OrgLeader.Positions.OTHER.value]] ## change to label soon
         cls.url = ABOUT_US_LEADERS
 
     def test_get_org_leaders(self):
         """
-        - test endpoint 'about-us-organization-leaders'
-        - test leader_limit
-        mock: create 7 org leaders (execom [pres to overseer])
+        - test if leaders are part of the execomm
+        mock: create 9 org leaders (execom [pres to overseer] + director & other)
         """
-        
-        for _ in range (7):
-            OrgLeader.objects.create(
-                first_name = 'Extra',
-                last_name = 'Leader',
-                background = 'background',
-                advocacy = 'advocacy',
-                position = OrgLeader.Positions.values[_],
-                image=Image.objects.create(name = 'other', image = self.image_file)
-            )        
-
-        response = self.client.get(self.url)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)  
-        self.assertLessEqual( len(response.data),  self.leaders_limit)  
-    
-    def test_get_execomm_leaders(self):
-        """
-        - test if all are execomm leaders
-        mock: create 9 org leaders (execom [pres to overseer] + director + othr)
-        """        
         for _ in range (9):
             OrgLeader.objects.create(
                 first_name = 'Extra',
@@ -569,23 +523,22 @@ class AboutUsLeadersTestCase(APITestCase):
                 advocacy = 'advocacy',
                 position = OrgLeader.Positions.values[_],
                 image=Image.objects.create(name = 'other', image = self.image_file)
-            )             
-
+            )        
         response = self.client.get(self.url)
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code) 
+        self.assertEqual(len(response.data), 7) 
 
         for leader in response.data:
             response_leader = OrgLeader.objects.get(pk=leader['id'])
-            self.assertNotIn(response_leader.position,  
-                [OrgLeader.Positions.DIRECTOR.value,
-                 OrgLeader.Positions.OTHER.value]
-            ) 
+            self.assertIn(response_leader.position, self.execomm_positions)     
  
     def test_get_execomm_leader_data(self):
         """
         - test expected execomm data
         mock: create 1 org leaders (Pres)
         """        
-        OrgLeader.objects.create(
+        expected_leader = OrgLeader.objects.create(
             first_name = 'Extra',
             last_name = 'Leader',
             background = 'background',
@@ -597,16 +550,14 @@ class AboutUsLeadersTestCase(APITestCase):
         response = self.client.get(self.url)
 
         response_leader = json.loads(response.content)[0] 
-        expected_leader = OrgLeader.objects.get(pk=response_leader['id'])
         image_url = get_expected_image_url(expected_leader.image.image.name, request)
-
         expected_leader_data = {
             'id' : expected_leader.id,
             'image' : {
                 'id' : 1,
-                'image' : image_url}
+                'image' : image_url
+                }
         }
-
         self.assertDictEqual(expected_leader_data, response_leader)
 # ---------------------------------------------------------------------------        
 # EventGetTestCase (Similar to event)
@@ -628,6 +579,15 @@ class AboutUsLeadersTestCase(APITestCase):
 class EventGetTestCase(APITestCase):
     """
     tests the get method for list and detail endpoints.
+        - test event list endpoint (status ok), return created events
+        - test event detail endpoint (status ok), return created event
+        - test event detail response data
+        - test event endpoint (status ok) with expanded gallery
+        - test event gallery limit
+        - test event gallery response data
+        - test event endpoint (status ok) with expanded contributors
+        - test event contributor response data     
+    
     """
     @classmethod
     def setUpTestData(cls) -> None:
@@ -635,6 +595,9 @@ class EventGetTestCase(APITestCase):
         cls.request_factory = APIRequestFactory()
 
     def test_get_event_list(self):
+        """
+        - test event list endpoint (status ok), return created events
+        """
         for _ in range(5): 
             Event.objects.create(
             title= f'Event {_}', 
@@ -644,14 +607,16 @@ class EventGetTestCase(APITestCase):
             image = Image.objects.create(name=f'image_{_}', image=self.image_file),  
             is_featured=True,
             )           
-
         response = self.client.get(reverse('event-list'))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertLessEqual( len(response.data), 5)        
+        self.assertLessEqual( len(response.data), 5)    
 
     def test_get_event_detail(self):
-
-        Event.objects.create(
+        """
+        - test event detail endpoint (status ok), return created event
+        - test event detail response data
+        """        
+        expected_event = Event.objects.create(
             title= 'Event 1', 
             description= 'description 1',
             start_date=timezone.now(),
@@ -664,7 +629,6 @@ class EventGetTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response_event = response.data
-        expected_event = Event.objects.get(pk=1)
         expected_event_data = {
             'id': expected_event.id,
             'title': expected_event.title,
@@ -681,10 +645,8 @@ class EventGetTestCase(APITestCase):
   
     def test_get_event_gallery(self):
         """
-        test if status ok,
-        query limit on this one (10)
-        data:
-            id, image_url
+        - test event endpoint (status ok) with expanded gallery
+        - test event gallery limit        
 
         mock :
             1 event related to 11 diff images
@@ -704,12 +666,16 @@ class EventGetTestCase(APITestCase):
         
         event.gallery.set(Image.objects.all().values_list('id', flat=True))
         response = self.client.get(EVENT_DETAIL_GALLERY_LIMIT)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)        
-        
         gallery = response.data[0]['gallery']
-        self.assertLessEqual( len(gallery), 10)           
+        self.assertEqual(status.HTTP_200_OK, response.status_code)                
+        self.assertLessEqual(len(gallery), 10)           
 
     def test_get_event_gallery_data(self):
+        """
+        - test event gallery response data        
+        data:
+            id, image_url        
+        """        
         event = Event.objects.create(
             title= 'Event 1', 
             description= 'description 1',
@@ -733,8 +699,8 @@ class EventGetTestCase(APITestCase):
     
     def test_get_event_contributors(self):
         """
-        test if status ok, data length
-
+        - test event endpoint (status ok) with expanded contributors
+        - test returned contributors
         mock :
             1 event related to 5 contributors
         
@@ -755,8 +721,8 @@ class EventGetTestCase(APITestCase):
         )     
         event.contributors.set(Contributor.objects.all().values_list('id', flat=True))
         response = self.client.get(EVENT_DETAIL_CONTRIBUTORS)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)        
         contributors = response.data[0]['contributors']
+        self.assertEqual(status.HTTP_200_OK, response.status_code)        
         self.assertEqual(len(contributors), 5)           
 
     def test_get_event_contributors_data(self):
@@ -768,23 +734,23 @@ class EventGetTestCase(APITestCase):
             image = Image.objects.create(name='image_1', image=self.image_file),
             is_featured=True,
         )     
-        contributor  = Contributor.objects.create(
+        expected_contributor  = Contributor.objects.create(
             name= 'Contributor 1', 
             category= Contributor.Categories.SPONSOR,
             image = Image.objects.create(name='image_1', image=self.image_file),
         )
-        event.contributors.add(contributor)               
+        event.contributors.add(expected_contributor)               
         request = self.request_factory.get(EVENT_DETAIL_CONTRIBUTORS)
         response = self.client.get(EVENT_DETAIL_CONTRIBUTORS)
         response_contributor = json.loads(response.content)[0]['contributors']
         expected_contributor_data = {
-            'id':contributor.id,
-            'name': contributor.name,
+            'id':expected_contributor.id,
+            'name': expected_contributor.name,
             'image': {
-                'id': contributor.image.id,
-                'image': get_expected_image_url(contributor.image.image.name, request)
+                'id': expected_contributor.image.id,
+                'image': get_expected_image_url(expected_contributor.image.image.name, request)
             },
-            'category' : contributor.category.label
+            'category' : expected_contributor.category.label
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
         
@@ -792,6 +758,14 @@ class EventGetTestCase(APITestCase):
 class ProjectGetTestCase(APITestCase):
     """
     tests the get method for list and detail endpoints.
+        - test project list endpoint (status ok), return created projects
+        - test project detail endpoint (status ok), return created project
+        - test project detail response data
+        - test project endpoint (status ok) with expanded gallery, return gallery images
+        - test project gallery limit
+        - test project gallery response data
+        - test project endpoint (status ok) with expanded contributors, return contributors
+        - test project contributor response data   
     """
     @classmethod
     def setUpTestData(cls) -> None:
@@ -799,6 +773,9 @@ class ProjectGetTestCase(APITestCase):
         cls.request_factory = APIRequestFactory()
 
     def test_get_project_list(self):
+        """
+        - test project list endpoint (status ok), return created projects        
+        """
         for _ in range(5): 
             Project.objects.create(
             title= f'Project {_}', 
@@ -814,8 +791,11 @@ class ProjectGetTestCase(APITestCase):
         self.assertLessEqual( len(response.data), 5)        
 
     def test_get_project_detail(self):
-
-        Project.objects.create(
+        """
+        - test project detail endpoint (status ok), return created project
+        - test project detail response data       
+        """
+        expected_project = Project.objects.create(
             title= 'Project 1', 
             description= 'description 1',
             start_date=timezone.now(),
@@ -828,7 +808,7 @@ class ProjectGetTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response_project = response.data
-        expected_project = Project.objects.get(pk=1)
+
         expected_project_data = {
             'id': expected_project.id,
             'title': expected_project.title,
@@ -845,11 +825,8 @@ class ProjectGetTestCase(APITestCase):
 
     def test_get_project_gallery(self):
         """
-        test if status ok,
-        query limit on this one (10)
-        data:
-            id, image_url
-
+        - test project endpoint (status ok) with expanded gallery, return gallery images
+        - test project gallery limit (10)
         mock :
             1 project related to 11 diff images
         
@@ -874,6 +851,11 @@ class ProjectGetTestCase(APITestCase):
         self.assertEqual( len(gallery), 10)           
 
     def test_get_project_gallery_data(self):
+        """
+        - test project gallery response data        
+        data:
+            id, image_url
+        """        
         project = Project.objects.create(
             title= 'Project 1', 
             description= 'description 1',
@@ -897,8 +879,7 @@ class ProjectGetTestCase(APITestCase):
     
     def test_get_project_contributors(self):
         """
-        test if status ok, data length
-
+        - test project endpoint (status ok) with expanded contributors, return contributors
         mock :
             1 project related to 5 contributors
         
@@ -924,6 +905,9 @@ class ProjectGetTestCase(APITestCase):
         self.assertLessEqual( len(contributors), 5)           
 
     def test_get_project_contributors_data(self):
+        """
+        - test project contributor response data        
+        """        
         project = Project.objects.create(
             title= 'Project 1', 
             description= 'description 1',
@@ -932,23 +916,23 @@ class ProjectGetTestCase(APITestCase):
             image = Image.objects.create(name='image_1', image=self.image_file),
             is_featured=True,
         )  
-        contributor  = Contributor.objects.create(
+        expected_contributor = Contributor.objects.create(
             name= 'Contributor 1', 
             category= Contributor.Categories.SPONSOR,
             image = Image.objects.create(name='image_1', image=self.image_file),
         )
-        project.contributors.add(contributor)               
+        project.contributors.add(expected_contributor)               
         request = self.request_factory.get(PROJECT_DETAIL_CONTRIBUTORS)
         response = self.client.get(PROJECT_DETAIL_CONTRIBUTORS)
         response_contributor = json.loads(response.content)[0]['contributors']
         expected_contributor_data = {
-            'id':contributor.id,
-            'name': contributor.name,
+            'id':expected_contributor.id,
+            'name': expected_contributor.name,
             'image': {
-                'id': contributor.image.id,
-                'image': get_expected_image_url(contributor.image.image.name, request)
+                'id': expected_contributor.image.id,
+                'image': get_expected_image_url(expected_contributor.image.image.name, request)
             },
-            'category' : contributor.category.label
+            'category' : expected_contributor.category.label
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 

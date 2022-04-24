@@ -14,11 +14,11 @@
 <div class="tree-container">
     <div class="tree">
         <ul>
-            <li><a><span>General Assembly</span></a>
+            <li><a class="null"><span>General Assembly</span></a>
                 <ul>
                     <li ><a id="BoT" (click)="clickBoT()" class="bot-button"><span>Board of Trustees</span></a>
                         <ul>
-                            <li><a><span>Campers</span></a>
+                            <li><a class="null"><span>Campers</span></a>
                                 <ul>
                                     <li (click)="clickBaybayon()" class="camp-button"><a id="Baybayon"><span>Baybayon</span></a></li>
                                     <li (click)="clickLasang()"><a id="Lasang"><span>Lasang</span></a></li>
@@ -36,16 +36,16 @@
         <ul *ngIf="showBaybayon" id="Baybayon">
             <li><a (click)="clickBaybayon()"><img src="assets/images/baybayon.png" alt="camp logo"><span>Baybayon</span></a>
                 <ul>
-                    <li><a><span>Camp Leader</span></a>
+                    <li><a (click)="openDialog(1)"><span>Camp Leader</span></a>
                         <ul>
-                            <li><a><span>Asst. Camp Leader</span></a>
+                            <li><a (click)="openDialog(1)"><span>Asst. Camp Leader</span></a>
                                 <ul>
-                                    <li><a><span>Finance<br>Cabin</span></a></li>
-                                    <li><a><span>Publicity<br>Cabin</span></a></li>
-                                    <li><a><span>Ways and Means<br>Cabin</span></a></li>
-                                    <li><a><span>Secretariat<br>Cabin</span></a></li>
-                                    <li><a><span>Programs<br>Cabin</span></a></li>
-                                    <li><a><span>Research<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Finance<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Publicity<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Ways and Means<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Secretariat<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Programs<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Research<br>Cabin</span></a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -57,16 +57,16 @@
         <ul *ngIf="showLasang">
             <li><a (click)="clickLasang()"><img src="assets/images/lasang.png" alt="camp logo"><span>Lasang</span></a>
                 <ul>
-                    <li><a><span>Camp Leader</span></a>
+                    <li><a (click)="openDialog(1)"><span>Camp Leader</span></a>
                         <ul>
-                            <li><a><span>Asst. Camp Leader</span></a>
+                            <li><a (click)="openDialog(1)"><span>Asst. Camp Leader</span></a>
                                 <ul>
-                                    <li><a><span>Finance<br>Cabin</span></a></li>
-                                    <li><a><span>Publicity<br>Cabin</span></a></li>
-                                    <li><a><span>Ways and Means<br>Cabin</span></a></li>
-                                    <li><a><span>Secretariat<br>Cabin</span></a></li>
-                                    <li><a><span>Programs<br>Cabin</span></a></li>
-                                    <li><a><span>Research<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Finance<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Publicity<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Ways and Means<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Secretariat<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Programs<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Research<br>Cabin</span></a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -78,16 +78,16 @@
         <ul *ngIf="showSuba">
             <li><a (click)="clickSuba()"><img src="assets/images/suba.png" alt="camp logo"><span>Suba</span></a>
                 <ul>
-                    <li><a><span>Camp Leader</span></a>
+                    <li><a (click)="openDialog(1)"><span>Camp Leader</span></a>
                         <ul>
-                            <li><a><span>Asst. Camp Leader</span></a>
+                            <li><a (click)="openDialog(1)"><span>Asst. Camp Leader</span></a>
                                 <ul>
-                                    <li><a><span>Finance<br>Cabin</span></a></li>
-                                    <li><a><span>Publicity<br>Cabin</span></a></li>
-                                    <li><a><span>Ways and Means<br>Cabin</span></a></li>
-                                    <li><a><span>Secretariat<br>Cabin</span></a></li>
-                                    <li><a><span>Programs<br>Cabin</span></a></li>
-                                    <li><a><span>Research<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Finance<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Publicity<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Ways and Means<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Secretariat<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Programs<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Research<br>Cabin</span></a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -99,16 +99,16 @@
         <ul *ngIf="showZW">
             <li><a (click)="clickZW()"><img src="assets/images/zero.png" alt="camp logo"><span>Zero Waste</span></a>
                 <ul>
-                    <li><a><span>Camp Leader</span></a>
+                    <li><a (click)="openDialog(1)"><span>Camp Leader</span></a>
                         <ul>
-                            <li><a><span>Asst. Camp Leader</span></a>
+                            <li><a (click)="openDialog(1)"><span>Asst. Camp Leader</span></a>
                                 <ul>
-                                    <li><a><span>Finance<br>Cabin</span></a></li>
-                                    <li><a><span>Publicity<br>Cabin</span></a></li>
-                                    <li><a><span>Ways and Means<br>Cabin</span></a></li>
-                                    <li><a><span>Secretariat<br>Cabin</span></a></li>
-                                    <li><a><span>Programs<br>Cabin</span></a></li>
-                                    <li><a><span>Research<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Finance<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Publicity<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Ways and Means<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Secretariat<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Programs<br>Cabin</span></a></li>
+                                    <li><a (click)="openDialog(3)"><span>Research<br>Cabin</span></a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -120,17 +120,17 @@
         <ul *ngIf="showBoT">
             <li><a (click)="clickBoT()"><span>Board of Trustees</span></a>
                 <ul>
-                    <li><a><span>Directors</span></a></li>
-                    <li><a><span>Executive Committee</span></a></li>
+                    <li><a (click)="openDialog(8)"><span>Directors</span></a></li>
+                    <li><a (click)="openDialog(7)"><span>Executive Committee</span></a></li>
                 </ul>
             </li>
         </ul>
 
         <ul>
-            <li><a><span>Constitutional Committees</span></a>
+            <li><a class="null"><span>Constitutional Committees</span></a>
                 <ul>
-                    <li><a><span>Grievances Committee</span></a></li>
-                    <li><a><span>Election Committee</span></a></li>
+                    <li><a (click)="openDialog(5)"><span>Grievances Committee</span></a></li>
+                    <li><a (click)="openDialog(5)"><span>Election Committee</span></a></li>
                 </ul>
             </li>
         </ul>

@@ -12,7 +12,7 @@ class CampSerializertestCase(TestCase):
     - test to serialize camp details when a camp leader exists
     - test to serialize camp details when a camp leader does not exists.
         returns none, or a non-truthy value (false)
-    # test if camp is 
+    # test if camp has doubles? will be restricted for posting so it would be hard to replicate
     """
     @classmethod
     def setUpTestData(cls) -> None: 

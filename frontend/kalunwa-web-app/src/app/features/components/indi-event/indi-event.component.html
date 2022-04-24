@@ -15,15 +15,7 @@
 <div class="gallery">
     <p>Event Gallery</p>
 
-    <owl-carousel-o [options]="customOptions">
-
-        <ng-container *ngFor="let p of event.gallery">
-            <ng-template class="carousel" carouselSlide [id]="p.id">
-                <img src="{{p.image}}" alt="{{p.id}}">
-            </ng-template>
-        </ng-container>
-    
-      </owl-carousel-o>
+    <ng-image-slider [images]="event.gallery" #nav></ng-image-slider>
 </div>
 <div class="partners">
     <p>Partners & Sponsors</p>

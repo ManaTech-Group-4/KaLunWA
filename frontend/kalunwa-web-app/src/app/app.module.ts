@@ -14,7 +14,7 @@ import { OrgStructureComponent } from './features/components/org-structure/org-s
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
-import { CarouselModule } from 'ngx-owl-carousel-o';
+import { NgImageSliderModule } from 'ng-image-slider';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     MatDesignModule,
     HttpClientModule,
     MatDialogModule,
-    CarouselModule,
+    NgImageSliderModule,
 
     MatCarouselModule.forRoot()
   ],

@@ -20,6 +20,6 @@
       <p>Latest Announcemnts are placed here mwehehehee</p>
     </div>
 </div>
-  <app-project-list ></app-project-list>
+  <app-project-list [projects]="(projectDisplay$ | async)!" ></app-project-list>
 </div>
 

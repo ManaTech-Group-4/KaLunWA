@@ -1,4 +1,5 @@
-<mat-card class="project-card" *ngFor="let project of projectList">
+<h1 class='no-events' *ngIf='projects.length < 1'>No project matched</h1>
+<mat-card class="project-card" *ngFor="let project of projects">
 
   <img mat-card-image src="{{project.image}}">
 
@@ -6,7 +7,7 @@
     <div class="project-header">
       <mat-chip-list class ="tags" aria-label="Fish selection">
         <div *ngFor="let tag of project.tags">
-          <mat-chip *ngIf ="tag == 'general'" [style.background-color]="'#121212'" selected>General</mat-chip>
+          <mat-chip *ngIf ="tag == 'GNRL'" [style.background-color]="'#121212'" selected>General</mat-chip>
           <mat-chip *ngIf ="tag == 'baybayon'" [style.background-color]="'#D9B863'" selected>Baybayon</mat-chip>
           <mat-chip *ngIf ="tag == 'lasang'" [style.background-color]="'#3F6218'" selected>Lasang</mat-chip>
           <mat-chip *ngIf ="tag == 'suba'" [style.background-color]="'#1C8BD4'" selected>Suba</mat-chip>

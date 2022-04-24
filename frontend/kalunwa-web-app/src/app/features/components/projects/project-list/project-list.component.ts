@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProjectItemsModel } from 'src/app/features/models/project-items-model';
 import { ProjectItemService } from '../service/project-item.service';
 
@@ -9,22 +9,24 @@ import { ProjectItemService } from '../service/project-item.service';
 })
 export class ProjectListComponent implements OnInit {
 
-  constructor(private projectService: ProjectItemService) { }
+  @Input()
+  projects = [] as ProjectItemsModel[];
 
-  projectList = [] as ProjectItemsModel[];
+  constructor() { }
+
   ngOnInit(): void {
-    this.projectService.getProjectList()
-      .subscribe(data => {
-        this.projectList = data.map((project) =>({
-          id: project.id,
-          title: project.title,
-          description: project.description,
-          image: project.image.image,
-          start_date: project.start_date,
-          end_date: project.end_date,
-          tags: [project.camp, project.status]
-        }));
-      });
+    // this.projectService.getProjectList()
+    //   .subscribe(data => {
+    //     this.projectList = data.map((project) =>({
+    //       id: project.id,
+    //       title: project.title,
+    //       description: project.description,
+    //       image: project.image.image,
+    //       start_date: project.start_date,
+    //       end_date: project.end_date,
+    //       tags: [project.camp, project.status]
+    //     }));
+    //   });
   }
 
 }

@@ -1,4 +1,5 @@
-<mat-card class="event-card" *ngFor="let event of eventsList">
+<h1 class='no-events' *ngIf='events.length < 1'>No event matched</h1>
+<mat-card class="event-card" *ngFor="let event of events">
 
   <img mat-card-image src="{{event.image}}">
 

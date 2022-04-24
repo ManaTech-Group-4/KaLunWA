@@ -11,7 +11,7 @@ export class FilterProjectsDialogComponent implements OnInit {
   constructor() { }
 
   allCamps: {[camp_name: string]: string;} = {
-    'General': '#121212',
+    'GNRL': '#121212',
     'Baybayon':'#D9B863',
     'Lasang':'#3F6218',
     'Suba':'#1C8BD4',
@@ -20,7 +20,7 @@ export class FilterProjectsDialogComponent implements OnInit {
 
   allStatus: {[status_name: string]: string;} = {
     'Upcoming': '#f44336',
-    'Past':'#C4C4C4'
+    'past':'#C4C4C4'
   };
 
 
@@ -51,7 +51,7 @@ export class FilterProjectsDialogComponent implements OnInit {
   }
 
 
-  private removeFirst(array: string[], toRemove: string): void {
+  removeFirst(array: string[], toRemove: string): void {
 
     const index = array.indexOf(toRemove);
     if (index !== -1) {

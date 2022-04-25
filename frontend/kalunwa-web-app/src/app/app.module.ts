@@ -42,7 +42,6 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     ProjectListComponent,
     FilterDialogComponent,
     FilterProjectsDialogComponent
-
   ],
   entryComponents:[
     MembersDialogComponent

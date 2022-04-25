@@ -221,6 +221,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             'quote',
             'image',
             'position',
+            'motto', 
             'created_at',
             'updated_at',
         )    

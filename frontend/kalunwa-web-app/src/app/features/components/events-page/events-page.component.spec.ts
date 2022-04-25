@@ -56,6 +56,4 @@ describe('EventsPageComponent', () => {
     expect(result).toEqual(response);
   }));
 
-
-
 });

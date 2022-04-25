@@ -277,8 +277,3 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
-

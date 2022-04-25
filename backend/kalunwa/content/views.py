@@ -109,6 +109,8 @@ class NewsViewSet(viewsets.ModelViewSet):
     filter_backends = [QueryLimitBackend]    
     serializer_class = NewsSerializer
 
+# organization structure
+
 class LabelToValue:
     def get_value_by_label(self, label:str, Enum): 
         if not label in Enum.labels:
@@ -119,8 +121,6 @@ class LabelToValue:
                 value = enum_obj.value
         return value
 
-
-#organization structure
 
 class OrgLeaderViewSet(viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
@@ -139,6 +139,7 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
         else:
             get_position_value = LabelToValue().get_value_by_label(get_position,OrgLeader.Positions)
             return OrgLeader.objects.filter(position=get_position_value)
+
 
 class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
@@ -162,6 +163,7 @@ class CommissionerViewSet(viewsets.ModelViewSet):
         else:
             category_value = LabelToValue().get_value_by_label(get_category,Commissioner.Categories)
             return Commissioner.objects.filter(category=category_value)
+
 
 # prep for about us
 class CampLeaderViewSet( viewsets.ModelViewSet): # limit 1 per query 
@@ -222,7 +224,6 @@ class CampPageViewSet(viewsets.ModelViewSet):
     filter_backends = [CampNameInFilterBackend, QueryLimitBackend]   
     queryset = CampPage.objects.all()
 
-
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
     queryset = Demographics.objects.all()
@@ -278,5 +279,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
 
 
-#------------------------------------------------------- 
-    
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
+

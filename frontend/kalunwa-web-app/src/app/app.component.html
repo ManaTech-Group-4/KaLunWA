@@ -5,8 +5,8 @@
       <li><a mat-button  class="drop-triggers" (click)="whatWeDo = !whatWeDo">What we do</a>
         <div class="dropdowns" *ngIf="whatWeDo">
           <a mat-button (click)="sidenav.close(); onSelect()" >News & Announcements</a>
-          <a mat-button (click)="sidenav.close(); onSelect()" >Projects</a>
-          <a mat-button (click)="sidenav.close(); onSelect()" >Events</a>
+          <a mat-button  routerLink="/projects"(click)="sidenav.close(); onSelect()" >Projects</a>
+          <a mat-button  routerLink="/events" (click)="sidenav.close(); onSelect()" >Events</a>
         </div>
       </li>
       <li><a mat-button (click)="about = !about" >About Us</a>

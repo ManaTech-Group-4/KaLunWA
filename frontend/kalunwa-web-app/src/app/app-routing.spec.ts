@@ -10,6 +10,7 @@ import { OrgStructureComponent } from "./features/components/org-structure/org-s
 import { PageNotFoundComponent } from "./features/components/page-not-found/page-not-found.component";
 import { AppComponent } from "./app.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 describe('Router: App', () => {
 
@@ -19,7 +20,7 @@ describe('Router: App', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[RouterTestingModule.withRoutes(routes), HttpClientTestingModule],
+      imports:[RouterTestingModule.withRoutes(routes), HttpClientTestingModule, MatDialogModule],
       declarations: [
         HomepageComponent,
         AboutPageComponent,

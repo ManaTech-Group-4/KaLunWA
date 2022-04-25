@@ -18,6 +18,8 @@ import { ProjectListComponent } from './features/components/projects/project-lis
 import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,10 @@ import { FilterProjectsDialogComponent } from './features/dialog/filter-projects
     ProjectListComponent,
     FilterDialogComponent,
     FilterProjectsDialogComponent
+    MembersDialogComponent
+  ],
+  entryComponents:[
+    MembersDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +50,9 @@ import { FilterProjectsDialogComponent } from './features/dialog/filter-projects
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule
+    MatDialogModule,
+
+    MatCarouselModule.forRoot()
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

@@ -14,7 +14,7 @@ class AuthoredModel(TimestampedModel):
     # created_by (User)
     # last_updated_by (User)
 
-    class Meta:
+    class Meta(TimestampedModel.Meta):
         abstract=True
 
 
@@ -31,12 +31,13 @@ class Image(AuthoredModel):
     tags = models.ManyToManyField(Tag, related_name='images', blank=True) # blank=true allows 0 tags
 
     def __str__(self) -> str:
-        return self.name
+        return str(self.id) + '. ' + self.name
 
 
 class Jumbotron(AuthoredModel):
     header_title = models.CharField(max_length=50)
     subtitle = models.CharField(max_length=225)
+    is_featured = models.BooleanField(default=False)    
     image = models.OneToOneField(Image,  related_name='jumbotrons', on_delete=models.PROTECT) 
 
     def __str__(self) -> str:
@@ -48,18 +49,15 @@ class ContentBase(AuthoredModel):
     title = models.CharField(max_length=50)
     description = models.TextField()
 
-    class Meta:
+    class Meta(AuthoredModel.Meta):
         abstract=True
+
 
 class News(ContentBase):
     image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
 
     def __str__(self) -> str:
         return self.title
-    
-    def homepage_date(self)->str:
-        date = self.created_at
-        return f'{date.strftime("%B")} {date.day}, {date.year}'
 
 
 class Announcement(ContentBase):
@@ -73,10 +71,12 @@ class Event(ContentBase):
     end_date = models.DateTimeField()
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
+    gallery = models.ManyToManyField(Image, related_name='gallery_events', blank=True)
+    contributors = models.ManyToManyField('content.Contributor', related_name='events', blank=True)
 
     def __str__(self) -> str:
         return self.title
-        
+       
 
 class Project(ContentBase):
     image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)
@@ -84,7 +84,8 @@ class Project(ContentBase):
     end_date = models.DateTimeField(null=True, blank=True)
     camp = models.CharField(choices=CampEnum.choices, max_length=5, default=CampEnum.GENERAL)
     is_featured = models.BooleanField(default=False)
-
+    gallery = models.ManyToManyField(Image, related_name='gallery_projects', blank=True)
+    contributors = models.ManyToManyField('content.Contributor', related_name='projects', blank=True)
     def __str__(self) -> str:
         return self.title
 
@@ -103,6 +104,7 @@ class CampPage(AuthoredModel):
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
         # use case: image.Suba -> expectedly returns a single CampPage, Suba
+    gallery = models.ManyToManyField(Image, related_name='gallery_camps', blank=True)
 
     def __str__(self) -> str:
         return self.get_name_display()
@@ -122,7 +124,7 @@ class LeaderBase(AuthoredModel):
         return f'{self.first_name} {self.last_name}'
 
 
-class OrgLeader(LeaderBase):
+class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
         PRESIDENT = 'PR', 'President'
         VICE_PRESIDENT = 'VP', 'Vice-President'
@@ -199,3 +201,14 @@ class CabinOfficer(LeaderBase):
         # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
 
 
+class Contributor(models.Model):
+    class Categories(models.TextChoices):
+        SPONSOR = 'SR', 'Sponsor'
+        PARTNER = 'PR', 'Partner'
+        OTHER = 'OTHR', 'Other'        
+    name = models.CharField(max_length=100)
+    image = models.OneToOneField(Image, related_name='contributors', on_delete=models.PROTECT)
+    category = models.CharField(choices=Categories.choices, max_length=4, default=Categories.OTHER)
+
+    def __str__(self) -> str:
+        return f'{self.get_category_display()}: {self.name}'

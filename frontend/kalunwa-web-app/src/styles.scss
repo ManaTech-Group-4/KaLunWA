@@ -83,4 +83,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-family: monserrat;
   src: url(./assets/fonts/Montserrat-Regular.ttf) format("truetype");
 }
-
+mat-dialog-container {
+  background-color: #628A3A !important;
+  padding: 15px !important;
+  border-radius: 15px;
+  overflow: hidden !important;
+}

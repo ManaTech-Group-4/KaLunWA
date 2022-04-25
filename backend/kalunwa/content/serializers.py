@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
@@ -207,20 +208,19 @@ class NewsSerializer(FlexFieldsModelSerializer):
 
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
-    name = serializers.CharField(max_length=100, source='get_fullname')
+    position = serializers.CharField(source='get_position')
+    camp = serializers.CharField(source='get_camp')   
 
     class Meta:
         model = CampLeader
         fields = (
             'id',
-            'name',
+            'camp',
             'first_name',
             'last_name',
             'quote',
             'image',
-            'camp',
             'position',
-            'motto',
             'created_at',
             'updated_at',
         )    
@@ -232,6 +232,8 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
                 }
             ),
         }           
+
+
 
 class CampPageSerializer(FlexFieldsModelSerializer):
     name = serializers.CharField(source='get_name_display') # behavior for creating data
@@ -276,16 +278,17 @@ class CampPageSerializer(FlexFieldsModelSerializer):
 
 
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
 
     class Meta:
         model = OrgLeader
         fields = (
             'id',
+            'position',
             'first_name',
             'last_name',
             'quote',
             'image',
-            'position',
             'created_at',
             'updated_at',
         )
@@ -349,17 +352,19 @@ class DemographicsSerializer(serializers.ModelSerializer):
         )
 
 class CommissionerSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
+    category = serializers.CharField(source='get_category_display')
 
     class Meta:
         model = Commissioner
         fields = (
             'id',
+            'category',
             'first_name',
             'last_name',
             'quote',
             'image',
             'position',
-            'category',
             'created_at',
             'updated_at',
         )
@@ -373,22 +378,32 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
         } 
 
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
+    camp = serializers.CharField(source='get_camp_display')
+    category = serializers.CharField(source='get_category_display')
 
     class Meta:
         model = CabinOfficer
         fields = (
             'id',
+            'category',
+            'position',
             'first_name',
             'last_name',
             'quote',
             'image',
             'camp',
-            'position',
-            'category',
             'created_at',
             'updated_at',
         )
-
+        
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
 
 #-------------------------------------------------------------------------------
 # to be removed if approved
@@ -565,3 +580,7 @@ class OrgStructOrgLeaderSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+
+
+
+

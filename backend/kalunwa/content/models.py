@@ -176,7 +176,8 @@ class CampLeader(LeaderBase):
     def __str__(self) -> str:
         return f'Camp {self.get_camp_display()}, {self.get_position_display()}: {self.last_name}'
         # e.g. Camp Suba, Camp Leader: Junel  
-
+    def get_camp(self):
+        return f'{self.get_camp_display()}'
 
 class CabinOfficer(LeaderBase):
     class Positions(models.TextChoices):
@@ -201,7 +202,10 @@ class CabinOfficer(LeaderBase):
     def __str__(self) -> str:
         return f'Camp {self.get_camp_display()} {self.get_category_display()}, {self.get_position_display()}: {self.last_name}'
         # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
-
+    def get_camp(self):
+        return f'{self.get_camp_display()}'
+    def get_category(self):
+        return f'{self.get_category_display()}'     
 
 class Contributor(models.Model):
     class Categories(models.TextChoices):

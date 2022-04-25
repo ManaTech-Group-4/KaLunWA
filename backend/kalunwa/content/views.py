@@ -1,5 +1,9 @@
 
+from lib2to3.pytree import convert
+from pickle import TRUE
 from posixpath import basename
+from turtle import position
+from unicodedata import category
 from django.db.models import Sum, Q
 from .models import CampEnum, Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
@@ -10,7 +14,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-
+from rest_framework.generics import ListAPIView
+from itertools import chain
+from operator import attrgetter
 
 class QueryLimitViewMixin:
 
@@ -55,16 +61,37 @@ class NewsViewSet(QueryLimitViewMixin, viewsets.ModelViewSet):
     serializer_class = NewsSerializer
     filter_backends = [OrderingFilter]    
     odering_fields = ['created_at']
-    
+
+
+class LabelToValue:
+    def get_value_by_label(self, label:str, Enum): 
+        if not label in Enum.labels:
+            return None
+
+        for enum_obj in Enum.__members__.values(): # enum members -> key:name, value:enum_obj { 'PRESIDENT': OrgLeader.Positions.PRESIDENT }
+            if label == enum_obj.label: 
+                value = enum_obj.value
+        return value
+
+
 
 # prep for about us
-class CampLeaderViewSet(viewsets.ModelViewSet): # limit 1 per query 
+class CampLeaderViewSet( viewsets.ModelViewSet): # limit 1 per query 
     serializer_class = CampLeaderSerializer
-    queryset = CampLeader.objects.all()
+    
+
+    def get_queryset(self):
+        get_camp = self.request.query_params.get('camp') 
+        if get_camp== None:
+            return CampLeader.objects.all()
+        else:
+            camp_value = LabelToValue().get_value_by_label(get_camp,CampEnum)
+            return CampLeader.objects.filter(camp=camp_value)
 
 
 class CampPageViewSet(viewsets.ModelViewSet):
     serializer_class = CampPageSerializer
+
 
     def get_queryset(self):
         # if preferred -> pure url search 
@@ -96,31 +123,64 @@ class CampPageViewSet(viewsets.ModelViewSet):
         serializer = AboutUsCampSerializer(camps, many=True, context={'request':request})
         return Response(serializer.data)
 
+'''
+class PositionFilterBackend(filters.BaseFilterBackend):
+    """
+    Filter that only allows users to see their own objects.
+    """
+    def filter_queryset(self, request, queryset, view):
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+        return queryset
 
+
+class OrgLeaderViewSet(viewsets.ModelViewSet):
+    queryset = OrgLeader.objects.all()
+    serializer_class = OrgLeaderSerializer
+    filter_backends = [PositionFilterBackend]
+
+'''
 class OrgLeaderViewSet(viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
 
     def get_queryset(self):
         # or make custom filter
-        if self.action=='list':
-            is_execomm = self.request.query_params.get('is_execomm', False)  
-            if is_execomm:          
-                execomm_leaders = OrgLeader.objects.exclude(              #  is_execomm? -> custom filter
-                Q(position=OrgLeader.Positions.DIRECTOR.value) |
-                Q(position=OrgLeader.Positions.OTHER.value)
-                )
-                return execomm_leaders
+        get_position = self.request.query_params.get('position')  
+        if get_position=="ExeComm":          
+            execomm_leaders = OrgLeader.objects.exclude(              #  is_execomm? -> custom filter
+            Q(position=OrgLeader.Positions.DIRECTOR.value) |
+            Q(position=OrgLeader.Positions.OTHER.value)
+            )
+            return execomm_leaders
+        if get_position == None:
+            return OrgLeader.objects.all()
+        else:
+            get_position_value = LabelToValue().get_value_by_label(get_position,OrgLeader.Positions)
+            return OrgLeader.objects.filter(position=get_position_value)
 
-        return OrgLeader.objects.all()
+class CabinOfficerViewSet(viewsets.ModelViewSet):
+    serializer_class = CabinOfficerSerializer
 
-#------------> added by jisi
-    @action(detail=False, url_path='directors')
-    def directors(self, request):
-        director = OrgLeader.objects.filter(position=OrgLeader.Positions.DIRECTOR.value)
-        
-        serializer = OrgStructOrgLeaderSerializer(director, many=True, context={'request':request})
-        return  Response(serializer.data)
-#------------> added by jisi
+    def get_queryset(self):
+        get_camp = self.request.query_params.get('camp') 
+        if get_camp== None:
+            return CabinOfficer.objects.all()
+        else:
+            camp_value = LabelToValue().get_value_by_label(get_camp,CampEnum)
+            return CabinOfficer.objects.filter(camp=camp_value)
+
+
+class CommissionerViewSet(viewsets.ModelViewSet):
+    serializer_class = CommissionerSerializer
+
+    def get_queryset(self):
+        get_category = self.request.query_params.get('category') 
+        if get_category== None:
+            return Commissioner.objects.all()
+        else:
+            category_value = LabelToValue().get_value_by_label(get_category,Commissioner.Categories)
+            return Commissioner.objects.filter(category=category_value)
+
 
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
@@ -213,13 +273,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #-----------------------------newly added models as of 23/3/2022-------------------------------------------------
 
 
-class CommissionerViewSet(viewsets.ModelViewSet):
-    serializer_class = CommissionerSerializer
-    queryset = Commissioner.objects.all()
 
-class CabinOfficerViewSet(viewsets.ModelViewSet):
-    serializer_class = CabinOfficerSerializer
-    queryset = CabinOfficer.objects.all()
+
 
 
 

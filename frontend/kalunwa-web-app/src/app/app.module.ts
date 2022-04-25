@@ -35,7 +35,7 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
-    IndivProjectComponent
+    IndivProjectComponent,
     EventsPageComponent,
     EventPageListComponent,
     ProjectPageComponent,
@@ -54,7 +54,7 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     HttpClientModule,
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
     MatDialogModule,
     NgImageSliderModule,
 

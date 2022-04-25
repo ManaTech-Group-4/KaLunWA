@@ -20,6 +20,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
+import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
+import { NgImageSliderModule } from 'ng-image-slider';
+import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 
 @NgModule({
   declarations: [
@@ -30,13 +33,17 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     AboutCampComponent,
     routeComponents,
     OrgStructureComponent,
+    MembersDialogComponent,
+    IndiEventComponent,
+    IndivProjectComponent,
     EventsPageComponent,
     EventPageListComponent,
     ProjectPageComponent,
     ProjectListComponent,
     FilterDialogComponent,
     FilterProjectsDialogComponent,
-    MembersDialogComponent
+    MembersDialogComponent,
+    FilterProjectsDialogComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -50,7 +57,8 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    NgImageSliderModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

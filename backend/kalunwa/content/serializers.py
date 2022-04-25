@@ -93,7 +93,7 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
     end_date = serializers.SerializerMethodField()   
     created_at =  serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
-    camp = serializers.CharField(source='get_camp_display')
+    camp = serializers.CharField(source='get_camp')
 
     class Meta:
         fields = (
@@ -236,7 +236,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
 
 
 class CampPageSerializer(FlexFieldsModelSerializer):
-    name = serializers.CharField(source='get_name_display') # behavior for creating data
+    name = serializers.CharField(source='get_name') # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -302,7 +302,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
         } 
 
 class ContributorSerializer(FlexFieldsModelSerializer):
-    category = serializers.CharField(source='get_category_display') 
+    category = serializers.CharField(source='get_category') 
 
     class Meta:
         model = Contributor
@@ -353,7 +353,7 @@ class DemographicsSerializer(serializers.ModelSerializer):
 
 class CommissionerSerializer(FlexFieldsModelSerializer):
     position = serializers.CharField(source='get_position')
-    category = serializers.CharField(source='get_category_display')
+    category = serializers.CharField(source='get_category')
 
     class Meta:
         model = Commissioner
@@ -379,8 +379,8 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
 
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
     position = serializers.CharField(source='get_position')
-    camp = serializers.CharField(source='get_camp_display')
-    category = serializers.CharField(source='get_category_display')
+    camp = serializers.CharField(source='get_camp')
+    category = serializers.CharField(source='get_category')
 
     class Meta:
         model = CabinOfficer

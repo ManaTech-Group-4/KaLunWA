@@ -7,7 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 const MATERIAL = [
   MatToolbarModule,
   MatButtonModule,
@@ -15,7 +20,13 @@ const MATERIAL = [
   MatIconModule,
   MatSidenavModule,
   MatCardModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatPaginatorModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatDialogModule,
+  MatInputModule,
+  MatSelectModule
 ];
 
 @NgModule({

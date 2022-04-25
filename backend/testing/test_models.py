@@ -27,7 +27,7 @@ class ModelTest(TestCase):
         self.assertTrue(isinstance(image_model,Image)) 
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(str(image_model.tags.all()[0]), "test_Tag")
-        self.assertEqual(str(image_model),"image_title")
+        self.assertEqual(str(image_model),f'{image_model.id}. image_title')
 
 
     def test_jumbotron_model(self):

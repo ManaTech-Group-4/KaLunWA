@@ -1,0 +1,26 @@
+<div class ="header">
+    <h1>{{project.title}}</h1>
+    <p>{{project.tagline}}</p>
+</div>
+
+<div class="content">
+    <div class="date">
+        <h5 class="start">{{project.start_date}}</h5>
+    </div>
+    <img src="{{project.cover_image.image}}" alt="{{project.title}}_img">
+    <p>{{project.description}}</p>
+</div>
+<div class="gallery">
+    <p>Project Gallery</p>
+
+    <ng-image-slider [images]="project.gallery" #nav></ng-image-slider>
+</div>
+<div class="partners">
+    <p>Partners & Sponsors</p>
+    <div class="logos" >
+        <span *ngFor="let p of project.contributors">
+            <img src="{{p.image.image}}" alt="{{p.name}}_img">
+            <p>{{p.name}}</p>
+        </span>
+    </div>
+</div>

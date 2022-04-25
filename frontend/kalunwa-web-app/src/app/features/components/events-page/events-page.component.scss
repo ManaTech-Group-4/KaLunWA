@@ -84,3 +84,29 @@ div{
     }
   }
 }
+
+//------------------MEDIA QUERY-----------------------------------
+
+@media screen and (max-width: 1040px){
+  .container{
+    .block{
+      .announcements{
+        width: 94vw;
+        padding: 10px 3vw;
+        height: auto;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 786px){
+  .container{
+    .block{
+      .announcements{
+        width: 94vw;
+        padding: 10px 3vw;
+        height: auto;
+      }
+    }
+  }
+}

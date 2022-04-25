@@ -42,7 +42,8 @@ div{
     width: 100%;
     margin-bottom: 20px;
     .announcements{
-      height: 50px;
+      padding: 0px 30px;
+      height: 70px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -74,12 +75,37 @@ div{
       }
       p{
         margin:0;
-        padding-left: 20px;
+        padding: 0px 30px;
         border-left: 2px solid white;
         color: white;
         width:auto;
         text-align: center;
         width:100%;
+      }
+    }
+  }
+}
+//------------------MEDIA QUERY-----------------------------------
+
+@media screen and (max-width: 1040px){
+  .container{
+    .block{
+      .announcements{
+        width: 94vw;
+        padding: 10px 3vw;
+        height: auto;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 786px){
+  .container{
+    .block{
+      .announcements{
+        width: 94vw;
+        padding: 10px 3vw;
+        height: auto;
       }
     }
   }

@@ -18,10 +18,12 @@
 
   }
   .mat-card-content{
+    position:relative;
     padding-left:20px;
+    height:100%;
     width: 100%;
-    p{
-      height: 50px;
+    p.desc{
+      height: 100px;
     }
     .project-header{
       display: flex;
@@ -48,6 +50,52 @@
       .mat-card-title{
         font-family: monserrat;
         font-weight:700;
+      }
+    }
+    .course-actions{
+      position: absolute;
+      bottom:9px;
+      left:20px;
+    }
+  }
+}
+//------------------MEDIA QUERY-----------------------------------
+
+
+@media screen and (max-width: 786px){
+
+  .project-card{
+    width: 90vw;
+    height: 40vw;
+    img{
+      width: 40vw;
+      height:40vw;
+    }
+    .mat-card-content{
+      height:40vw;
+      p.desc{
+        height: 40%;
+      }
+    }
+  }
+}
+@media screen and (max-width: 599px){
+  .project-card{
+    .mat-card-content{
+      height:40vw;
+      p.desc{
+        height: 20%;
+      }
+      .project-header{
+        .mat-card-title{
+          font-size:22px;
+        }
+      }
+
+      .course-actions{
+        button{
+          font-size: 12px;
+        }
       }
     }
   }

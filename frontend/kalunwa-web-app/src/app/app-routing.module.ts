@@ -28,7 +28,6 @@ export const routeComponents = [HomepageComponent,
                                 AboutPageComponent,
                                 OrgStructureComponent,
                                 IndiEventComponent,
-                                PageNotFoundComponent];
                                 PageNotFoundComponent,
                                 EventsPageComponent,
                                 ProjectPageComponent];

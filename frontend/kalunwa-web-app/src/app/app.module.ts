@@ -50,9 +50,7 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
-    MatDialogModule,
-
-    MatCarouselModule.forRoot()
+    MatDialogModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

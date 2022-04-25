@@ -50,43 +50,43 @@ describe('AboutpageService', () => {
 
   it('should retrieve all camp info and leaders', () => {
     const testCampLeaders: AboutCampModel[] = [{
-          "camp_name": "Suba",
+          "name": "Suba",
           "description": "default description",
-          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
+          "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
           "camp_leader": {
               "name": "firstname 1 lastname 1",
               "motto": "",
-              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
+              "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
           }
       },
       {
-          "camp_name": "Baybayon",
-          "description": "default description",
-          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
-          "camp_leader": {
-              "name": "firstname 0 lastname 0",
-              "motto": "",
-              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
+        "name": "Baybayon",
+        "description": "default description",
+        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+        "camp_leader": {
+            "name": "firstname 1 lastname 1",
+            "motto": "",
+            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
           }
       },
       {
-          "camp_name": "Zero Waste",
-          "description": "default description",
-          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
-          "camp_leader": {
-              "name": "firstname 3 lastname 3",
-              "motto": "",
-              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
+        "name": "Zero Waste",
+        "description": "default description",
+        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+        "camp_leader": {
+            "name": "firstname 1 lastname 1",
+            "motto": "",
+            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
           }
       },
       {
-          "camp_name": "Lasang",
-          "description": "default description",
-          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
-          "camp_leader": {
-              "name": "firstname 2 lastname 2",
-              "motto": "",
-              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
+        "name": "Lasang",
+        "description": "default description",
+        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+        "camp_leader": {
+            "name": "firstname 1 lastname 1",
+            "motto": "",
+            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
           }
       }];
 

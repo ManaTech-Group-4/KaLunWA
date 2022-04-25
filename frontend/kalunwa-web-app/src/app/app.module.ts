@@ -11,9 +11,15 @@ import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
+import { EventsPageComponent } from './features/components/events-page/events-page.component';
+import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
+import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
+import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
+import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
-
 
 @NgModule({
   declarations: [
@@ -24,6 +30,12 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     AboutCampComponent,
     routeComponents,
     OrgStructureComponent,
+    EventsPageComponent,
+    EventPageListComponent,
+    ProjectPageComponent,
+    ProjectListComponent,
+    FilterDialogComponent,
+    FilterProjectsDialogComponent
     MembersDialogComponent
   ],
   entryComponents:[
@@ -35,6 +47,9 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
+    MatCarouselModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule
     MatDialogModule,
 
     MatCarouselModule.forRoot()

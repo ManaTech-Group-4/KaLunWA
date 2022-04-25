@@ -51,4 +51,32 @@ describe('OrgStructureComponent', () => {
       expect(component.showBoT).toBeTruthy();
     });
   }));
+
+  it('changes the value of BoT(if true) to false after clicking to Baybayon', () =>{
+    component.showBoT = true;
+    component.clickBaybayon();
+
+    expect(component.showBoT).toBeFalse();
+  });
+
+  it('changes the value of BoT(if true) to false after clicking to Suba', () =>{
+    component.showBoT = true;
+    component.clickSuba();
+
+    expect(component.showBoT).toBeFalse();
+  });
+
+  it('changes the value of BoT(if true) to false after clicking to Lasang', () =>{
+    component.showBoT = true;
+    component.clickLasang();
+
+    expect(component.showBoT).toBeFalse();
+  });
+
+  it('changes the value of BoT(if true) to false after clicking to Zero Waste', () =>{
+    component.showBoT = true;
+    component.clickZW();
+
+    expect(component.showBoT).toBeFalse();
+  });
 });

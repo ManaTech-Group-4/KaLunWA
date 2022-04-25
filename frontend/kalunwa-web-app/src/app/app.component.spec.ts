@@ -55,4 +55,16 @@ describe('AppComponent', () => {
       tick();
       expect(component.whatWeDo).toBeTruthy();
   }));
+
+
+  it('should set sidenav after view init to service sidenav', () => {
+    component.ngAfterViewInit();
+    expect(component.sidenav).toEqual(service.sidenav);
+  });
+
+
+  it('should close all opened dropdowns in the nav after exiting or rerouting', () => {
+    component.onSelect();
+    expect(component.whatWeDo).toBe(false);
+  });
 });

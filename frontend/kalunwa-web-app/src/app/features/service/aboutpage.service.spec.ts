@@ -38,7 +38,7 @@ describe('AboutpageService', () => {
       expect(testMembers).toBe(member,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/about-us/demographics');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/demographics/total-members/');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');
@@ -94,7 +94,7 @@ describe('AboutpageService', () => {
       expect(testCampLeaders).toBe(camps,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/about-us/camps');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/camps/?expand=image&omit=created_at,updated_at&name__in=Suba,Zero%20Waste,Baybayon,Lasang');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');

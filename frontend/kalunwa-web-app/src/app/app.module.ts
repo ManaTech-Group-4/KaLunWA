@@ -22,6 +22,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NgImageSliderModule } from 'ng-image-slider';
     routeComponents,
     OrgStructureComponent,
     MembersDialogComponent,
-    IndiEventComponent
+    IndiEventComponent,
+    IndivProjectComponent
     EventsPageComponent,
     EventPageListComponent,
     ProjectPageComponent,

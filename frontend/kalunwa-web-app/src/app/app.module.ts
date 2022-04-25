@@ -35,7 +35,7 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     ProjectPageComponent,
     ProjectListComponent,
     FilterDialogComponent,
-    FilterProjectsDialogComponent
+    FilterProjectsDialogComponent,
     MembersDialogComponent
   ],
   entryComponents:[
@@ -49,7 +49,7 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
     HttpClientModule,
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
     MatDialogModule,
 
     MatCarouselModule.forRoot()

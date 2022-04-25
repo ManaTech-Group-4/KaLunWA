@@ -1,11 +1,7 @@
-from email.quoprimime import quote
 import json
-from unicodedata import category
 from django.urls import reverse
-from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
-from rest_framework.views import APIView
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
     ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS,

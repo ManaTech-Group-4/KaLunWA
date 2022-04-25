@@ -1,3 +1,4 @@
+from email.quoprimime import quote
 import json
 from unicodedata import category
 from django.urls import reverse
@@ -461,8 +462,7 @@ class AboutUsCampsTestCase(APITestCase):
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
-            background = 'sunset',
-            advocacy='spread wings',
+            quote='spread wings',
             image = Image.objects.create(name = 'name', image = self.test_image),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
@@ -519,8 +519,7 @@ class AboutUsLeadersTestCase(APITestCase):
             OrgLeader.objects.create(
                 first_name = 'Extra',
                 last_name = 'Leader',
-                background = 'background',
-                advocacy = 'advocacy',
+                quote = 'advocacy',
                 position = OrgLeader.Positions.values[_],
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )        
@@ -541,8 +540,7 @@ class AboutUsLeadersTestCase(APITestCase):
         expected_leader = OrgLeader.objects.create(
             first_name = 'Extra',
             last_name = 'Leader',
-            background = 'background',
-            advocacy = 'advocacy',
+            quote = 'background',
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             

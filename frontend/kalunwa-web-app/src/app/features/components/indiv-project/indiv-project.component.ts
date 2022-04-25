@@ -25,43 +25,53 @@ export class IndivProjectComponent implements OnInit {
     gallery:[
       {
         id: 1,
-        image: "assets/images/event.jpg"
+        image: "assets/images/event.jpg",
+        thumbImage: "assets/images/event.jpg"
       },
       {
         id: 2,
-        image: "assets/images/carousel/carousel1.jpg"
+        image: "assets/images/carousel/carousel1.jpg",
+        thumbImage: "assets/images/carousel/carousel1.jpg"
       },
       {
         id: 3,
-        image: "assets/images/carousel/carousel2.jpg"
+        image: "assets/images/carousel/carousel2.jpg",
+        thumbImage: "assets/images/carousel/carousel2.jpg"
       },
       {
         id: 4,
-        image: "assets/images/carousel/carousel3.jpg"
+        image: "assets/images/carousel/carousel3.jpg",
+        thumbImage: "assets/images/carousel/carousel3.jpg"
       },
       {
         id: 5,
-        image: "assets/images/carousel/carousel4.jpg"
+        image: "assets/images/carousel/carousel4.jpg",
+        thumbImage: "assets/images/carousel/carousel4.jpg"
       },
       {
         id: 6,
-        image: "assets/images/partners/partner1.jpeg"
+        image: "assets/images/partners/partner1.jpeg",
+        thumbImage: "assets/images/partners/partner1.jpeg"
       },
       {
         id: 7,
-        image: "assets/images/carousel/carousel1.jpg"
+        image: "assets/images/carousel/carousel1.jpg",
+        thumbImage: "assets/images/carousel/carousel1.jpg"
       },
       {
         id: 8,
-        image: "assets/images/carousel/carousel2.jpg"
+        image: "assets/images/carousel/carousel2.jpg",
+        thumbImage: "assets/images/carousel/carousel2.jpg"
       },
       {
         id: 9,
-        image: "assets/images/carousel/carousel3.jpg"
+        image: "assets/images/carousel/carousel3.jpg",
+        thumbImage: "assets/images/carousel/carousel3.jpg"
       },
       {
         id: 10,
-        image: "assets/images/carousel/carousel4.jpg"
+        image: "assets/images/carousel/carousel4.jpg",
+        thumbImage: "assets/images/carousel/carousel4.jpg"
       },
     ],
     contributors:[

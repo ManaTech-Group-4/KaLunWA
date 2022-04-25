@@ -436,7 +436,7 @@ class AboutUsCampsTestCase(APITestCase):
         mock: 5 camps (expected + general)     
         """
 
-        for _ in range(5):
+        for _ in range(4):
             # camp pages    
             CampPage.objects.create(
                 name=CampEnum.values[_],
@@ -492,7 +492,7 @@ class AboutUsCampsTestCase(APITestCase):
                 }
 
             }            
-        }          
+        }   
         self.assertDictEqual(camp, expected_camp_data)
 
 

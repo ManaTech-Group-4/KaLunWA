@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
@@ -210,12 +209,14 @@ class NewsSerializer(FlexFieldsModelSerializer):
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
     position = serializers.CharField(source='get_position')
     camp = serializers.CharField(source='get_camp')   
+    name = serializers.CharField(source='get_fullname')
 
     class Meta:
         model = CampLeader
         fields = (
             'id',
             'camp',
+            'name',
             'first_name',
             'last_name',
             'quote',

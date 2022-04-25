@@ -11,6 +11,9 @@ import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +23,11 @@ import { OrgStructureComponent } from './features/components/org-structure/org-s
     FooterComponent,
     AboutCampComponent,
     routeComponents,
-    OrgStructureComponent
+    OrgStructureComponent,
+    MembersDialogComponent
+  ],
+  entryComponents:[
+    MembersDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -28,6 +35,8 @@ import { OrgStructureComponent } from './features/components/org-structure/org-s
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
+    MatDialogModule,
+
     MatCarouselModule.forRoot()
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

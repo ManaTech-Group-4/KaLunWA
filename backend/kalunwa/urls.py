@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-
 # to be used for url patterns
 from django.conf.urls.static import static
 
@@ -24,9 +23,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('api/', include([
-        path('', include('kalunwa.content.urls'))
-    ]) )
+    path('api/', include(
+            [
+                path('', include('kalunwa.content.urls')),
+                path('', include('kalunwa.users.urls')),                
+            ]
+        )
+    )
 ]
 
 if settings.DEBUG:

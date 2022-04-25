@@ -148,3 +148,6 @@ CORS_ORIGIN_WHITELIST = (
 'http://localhost:4200', # angular
 'http://localhost:8000',
 )
+
+# authentication
+AUTH_USER_MODEL = 'users.User'

@@ -145,12 +145,18 @@ class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
 
     def get_queryset(self):
-        get_camp = self.request.query_params.get('camp') 
-        if get_camp== None:
-            return CabinOfficer.objects.all()
-        else:
-            camp_value = LabelToValue().get_value_by_label(get_camp,CampEnum)
+        get_camp = self.request.query_params.get('camp')
+        get_category = self.request.query_params.get('category') 
+        camp_value = LabelToValue().get_value_by_label(get_camp,CampEnum)
+        category_value = LabelToValue().get_value_by_label(get_category,CabinOfficer.Categories)
+        if get_camp is not None and get_category == None:
             return CabinOfficer.objects.filter(camp=camp_value)
+        if get_camp == None and get_category is not None:
+            return CabinOfficer.objects.filter(category=category_value)   
+        if get_camp is not None and get_category is not None:
+            return CabinOfficer.objects.filter(camp=camp_value, category=category_value)
+        else:
+            return CabinOfficer.objects.all()
 
 
 class CommissionerViewSet(viewsets.ModelViewSet):

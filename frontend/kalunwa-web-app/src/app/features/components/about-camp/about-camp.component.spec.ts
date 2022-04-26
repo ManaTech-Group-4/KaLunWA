@@ -62,12 +62,4 @@ describe('AboutCampComponent', () => {
       expect(injectService).toBe(testBedService);
   }));
 
-  it('switch to the display camp',() => {
-    component.ngOnInit();
-    const mockRetrieve$ = of(mockCamps);
-    component.onSelect(1);
-    mockRetrieve$.subscribe((camps)=>{
-        expect(camps[1]?.name).toEqual(component.displayCamp.name);
-      });
-  });
 });

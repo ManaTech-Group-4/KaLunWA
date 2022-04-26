@@ -15,16 +15,16 @@ export class FilterDialogComponent implements OnInit {
   constructor() { }
 
   allCamps: {[camp_name: string]: string;} = {
-    'GNRL': '#121212',
+    'General': '#121212',
     'Baybayon':'#D9B863',
     'Lasang':'#3F6218',
     'Suba':'#1C8BD4',
-    'Zero Waste':'#9CCC65',
+    'Zero-Waste':'#9CCC65',
   };
 
   allStatus: {[status_name: string]: string;} = {
     'Upcoming': '#f44336',
-    'past':'#C4C4C4'
+    'Past':'#C4C4C4'
   };
 
 

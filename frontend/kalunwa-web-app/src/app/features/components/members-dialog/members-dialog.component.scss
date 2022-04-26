@@ -1,3 +1,12 @@
+
+
+// .container {
+//   background-color: #628A3A !important;
+//   padding: 15px !important;
+//   border-radius: 15px;
+//   overflow: hidden !important;
+// }
+
 mat-icon{
   float: right;
   top:-15px;
@@ -27,13 +36,13 @@ mat-dialog-content{
 }
 
 .member{
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-items: center;
     margin: 25px 0px;
-    
+
     a{
       width: 13vw;
       background-color: #3b5c1e;
@@ -56,7 +65,7 @@ mat-dialog-content{
           padding: 8px;
           letter-spacing: 1px;
           font-weight: 500;
-          
+
           p{
             font-family: monserrat;
             font-size: 12px;
@@ -91,7 +100,7 @@ mat-dialog-content{
   mat-dialog-content {
     max-height: 60vh !important;
     padding-left: 25%;
-  
+
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -105,7 +114,7 @@ mat-dialog-content{
 
   .member{
     margin: 13px 0px;
-    
+
     a{
       width: 15vw;
       margin: 0 27px 0 17px;
@@ -126,6 +135,7 @@ mat-dialog-content{
     }
   }
 
+
   @media screen and (max-width: 649px){
 
     mat-icon{
@@ -136,7 +146,7 @@ mat-dialog-content{
     mat-dialog-content{
       width:40vw;
       padding: 0 7px 0 13px;
-  
+
       &::-webkit-scrollbar {
         visibility: hidden;
       }
@@ -172,9 +182,9 @@ mat-dialog-content{
           }
       }
     }
-  
+
     @media screen and (max-width: 475px){
-  
+
       mat-dialog-content{
         padding: 0 5px 0 10px;
         width: 37vw;
@@ -185,9 +195,9 @@ mat-dialog-content{
           margin: 5px 5px 5px 7px;
         }
       }
-  
+
     }
-  
+
   }
 }
 

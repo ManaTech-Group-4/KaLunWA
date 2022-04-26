@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers

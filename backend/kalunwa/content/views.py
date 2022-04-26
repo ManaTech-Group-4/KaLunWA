@@ -214,6 +214,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 class AnnouncementViewSet(viewsets.ModelViewSet):
     serializer_class = AnnouncementSerializer
     queryset = Announcement.objects.all()
+    filter_backends = [QueryLimitBackend]
 
 
 #-------------------------------------------------------

@@ -41,11 +41,17 @@ hr{
 	margin: 0px;
 	box-sizing: border-box;
 }
+
+.null{
+    cursor: default !important;
+}
+
 .tree-container {
 	display: grid;
 	align-items: center;
 
     .tree {
+        font-family: monserrat;
         width: 100%;
         height: auto;
         text-align: center;
@@ -121,12 +127,15 @@ hr{
                 }
             }
             a {
-                border: 1px solid #ccc;
+                border: 1px solid #91ad75;
                 padding: 10px;
                 display: inline-grid;
                 border-radius: 5px;
                 text-decoration-line: none;
                 transition: .5s;
+                cursor: pointer;
+
+
                 img {
                     width: 50px;
                     height: 50px;
@@ -135,14 +144,14 @@ hr{
                     margin: auto;
                 }
                 span {
-                    border: 1px solid #ccc;
+                    border: 1px solid #91ad75;
                     border-radius: 5px;
-                    color: #666;
+                    color: #628A3A;
                     padding: 8px;
                     font-size: 12px;
                     text-transform: uppercase;
                     letter-spacing: 1px;
-                    font-weight: 500;
+                    font-weight: 600;
                 }
                 &:hover {
                     background: #628A3A;
@@ -189,7 +198,7 @@ hr{
 
 //--------------------------MEDIA QUERY-----------------------------------
 
-@media screen and (max-width: 786px){
+@media screen and (max-width: 936px){
 
     div{
         .header{

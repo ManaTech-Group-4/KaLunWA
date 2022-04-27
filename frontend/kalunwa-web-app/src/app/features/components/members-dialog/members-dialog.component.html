@@ -1,0 +1,17 @@
+<mat-icon (click)="close()">close</mat-icon>
+<br>
+<mat-dialog-content>
+  <div class="member" *ngFor="let member of members | slice: 0:getLimit()">
+
+    <a>
+      <img src="{{member.member_img}}"/>
+      <span>
+        <p>{{member.quote}}</p>
+        <hr>
+        <p>{{member.name}}</p>
+        <h2>{{member.position}}</h2>
+      </span>
+    </a>
+
+  </div>
+</mat-dialog-content>

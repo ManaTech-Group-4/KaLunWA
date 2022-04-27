@@ -1,0 +1,36 @@
+<h1 class='no-events' *ngIf='events.length < 1'>No event matched</h1>
+<mat-card class="event-card" *ngFor="let event of events">
+
+  <img mat-card-image src="{{event.image}}">
+
+  <mat-card-content>
+    <div class="event-header">
+      <mat-chip-list class ="tags" aria-label="Fish selection">
+        <div *ngFor="let tag of event.tags">
+          <mat-chip *ngIf ="tag == 'General'" [style.background-color]="'#121212'" selected>General</mat-chip>
+          <mat-chip *ngIf ="tag == 'Baybayon'" [style.background-color]="'#D9B863'" selected>Baybayon</mat-chip>
+          <mat-chip *ngIf ="tag == 'Lasang'" [style.background-color]="'#3F6218'" selected>Lasang</mat-chip>
+          <mat-chip *ngIf ="tag == 'Suba'" [style.background-color]="'#1C8BD4'" selected>Suba</mat-chip>
+          <mat-chip *ngIf ="tag == 'Zero-waste'" [style.background-color]="'#9CCC65'" selected>Zero Waste</mat-chip>
+          <mat-chip *ngIf ="tag == 'Upcoming'"[style.background-color]="'#f44336'" selected>Upcoming</mat-chip>
+          <mat-chip *ngIf ="tag == 'Past'"[style.background-color]="'#C4C4C4'" selected>Past</mat-chip>
+        </div>
+      </mat-chip-list>
+      <mat-card-title>{{event.title}}</mat-card-title>
+      <p>{{event.start_date}}</p>
+    </div>
+
+
+        <p class="desc">{{event.description}}</p>
+
+
+    <mat-card-actions class="course-actions">
+
+        <button mat-raised-button color="primary" onclick="window.location.href='/indiv-event';">
+            Read More
+        </button>
+    </mat-card-actions>
+  </mat-card-content>
+
+</mat-card>
+

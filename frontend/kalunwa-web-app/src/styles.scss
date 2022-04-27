@@ -41,6 +41,9 @@ $md-kalunwapallete: (
         A700 : #ffffff,
     )
 );
+
+
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -56,8 +59,7 @@ $kalunwa-web-app-theme: mat-light-theme((
   color: (
     primary: $kalunwa-web-app-primary,
     accent: $kalunwa-web-app-accent,
-    warn: $kalunwa-web-app-warn,
-  )
+    warn: $kalunwa-web-app-warn)
 ));
 
 // Include theme styles for core and each component used in your app.
@@ -81,4 +83,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-family: monserrat;
   src: url(./assets/fonts/Montserrat-Regular.ttf) format("truetype");
 }
-

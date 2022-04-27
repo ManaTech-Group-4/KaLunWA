@@ -24,7 +24,7 @@
   <h1>Projects</h1>
   <mat-card class="events-card"  *ngFor="let project of projects">
     <div>
-      <img mat-card-xl-image src="{{project.image}}" >
+      <img mat-card-xl-image src="{{project.image.image}}" >
     </div>
     <mat-card-content>
       <h1>{{project.title}}</h1>
@@ -34,7 +34,7 @@
       <mat-icon>arrow_forward_ios</mat-icon>
     </mat-card-actions>
   </mat-card>
-  <div class="see-more">
+  <div class="see-more"  routerLink="/projects">
     <p>See more</p>
     <mat-icon>keyboard_arrow_down</mat-icon>
   </div>
@@ -45,7 +45,7 @@
   <h1>Events</h1>
   <mat-card class="events-card"  *ngFor="let event of events">
     <div>
-      <img mat-card-xl-image src="{{event.image}}" >
+      <img mat-card-xl-image src="{{event.image.image}}" >
     </div>
     <mat-card-content>
       <h1>{{event.title}}</h1>
@@ -55,7 +55,7 @@
       <mat-icon>arrow_forward_ios</mat-icon>
     </mat-card-actions>
   </mat-card>
-  <div class="see-more">
+  <div class="see-more" routerLink="/events">
     <p>See more</p>
     <mat-icon>keyboard_arrow_down</mat-icon>
   </div>
@@ -64,7 +64,7 @@
 
 <div class="news">
   <h1>News</h1>
-  <mat-card class="events-card"  *ngFor="let soloNews of news" style="background-image: url('{{soloNews.image}}');background-size: cover;background-position: center;" >
+  <mat-card class="events-card"  *ngFor="let soloNews of news" style="background-image: url('{{soloNews.image.image}}');background-size: cover;background-position: center;" >
     <div>
       <mat-card-content>
         <h1>{{soloNews.title}}</h1>

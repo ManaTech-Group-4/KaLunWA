@@ -1,220 +1,50 @@
+from datetime import datetime
+from io import BytesIO
+import PIL.Image
+from django.core.files.images import ImageFile
+from kalunwa.content.models import CampEnum
 
-from django.test import TestCase
-from django.utils import timezone
-from .utils import  get_test_image_file
-from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Project, Event
-from kalunwa.content.serializers import CampPageSerializer, EventSerializer, ProjectSerializer
-from kalunwa.content.serializers import StatusEnum
+def get_test_image_file(filename="test.jpg", colour=0, size=(1, 1))->ImageFile:
+    f = BytesIO()
+    image = PIL.Image.new('1', size, colour)
+    image.save(f, "png")
+    return ImageFile(f, name=filename)
 
-
-class CampSerializertestCase(TestCase):
+def get_expected_image_url(file_name, request):
     """
-    - test to serialize camp details when a camp leader exists
-    - test to serialize camp details when a camp leader does not exists.
-        returns none, or a non-truthy value (false)
-    # test if camp has doubles? will be restricted for posting so it would be hard to replicate
+    build complete url 
+    request.scheme -> http
+    request.get_host() -> testserver        
+    self.image.image.name [file name]->  images/content/test_U5U97df.jpg
     """
-    @classmethod
-    def setUpTestData(cls) -> None: 
-        # create camp -> Suba
-        # create leader -> Suba, Cl
-        test_image = get_test_image_file()
+    return f'{request.scheme}://{request.get_host()}/media/{file_name}'
 
-        CampPage.objects.create(
-            name=CampEnum.SUBA.value,
-            description = 'default description',
-            image = Image.objects.create(
-                name='suba',
-                image=test_image
-            )
-        )
-        
-        CampPage.objects.create(
-            name=CampEnum.BAYBAYON.value,
-            description = 'default description',
-            image = Image.objects.create(
-                name='camp',
-                image=test_image
-            )
-        )        
+def to_formal_mdy(date:datetime)->str:
+    return f'{date.strftime("%B")} {date.day}, {date.year}'    
 
-        CampLeader.objects.create(
-            first_name = 'Suba',
-            last_name = 'Asub',
-            background = 'background',
-            advocacy = 'advocacy',
-            position = CampLeader.Positions.LEADER,
-            camp=CampEnum.SUBA,
-            image= Image.objects.create(
-                name='suba_lead',
-                image=test_image
-            )
-        )
+def get_camp_value_via_label(label):
+    if label == CampEnum.BAYBAYON.label:
+        return CampEnum.BAYBAYON.value
+    if label == CampEnum.SUBA.label:
+        return CampEnum.SUBA.value
+    if label == CampEnum.LASANG.label:
+        return CampEnum.LASANG.value
+    if label == CampEnum.ZEROWASTE.label:
+        return CampEnum.ZEROWASTE.value
+    if label == CampEnum.GENERAL.label:
+        return CampEnum.GENERAL.value
 
-        CampLeader.objects.create(
-            first_name = 'Baybayon',
-            last_name = 'Noyabyab',
-            background = 'background',
-            advocacy = 'advocacy',
-            position = CampLeader.Positions.ASSISTANT_LEADER,
-            camp=CampEnum.BAYBAYON,
-            image= Image.objects.create(
-                name='baybayon_AL',
-                image=test_image
-            )
-        )        
-        # create camp that has no Camp leader -> Baybayon
-        # create leader -> Suba, Al
-    def test_serialize_with_camp_leader(self):
-        """
-        test to serialize camp details when a camp leader exists
-        """
-        camp_with_leader = CampPage.objects.get(name=CampEnum.SUBA)
-        serializer = CampPageSerializer(camp_with_leader)
-        
-        self.assertTrue(serializer.data['camp_leader']) # exists
+    return None
 
-    def test_serialize_without_camp_leader(self):
-        """
-        test to serialize camp details when a camp leader does not exists.
-        returns none, or a non-truthy value (false)
-        """
-        camp_without_leader = CampPage.objects.get(name=CampEnum.BAYBAYON)
-        serializer = CampPageSerializer(camp_without_leader)
-        self.assertFalse(serializer.data['camp_leader']) # does not exist (null)
+HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5'
+HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
+HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
+HOMEPAGE_NEWS_URL = '/api/news/?expand=image&omit=created_at,updated_at,image.id&query_limit=3'
 
-
-class StatusSerializerTestCase(TestCase):
-    """
-    test dates are prepared to simulate a timezone.now() request, and
-    get the expected status
-    """
-    @classmethod
-    def setUpTestData(cls) -> None: 
-        date_tomorrow = timezone.now() + timezone.timedelta(days=1)
-        date_yesterday = timezone.now() - timezone.timedelta(days=1)
-
-        image_file = get_test_image_file()
- 
-        for _ in range(4): 
-            Image.objects.create(
-                pk=_,
-                name=f'image_{_}',
-                image=image_file,
-            )
-
-        image = Image.objects.create(
-                name='image_1',
-                image=get_test_image_file(),            
-
-        )
-        # events
-            #  upcoming
-        cls.event_upcoming = Event.objects.create(
-            title= 'upcoming event', 
-            description= 'description 1',
-            start_date=date_tomorrow,
-            end_date=date_tomorrow,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=1),
-            is_featured=True,
-            is_published=True,
-        ) 
-            #  ongoing            
-        cls.event_ongoing = Event.objects.create(
-            title= 'ongoing event', 
-            description= 'description 1',
-            start_date=timezone.now(),
-            end_date=date_tomorrow,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=2),
-            is_featured=True,
-            is_published=True,
-        ) 
-
-            #  past            
-        cls.event_past = Event.objects.create(
-            title= 'past event', 
-            description= 'description 1',
-            start_date=date_yesterday,
-            end_date=date_yesterday,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=3),
-            is_featured=True,
-            is_published=True,
-        ) 
-
-        #projects 
-            # upcoming
-        cls.project_upcoming = Project.objects.create(
-            title= 'upcoming project', 
-            description= 'description 1',
-            start_date=date_tomorrow,
-            end_date=date_tomorrow,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=1),
-            is_featured=True,
-            is_published=True,
-        ) 
-            #  ongoing            
-        cls.project_ongoing = Project.objects.create(
-            title= 'ongoing project', 
-            description= 'description 1',
-            start_date=timezone.now(),
-            end_date=date_tomorrow,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=2),
-            is_featured=True,
-            is_published=True,
-        ) 
-            #no_end date, ongoing
-        cls.project_ongoing_no_end_date = Project.objects.create(
-            title= 'ongoing project no end date', 
-            description= 'description 1',
-            start_date=timezone.now(),
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=3),
-            is_featured=True,
-            is_published=True,
-        ) 
-
-            #  past            
-        cls.project_past = Project.objects.create(
-            title= 'past project', 
-            description= 'description 1',
-            start_date=date_yesterday,
-            end_date=date_yesterday,
-            camp=CampEnum.GENERAL,
-            image = Image.objects.get(pk=4),
-            is_featured=True,
-            is_published=True,
-        ) 
-
-    def test_past_status_event(self):
-        serializer = EventSerializer(self.event_past)
-        self.assertEqual(serializer.data['status'], StatusEnum.PAST.value)
-
-    def test_ongoing_status_event(self):
-        serializer = EventSerializer(self.event_ongoing)
-        self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
-
-    def test_upcoming_status_event(self):
-        serializer = EventSerializer(self.event_upcoming)
-        self.assertEqual(serializer.data['status'], StatusEnum.UPCOMING.value)
-
-    def test_past_status_project(self):
-        serializer = ProjectSerializer(self.project_past)
-        self.assertEqual(serializer.data['status'], StatusEnum.PAST.value)
-
-    def test_ongoing_status_project(self):
-        serializer = ProjectSerializer(self.project_ongoing)
-        self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
-
-    def test_ongoing_no_date_status_project(self):
-        serializer = ProjectSerializer(self.project_ongoing_no_end_date)
-        self.assertEqual(serializer.data['status'], StatusEnum.ONGOING.value)
-
-    def test_upcoming_status_project(self):
-        serializer = ProjectSerializer(self.project_upcoming)
-        self.assertEqual(serializer.data['status'], StatusEnum.UPCOMING.value)
-
+ABOUT_US_CAMP_URL = '/api/camps/?expand=image&omit=created_at,updated_at&name__in=Suba,Zero%20Waste,Baybayon,Lasang'
+ABOUT_US_TOTAL_MEMBERS = '/api/demographics/total-members/'
+ABOUT_US_LEADERS = '/api/orgleaders/?expand=image&fields=id,image&position=ExeComm'
+EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_limit_gallery=10' # expected fields for detail
+EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'
+PROJECT_DETAIL_GALLERY_LIMIT = '/api/projects/?expand=gallery,contributors&query_limit_gallery=10'
+PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'

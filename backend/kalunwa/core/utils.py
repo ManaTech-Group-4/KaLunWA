@@ -6,7 +6,7 @@ def to_formal_mdy(date:datetime)->str:
             return None
         return f'{date.strftime("%B")} {date.day}, {date.year}' 
 
-def get_value_by_label(self, label:str, Enum): 
+def get_value_by_label(label:str, Enum): 
 	if not label in Enum.labels:
 		return None
 

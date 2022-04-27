@@ -41,8 +41,6 @@ class CampSerializertestCase(TestCase):
         CampLeader.objects.create(
             first_name = 'Suba',
             last_name = 'Asub',
-            background = 'background',
-            advocacy = 'advocacy',
             position = CampLeader.Positions.LEADER,
             camp=CampEnum.SUBA,
             image= Image.objects.create(
@@ -54,8 +52,6 @@ class CampSerializertestCase(TestCase):
         CampLeader.objects.create(
             first_name = 'Baybayon',
             last_name = 'Noyabyab',
-            background = 'background',
-            advocacy = 'advocacy',
             position = CampLeader.Positions.ASSISTANT_LEADER,
             camp=CampEnum.BAYBAYON,
             image= Image.objects.create(

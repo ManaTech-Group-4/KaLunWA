@@ -340,7 +340,7 @@ class HomepageNewsTestCase(APITestCase):
 
         pk = 4
         for news in news_set:
-            self.assertEqual(news['id'], pk)
+            self.assertEqual(news['id'], pk) # error here
             pk-=1
   
     def test_get_homepage_news_data(self):

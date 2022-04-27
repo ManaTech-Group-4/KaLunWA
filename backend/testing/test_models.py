@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from kalunwa.content.models import Image, Jumbotron, Tag, Event, Project, News, Announcement, CampEnum
-from kalunwa.content.models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
+from kalunwa.content.models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer, Contributor
 import tempfile
 
 
@@ -131,6 +131,7 @@ class ModelTest(TestCase):
         self.assertEqual(org_leader_model.quote,"leader_quote")
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(org_leader_model.position, OrgLeader.Positions.OTHER)
+        self.assertEqual(org_leader_model.get_position(), OrgLeader.Positions.OTHER.label)
         self.assertEqual(str(org_leader_model),f'{OrgLeader.Positions.OTHER.label} : {org_leader_model.last_name}')
         
 
@@ -149,6 +150,7 @@ class ModelTest(TestCase):
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(commissioner_model.category, Commissioner.Categories.OTHER)
         self.assertEqual(commissioner_model.position, Commissioner.Positions.OTHER)
+        self.assertEqual(commissioner_model.get_position(), Commissioner.Positions.OTHER.label)
         self.assertEqual(str(commissioner_model),f'{Commissioner.Categories.OTHER.label} {Commissioner.Positions.OTHER.label}: {commissioner_model.last_name}')
 
 
@@ -169,6 +171,8 @@ class ModelTest(TestCase):
         self.assertEqual(camp_leader_model.camp, CampEnum.GENERAL)
         self.assertEqual(camp_leader_model.position, CampLeader.Positions.OTHER)
         self.assertEqual(camp_leader_model.motto,"camp_leader_motto")
+        self.assertEqual(camp_leader_model.get_position(), CampLeader.Positions.OTHER.label)
+        self.assertEqual(camp_leader_model.get_camp(), CampEnum.GENERAL.label)
         self.assertEqual(str(camp_leader_model),f'Camp {CampEnum.GENERAL.label}, {CampLeader.Positions.OTHER.label}: {camp_leader_model.last_name}')        
 
 
@@ -189,9 +193,19 @@ class ModelTest(TestCase):
         self.assertEqual(cabin_officer_model.camp, CampEnum.GENERAL)
         self.assertEqual(cabin_officer_model.category, CabinOfficer.Categories.OTHER)
         self.assertEqual(cabin_officer_model.position, CabinOfficer.Positions.OTHER)
+        self.assertEqual(cabin_officer_model.get_position(), CabinOfficer.Positions.OTHER.label)
+        self.assertEqual(cabin_officer_model.get_camp(), CampEnum.GENERAL.label)
+        self.assertEqual(cabin_officer_model.get_category(), CabinOfficer.Categories.OTHER.label)
         self.assertEqual(str(cabin_officer_model),f'Camp {CampEnum.GENERAL.label} {CabinOfficer.Categories.OTHER.label}, {CabinOfficer.Positions.OTHER.label}: {cabin_officer_model.last_name}')            
 
-    
-
-
+    def test_contributor_model(self):
+        contributor_model = Contributor.objects.create(
+            name = "contributor_name",
+            image=self.create_image_sample(),
+            category = Contributor.Categories.OTHER)
+        self.assertTrue(isinstance(contributor_model,Contributor))
+        self.assertEqual(contributor_model.name,"contributor_name")
+        self.assertEqual(Image.objects.count(), 1)
+        self.assertEqual(contributor_model.category, Contributor.Categories.OTHER)
+        self.assertEqual(str(contributor_model),f'{contributor_model.get_category_display()}: {contributor_model.name}')
         

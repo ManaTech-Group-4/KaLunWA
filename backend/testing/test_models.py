@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.test import TestCase
 from django.utils import timezone
 from kalunwa.content.models import Image, Jumbotron, Tag, Event, Project, News, Announcement, CampEnum

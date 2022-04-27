@@ -216,12 +216,12 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         fields = (
             'id',
             'camp',
+            'position',
             'name',
             'first_name',
             'last_name',
             'quote',
             'image',
-            'position',
             'motto', 
             'created_at',
             'updated_at',
@@ -362,11 +362,11 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'category',
+            'position',
             'first_name',
             'last_name',
             'quote',
             'image',
-            'position',
             'created_at',
             'updated_at',
         )

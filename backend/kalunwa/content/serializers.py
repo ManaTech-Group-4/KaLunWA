@@ -209,18 +209,19 @@ class NewsSerializer(FlexFieldsModelSerializer):
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
     position = serializers.CharField(source='get_position')
     camp = serializers.CharField(source='get_camp')   
+    name = serializers.CharField(source='get_fullname')
 
     class Meta:
         model = CampLeader
         fields = (
             'id',
             'camp',
-            'position',
             'name',
             'first_name',
             'last_name',
             'quote',
             'image',
+            'position',
             'motto', 
             'created_at',
             'updated_at',
@@ -361,11 +362,11 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'category',
-            'position',
             'first_name',
             'last_name',
             'quote',
             'image',
+            'position',
             'created_at',
             'updated_at',
         )

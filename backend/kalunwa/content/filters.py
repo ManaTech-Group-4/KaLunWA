@@ -118,7 +118,7 @@ class OrgLeaderPositionFilter(BaseFilterBackend):
             return execomm_leaders
         position_value = get_value_by_label(position, OrgLeader.Positions)            
         if position_value is None: # invalid position (django-filter-like behavior)     
-            return queryset
+            return queryset.none()
         return queryset.filter(position=position_value)   
 
 
@@ -129,7 +129,7 @@ class CampFilter(BaseFilterBackend):
             return queryset
         camp_value = get_value_by_label(camp,CampEnum)            
         if camp_value is None:
-            return queryset    
+            return queryset.none()   
         else:
             return queryset.filter(camp=camp_value)  
 
@@ -141,5 +141,6 @@ class CommissionerCategoryFilter(BaseFilterBackend):
             return queryset
         category_value = get_value_by_label(category, Commissioner.Categories)
         if category_value is None:
-            return queryset
-        return queryset.filter(category=category_value)
+            return queryset.none()
+        else:
+            return queryset.filter(category=category_value)

@@ -151,6 +151,7 @@ class ModelTest(TestCase):
         self.assertEqual(commissioner_model.category, Commissioner.Categories.OTHER)
         self.assertEqual(commissioner_model.position, Commissioner.Positions.OTHER)
         self.assertEqual(commissioner_model.get_position(), Commissioner.Positions.OTHER.label)
+        self.assertEqual(commissioner_model.get_category(), Commissioner.Categories.OTHER.label)
         self.assertEqual(str(commissioner_model),f'{Commissioner.Categories.OTHER.label} {Commissioner.Positions.OTHER.label}: {commissioner_model.last_name}')
 
 
@@ -207,5 +208,6 @@ class ModelTest(TestCase):
         self.assertEqual(contributor_model.name,"contributor_name")
         self.assertEqual(Image.objects.count(), 1)
         self.assertEqual(contributor_model.category, Contributor.Categories.OTHER)
-        self.assertEqual(str(contributor_model),f'{contributor_model.get_category_display()}: {contributor_model.name}')
+        self.assertEqual(contributor_model.get_category(), Contributor.Categories.OTHER.label)
+        self.assertEqual(str(contributor_model),f'{Contributor.Categories.OTHER.label}: {contributor_model.name}')
         

@@ -17,7 +17,8 @@ class QueryLimitBackend(BaseFilterBackend):
     Backend filters are done from left to right, so ensure that this is put
     at the very right of the list. This is because a queryset cannot be filtered 
     further after splicing it (e.g. queryset[:limit]). 
-    ps: may be useless when post and validation is implemented.
+    ps: may be useless when post and validation is implemented. 
+    usecase: latest announcement
 
     e.g. [DjangoFilter, ..., QueryLimitBackend]
 

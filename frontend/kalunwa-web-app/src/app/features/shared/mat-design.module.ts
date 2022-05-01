@@ -13,6 +13,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import { NgImageSliderModule } from 'ng-image-slider';
 const MATERIAL = [
   MatToolbarModule,
   MatButtonModule,
@@ -26,7 +27,8 @@ const MATERIAL = [
   MatAutocompleteModule,
   MatDialogModule,
   MatInputModule,
-  MatSelectModule
+  MatSelectModule,
+  NgImageSliderModule
 ];
 
 @NgModule({

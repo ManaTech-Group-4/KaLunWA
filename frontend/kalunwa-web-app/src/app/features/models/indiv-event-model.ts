@@ -1,13 +1,12 @@
 export interface IndivEventsModel{
   id:number;
   title: string;
-  tagline: string;
-  cover_image: any;
+  image: {id: number, image: string};
   start_date:string;
   end_date:string;
   camp: string;
   status: string;
   description: string;
-  gallery: Array<any>;
+  gallery: Array<{id: number, image: string, thumbImage: string}>;
   contributors:Array<any>;
 }

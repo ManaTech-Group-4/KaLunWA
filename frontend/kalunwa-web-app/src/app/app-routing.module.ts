@@ -15,8 +15,8 @@ export const routes: Routes = [
   {path: 'home', component: HomepageComponent},
   {path: 'about',  component: AboutPageComponent},
   {path: 'org-struct',  component: OrgStructureComponent},
-  {path: "indiv-event", component: IndiEventComponent},
-  {path: "indiv-project", component: IndivProjectComponent},
+  {path: "indiv-event/:id", component: IndiEventComponent},
+  {path: "indiv-project/:id", component: IndivProjectComponent},
   {path: 'events', component:EventsPageComponent},
   {path: 'projects', component:ProjectPageComponent},
   {path: "**", component: PageNotFoundComponent}];

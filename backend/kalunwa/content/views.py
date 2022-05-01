@@ -22,7 +22,7 @@ class EventViewSet(viewsets.ModelViewSet):
     model = Event
     queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
-    filter_backends = [DjangoFilterBackend, QueryLimitBackend] 
+    filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend] 
     filterset_fields = ['is_featured']
 
 
@@ -30,7 +30,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [DjangoFilterBackend, QueryLimitBackend]
+    filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
     filterset_fields = ['is_featured']
 
 

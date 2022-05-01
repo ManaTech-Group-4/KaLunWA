@@ -150,7 +150,7 @@ class HomepageEventsTestCase(APITestCase):
         """
 
         for _ in range(5): 
-            if _ == [0,1]: # first 2 events are featured, rest are not
+            if _ in [0,1]: # first 2 events are featured, rest are not
                 featured = True
             else:
                 featured = False
@@ -474,6 +474,7 @@ class AboutUsCampsTestCase(APITestCase):
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
             'description' : expected_camp.description,
+            'tagline' : expected_camp.tagline,
             'image' : {
                 'id' : expected_camp.image.pk,
                 'image' : camp_image_url,

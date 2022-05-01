@@ -247,6 +247,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             'id',
             'name',
             'description',
+            'tagline',
             'image',
             'camp_leader',
             'created_at',

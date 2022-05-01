@@ -474,6 +474,7 @@ class AboutUsCampsTestCase(APITestCase):
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
             'description' : expected_camp.description,
+            'tagline' : expected_camp.tagline,
             'image' : {
                 'id' : expected_camp.image.pk,
                 'image' : camp_image_url,

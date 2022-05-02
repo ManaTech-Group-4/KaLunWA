@@ -28,6 +28,7 @@ import { LasangComponent } from './features/components/indiv-camps/lasang/lasang
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { JoinUsComponent } from './features/components/join-us/join-us.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,8 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     BaybayonComponent,
     LasangComponent,
     SubaComponent,
-    ZeroWasteComponent
+    ZeroWasteComponent,
+    JoinUsComponent
   ],
   entryComponents:[
     MembersDialogComponent

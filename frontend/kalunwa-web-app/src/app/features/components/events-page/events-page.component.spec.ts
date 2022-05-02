@@ -36,7 +36,7 @@ describe('EventsPageComponent', () => {
   });
 
 
-  it('Service injected via inject() and TestBed.get() should be the same instance (HomepageService)',
+  it('Service injected via inject() and TestBed.get() should be the same instance (EventpageService)',
     inject([EventspageService], (injectService: EventspageService) => {
       expect(injectService).toBe(testBedService);
   }));

@@ -1,28 +1,34 @@
-<div class ="header">
-    <h1>{{event.title}}</h1>
-    <p>{{event.tagline}}</p>
-</div>
+<div class="container"  *ngIf="(event$ | async) as event">
+  <div class ="header">
+      <h1>{{event.title}}</h1>
+  </div>
 
-<div class="content">
-    <div class="date">
-        <h5 class="start">{{event.start_date}}</h5>
-        
-        <h5 class="end">{{event.end_date}}</h5>
-    </div>
-    <img src="{{event.cover_image.image}}" alt="{{event.title}}_img">
-    <p>{{event.description}}</p>
-</div>
-<div class="gallery">
-    <p>Event Gallery</p>
+  <div class="content">
+      <div class="date">
+          <h5 class="start">{{event.start_date}}</h5>
 
-    <ng-image-slider [images]="event.gallery" #nav></ng-image-slider>
-</div>
-<div class="partners">
-    <p>Partners & Sponsors</p>
-    <div class="logos" >
-        <span *ngFor="let p of event.contributors">
-            <img src="{{p.image.image}}" alt="{{p.name}}_img">
-            <p>{{p.name}}</p>
-        </span>
-    </div>
+          <h5 class="end">{{event.end_date}}</h5>
+      </div>
+      <img src="{{event.image.image}}" alt="{{event.title}}_img">
+      <p>{{event.description}}</p>
+  </div>
+  <div class="gallery">
+      <p>Event Gallery</p>
+      <div class="slider">
+        <ng-image-slider  *ngIf="event.gallery.length > 1; else noItem" [images]="event.gallery" #nav
+        [infinite]="false"
+        [imageSize]="{width: '350', height: 300}"
+        [slideImage]="2"></ng-image-slider>
+        <ng-template #noItem><p class="noEvent">No image available for this event</p></ng-template>
+      </div>
+  </div>
+  <div class="partners">
+      <p>Partners & Sponsors</p>
+      <div class="logos" >
+          <span *ngFor="let p of event.contributors">
+              <img src="{{p.image.image}}" alt="{{p.name}}_img">
+              <p>{{p.name}}</p>
+          </span>
+      </div>
+  </div>
 </div>

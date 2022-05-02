@@ -23,13 +23,15 @@
 
 .content{
   font-family: monserrat;
-  margin: 60px;
-  
+  margin: 60px auto;
+  max-width: 1350px;
+  min-height: 25vw;
+
   .date{
     display: flex;
     flex-direction: row;
     margin: 15px ;
-    
+
     h5{
       font-family: monserrat;
       font-size: 18px;
@@ -39,8 +41,8 @@
   img {
     float:left;
     margin: 0 25px 20px 0;
-    max-width: 30%;
-    max-height: 30%;
+    max-width: 30vw;
+    max-height: 30vw;
     width: auto;
     height: auto;
     border-radius: 15px;
@@ -65,8 +67,16 @@
     color:white;
     margin-bottom: 30px;
   }
-  
+  .noEvent{
+    font-size: 20px;
+    font-family: monserrat;
+  }
 
+  .slider{
+    max-width:1350px;
+    margin:auto;
+    overflow: hidden;
+  }
 }
 
 .partners{
@@ -106,6 +116,12 @@
 
 //--------------------------MEDIA QUERY-----------------------------------
 
+@media screen and (max-width: 1470px){
+  .content{
+    margin:60px;
+  }
+}
+
 @media screen and (max-width: 786px){
 
   .header{
@@ -123,18 +139,19 @@
 
 .content{
   margin: 50px;
-  
+  min-height: 35vw;
+
   .date{
     margin: 10px ;
-    
+
     h5{
       font-size: 15px;
       margin-right: 60px;
     }
   }
   img {
-    max-width: 45%;
-    max-height: 45%;
+    max-width: 40vw;
+    max-height: 40vw;
     margin: 0 20px 9px 0;
   }
   p{
@@ -148,7 +165,7 @@
     font-size: 115px;
     line-height: 80px;
   }
-  
+
 
 }
 
@@ -198,16 +215,16 @@
     justify-items: center;
     margin: 40px;
     margin-top: 20px;
-    
+
     .date{
       display: flex;
       flex-direction: row;
       align-self: center;
       justify-content: center;
       //margin-left: 50px ;
-      
+
       h5{
-        width: 20vw;
+        width: 40vw;
         text-align: center;
         font-size: 13px;
         margin: 5px 0;
@@ -231,7 +248,7 @@
       font-size: 600%;
       line-height: 75%;
     }
-    
+
 
   }
 

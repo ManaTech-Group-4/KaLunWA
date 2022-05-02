@@ -26,7 +26,7 @@
 
     <mat-card-actions class="course-actions">
 
-        <button mat-raised-button color="primary" onclick="window.location.href='/indiv-event';">
+        <button mat-raised-button color="primary" [routerLink]="['/indiv-event', event.id]">
             Read More
         </button>
     </mat-card-actions>

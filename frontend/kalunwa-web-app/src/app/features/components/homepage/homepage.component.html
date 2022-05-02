@@ -11,7 +11,7 @@
   <h1>Camps</h1>
   <mat-card class="events-card"  *ngFor="let camp of camps">
     <div>
-      <img mat-card-lg-image src="{{camp.img}}" >
+      <a href="{{camp.link}}"><img mat-card-lg-image src="{{camp.img}}" ></a>
     </div>
     <mat-card-content>
       <h1>{{camp.title}}</h1>

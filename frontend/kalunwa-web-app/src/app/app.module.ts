@@ -23,7 +23,11 @@ import { MembersDialogComponent } from './features/components/members-dialog/mem
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
-
+import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
+import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
+import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
+import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +45,11 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     ProjectPageComponent,
     ProjectListComponent,
     FilterDialogComponent,
-    FilterProjectsDialogComponent
+    FilterProjectsDialogComponent,
+    BaybayonComponent,
+    LasangComponent,
+    SubaComponent,
+    ZeroWasteComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -52,11 +60,11 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
-    MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
     NgImageSliderModule,
+    CarouselModule,
 
     MatCarouselModule.forRoot()
   ],

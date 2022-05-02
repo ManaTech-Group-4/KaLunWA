@@ -8,8 +8,9 @@
   display: flex;
   flex-direction: row;
   padding:0;
-  margin: 10px;
+  margin: 15px;
   box-shadow: none;
+  background-color: transparent;
 
   img{
     width:250px;
@@ -23,6 +24,8 @@
     padding-left:20px;
     height:100%;
     width: 100%;
+    font-family: monserrat;
+    color: #233620;
     p.desc{
       height: 100px;
     }

@@ -41,6 +41,7 @@ div{
     background:#628A3A;
     width: 100%;
     margin-bottom: 20px;
+    
     .announcements{
       padding: 0px 30px;
       height: 70px;
@@ -62,6 +63,8 @@ div{
         text-align: left;
         margin-right:20px;
         overflow-x: hidden;
+        font-family: monserrat;
+        color:#628A3A;
 
         .mat-icon{
         font-size: 21px;
@@ -81,6 +84,7 @@ div{
         width:auto;
         text-align: center;
         width:100%;
+        font-family: monserrat;
       }
     }
   }

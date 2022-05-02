@@ -26,22 +26,26 @@ export class HomepageComponent implements OnInit {
     {
       title:"Baybayon",
       img: "assets/images/baybayon.png",
-      color: "#ECDBB2"
+      color: "#ECDBB2",
+      link: "/baybayon",
     },
     {
       title:"Lasang",
       img: "assets/images/lasang.png",
-      color: "#3F6218"
+      color: "#3F6218",
+      link: "/lasang",
     },
     {
       title:"Suba",
       img: "assets/images/suba.png",
-      color: "#1C8BD4"
+      color: "#1C8BD4",
+      link: "/suba",
     },
     {
       title:"Zero Waste",
       img: "assets/images/zero.png",
-      color: "#9CCC65"
+      color: "#9CCC65",
+      link: "/zero-waste",
     },
   ];
 

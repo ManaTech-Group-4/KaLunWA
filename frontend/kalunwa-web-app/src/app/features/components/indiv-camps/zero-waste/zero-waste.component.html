@@ -1,0 +1,60 @@
+<div [style.background-color]="camp.theme_colors.background">
+    <div class = "header">
+    <img src="{{camp.header_img}}"/>
+    </div>
+  
+    <div class ="subhead">
+      <h1>{{camp.camp_name}}</h1>
+      <p [style.color]="camp.theme_colors.dark">{{camp.tagline}}</p>
+    </div>
+
+    <div class="socmed" [style.background-color]="camp.theme_colors.main">
+        <span><img src="assets/images/fb_logo.svg" alt="alt"><a href="#">{{camp.socmed.fb}}</a></span>
+        <span><img src="assets/images/twitter_logo.svg" alt="alt"><img src="assets/images/ig_logo.svg" alt="alt"><a href="#">{{camp.socmed.twt_ig}}</a></span>
+    </div>
+
+    <div class="content">
+        <mat-card class="content_img" style="background-image: url('{{camp.content_image.image}}');background-size: cover;background-position: center;" ></mat-card>
+        <p [style.color]="camp.theme_colors.dark">{{camp.content}}</p>
+    </div>
+
+    <div class="gallery" [style.background-color]="camp.theme_colors.main">
+        <p>Camp Gallery</p>
+        <ng-image-slider [images]="camp.gallery" #nav></ng-image-slider>
+    </div>
+
+    <div class="events">
+        <p>Camp Events</p>
+        <owl-carousel-o [options]="customOptions">
+            <ng-container *ngFor="let event of camp.events">
+                <ng-template ngTemplate carouselSlide [id]="event.id">
+                  <img [src]="event.image" [alt]="event.id">
+                </ng-template>
+              </ng-container>
+        </owl-carousel-o>
+
+    </div>
+
+    <div class="projects" [style.background-color]="camp.theme_colors.main">
+        <p>Camp Projects</p>
+
+    </div>
+
+    <div class="other-camps">
+        <p>Other Camps</p>
+
+        <mat-card class="events-card">
+            <div>
+                <a href="/lasang"><img mat-card-lg-image src="assets/images/lasang.png" ></a>
+            </div>
+            <div>
+                <a href="/suba"><img mat-card-lg-image src="assets/images/suba.png" ></a>
+            </div>
+            <div>
+                <a href="/baybayon"><img mat-card-lg-image src="assets/images/baybayon.png" ></a>
+            </div>
+            
+        </mat-card>
+
+    </div>
+</div>

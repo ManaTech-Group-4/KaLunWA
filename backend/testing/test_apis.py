@@ -1,10 +1,7 @@
 import json
-from unicodedata import category
 from django.urls import reverse
-from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
-from rest_framework.views import APIView
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
     ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS,
@@ -153,7 +150,7 @@ class HomepageEventsTestCase(APITestCase):
         """
 
         for _ in range(5): 
-            if _ == [0,1]: # first 2 events are featured, rest are not
+            if _ in [0,1]: # first 2 events are featured, rest are not
                 featured = True
             else:
                 featured = False
@@ -343,7 +340,7 @@ class HomepageNewsTestCase(APITestCase):
 
         pk = 4
         for news in news_set:
-            self.assertEqual(news['id'], pk)
+            self.assertEqual(news['id'], pk) # error here
             pk-=1
   
     def test_get_homepage_news_data(self):
@@ -435,7 +432,7 @@ class AboutUsCampsTestCase(APITestCase):
         mock: 5 camps (expected + general)     
         """
 
-        for _ in range(5):
+        for _ in range(4):
             # camp pages    
             CampPage.objects.create(
                 name=CampEnum.values[_],
@@ -461,8 +458,7 @@ class AboutUsCampsTestCase(APITestCase):
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
-            background = 'sunset',
-            advocacy='spread wings',
+            quote='spread wings',
             image = Image.objects.create(name = 'name', image = self.test_image),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
@@ -478,6 +474,7 @@ class AboutUsCampsTestCase(APITestCase):
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
             'description' : expected_camp.description,
+            'tagline' : expected_camp.tagline,
             'image' : {
                 'id' : expected_camp.image.pk,
                 'image' : camp_image_url,
@@ -492,7 +489,7 @@ class AboutUsCampsTestCase(APITestCase):
                 }
 
             }            
-        }          
+        }   
         self.assertDictEqual(camp, expected_camp_data)
 
 
@@ -519,8 +516,7 @@ class AboutUsLeadersTestCase(APITestCase):
             OrgLeader.objects.create(
                 first_name = 'Extra',
                 last_name = 'Leader',
-                background = 'background',
-                advocacy = 'advocacy',
+                quote = 'advocacy',
                 position = OrgLeader.Positions.values[_],
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )        
@@ -541,8 +537,7 @@ class AboutUsLeadersTestCase(APITestCase):
         expected_leader = OrgLeader.objects.create(
             first_name = 'Extra',
             last_name = 'Leader',
-            background = 'background',
-            advocacy = 'advocacy',
+            quote = 'background',
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             

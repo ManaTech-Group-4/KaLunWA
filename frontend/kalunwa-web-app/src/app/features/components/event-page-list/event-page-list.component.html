@@ -5,7 +5,7 @@
 
   <mat-card-content>
     <div class="event-header">
-      <mat-chip-list class ="tags" aria-label="Fish selection">
+      <mat-chip-list class ="tags" aria-label="Tags">
         <div *ngFor="let tag of event.tags">
           <mat-chip *ngIf ="tag == 'General'" [style.background-color]="'#121212'" selected>General</mat-chip>
           <mat-chip *ngIf ="tag == 'Baybayon'" [style.background-color]="'#D9B863'" selected>Baybayon</mat-chip>

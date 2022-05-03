@@ -21,6 +21,7 @@ div{
       line-height: 70px;
       padding: 50px 0px;
       color:#233620;
+      line-height: 125px;
     }
 
     p{
@@ -41,55 +42,34 @@ div{
     background:#628A3A;
     width: 100%;
     margin-bottom: 20px;
-
     .announcements{
-      height: 50px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      width:1000px;
+      width:950px;
       margin: auto;
+      padding: 20px 0px;
 
-      .filter{
-        background: white;
-        font-family: monserrat;
-        width: 150px;
-        font-size: 12px;
-        font-weight: 400;
-        border-radius:50vh;
-        height:30px;
-        line-height: 30px;
-        padding-left: 10px;
-        text-align: left;
-        margin-right:20px;
-        overflow-x: hidden;
-        color: #628A3A;
-
-
-        .mat-icon{
-        font-size: 21px;
-        height:21px;
-        color:#628A3A;
-        margin-right: 5px;
-        padding-right:4px;
-        border-right: 2px solid #628A3A;
-        }
-
+      .speaker{
+        width:90px;
+        height: 90px;
       }
-      p{
+
+      .announcement-header{
         margin:0;
-        padding-left: 20px;
-        border-left: 2px solid white;
+        padding: 0px 30px;
         color: white;
         width:auto;
-        text-align: center;
         width:100%;
-        font-family: monserrat;
+
+        h2{
+          padding:10px 0px 0px 0px;
+          margin:0;
+        }
       }
     }
   }
 }
-
 //------------------MEDIA QUERY-----------------------------------
 
 @media screen and (max-width: 1040px){
@@ -104,7 +84,6 @@ div{
     .block{
       .announcements{
         width: 94vw;
-        padding: 10px 3vw;
         height: auto;
       }
     }
@@ -116,7 +95,8 @@ div{
     .subhead{
       padding: 40px 0px;
       h1{
-        font-size: 100px;
+        font-size: 80px;
+        line-height: 70px;
         padding: 5px 10px;
         margin-bottom: 0px;
       }
@@ -126,27 +106,14 @@ div{
     .block{
       .announcements{
         width: 94vw;
-        padding: 10px 20px 10px 20px;
         height: auto;
-
-        .filter{
-          min-width: 50px !important;
-          width: 50px;
-          height:50px;
-          font-size: 0px;
-          padding:0;
-          .mat-icon{
-            border-right:none;
-            padding:5px 0px 0px 5px;
-            margin:0;
-            width:40px;
-            height:40px;
-            font-size: 40px;
-
-          }
-          p{
-            font-size: 12px;
-          }
+        flex-direction: column;
+        .announcement-header{
+          padding: 20px 5vw 0px 5vw;
+          display:flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
         }
       }
     }

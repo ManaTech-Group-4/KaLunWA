@@ -37,6 +37,7 @@ class QueryLimitBackend(BaseFilterBackend):
     def limit_related_gallery(self, queryset,request, limit, model):
         """
         use for models that have gallery implementations.
+        related name should be 'gallery_<content>s' e.g. gallery_events
         viewsets should have a 'model' attribute set. 
 
         quick docs:
@@ -57,7 +58,7 @@ class QueryLimitBackend(BaseFilterBackend):
         (4) add `distinct` since duplicate image objs are returned for images
              belonging in more than 1 gallery given a many-to-many relationship                       
         """
-        if limit is None or not limit.isdigit():
+        if not limit.isdigit():
             return queryset
         limit = int(limit)
         # related_name -> gallery_<content> -> format via user

@@ -930,6 +930,9 @@ class ProjectGetTestCase(APITestCase):
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
+###
+# filter tests
+###
 
 class QueryLimitTestCase(APITestCase):
     """
@@ -962,26 +965,27 @@ class QueryLimitTestCase(APITestCase):
 
         cls.event_count = len(Event.objects.all())            
 
-    def test_expected_query_integer_input(self):
+    def test_expected_integer_zero_input(self):
         # 0 -> returns 0 or no events
-        query_limit = 0
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        response = self.client.get(f'/api/events/?query_limit={0}')        
         self.assertEqual(len(response.data), 0)
-        # 3 -> returns 3 events
-        query_limit = 3
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)        
-        # 5 -> returns 5 events
-        query_limit = 5
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)           
-        # 6 -> returns 5 events
-        query_limit = 6
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), self.event_count)
-        # aaa -> strings are ignored
 
-    def test_negative_query_integer_input(self):
+    def test_expected_integer_less_than_count(self):         
+        #  (test less than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count-1}')        
+        self.assertEqual(len(response.data), self.event_count-1)        
+
+    def test_expected_integer_equal_count(self):    
+        #  (test exact)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count}')        
+        self.assertEqual(len(response.data), self.event_count)           
+
+    def test_expected_integer_greater_than_count(self):     
+        # (test greater than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count+1}')        
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_expected_integer_equal_count(self):  
         # -1 -> ignores negative, return all events
         query_limit = -1
         response = self.client.get(f'/api/events/?query_limit={query_limit}')
@@ -994,14 +998,124 @@ class QueryLimitTestCase(APITestCase):
             response = self.client.get(f'/api/events/?query_limit={query_limit}')        
             self.assertEqual(len(response.data), self.event_count)   
 
-"""
-Test QueryLimitBackend: Gallery
+    def test_no_query_limit_param(self): # default to None
+        response = self.client.get(f'/api/events/')
+        self.assertEqual(len(response.data), self.event_count)     
 
-tests:
-    - if no model -> error 
-    - is used by a model that has no gallery 
-""" 
 
+class QueryLimitGalleryTestCase(APITestCase):
+    """
+    assumptions:
+    - viewset has a model attribute (custom defined)
+    - used by a viewset, to which its model has a related gallery
+        - related name should be 'gallery_<content>s' e.g. gallery_events
+    - these assumptions are made, because errors from these are programmer-driven
+    and not user/client driven
+    
+    mock : 
+        - viewset that uses this logic e.g. Event    
+        - mock 5 events        
+    tests:
+    - limit is a valid number
+    - limit is 0 
+    - limit is not a digit
+    - limit is negative
+    - limit is strings
+    - test for list and detail (valid int input for both cases)
+    - limit is None    
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+
+        cls.event = Event.objects.create(
+            title= f'Event 1', 
+            description= f'description 1',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image', image=cls.image_file),  
+            is_featured=True,
+        )   
+        for _ in range(3): 
+            Image.objects.create(name=f'image', image=cls.image_file)
+        cls.event.gallery.set(Image.objects.all())
+        cls.gallery_count = len(cls.event.gallery.all())# one is merely a featured image  
+
+    def test_expected_integer_zero_input(self):
+        # 0 -> returns 0 or no events
+            # list   
+        gallery_limit = 0
+        response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')   
+        event = response.data[0]     
+        self.assertEqual(len(event['gallery']), 0)
+            # detail
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')                
+        self.assertEqual(len(response.data['gallery']), 0) 
+
+    def test_expected_integer_less_than_count(self):           
+        # (test less than)
+        gallery_limit = self.gallery_count-1      
+            # list      
+        response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')
+        event = response.data[0]  
+        self.assertEqual(len(event['gallery']), self.gallery_count-1) 
+            # detail
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')                
+        self.assertEqual(len(response.data['gallery']), self.gallery_count-1)  
+
+    def test_expected_integer_equal_count(self):                 
+        # (test exact)
+        gallery_limit = self.gallery_count   
+            # list        
+        response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')
+        event = response.data[0]  
+        self.assertEqual(len(event['gallery']), self.gallery_count)  
+            # detail       
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')             
+        self.assertEqual(len(response.data['gallery']), self.gallery_count)    
+         
+    def test_expected_integer_greater_than_count(self):                   
+        # (test greater than)
+        gallery_limit = self.gallery_count+1        
+            # list
+        response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')
+        event = response.data[0]  
+        self.assertEqual(len(event['gallery']), self.gallery_count)  
+            # detail 
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')                
+        self.assertEqual(len(response.data['gallery']), self.gallery_count)                 
+
+    def test_negative_integer_input(self):
+        # -1 -> ignores negative, return all events
+            # list 
+        gallery_limit = -1
+        response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')
+        event = response.data[0]  
+        self.assertEqual(len(event['gallery']), self.gallery_count)   
+            # detail     
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')  
+        self.assertEqual(len(response.data['gallery']), self.gallery_count)           
+
+    def test_string_query_input(self):
+        gallery_limits = ['aaa', '*&()', '']
+
+        for gallery_limit in gallery_limits:
+            #list 
+            response = self.client.get(f'/api/events/?expand=gallery&query_limit_gallery={gallery_limit}')   
+            event = response.data[0]       
+            self.assertEqual(len(event['gallery']), self.gallery_count)   
+            # detail
+            response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery&query_limit_gallery={gallery_limit}')   
+            self.assertEqual(len(response.data['gallery']), self.gallery_count)   
+
+    def test_no_query_limit_param(self): # default to None
+        # list
+        response = self.client.get(f'/api/events/?expand=gallery')
+        event = response.data[0]       
+        self.assertEqual(len(event['gallery']), self.gallery_count)   
+        # detail
+        response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery')           
+        self.assertEqual(len(response.data['gallery']), self.gallery_count)   
 
 # ---------------------------------------------------------------------------        
 # Post end-points

@@ -12,7 +12,6 @@ current generatable content:
     - actual events and projects (not all are relective to actual data/lack/excess)
         - uses dummy images
 
-
 requirements:
     - file names must be accurate and should be in the specified directory
          (see fields with directories e.g. images/content/...jpg)
@@ -48,10 +47,11 @@ to populate database, run the script ONCE:
     exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())    
 """
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 #-------------------------------------------------------------------------------
 # create superuser
-superuser = User.objects.create_user('admin', password='admin123')     
+superuser = User.objects.create_user(email='admin@gmail.com', password='admin123')     
 superuser.is_superuser=True
 superuser.is_staff=True
 superuser.save()

@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
+    TokenVerifyView,
 )
 
 # add /api to access api's
@@ -31,9 +32,10 @@ urlpatterns = [
     path('api/', include(
             [
                 path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-                path('token/refresh/', TokenObtainPairView.as_view(), name='token_refresh'),
+                path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),                
                 path('', include('kalunwa.content.urls')),
-                path('', include('kalunwa.users.urls')),                
+                path('users/', include('kalunwa.users.urls')),                
             ]
         )
     )

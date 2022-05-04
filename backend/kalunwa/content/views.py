@@ -19,7 +19,6 @@ from .filters import (
     CommissionerCategoryFilter
 )
 
-
     
 class EventViewSet(viewsets.ModelViewSet):
     model = Event

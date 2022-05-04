@@ -3,16 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
-# class User(AbstractUser):
-#     name = models.CharField(max_length=255)
-#     email = models.EmailField(max_length=255, unique=True)
-#     password = models.CharField(max_length=255)
-#     username = None
-#     # defaults to username login, so override to email
-#     USERNAME_FIELD = 'email' 
-#     REQUIRED_FIELDS = []
-
-
 # user profile
     # first_name = models.CharField(max_length=150, blank=True) -> profile
     # last_name = models.CharField(max_length=150, blank=True)    
@@ -55,7 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin): # permission for django faciliti
     is_active = models.BooleanField(default=True)
 
     objects = CustomAccountManager()
-
+    # a username field is default for login, so we override it to use the 
+    # email instead
     USERNAME_FIELD = 'email'
 #     REQUIRED_FIELDS = []    
 

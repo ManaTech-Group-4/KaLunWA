@@ -418,7 +418,7 @@ class AboutUsCampsTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):    
         cls.camp_count = 4
-        cls.test_image = get_test_image_file()
+        cls.image_file = get_test_image_file()
         cls.expected_camps = CampEnum.labels
         cls.expected_camps.remove(CampEnum.GENERAL.label)
         cls.request_factory = APIRequestFactory() 
@@ -437,7 +437,7 @@ class AboutUsCampsTestCase(APITestCase):
             CampPage.objects.create(
                 name=CampEnum.values[_],
                 description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
+                image = Image.objects.create(name = 'name', image = self.image_file)
         )   
         response = self.client.get(self.url)
         response_camps = []
@@ -452,14 +452,14 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp = CampPage.objects.create(
             name=CampEnum.SUBA.value,
             description='default',
-            image = Image.objects.create(name = 'name', image = self.test_image)            
+            image = Image.objects.create(name = 'name', image = self.image_file)            
         )        
 
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
             quote='spread wings',
-            image = Image.objects.create(name = 'name', image = self.test_image),
+            image = Image.objects.create(name = 'name', image = self.image_file),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
             motto = 'all is well'
@@ -1116,6 +1116,70 @@ class QueryLimitGalleryTestCase(APITestCase):
         # detail
         response = self.client.get(f'/api/events/{self.event.id}/?expand=gallery')           
         self.assertEqual(len(response.data['gallery']), self.gallery_count)   
+
+
+class CampNameInFilterTestcase(APITestCase):
+    """
+    CampNameInFilterTest
+    tests 
+        - no filter on param
+        - expected use case 
+            'Suba,Baybayon,Lasang,Zero%20Waste'
+        - 'Subba' 
+            - returns empty list
+        - correct labels but with many commas
+            - would still work
+
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        camp_values = CampEnum.values
+        cls.expected_camp_labels = CampEnum.labels
+        cls.expected_camp_labels.remove(CampEnum.GENERAL.label)
+
+        # mock all including GENERAL
+        for _ in range(5):
+
+            CampPage.objects.create(
+                name=camp_values[_],
+                description = 'default description',
+                image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            )
+
+    def test_no_param(self): 
+        response = self.client.get(f'/api/camps/')
+        for camp in response.data:
+            self.assertIn(camp['name'], CampEnum.labels)
+    
+    def test_expected_camps(self):
+        response = self.client.get(f'/api/camps/?name__in=Suba,Baybayon,Lasang,Zero%20Waste')
+        self.assertEqual(len(response.data), 4)
+        for camp in response.data:
+            self.assertIn(camp['name'], self.expected_camp_labels)   
+
+    def test_not_valid_camp_single(self):
+        # Subba -> returns empty list; qs filtering with an empty list -> .filter(name__in=[])
+        response = self.client.get(f'/api/camps/?name__in=Subba')
+        self.assertEqual(len(response.data), 0)        
+
+    def test_not_valid_camp_with_valids(self):
+        # ignores the invalid camp;
+        response = self.client.get(f'/api/camps/?name__in=Subba,Baybayon,Lasang')
+        self.assertEqual(len(response.data), 2)        
+        for camp in response.data:
+            self.assertIn(camp['name'], [CampEnum.BAYBAYON.label, CampEnum.LASANG.label])           
+
+    def test_expected_camps_with_many_commas(self):
+        response = self.client.get(f'/api/camps/?name__in=Suba,,,Baybayon,Lasang,,,,,Zero%20Waste')
+        self.assertEqual(len(response.data), 4)
+        for camp in response.data:
+            self.assertIn(camp['name'], self.expected_camp_labels)   
+
+
+
+
+
 
 # ---------------------------------------------------------------------------        
 # Post end-points

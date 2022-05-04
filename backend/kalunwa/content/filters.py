@@ -77,12 +77,13 @@ class QueryLimitBackend(BaseFilterBackend):
 
 class CampNameInFilter(BaseFilterBackend):
     """
-    # expect a list of names here. (e.g. Suba,Lasang,)
-    # urls don't accept whitespaces, so don't have to worry bout that 
-    # spaces are automatically replaced with `%20`
-    # risky inputs
+    used in camps endpoint
+    expect a list of names here. (e.g. Suba,Lasang,)
+    urls don't accept whitespaces, so don't have to worry bout that 
+    spaces are automatically replaced with `%20`
+    risky inputs
     #   Suba,,,,General,, -> would be accepted (same behavior for flex fields)
-
+    returns empty list if name queried is invalid, and no other valid camp is queried
     """
 
     def filter_queryset(self, request, queryset, view):

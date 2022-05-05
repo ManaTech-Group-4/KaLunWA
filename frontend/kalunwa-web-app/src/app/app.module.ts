@@ -16,7 +16,7 @@ import { EventPageListComponent } from './features/components/event-page-list/ev
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
 import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
@@ -29,6 +29,8 @@ import { SubaComponent } from './features/components/indiv-camps/suba/suba.compo
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
+import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +53,8 @@ import { JoinUsComponent } from './features/components/join-us/join-us.component
     LasangComponent,
     SubaComponent,
     ZeroWasteComponent,
-    JoinUsComponent
+    JoinUsComponent,
+    ContactUsComponent
   ],
   entryComponents:[
     MembersDialogComponent

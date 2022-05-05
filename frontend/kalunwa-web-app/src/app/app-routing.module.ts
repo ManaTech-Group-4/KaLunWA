@@ -13,6 +13,7 @@ import { SubaComponent } from './features/components/indiv-camps/suba/suba.compo
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
+import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -28,6 +29,7 @@ export const routes: Routes = [
   {path: 'lasang', component:LasangComponent},
   {path: 'zero-waste', component:ZeroWasteComponent},
   {path: 'join-us', component:JoinUsComponent},
+  {path: 'contact-us', component:ContactUsComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -47,4 +49,5 @@ export const routeComponents = [HomepageComponent,
                                 SubaComponent,
                                 LasangComponent,
                                 ZeroWasteComponent,
-                                JoinUsComponent];
+                                JoinUsComponent,
+                                ContactUsComponent];

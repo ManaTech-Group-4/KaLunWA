@@ -1,9 +1,9 @@
-from django.db.models import OuterRef, Subquery, Prefetch
+from django.db.models import Q, OuterRef, Subquery, Prefetch
 from rest_framework.filters import BaseFilterBackend
-from .models import (
-    CampEnum,
-     Image, 
-)
+from .models import CampEnum, Image, OrgLeader, Commissioner
+from rest_framework.filters import BaseFilterBackend
+from kalunwa.core.utils import get_value_by_label
+
 
 
 class QueryLimitBackend(BaseFilterBackend):
@@ -38,6 +38,7 @@ class QueryLimitBackend(BaseFilterBackend):
     def limit_related_gallery(self, queryset,request, limit, model):
         """
         use for models that have gallery implementations.
+        related name should be 'gallery_<content>s' e.g. gallery_events
         viewsets should have a 'model' attribute set. 
 
         quick docs:
@@ -58,7 +59,7 @@ class QueryLimitBackend(BaseFilterBackend):
         (4) add `distinct` since duplicate image objs are returned for images
              belonging in more than 1 gallery given a many-to-many relationship                       
         """
-        if limit is None or not limit.isdigit():
+        if not limit.isdigit():
             return queryset
         limit = int(limit)
         # related_name -> gallery_<content> -> format via user
@@ -72,17 +73,18 @@ class QueryLimitBackend(BaseFilterBackend):
                     ) 
         prefetch = Prefetch('gallery', # 3
             queryset=Image.objects.filter(id__in=sub_query).distinct()) # 4
-        return queryset.prefetch_related(prefetch)  
+        return queryset.prefetch_related(prefetch)        
 
 
-class CampNameInFilterBackend(BaseFilterBackend):
+class CampNameInFilter(BaseFilterBackend):
     """
-    # expect a list of names here. (e.g. Suba,Lasang,)
-    # urls don't accept whitespaces, so don't have to worry bout that 
-    # spaces are automatically replaced with `%20`
-    # risky inputs
+    used in camps endpoint
+    expect a list of names here. (e.g. Suba,Lasang,)
+    urls don't accept whitespaces, so don't have to worry bout that 
+    spaces are automatically replaced with `%20`
+    risky inputs
     #   Suba,,,,General,, -> would be accepted (same behavior for flex fields)
-
+    returns empty list if name queried is invalid, and no other valid camp is queried
     """
 
     def filter_queryset(self, request, queryset, view):
@@ -114,10 +116,50 @@ def get_value_by_label(label:str, Enum): # will prolly be put in core/utils
     return value
 
 
+class OrgLeaderPositionFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        position = request.query_params.get('position', None)     
+        if position is None:
+            return queryset
+        if position=="ExeComm":          
+            execomm_leaders = queryset.exclude(              
+            Q(position=OrgLeader.Positions.DIRECTOR.value) |
+            Q(position=OrgLeader.Positions.OTHER.value)
+            )
+            return execomm_leaders
+        position_value = get_value_by_label(position, OrgLeader.Positions)            
+        if position_value is None: # invalid position (django-filter-like behavior)     
+            return queryset.none()
+        return queryset.filter(position=position_value)   
+
+
+class CampFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        camp = request.query_params.get('camp', None)                 
+        if camp is None:
+            return queryset
+        camp_value = get_value_by_label(camp,CampEnum)            
+        if camp_value is None:
+            return queryset.none()   
+        else:
+            return queryset.filter(camp=camp_value)  
+
+
+class CommissionerCategoryFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        category = request.query_params.get('category', None)       
+        if category is None:
+            return queryset
+        category_value = get_value_by_label(category, Commissioner.Categories)
+        if category_value is None:
+            return queryset.none()
+        else:
+            return queryset.filter(category=category_value)
+
+
 class ExcludeIDFilter(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         id = request.query_params.get('id__not', None)     
         if id is None or not id.isdigit():
             return queryset
         return queryset.exclude(id=int(id))    
-

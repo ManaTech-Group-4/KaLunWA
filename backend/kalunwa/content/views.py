@@ -1,4 +1,4 @@
-from django.db.models import Sum, Q
+from django.db.models import Sum
 from .models import Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampLeaderSerializer, 
@@ -9,10 +9,17 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import ExcludeIDFilter, QueryLimitBackend, CampNameInFilterBackend
+from .filters import (
+    QueryLimitBackend, 
+    CampNameInFilter,
+    OrgLeaderPositionFilter,
+    CampFilter,
+    CommissionerCategoryFilter,
+    ExcludeIDFilter
+)
 
-
-class EventViewSet( viewsets.ModelViewSet):
+    
+class EventViewSet(viewsets.ModelViewSet):
     model = Event
     queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
@@ -39,36 +46,37 @@ class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
-    
 
-# prep for about us
-class CampLeaderViewSet(viewsets.ModelViewSet): # limit 1 per query 
+
+class OrgLeaderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrgLeaderSerializer
+    queryset = OrgLeader.objects.all()
+    filter_backends = [OrgLeaderPositionFilter]
+              
+
+class CabinOfficerViewSet(viewsets.ModelViewSet):
+    serializer_class = CabinOfficerSerializer
+    queryset = CabinOfficer.objects.all()
+    filter_backends = [CampFilter]    
+
+
+class CommissionerViewSet(viewsets.ModelViewSet):
+    serializer_class = CommissionerSerializer
+    queryset = Commissioner.objects.all()
+    filter_backends = [CommissionerCategoryFilter]
+
+
+class CampLeaderViewSet(viewsets.ModelViewSet): 
     serializer_class = CampLeaderSerializer
     queryset = CampLeader.objects.all()
+    filter_backends = [CampFilter]               
 
 
 class CampPageViewSet(viewsets.ModelViewSet):
     model = CampPage
     serializer_class = CampPageSerializer
-    filter_backends = [CampNameInFilterBackend, QueryLimitBackend]   
+    filter_backends = [CampNameInFilter, QueryLimitBackend]   
     queryset = CampPage.objects.all()
-
-
-class OrgLeaderViewSet(viewsets.ModelViewSet):
-    serializer_class = OrgLeaderSerializer
-
-    def get_queryset(self):
-        # or make custom filter
-        if self.action=='list':
-            position = self.request.query_params.get('position', None)  
-            if position is not None:          
-                execomm_leaders = OrgLeader.objects.exclude(              #  is_execomm? -> custom filter
-                Q(position=OrgLeader.Positions.DIRECTOR.value) |
-                Q(position=OrgLeader.Positions.OTHER.value)
-                )
-                return execomm_leaders
-
-        return OrgLeader.objects.all()
 
 
 class DemographicsViewSet(viewsets.ModelViewSet):
@@ -124,16 +132,3 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#-----------------------------newly added models as of 23/3/2022-------------------------------------------------
-
-
-class CommissionerViewSet(viewsets.ModelViewSet):
-    serializer_class = CommissionerSerializer
-    queryset = Commissioner.objects.all()
-
-class CabinOfficerViewSet(viewsets.ModelViewSet):
-    serializer_class = CabinOfficerSerializer
-    queryset = CabinOfficer.objects.all()    

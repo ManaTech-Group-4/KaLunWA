@@ -107,14 +107,6 @@ class CampNameInFilter(BaseFilterBackend):
         camp_values = self.get_name_values(name_labels)
         return queryset.filter(name__in=camp_values)              
 
-def get_value_by_label(label:str, Enum): # will prolly be put in core/utils
-    if not label in Enum.labels:
-        return None
-    for enum_obj in Enum.__members__.values(): # enum members -> key:name-value:enum_obj { 'PRESIDENT': OrgLeader.Positions.PRESIDENT }
-        if label == enum_obj.label: 
-            value = enum_obj.value
-    return value
-
 
 class OrgLeaderPositionFilter(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):

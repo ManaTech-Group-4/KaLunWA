@@ -260,6 +260,12 @@ class CampPageSerializer(FlexFieldsModelSerializer):
                  'fields':['id','image']
                 }
             ),
+            'gallery' : ('kalunwa.content.ImageSerializer',
+                {
+                 'many': True,
+                 'fields':['id','image']
+                 }            
+            ),            
         }   
 
     def get_camp_leader(self, obj): # can't select fields if not related object (e.g. fk or m2m)

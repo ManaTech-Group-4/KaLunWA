@@ -7,5 +7,6 @@ for file in file_list:
     os.remove(file)
 
 
+# python manage.py shell
 # exec(open("dev_utils/delete_test_files.py").read())
 

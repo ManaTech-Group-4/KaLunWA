@@ -1,10 +1,7 @@
 import json
-from unicodedata import category
 from django.urls import reverse
-from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
-from rest_framework.views import APIView
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
     ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS,
@@ -343,7 +340,7 @@ class HomepageNewsTestCase(APITestCase):
 
         pk = 4
         for news in news_set:
-            self.assertEqual(news['id'], pk)
+            self.assertEqual(news['id'], pk) # error here
             pk-=1
   
     def test_get_homepage_news_data(self):
@@ -421,7 +418,7 @@ class AboutUsCampsTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):    
         cls.camp_count = 4
-        cls.test_image = get_test_image_file()
+        cls.image_file = get_test_image_file()
         cls.expected_camps = CampEnum.labels
         cls.expected_camps.remove(CampEnum.GENERAL.label)
         cls.request_factory = APIRequestFactory() 
@@ -435,12 +432,12 @@ class AboutUsCampsTestCase(APITestCase):
         mock: 5 camps (expected + general)     
         """
 
-        for _ in range(5):
+        for _ in range(4):
             # camp pages    
             CampPage.objects.create(
                 name=CampEnum.values[_],
                 description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
+                image = Image.objects.create(name = 'name', image = self.image_file)
         )   
         response = self.client.get(self.url)
         response_camps = []
@@ -455,15 +452,14 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp = CampPage.objects.create(
             name=CampEnum.SUBA.value,
             description='default',
-            image = Image.objects.create(name = 'name', image = self.test_image)            
+            image = Image.objects.create(name = 'name', image = self.image_file)            
         )        
 
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
-            background = 'sunset',
-            advocacy='spread wings',
-            image = Image.objects.create(name = 'name', image = self.test_image),
+            quote='spread wings',
+            image = Image.objects.create(name = 'name', image = self.image_file),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
             motto = 'all is well'
@@ -492,7 +488,7 @@ class AboutUsCampsTestCase(APITestCase):
                 }
 
             }            
-        }          
+        }   
         self.assertDictEqual(camp, expected_camp_data)
 
 
@@ -519,8 +515,7 @@ class AboutUsLeadersTestCase(APITestCase):
             OrgLeader.objects.create(
                 first_name = 'Extra',
                 last_name = 'Leader',
-                background = 'background',
-                advocacy = 'advocacy',
+                quote = 'advocacy',
                 position = OrgLeader.Positions.values[_],
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )        
@@ -541,8 +536,7 @@ class AboutUsLeadersTestCase(APITestCase):
         expected_leader = OrgLeader.objects.create(
             first_name = 'Extra',
             last_name = 'Leader',
-            background = 'background',
-            advocacy = 'advocacy',
+            quote = 'background',
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             
@@ -935,78 +929,6 @@ class ProjectGetTestCase(APITestCase):
             'category' : expected_contributor.category.label
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
-
-
-class QueryLimitTestCase(APITestCase):
-    """
-    mock viewset that uses this logic e.g. Event
-    -> test on list endpoint
-        - mock 5 events
-        - query limit is an integer.
-        - query limit values to test: [-1, 0, 3, 5, 6]
-            # negative value
-            # zero
-            # less than total events
-            # exact no. of events
-            # greater than no. of events
-            # strings
-                # empty string
-    """
-    @classmethod
-    def setUpTestData(cls) -> None:
-        cls.image_file = get_test_image_file()
-
-        for _ in range(5): 
-            Event.objects.create(
-            title= f'Event {_}', 
-            description= f'description {_}',
-            start_date=timezone.now(),
-            end_date=timezone.now(),
-            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
-            is_featured=True,
-            )           
-
-        cls.event_count = len(Event.objects.all())            
-
-    def test_expected_query_integer_input(self):
-        # 0 -> returns 0 or no events
-        query_limit = 0
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), 0)
-        # 3 -> returns 3 events
-        query_limit = 3
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)        
-        # 5 -> returns 5 events
-        query_limit = 5
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)           
-        # 6 -> returns 5 events
-        query_limit = 6
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), self.event_count)
-        # aaa -> strings are ignored
-
-    def test_negative_query_integer_input(self):
-        # -1 -> ignores negative, return all events
-        query_limit = -1
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')
-        self.assertEqual(len(response.data), self.event_count)
-
-    def test_string_query_input(self):
-        query_limits = ['aaa', '*&()', '']
-
-        for query_limit in query_limits:
-            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-            self.assertEqual(len(response.data), self.event_count)   
-
-"""
-Test QueryLimitBackend: Gallery
-
-tests:
-    - if no model -> error 
-    - is used by a model that has no gallery 
-""" 
 
 
 # ---------------------------------------------------------------------------        

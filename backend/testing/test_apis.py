@@ -4,15 +4,37 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
-    ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, CAMP_DETAIL_GALLERY_LIMIT,
-    EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT,
-    HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, 
-    PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file, to_expected_iso_format,
-    to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+    ANNOUNCEMENT_LATEST_ONE,
+    ABOUT_US_CAMP_URL, 
+    ABOUT_US_LEADERS,
+    ABOUT_US_TOTAL_MEMBERS, 
+    CAMP_DETAIL_GALLERY_LIMIT,
+    EVENT_DETAIL_CONTRIBUTORS,
+    EVENT_DETAIL_GALLERY_LIMIT,
+    HOMEPAGE_EVENT_URL,
+    HOMEPAGE_JUMBOTRON_URL,     
+    HOMEPAGE_NEWS_URL,
+    HOMEPAGE_PROJECT_URL, 
+    PROJECT_DETAIL_CONTRIBUTORS, 
+    PROJECT_DETAIL_GALLERY_LIMIT, 
+    get_expected_image_url, 
+    get_test_image_file, 
+    to_expected_iso_format,
+    to_formal_mdy, 
 )
 from kalunwa.content.models import(
-    CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, 
-    News, OrgLeader, Project, Event
+    Announcement,
+    CampEnum, 
+    CampLeader, 
+    CampPage, 
+    Contributor, 
+    Demographics,  
+    Event,
+    Image, 
+    Jumbotron, 
+    News, 
+    OrgLeader, 
+    Project,     
 )
 from rest_framework import status
 #-------------------------------------------------------------------------------
@@ -121,7 +143,6 @@ class HomepageEventsTestCase(APITestCase):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
         cls.url = HOMEPAGE_EVENT_URL
-
     
     def test_get_homepage_events(self):
         """
@@ -220,8 +241,7 @@ class HomepageProjectsTestCase(APITestCase):
             pk=_,
             name=f'image_{_}',
             image=self.image_file,
-        )       
-
+            )       
             Project.objects.create(
             title= f'Project {_}', 
             description= f'description {_}',
@@ -553,23 +573,11 @@ class AboutUsLeadersTestCase(APITestCase):
                 'image' : image_url
                 }
         }
-        self.assertDictEqual(expected_leader_data, response_leader)
-# ---------------------------------------------------------------------------        
-# EventGetTestCase (Similar to event)
-    # covers list and detail views 
+        self.assertDictEqual(expected_leader_data, response_leader)      
 
-    # test_get_event_list
-        # create 5 events, return all
-        # assert length of response data and status code
 
-    # test_get_event_detail
-        # create 1 event
-        # check status code OK 
-        # check if event is returned
-        # check data as well
-            # camp name must be full name
-            # date must be in formal format 
-            # status must be capitalized 
+# ------------------------------------------------------------------------------
+# website list and views
 
 class EventGetTestCase(APITestCase):
     """
@@ -931,7 +939,6 @@ class ProjectGetTestCase(APITestCase):
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
-# ----------------------------------------------------------------------------
 
 class CampGetTestCase(APITestCase):
     """
@@ -1040,7 +1047,76 @@ class CampGetTestCase(APITestCase):
             'id':image.id,
             'image': get_expected_image_url(image.image.name, request)
         } 
-        self.assertDictEqual(gallery[0], expected_gallery_data)                
+        self.assertDictEqual(gallery[0], expected_gallery_data)   
+
+
+class AnnouncementGetTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_announcement_list(self):
+        """
+            - test announcement endpoint (status ok), return created announcements    
+        """        
+        for _ in range(5):
+            Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+            )
+        response = self.client.get(reverse('announcement-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual( len(response.data), 5)       
+
+    def test_get_announcement_detail(self):
+        """
+            - test announcement detail endpoint (status ok), return created announcement   
+        """        
+        expected_announcement = Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+        )
+        response = self.client.get(reverse('announcement-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response_announcement = json.loads(response.content)
+        expected_announcement_data = {
+            'id': expected_announcement.id,
+            'title': expected_announcement.title,
+            'description' : expected_announcement.description,    
+            'date': to_formal_mdy(expected_announcement.created_at),          
+            'created_at': to_expected_iso_format(expected_announcement.created_at), 
+            'updated_at': to_expected_iso_format(expected_announcement.updated_at),                      
+        }
+        self.assertDictEqual(expected_announcement_data, response_announcement)        
+
+        
+class AnnouncementLatesTTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.request_factory = APIRequestFactory()
+        cls.url = ANNOUNCEMENT_LATEST_ONE
+
+    def test_get_latest_announcement(self):      
+        for _ in range(5):
+            Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+            )
+
+        response = self.client.get(self.url)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        expected_announcement = Announcement.objects.first() # ordered by latest
+        response_announcement = json.loads(response.content)[0]
+        latest_announcement_data = {
+            'id': expected_announcement.id,
+            'title': expected_announcement.title,
+            'description' : expected_announcement.description,  
+            'date': to_formal_mdy(expected_announcement.created_at)                  
+        }        
+        self.assertDictEqual(latest_announcement_data, response_announcement)
+            
+
+
 
 # ---------------------------------------------------------------------------        
 # Post end-points

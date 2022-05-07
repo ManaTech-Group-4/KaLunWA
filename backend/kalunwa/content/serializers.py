@@ -328,17 +328,20 @@ class ContributorSerializer(FlexFieldsModelSerializer):
 #  serializes all data fields
 
 
-class AnnouncementSerializer(serializers.ModelSerializer):
-
+class AnnouncementSerializer(FlexFieldsModelSerializer):
+    date = serializers.SerializerMethodField()    
     class Meta:
         model = Announcement
         fields = (
             'id',
             'title',
             'description',
+            'date',
             'created_at',
             'updated_at',
         )
+    def get_date(self, obj):
+        return to_formal_mdy(obj.created_at)
 
 
 class DemographicsSerializer(serializers.ModelSerializer):

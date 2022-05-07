@@ -76,7 +76,10 @@ class Event(ContentBase):
 
     def __str__(self) -> str:
         return self.title
-       
+
+    def get_camp(self):
+        return f'{self.get_camp_display()}'       
+
 
 class Project(ContentBase):
     image = models.OneToOneField(Image, related_name='projects', on_delete=models.PROTECT)
@@ -86,8 +89,12 @@ class Project(ContentBase):
     is_featured = models.BooleanField(default=False)
     gallery = models.ManyToManyField(Image, related_name='gallery_projects', blank=True)
     contributors = models.ManyToManyField('content.Contributor', related_name='projects', blank=True)
+
     def __str__(self) -> str:
         return self.title
+
+    def get_camp(self):
+        return f'{self.get_camp_display()}'        
 
 
 class Demographics(AuthoredModel):
@@ -102,19 +109,19 @@ class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
-    # image = models.OneToOneField(Image, related_name=self.get_name_display(), on_delete=models.PROTECT)
-        # use case: image.Suba -> expectedly returns a single CampPage, Suba
     gallery = models.ManyToManyField(Image, related_name='gallery_camps', blank=True)
 
     def __str__(self) -> str:
         return self.get_name_display()
 
+    def get_name(self):
+        return f'{self.get_name_display()}'
+
 
 class LeaderBase(AuthoredModel):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    background = models.TextField()
-    advocacy = models.TextField()
+    quote = models.TextField()
     image = models.OneToOneField(Image, on_delete=models.PROTECT)
 
     class Meta:
@@ -122,6 +129,7 @@ class LeaderBase(AuthoredModel):
     
     def get_fullname(self):
         return f'{self.first_name} {self.last_name}'
+
 
 
 class OrgLeader(LeaderBase): # how to make pres -> overseer unique
@@ -137,9 +145,13 @@ class OrgLeader(LeaderBase): # how to make pres -> overseer unique
         OTHER = 'OTHR', 'Other'
 
     position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
-    def __str__(self) -> str:
 
+
+    def __str__(self) -> str:
         return f'{self.get_position_display()} : {self.last_name}'
+
+    def get_position(self):
+        return f'{self.get_position_display()}'     
 
 
 class Commissioner(LeaderBase):
@@ -156,9 +168,16 @@ class Commissioner(LeaderBase):
     category = models.CharField(choices=Categories.choices, max_length=5, default=Categories.OTHER)
     position = models.CharField(choices=Positions.choices, max_length=5, default=Positions.OTHER)
 
+
     def __str__(self) -> str:
         return f'{self.get_category_display()} {self.get_position_display()}: {self.last_name}'
         # e.g. Election Chief Commissioner: Junel
+
+    def get_position(self):
+        return f'{self.get_position_display()}'     
+
+    def get_category(self):
+        return f'{self.get_category_display()}'             
 
 
 class CampLeader(LeaderBase):
@@ -174,6 +193,12 @@ class CampLeader(LeaderBase):
     def __str__(self) -> str:
         return f'Camp {self.get_camp_display()}, {self.get_position_display()}: {self.last_name}'
         # e.g. Camp Suba, Camp Leader: Junel  
+
+    def get_camp(self):
+        return f'{self.get_camp_display()}'
+
+    def get_position(self):
+        return f'{self.get_position_display()}'        
 
 
 class CabinOfficer(LeaderBase):
@@ -199,6 +224,14 @@ class CabinOfficer(LeaderBase):
     def __str__(self) -> str:
         return f'Camp {self.get_camp_display()} {self.get_category_display()}, {self.get_position_display()}: {self.last_name}'
         # e.g. Camp Suba Secretariat Cabin, Cabin Head: Junel  
+    def get_camp(self):
+        return f'{self.get_camp_display()}'
+
+    def get_category(self):
+        return f'{self.get_category_display()}'     
+
+    def get_position(self):
+        return f'{self.get_position_display()}'
 
 
 class Contributor(models.Model):
@@ -212,3 +245,6 @@ class Contributor(models.Model):
 
     def __str__(self) -> str:
         return f'{self.get_category_display()}: {self.name}'
+        
+    def get_category(self):
+        return f'{self.get_category_display()}'        

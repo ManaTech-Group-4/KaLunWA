@@ -87,13 +87,12 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
             # and end_date (work around would involve making another serializer)
         # might be more appropriate to do display manipulations at the frontend
     # alternative: another field for datetime (for post/create) and display (get/list)? 
-    # separate read and write serializers
     status = serializers.SerializerMethodField()
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()   
     created_at =  serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
-    camp = serializers.CharField(source='get_camp_display')
+    camp = serializers.CharField(source='get_camp')
 
     class Meta:
         fields = (
@@ -208,21 +207,22 @@ class NewsSerializer(FlexFieldsModelSerializer):
 
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
-    name = serializers.CharField(max_length=100, source='get_fullname')
+    position = serializers.CharField(source='get_position')
+    camp = serializers.CharField(source='get_camp')   
+    name = serializers.CharField(source='get_fullname')
 
     class Meta:
         model = CampLeader
         fields = (
             'id',
+            'camp',
+            'position',
             'name',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
-            'camp',
-            'position',
-            'motto',
+            'motto', 
             'created_at',
             'updated_at',
         )    
@@ -235,8 +235,10 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             ),
         }           
 
+
+
 class CampPageSerializer(FlexFieldsModelSerializer):
-    name = serializers.CharField(source='get_name_display') # behavior for creating data
+    name = serializers.CharField(source='get_name') # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -278,17 +280,17 @@ class CampPageSerializer(FlexFieldsModelSerializer):
 
 
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
 
     class Meta:
         model = OrgLeader
         fields = (
             'id',
+            'position',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
-            'position',
             'created_at',
             'updated_at',
         )
@@ -302,7 +304,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
         } 
 
 class ContributorSerializer(FlexFieldsModelSerializer):
-    category = serializers.CharField(source='get_category_display') 
+    category = serializers.CharField(source='get_category') 
 
     class Meta:
         model = Contributor
@@ -354,38 +356,57 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-class CommissionerSerializer(serializers.ModelSerializer):
+class CommissionerSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
+    category = serializers.CharField(source='get_category')
 
     class Meta:
         model = Commissioner
         fields = (
             'id',
+            'category',
+            'position',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
-            'position',
-            'category',
             'created_at',
             'updated_at',
         )
 
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
 
-class CabinOfficerSerializer(serializers.ModelSerializer):
+class CabinOfficerSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
+    camp = serializers.CharField(source='get_camp')
+    category = serializers.CharField(source='get_category')
 
     class Meta:
         model = CabinOfficer
         fields = (
             'id',
+            'category',
+            'position',
             'first_name',
             'last_name',
-            'background',
-            'advocacy',
+            'quote',
             'image',
             'camp',
-            'position',
-            'category',
             'created_at',
             'updated_at',
         )
+        
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
+

@@ -236,8 +236,7 @@ for _ in range(4):
     CampLeader.objects.create(
         first_name = f'firstname {_}',
         last_name = f'lastname {_}',
-        background = f'background {_}',
-        advocacy = f'advocacy {_}',
+        quote = f'quote {_}',
         position = CampLeader.Positions.LEADER,
         image=dummy_image
     )
@@ -262,8 +261,7 @@ dummy_image = Image.objects.create(
 OrgLeader.objects.create(
     first_name = 'Jairus',
     last_name = 'Chiu',
-    background = 'background',
-    advocacy = 'advocacy',
+    quote = 'quote',
     position = OrgLeader.Positions.PRESIDENT,
 
     image=Image.objects.create(
@@ -275,8 +273,7 @@ OrgLeader.objects.create(
 OrgLeader.objects.create(
     first_name = 'Vice',
     last_name = 'Pres',
-    background = 'background',
-    advocacy = 'advocacy',
+    quote = 'quote',
     position = OrgLeader.Positions.VICE_PRESIDENT,
     
     image=Image.objects.create(
@@ -289,8 +286,7 @@ OrgLeader.objects.create(
 OrgLeader.objects.create(
     first_name = 'Sec',
     last_name = 'Retary',
-    background = 'background',
-    advocacy = 'advocacy',
+    quote = 'quote',
     position = OrgLeader.Positions.SECRETARY,
     
     image=Image.objects.create(
@@ -303,8 +299,7 @@ OrgLeader.objects.create(
 OrgLeader.objects.create(
     first_name = 'Tre',
     last_name = 'Asurer',
-    background = 'background',
-    advocacy = 'advocacy',
+    quote = 'quote',
     position = OrgLeader.Positions.TREASURER,
     
     image=Image.objects.create(
@@ -317,8 +312,7 @@ OrgLeader.objects.create(
 OrgLeader.objects.create(
     first_name = 'Audi',
     last_name = 'Tor',
-    background = 'background',
-    advocacy = 'advocacy',
+    quote = 'quote',
     position = OrgLeader.Positions.AUDITOR,
     
     image=Image.objects.create(

@@ -340,7 +340,7 @@ class HomepageNewsTestCase(APITestCase):
 
         pk = 4
         for news in news_set:
-            self.assertEqual(news['id'], pk)
+            self.assertEqual(news['id'], pk) # error here
             pk-=1
   
     def test_get_homepage_news_data(self):
@@ -418,7 +418,7 @@ class AboutUsCampsTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):    
         cls.camp_count = 4
-        cls.test_image = get_test_image_file()
+        cls.image_file = get_test_image_file()
         cls.expected_camps = CampEnum.labels
         cls.expected_camps.remove(CampEnum.GENERAL.label)
         cls.request_factory = APIRequestFactory() 
@@ -432,12 +432,12 @@ class AboutUsCampsTestCase(APITestCase):
         mock: 5 camps (expected + general)     
         """
 
-        for _ in range(5):
+        for _ in range(4):
             # camp pages    
             CampPage.objects.create(
                 name=CampEnum.values[_],
                 description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
+                image = Image.objects.create(name = 'name', image = self.image_file)
         )   
         response = self.client.get(self.url)
         response_camps = []
@@ -452,15 +452,14 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp = CampPage.objects.create(
             name=CampEnum.SUBA.value,
             description='default',
-            image = Image.objects.create(name = 'name', image = self.test_image)            
+            image = Image.objects.create(name = 'name', image = self.image_file)            
         )        
 
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
-            background = 'sunset',
-            advocacy='spread wings',
-            image = Image.objects.create(name = 'name', image = self.test_image),
+            quote='spread wings',
+            image = Image.objects.create(name = 'name', image = self.image_file),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
             motto = 'all is well'
@@ -489,7 +488,7 @@ class AboutUsCampsTestCase(APITestCase):
                 }
 
             }            
-        }          
+        }   
         self.assertDictEqual(camp, expected_camp_data)
 
 
@@ -516,8 +515,7 @@ class AboutUsLeadersTestCase(APITestCase):
             OrgLeader.objects.create(
                 first_name = 'Extra',
                 last_name = 'Leader',
-                background = 'background',
-                advocacy = 'advocacy',
+                quote = 'advocacy',
                 position = OrgLeader.Positions.values[_],
                 image=Image.objects.create(name = 'other', image = self.image_file)
             )        
@@ -538,8 +536,7 @@ class AboutUsLeadersTestCase(APITestCase):
         expected_leader = OrgLeader.objects.create(
             first_name = 'Extra',
             last_name = 'Leader',
-            background = 'background',
-            advocacy = 'advocacy',
+            quote = 'background',
             position = OrgLeader.Positions.PRESIDENT,
             image=Image.objects.create(name = 'other', image = self.image_file)
         )             
@@ -934,11 +931,6 @@ class ProjectGetTestCase(APITestCase):
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
 
-## announcements
-# use endpoint 
-# new url
-# query_limit 1
-# expected data
 class AnnouncementGetTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:    

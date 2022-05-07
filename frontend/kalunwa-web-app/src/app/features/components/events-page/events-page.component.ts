@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
 import { EventsItemsModel } from '../../models/event-items-model';
 import { EventsResponseModel } from '../../models/events-response-model';
-import { TagModel } from '../../models/tags-model';
 import { EventspageService } from '../../service/eventspage.service';
 
 @Component({

@@ -24,6 +24,7 @@ import { IndiEventComponent } from './features/components/indi-event/indi-event.
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 import { NewsComponent } from './features/components/news/news/news.component';
 import { NewsListComponent } from './features/components/news/news-list/news-list.component';
+import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { NewsListComponent } from './features/components/news/news-list/news-lis
     MembersDialogComponent,
     FilterProjectsDialogComponent,
     NewsComponent,
-    NewsListComponent
+    NewsListComponent,
+    IndivNewsComponent
   ],
   entryComponents:[
     MembersDialogComponent

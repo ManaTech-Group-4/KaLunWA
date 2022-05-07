@@ -9,6 +9,7 @@ import { IndiEventComponent } from './features/components/indi-event/indi-event.
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { NewsComponent } from './features/components/news/news/news.component';
+import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
 
 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
   {path: 'events', component:EventsPageComponent},
   {path: 'projects', component:ProjectPageComponent},
   {path: 'news', component:NewsComponent},
+  {path: "indiv-news/:id", component: IndivNewsComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -36,4 +38,5 @@ export const routeComponents = [HomepageComponent,
                                 PageNotFoundComponent,
                                 EventsPageComponent,
                                 ProjectPageComponent,
-                                NewsComponent];
+                                NewsComponent,
+                                IndivNewsComponent];

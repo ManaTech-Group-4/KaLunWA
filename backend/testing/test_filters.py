@@ -4,6 +4,76 @@ from .utils import get_test_image_file
 from rest_framework.test import APITestCase
 from django.utils import timezone
 
+
+class QueryLimitTestCase(APITestCase):
+    """
+    mock viewset that uses this logic e.g. Event
+    -> test on list endpoint
+        - mock 5 events
+        - query limit is an integer.
+        - query limit values to test: [-1, 0, 3, 5, 6]
+            # negative value
+            # zero
+            # less than total events
+            # exact no. of events
+            # greater than no. of events
+            # strings
+                # empty string
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            is_featured=True,
+            )           
+
+        cls.event_count = len(Event.objects.all())            
+
+    def test_expected_integer_zero_input(self):
+        # 0 -> returns 0 or no events
+        response = self.client.get(f'/api/events/?query_limit={0}')        
+        self.assertEqual(len(response.data), 0)
+
+    def test_expected_integer_less_than_count(self):         
+        #  (test less than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count-1}')        
+        self.assertEqual(len(response.data), self.event_count-1)        
+
+    def test_expected_integer_equal_count(self):    
+        #  (test exact)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count}')        
+        self.assertEqual(len(response.data), self.event_count)           
+
+    def test_expected_integer_greater_than_count(self):     
+        # (test greater than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count+1}')        
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_expected_integer_equal_count(self):  
+        # -1 -> ignores negative, return all events
+        query_limit = -1
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_string_query_input(self):
+        query_limits = ['aaa', '*&()', '']
+
+        for query_limit in query_limits:
+            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+            self.assertEqual(len(response.data), self.event_count)   
+
+    def test_no_query_limit_param(self): # default to None
+        response = self.client.get(f'/api/events/')
+        self.assertEqual(len(response.data), self.event_count) 
+
+        
 class QueryLimitGalleryTestCase(APITestCase):
     """
     assumptions:

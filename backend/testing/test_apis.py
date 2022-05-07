@@ -418,7 +418,7 @@ class AboutUsCampsTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):    
         cls.camp_count = 4
-        cls.test_image = get_test_image_file()
+        cls.image_file = get_test_image_file()
         cls.expected_camps = CampEnum.labels
         cls.expected_camps.remove(CampEnum.GENERAL.label)
         cls.request_factory = APIRequestFactory() 
@@ -437,7 +437,7 @@ class AboutUsCampsTestCase(APITestCase):
             CampPage.objects.create(
                 name=CampEnum.values[_],
                 description = 'default description',
-                image = Image.objects.create(name = 'name', image = self.test_image)
+                image = Image.objects.create(name = 'name', image = self.image_file)
         )   
         response = self.client.get(self.url)
         response_camps = []
@@ -452,14 +452,14 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp = CampPage.objects.create(
             name=CampEnum.SUBA.value,
             description='default',
-            image = Image.objects.create(name = 'name', image = self.test_image)            
+            image = Image.objects.create(name = 'name', image = self.image_file)            
         )        
 
         expected_leader = CampLeader.objects.create(
             first_name='Suba leader',
             last_name = 'Suba last n',
             quote='spread wings',
-            image = Image.objects.create(name = 'name', image = self.test_image),
+            image = Image.objects.create(name = 'name', image = self.image_file),
             camp = CampEnum.SUBA.value,
             position = CampLeader.Positions.LEADER,
             motto = 'all is well'
@@ -930,6 +930,9 @@ class ProjectGetTestCase(APITestCase):
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
+###
+# filter tests
+###
 
 
 class QueryLimitTestCase(APITestCase):
@@ -963,26 +966,27 @@ class QueryLimitTestCase(APITestCase):
 
         cls.event_count = len(Event.objects.all())            
 
-    def test_expected_query_integer_input(self):
+    def test_expected_integer_zero_input(self):
         # 0 -> returns 0 or no events
-        query_limit = 0
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        response = self.client.get(f'/api/events/?query_limit={0}')        
         self.assertEqual(len(response.data), 0)
-        # 3 -> returns 3 events
-        query_limit = 3
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)        
-        # 5 -> returns 5 events
-        query_limit = 5
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)           
-        # 6 -> returns 5 events
-        query_limit = 6
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), self.event_count)
-        # aaa -> strings are ignored
 
-    def test_negative_query_integer_input(self):
+    def test_expected_integer_less_than_count(self):         
+        #  (test less than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count-1}')        
+        self.assertEqual(len(response.data), self.event_count-1)        
+
+    def test_expected_integer_equal_count(self):    
+        #  (test exact)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count}')        
+        self.assertEqual(len(response.data), self.event_count)           
+
+    def test_expected_integer_greater_than_count(self):     
+        # (test greater than)
+        response = self.client.get(f'/api/events/?query_limit={self.event_count+1}')        
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_expected_integer_equal_count(self):  
         # -1 -> ignores negative, return all events
         query_limit = -1
         response = self.client.get(f'/api/events/?query_limit={query_limit}')
@@ -993,16 +997,15 @@ class QueryLimitTestCase(APITestCase):
 
         for query_limit in query_limits:
             response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-            self.assertEqual(len(response.data), self.event_count)  
-             
-#--------------------------> insert test here
-"""
-Test QueryLimitBackend: Gallery
+            self.assertEqual(len(response.data), self.event_count)   
 
-tests:
-    - if no model -> error 
-    - is used by a model that has no gallery 
-""" 
+    def test_no_query_limit_param(self): # default to None
+        response = self.client.get(f'/api/events/')
+        self.assertEqual(len(response.data), self.event_count)     
+
+
+
+
 # ---------------------------------------------------------------------------        
 # Post end-points
 # covers post serializer 

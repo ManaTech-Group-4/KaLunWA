@@ -931,6 +931,7 @@ class ProjectGetTestCase(APITestCase):
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
 
+
 class QueryLimitTestCase(APITestCase):
     """
     mock viewset that uses this logic e.g. Event
@@ -992,8 +993,9 @@ class QueryLimitTestCase(APITestCase):
 
         for query_limit in query_limits:
             response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-            self.assertEqual(len(response.data), self.event_count)   
-
+            self.assertEqual(len(response.data), self.event_count)  
+             
+#--------------------------> insert test here
 """
 Test QueryLimitBackend: Gallery
 
@@ -1001,8 +1003,6 @@ tests:
     - if no model -> error 
     - is used by a model that has no gallery 
 """ 
-
-
 # ---------------------------------------------------------------------------        
 # Post end-points
 # covers post serializer 

@@ -130,8 +130,6 @@ class LeaderBase(AuthoredModel):
     def get_fullname(self):
         return f'{self.first_name} {self.last_name}'
 
-    def get_position(self):
-        return f'{self.get_position_display()}'
 
 
 class OrgLeader(LeaderBase): # how to make pres -> overseer unique

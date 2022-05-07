@@ -1,6 +1,6 @@
 from django.db.models import Q, OuterRef, Subquery, Prefetch
 from rest_framework.filters import BaseFilterBackend
-from .models import CampEnum, Image, OrgLeader, Commissioner
+from .models import CampEnum, Image, OrgLeader, Commissioner, CabinOfficer
 from rest_framework.filters import BaseFilterBackend
 from kalunwa.core.utils import get_value_by_label
 
@@ -134,9 +134,21 @@ class CampFilter(BaseFilterBackend):
             return queryset.filter(camp=camp_value)  
 
 
-class CommissionerCategoryFilter(BaseFilterBackend):
+class CabinOfficerCategoryFilter(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        category = request.query_params.get('category', None)       
+        category = request.query_params.get('category', None)         
+        if category is None:
+            return queryset
+        category_value = get_value_by_label(category, CabinOfficer.Categories)
+        if category_value is None:
+            return queryset.none()
+        else:
+            return queryset.filter(category=category_value)
+
+
+class CommissionerCategoryFilter(BaseFilterBackend): 
+    def filter_queryset(self, request, queryset, view):
+        category = request.query_params.get('category', None)         
         if category is None:
             return queryset
         category_value = get_value_by_label(category, Commissioner.Categories)

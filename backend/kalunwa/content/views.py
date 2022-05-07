@@ -14,6 +14,7 @@ from .filters import (
     CampNameInFilter,
     OrgLeaderPositionFilter,
     CampFilter,
+    CabinOfficerCategoryFilter,
     CommissionerCategoryFilter
 )
 
@@ -56,7 +57,7 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
 class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
     queryset = CabinOfficer.objects.all()
-    filter_backends = [CampFilter]    
+    filter_backends = [CampFilter, CabinOfficerCategoryFilter]    
 
 
 class CommissionerViewSet(viewsets.ModelViewSet):

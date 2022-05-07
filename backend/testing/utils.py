@@ -48,3 +48,5 @@ EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_lim
 EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'
 PROJECT_DETAIL_GALLERY_LIMIT = '/api/projects/?expand=gallery,contributors&query_limit_gallery=10'
 PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'
+
+

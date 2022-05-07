@@ -1,0 +1,24 @@
+<h1 class='no-events' *ngIf='news.length < 1'>No event matched</h1>
+<mat-card class="event-card" *ngFor="let event of news">
+
+  <img mat-card-image src="{{event.image.image}}">
+
+  <mat-card-content>
+    <div class="event-header">
+      <mat-card-title>{{event.title}}</mat-card-title>
+      <p>{{event.date}}</p>
+    </div>
+
+
+        <p class="desc">{{event.description}}</p>
+
+
+    <mat-card-actions class="course-actions">
+
+        <button mat-raised-button color="primary">
+            Read More
+        </button>
+    </mat-card-actions>
+  </mat-card-content>
+
+</mat-card>

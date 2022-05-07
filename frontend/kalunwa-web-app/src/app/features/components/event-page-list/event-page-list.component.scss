@@ -28,7 +28,12 @@
     font-family: monserrat;
     color: #233620;
     p.desc{
-      height: 100px;
+      height:auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
     }
     .event-header{
       display: flex;
@@ -80,9 +85,7 @@
     }
     .mat-card-content{
       height:40vw;
-      p.desc{
-        height: 40%;
-      }
+
     }
   }
 }
@@ -90,18 +93,35 @@
   .event-card{
     .mat-card-content{
       height:40vw;
+
       p.desc{
-        height: 20%;
+      -webkit-line-clamp: 2;
+      font-size:11px;
       }
       .event-header{
+        .tags{
+          .mat-chip{
+            min-height: 18px !important;
+            font-size: 8px;
+            padding: 0px 5px;
+          }
+        }
         .mat-card-title{
-          font-size:22px;
+          font-size:17px;
+          margin-bottom: 0px;
+        }
+        p{
+          font-size:11px;
+          margin-bottom: 2px;
         }
       }
 
       .course-actions{
+        bottom:5px;
         button{
+          padding: 0px 12px;
           font-size: 12px;
+          line-height: 30px !important;
         }
       }
     }

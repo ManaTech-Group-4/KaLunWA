@@ -52,6 +52,7 @@ div{
 
       .filter{
         background: white;
+        font-family: monserrat;
         width: 150px;
         font-size: 12px;
         font-weight: 400;
@@ -62,6 +63,7 @@ div{
         text-align: left;
         margin-right:20px;
         overflow-x: hidden;
+        color: #628A3A;
 
         .mat-icon{
         font-size: 21px;
@@ -81,6 +83,7 @@ div{
         width:auto;
         text-align: center;
         width:100%;
+        font-family: monserrat;
       }
     }
   }
@@ -88,6 +91,13 @@ div{
 //------------------MEDIA QUERY-----------------------------------
 
 @media screen and (max-width: 1040px){
+  div{
+    .subhead{
+      h1{
+        font-size: 170px;
+      }
+    }
+  }
   .container{
     .block{
       .announcements{
@@ -100,12 +110,42 @@ div{
 }
 
 @media screen and (max-width: 786px){
+  div{
+    .subhead{
+      padding: 40px 0px;
+      h1{
+        font-size: 80px;
+        padding: 5px 10px;
+        margin-bottom: 0px;
+      }
+    }
+  }
   .container{
     .block{
       .announcements{
         width: 94vw;
-        padding: 10px 3vw;
+        padding: 10px 20px 10px 20px;
         height: auto;
+
+        .filter{
+          min-width: 50px !important;
+          width: 50px;
+          height:50px;
+          font-size: 0px;
+          padding:0;
+          .mat-icon{
+            border-right:none;
+            padding:5px 0px 0px 5px;
+            margin:0;
+            width:40px;
+            height:40px;
+            font-size: 40px;
+
+          }
+          p{
+            font-size: 12px;
+          }
+        }
       }
     }
   }

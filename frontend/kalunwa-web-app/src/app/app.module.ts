@@ -22,6 +22,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
+import { NewsComponent } from './features/components/news/news/news.component';
+import { NewsListComponent } from './features/components/news/news-list/news-list.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
     FilterDialogComponent,
     FilterProjectsDialogComponent,
     MembersDialogComponent,
-    FilterProjectsDialogComponent
+    FilterProjectsDialogComponent,
+    NewsComponent,
+    NewsListComponent
   ],
   entryComponents:[
     MembersDialogComponent

@@ -552,23 +552,8 @@ class AboutUsLeadersTestCase(APITestCase):
                 'image' : image_url
                 }
         }
-        self.assertDictEqual(expected_leader_data, response_leader)
-# ---------------------------------------------------------------------------        
-# EventGetTestCase (Similar to event)
-    # covers list and detail views 
+        self.assertDictEqual(expected_leader_data, response_leader)      
 
-    # test_get_event_list
-        # create 5 events, return all
-        # assert length of response data and status code
-
-    # test_get_event_detail
-        # create 1 event
-        # check status code OK 
-        # check if event is returned
-        # check data as well
-            # camp name must be full name
-            # date must be in formal format 
-            # status must be capitalized 
 
 class EventGetTestCase(APITestCase):
     """
@@ -995,82 +980,6 @@ class AnnouncementLatesTTestCase(APITestCase):
             'date': to_formal_mdy(expected_announcement.created_at)                  
         }        
         self.assertDictEqual(latest_announcement_data, response_announcement)
-
-    
-
-    
-
-
-class QueryLimitTestCase(APITestCase):
-    """
-    mock viewset that uses this logic e.g. Event
-    -> test on list endpoint
-        - mock 5 events
-        - query limit is an integer.
-        - query limit values to test: [-1, 0, 3, 5, 6]
-            # negative value
-            # zero
-            # less than total events
-            # exact no. of events
-            # greater than no. of events
-            # strings
-                # empty string
-    """
-    @classmethod
-    def setUpTestData(cls) -> None:
-        cls.image_file = get_test_image_file()
-
-        for _ in range(5): 
-            Event.objects.create(
-            title= f'Event {_}', 
-            description= f'description {_}',
-            start_date=timezone.now(),
-            end_date=timezone.now(),
-            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
-            is_featured=True,
-            )           
-
-        cls.event_count = len(Event.objects.all())            
-
-    def test_expected_query_integer_input(self):
-        # 0 -> returns 0 or no events
-        query_limit = 0
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), 0)
-        # 3 -> returns 3 events
-        query_limit = 3
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)        
-        # 5 -> returns 5 events
-        query_limit = 5
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), query_limit)           
-        # 6 -> returns 5 events
-        query_limit = 6
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-        self.assertEqual(len(response.data), self.event_count)
-        # aaa -> strings are ignored
-
-    def test_negative_query_integer_input(self):
-        # -1 -> ignores negative, return all events
-        query_limit = -1
-        response = self.client.get(f'/api/events/?query_limit={query_limit}')
-        self.assertEqual(len(response.data), self.event_count)
-
-    def test_string_query_input(self):
-        query_limits = ['aaa', '*&()', '']
-
-        for query_limit in query_limits:
-            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
-            self.assertEqual(len(response.data), self.event_count)   
-
-"""
-Test QueryLimitBackend: Gallery
-
-tests:
-    - if no model -> error 
-    - is used by a model that has no gallery 
-""" 
 
 
 # ---------------------------------------------------------------------------        

@@ -14,8 +14,9 @@ from .filters import (
     CampNameInFilter,
     OrgLeaderPositionFilter,
     CampFilter,
+    CommissionerCategoryFilter,
     CabinOfficerCategoryFilter,
-    CommissionerCategoryFilter
+    ExcludeIDFilter,
 )
 
     
@@ -23,7 +24,7 @@ class EventViewSet(viewsets.ModelViewSet):
     model = Event
     queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
-    filter_backends = [DjangoFilterBackend, QueryLimitBackend] 
+    filter_backends = [DjangoFilterBackend,ExcludeIDFilter, QueryLimitBackend] 
     filterset_fields = ['is_featured']
 
 
@@ -31,7 +32,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    filter_backends = [DjangoFilterBackend, QueryLimitBackend]
+    filter_backends = [DjangoFilterBackend,ExcludeIDFilter, QueryLimitBackend]
     filterset_fields = ['is_featured']
 
 
@@ -44,7 +45,7 @@ class JumbotronViewSet(viewsets.ModelViewSet):
 
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
-    filter_backends = [QueryLimitBackend]    
+    filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
 
 

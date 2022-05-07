@@ -1,7 +1,17 @@
-
-from kalunwa.content.models import Image, CampEnum, Commissioner,CabinOfficer, CampLeader, OrgLeader, CampPage, Event
-from .utils import get_test_image_file
 from rest_framework.test import APITestCase
+from kalunwa.content.models import(
+    CabinOfficer,
+    CampEnum,
+    CampLeader,
+    CampPage,
+    Commissioner,
+    Event,
+    Image,
+    OrgLeader,
+)
+from .utils import (
+    get_test_image_file,
+)
 from django.utils import timezone
 
 
@@ -71,9 +81,9 @@ class QueryLimitTestCase(APITestCase):
 
     def test_no_query_limit_param(self): # default to None
         response = self.client.get(f'/api/events/')
-        self.assertEqual(len(response.data), self.event_count) 
+        self.assertEqual(len(response.data), self.event_count)     
 
-        
+
 class QueryLimitGalleryTestCase(APITestCase):
     """
     assumptions:
@@ -246,6 +256,49 @@ class CampNameInFilterTestcase(APITestCase):
         self.assertEqual(len(response.data), 4)
         for camp in response.data:
             self.assertIn(camp['name'], self.expected_camp_labels)   
+
+
+class ExcludeIDFilterTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()    
+        for _ in range(3):
+            image = Image.objects.create(name=f'image', image=cls.image_file)            
+
+            Event.objects.create(
+                title= f'Event', 
+                description= f'description',
+                start_date=timezone.now(),
+                end_date=timezone.now(),
+                image = image,  
+                is_featured=True,
+            )   
+        cls.event_count = Event.objects.count()
+
+    def test_id_exists(self):
+        # return all except the flagged id 
+        expected_event = Event.objects.last()
+        response = self.client.get(f'/api/events/?id__not={expected_event.id}')
+        self.assertEqual(self.event_count-1, len(response.data))
+        for event in response.data:
+            self.assertNotEqual(event['id'],expected_event.id)
+
+    def test_id_doesnt_exist(self):
+        # return all events
+        response = self.client.get(f'/api/events/?id__not={self.event_count+1}')       
+        self.assertEqual(self.event_count, len(response.data))       
+                
+    def test_id_is_invalid(self):
+        # does not satisfy the isdigit check
+        #return all events
+        invalid_ids = ['aaa', '*&()', '']
+        for invalid_id in invalid_ids:
+            response = self.client.get(f'/api/events/?id__not={invalid_id}')                   
+            self.assertEqual(self.event_count, len(response.data))             
+
+    def test_no_id_not_param(self):
+        response = self.client.get(f'/api/events/')                   
+        self.assertEqual(self.event_count, len(response.data))    
 
 
 class OrgLeaderPositionFilterTestCase(APITestCase):

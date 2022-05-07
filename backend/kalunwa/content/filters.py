@@ -5,6 +5,7 @@ from rest_framework.filters import BaseFilterBackend
 from kalunwa.core.utils import get_value_by_label
 
 
+
 class QueryLimitBackend(BaseFilterBackend):
     """
     Backend filters are done from left to right, so ensure that this is put
@@ -104,7 +105,7 @@ class CampNameInFilter(BaseFilterBackend):
 
     def filter_by_names(self, queryset, name_labels:str):
         camp_values = self.get_name_values(name_labels)
-        return queryset.filter(name__in=camp_values)  
+        return queryset.filter(name__in=camp_values)              
 
 
 class OrgLeaderPositionFilter(BaseFilterBackend):
@@ -158,3 +159,11 @@ class CommissionerCategoryFilter(BaseFilterBackend):
             return queryset.none()
         else:
             return queryset.filter(category=category_value)
+
+
+class ExcludeIDFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        id = request.query_params.get('id__not', None)     
+        if id is None or not id.isdigit():
+            return queryset
+        return queryset.exclude(id=int(id))    

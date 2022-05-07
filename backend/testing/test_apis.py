@@ -4,14 +4,14 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
-    ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS,
+    ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, ANNOUNCEMENT_LATEST_ONE,
     EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT,
     HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, 
-    PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file,
+    PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file, to_expected_iso_format,
     to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
 )
 from kalunwa.content.models import(
-    CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, 
+    Announcement, CampEnum, CampLeader, CampPage, Contributor, Demographics,  Image, Jumbotron, 
     News, OrgLeader, Project, Event
 )
 from rest_framework import status
@@ -929,6 +929,148 @@ class ProjectGetTestCase(APITestCase):
             'category' : expected_contributor.category.label
         } 
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
+
+
+class AnnouncementGetTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_announcement_list(self):
+        """
+            - test announcement endpoint (status ok), return created announcements    
+        """        
+        for _ in range(5):
+            Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+            )
+        response = self.client.get(reverse('announcement-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual( len(response.data), 5)       
+
+    def test_get_announcement_detail(self):
+        """
+            - test announcement detail endpoint (status ok), return created announcement   
+        """        
+        expected_announcement = Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+        )
+        response = self.client.get(reverse('announcement-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response_announcement = json.loads(response.content)
+        expected_announcement_data = {
+            'id': expected_announcement.id,
+            'title': expected_announcement.title,
+            'description' : expected_announcement.description,    
+            'date': to_formal_mdy(expected_announcement.created_at),          
+            'created_at': to_expected_iso_format(expected_announcement.created_at), 
+            'updated_at': to_expected_iso_format(expected_announcement.updated_at),                      
+        }
+        self.assertDictEqual(expected_announcement_data, response_announcement)        
+
+        
+class AnnouncementLatesTTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.request_factory = APIRequestFactory()
+        cls.url = ANNOUNCEMENT_LATEST_ONE
+
+    def test_get_latest_announcement(self):      
+        for _ in range(5):
+            Announcement.objects.create(
+                title='announcement',
+                description = 'description'
+            )
+
+        response = self.client.get(self.url)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        expected_announcement = Announcement.objects.first() # ordered by latest
+        response_announcement = json.loads(response.content)[0]
+        latest_announcement_data = {
+            'id': expected_announcement.id,
+            'title': expected_announcement.title,
+            'description' : expected_announcement.description,  
+            'date': to_formal_mdy(expected_announcement.created_at)                  
+        }        
+        self.assertDictEqual(latest_announcement_data, response_announcement)
+
+    
+
+    
+
+
+class QueryLimitTestCase(APITestCase):
+    """
+    mock viewset that uses this logic e.g. Event
+    -> test on list endpoint
+        - mock 5 events
+        - query limit is an integer.
+        - query limit values to test: [-1, 0, 3, 5, 6]
+            # negative value
+            # zero
+            # less than total events
+            # exact no. of events
+            # greater than no. of events
+            # strings
+                # empty string
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+
+        for _ in range(5): 
+            Event.objects.create(
+            title= f'Event {_}', 
+            description= f'description {_}',
+            start_date=timezone.now(),
+            end_date=timezone.now(),
+            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            is_featured=True,
+            )           
+
+        cls.event_count = len(Event.objects.all())            
+
+    def test_expected_query_integer_input(self):
+        # 0 -> returns 0 or no events
+        query_limit = 0
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), 0)
+        # 3 -> returns 3 events
+        query_limit = 3
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)        
+        # 5 -> returns 5 events
+        query_limit = 5
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), query_limit)           
+        # 6 -> returns 5 events
+        query_limit = 6
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+        self.assertEqual(len(response.data), self.event_count)
+        # aaa -> strings are ignored
+
+    def test_negative_query_integer_input(self):
+        # -1 -> ignores negative, return all events
+        query_limit = -1
+        response = self.client.get(f'/api/events/?query_limit={query_limit}')
+        self.assertEqual(len(response.data), self.event_count)
+
+    def test_string_query_input(self):
+        query_limits = ['aaa', '*&()', '']
+
+        for query_limit in query_limits:
+            response = self.client.get(f'/api/events/?query_limit={query_limit}')        
+            self.assertEqual(len(response.data), self.event_count)   
+
+"""
+Test QueryLimitBackend: Gallery
+
+tests:
+    - if no model -> error 
+    - is used by a model that has no gallery 
+""" 
 
 
 # ---------------------------------------------------------------------------        

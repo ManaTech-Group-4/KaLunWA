@@ -8,13 +8,8 @@ import { PageNotFoundComponent } from './features/components/page-not-found/page
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
-import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
-import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
-import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
-import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
-import { NewsComponent } from './features/components/news/news/news.component';
 
 
 export const routes: Routes = [
@@ -26,13 +21,8 @@ export const routes: Routes = [
   {path: "indiv-project/:id", component: IndivProjectComponent},
   {path: 'events', component:EventsPageComponent},
   {path: 'projects', component:ProjectPageComponent},
-  {path: 'baybayon', component:BaybayonComponent},
-  {path: 'suba', component:SubaComponent},
-  {path: 'lasang', component:LasangComponent},
-  {path: 'zero-waste', component:ZeroWasteComponent},
   {path: 'join-us', component:JoinUsComponent},
   {path: 'contact-us', component:ContactUsComponent},
-  {path: 'news', component:NewsComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -48,10 +38,5 @@ export const routeComponents = [HomepageComponent,
                                 PageNotFoundComponent,
                                 EventsPageComponent,
                                 ProjectPageComponent,
-                                BaybayonComponent,
-                                SubaComponent,
-                                LasangComponent,
-                                ZeroWasteComponent,
                                 JoinUsComponent,
-                                ContactUsComponent,
-                                NewsComponent];
+                                ContactUsComponent];

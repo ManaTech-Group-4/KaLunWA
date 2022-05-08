@@ -10,7 +10,10 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { NewsComponent } from './features/components/news/news/news.component';
 import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
-
+import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
+import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
+import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
+import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -23,6 +26,10 @@ export const routes: Routes = [
   {path: 'projects', component:ProjectPageComponent},
   {path: 'news', component:NewsComponent},
   {path: "indiv-news/:id", component: IndivNewsComponent},
+  {path: 'baybayon', component:BaybayonComponent},
+  {path: 'lasang', component:LasangComponent},
+  {path: 'suba', component:SubaComponent},
+  {path: 'zero-waste', component:ZeroWasteComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -39,4 +46,8 @@ export const routeComponents = [HomepageComponent,
                                 EventsPageComponent,
                                 ProjectPageComponent,
                                 NewsComponent,
-                                IndivNewsComponent];
+                                IndivNewsComponent,
+                                BaybayonComponent,
+                                LasangComponent,
+                                SubaComponent,
+                                ZeroWasteComponent];

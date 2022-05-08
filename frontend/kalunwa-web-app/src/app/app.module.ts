@@ -13,8 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
-import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
-import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
 import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
@@ -22,15 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
-import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
-import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
-import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
-import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
-import { NewsComponent } from './features/components/news/news/news.component';
-import { NewsListComponent } from './features/components/news/news-list/news-list.component';
 
 @NgModule({
   declarations: [
@@ -46,20 +37,12 @@ import { NewsListComponent } from './features/components/news/news-list/news-lis
     IndivProjectComponent,
     EventsPageComponent,
     EventPageListComponent,
-    ProjectPageComponent,
-    ProjectListComponent,
     FilterDialogComponent,
     FilterProjectsDialogComponent,
-    BaybayonComponent,
-    LasangComponent,
-    SubaComponent,
-    ZeroWasteComponent,
     JoinUsComponent,
     ContactUsComponent,
     MembersDialogComponent,
     FilterProjectsDialogComponent,
-    NewsComponent,
-    NewsListComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -73,7 +56,6 @@ import { NewsListComponent } from './features/components/news/news-list/news-lis
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
-    CarouselModule,
 
     MatCarouselModule.forRoot()
   ],

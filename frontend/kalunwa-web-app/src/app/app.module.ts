@@ -13,8 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
-import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
-import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
 import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
@@ -39,8 +37,6 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     IndivProjectComponent,
     EventsPageComponent,
     EventPageListComponent,
-    ProjectPageComponent,
-    ProjectListComponent,
     FilterDialogComponent,
     FilterProjectsDialogComponent,
     JoinUsComponent,

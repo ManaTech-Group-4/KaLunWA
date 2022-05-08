@@ -7,7 +7,6 @@ import { OrgStructureComponent } from './features/components/org-structure/org-s
 import { PageNotFoundComponent } from './features/components/page-not-found/page-not-found.component';
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
-import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 
@@ -20,7 +19,6 @@ export const routes: Routes = [
   {path: "indiv-event/:id", component: IndiEventComponent},
   {path: "indiv-project/:id", component: IndivProjectComponent},
   {path: 'events', component:EventsPageComponent},
-  {path: 'projects', component:ProjectPageComponent},
   {path: 'join-us', component:JoinUsComponent},
   {path: 'contact-us', component:ContactUsComponent},
   {path: "**", component: PageNotFoundComponent}];
@@ -37,6 +35,5 @@ export const routeComponents = [HomepageComponent,
                                 IndivProjectComponent,
                                 PageNotFoundComponent,
                                 EventsPageComponent,
-                                ProjectPageComponent,
                                 JoinUsComponent,
                                 ContactUsComponent];

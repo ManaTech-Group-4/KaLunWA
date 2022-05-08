@@ -10,11 +10,11 @@
 </div>
 <div class="form">
 
-    <form action="https://formsubmit.co/ewiicccaa@gmail.com" method="POST">
+    <form #form action="https://formsubmit.co/firecav198@bunlets.com" method="POST">
         <div class="row1">            
             <label for="pronoun">Pronoun
                 <br>
-                <select name="pronoun" placeholder="Pronoun" id="pronoun">
+                <select name="pronoun" id="pronoun">
                     <option value="Mr."> Mr.</option>
                     <option value="Ms.">Ms.</option>
                     <option value="Mx.">Mx.</option>
@@ -40,7 +40,7 @@
                 <textarea name="message" id="message" placeholder="Your Message Here" required></textarea>
             </label>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn btn-success" (click)="form.submit()">Submit</button>
     </form>
 
     

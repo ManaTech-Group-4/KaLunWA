@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { Router} from "@angular/router";
+import { ActivatedRoute, Router} from "@angular/router";
 
 import { routes } from "./app-routing.module";
 import { HomepageComponent } from "./features/components/homepage/homepage.component";
@@ -27,7 +27,7 @@ describe('Router: App', () => {
         OrgStructureComponent,
         PageNotFoundComponent,
         AppComponent
-      ]
+      ],
     });
 
     router = TestBed.get(Router);

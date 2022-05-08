@@ -15,18 +15,7 @@ export class ProjectListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // this.projectService.getProjectList()
-    //   .subscribe(data => {
-    //     this.projectList = data.map((project) =>({
-    //       id: project.id,
-    //       title: project.title,
-    //       description: project.description,
-    //       image: project.image.image,
-    //       start_date: project.start_date,
-    //       end_date: project.end_date,
-    //       tags: [project.camp, project.status]
-    //     }));
-    //   });
+
   }
 
 }

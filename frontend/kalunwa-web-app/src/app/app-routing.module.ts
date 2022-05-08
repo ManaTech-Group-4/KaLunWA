@@ -14,14 +14,16 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { NewsComponent } from './features/components/news/news/news.component';
+
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomepageComponent},
   {path: 'about',  component: AboutPageComponent},
   {path: 'org-struct',  component: OrgStructureComponent},
-  {path: "indiv-event", component: IndiEventComponent},
-  {path: "indiv-project", component: IndivProjectComponent},
+  {path: "indiv-event/:id", component: IndiEventComponent},
+  {path: "indiv-project/:id", component: IndivProjectComponent},
   {path: 'events', component:EventsPageComponent},
   {path: 'projects', component:ProjectPageComponent},
   {path: 'baybayon', component:BaybayonComponent},
@@ -30,6 +32,7 @@ export const routes: Routes = [
   {path: 'zero-waste', component:ZeroWasteComponent},
   {path: 'join-us', component:JoinUsComponent},
   {path: 'contact-us', component:ContactUsComponent},
+  {path: 'news', component:NewsComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -50,4 +53,5 @@ export const routeComponents = [HomepageComponent,
                                 LasangComponent,
                                 ZeroWasteComponent,
                                 JoinUsComponent,
-                                ContactUsComponent];
+                                ContactUsComponent,
+                                NewsComponent];

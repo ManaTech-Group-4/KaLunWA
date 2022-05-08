@@ -134,8 +134,8 @@ hr{
                 text-decoration-line: none;
                 transition: .5s;
                 cursor: pointer;
-                
-                
+
+
                 img {
                     width: 50px;
                     height: 50px;
@@ -199,24 +199,23 @@ hr{
 //--------------------------MEDIA QUERY-----------------------------------
 
 @media screen and (max-width: 936px){
-
-    div{
-        .header{
-            height:150px;
-        }
-        .subhead{
-            padding: 50px 0px;
-            h1{
-            font-size: 100px;
-            line-height: 85px;
-            padding: 20px 0px;
-            }
-
-            p{
-            font-size: 16px;
-            }
-        }
+  div{
+    .subhead{
+      h1{
+        font-size: 140px;
+      }
     }
+  }
+  .container{
+    .block{
+      .announcements{
+        width: 94vw;
+        padding: 10px 3vw;
+        height: auto;
+      }
+    }
+  }
+
     hr{
         border-top:20px solid #628A3A;
     }
@@ -263,23 +262,16 @@ hr{
 
 
   @media screen and (max-width: 450px){
-
     div{
-        .header{
-            height:125px;
+      .subhead{
+        padding: 40px 0px;
+        h1{
+          font-size: 100px;
+          line-height: 90px;
+          padding: 5px 10px;
+          margin-bottom: 0px;
         }
-        .subhead{
-            padding: 30px 20px;
-            h1{
-            font-size: 80px;
-            line-height: 60px;
-            padding: 10px 0px;
-            }
-
-            p{
-            font-size: 13px;
-            }
-        }
+      }
     }
     hr{
         border-top:15px solid #628A3A;

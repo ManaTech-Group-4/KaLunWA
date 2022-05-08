@@ -24,14 +24,14 @@ export class EventsPageComponent implements OnInit {
   ngOnInit(): void {
     this.eventList$ = this.eventService.getEventList()
     .pipe(
-      map((data: EventsResponseModel[]) =>  data.map(project =>({
-        id: project.id,
-        title: project.title,
-        description: project.description,
-        image: project.image.image,
-        start_date: project.start_date,
-        end_date: project.end_date,
-        tags: [project.camp, project.status]
+      map((data: EventsResponseModel[]) =>  data.map(events =>({
+        id: events.id,
+        title: events.title,
+        description: events.description,
+        image: events.image.image,
+        start_date: events.start_date,
+        end_date: events.end_date,
+        tags: [events.camp, events.status]
       }))
       ));
 

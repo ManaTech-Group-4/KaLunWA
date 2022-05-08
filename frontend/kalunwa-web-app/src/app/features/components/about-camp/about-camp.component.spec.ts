@@ -8,18 +8,18 @@ import { AboutCampComponent } from './about-camp.component';
 import { of } from 'rxjs/internal/observable/of';
 
   const mockData: AboutCampModel[] = [
-    {'camp_name': 'Baybayon',
+    {'name': 'Baybayon',
       'description': 'asd',
-      'camp_image' : 'image1',
-      'camp_leader': {'name':'Juan Tamad', 'image': 'image_profile', 'motto': 'you are my fire'}},
-    {'camp_name': 'Lasang',
+      'image' : {image: 'image_profile'},
+      'camp_leader': {'name':'Juan Tamad', 'image': {image: 'image_profile'}, 'motto': 'you are my fire'}},
+    {'name': 'Lasang',
       'description': 'asd',
-      'camp_image' : 'image1',
-      'camp_leader': {'name':'Juan Tamad', 'image': 'image_profile', 'motto': 'you are my fire'}},
-    {'camp_name': 'Suba',
+      'image' :  {image: 'image_profile'},
+      'camp_leader': {'name':'Juan Tamad', 'image': {image: 'image_profile'}, 'motto': 'you are my fire'}},
+    {'name': 'Suba',
       'description': 'asd',
-      'camp_image' : 'image1',
-      'camp_leader':  {'name':'Juan Tamad', 'image': 'image_profile', 'motto': 'you are my fire'}}
+      'image' :  {image: 'image_profile'},
+      'camp_leader':  {'name':'Juan Tamad', 'image': {image: 'image_profile'}, 'motto': 'you are my fire'}}
   ];
 
 describe('AboutCampComponent', () => {
@@ -62,12 +62,4 @@ describe('AboutCampComponent', () => {
       expect(injectService).toBe(testBedService);
   }));
 
-  it('switch to the display camp',() => {
-    component.ngOnInit();
-    const mockRetrieve$ = of(mockCamps);
-    component.onSelect(1);
-    mockRetrieve$.subscribe((camps)=>{
-        expect(camps[1].camp_name).toEqual(component.displayCamp.camp_name);
-      });
-  });
 });

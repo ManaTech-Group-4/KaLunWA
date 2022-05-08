@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { IndivCampModel } from 'src/app/features/models/indiv-camp-model';
-import { OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-zero-waste',
@@ -77,81 +76,86 @@ export class ZeroWasteComponent implements OnInit {
       {
         id:1,
         image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        event_name: "Event Name1",
       },
       {
         id:2,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel2.jpg",
+        event_name: "Event Name2",
       },
       {
         id:3,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel1.jpg",
+        event_name: "Event Name3",
       },
       {
         id:4,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel4.jpg",
+        event_name: "Event Name4",
       },
       {
         id:5,
+        image: "assets/images/partners/partner1.jpeg",
+        event_name: "Event Name5",
+      },
+      {
+        id:6,
+        image: "assets/images/carousel/carousel3.jpg",
+        event_name: "Event Name6",
+      },
+      {
+        id:7,
         image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        event_name: "Event Name7",
+      },
+      {
+        id:8,
+        image: "assets/images/carousel/carousel1.jpg",
+        event_name: "Event Name8",
       },
     ],
     projects: [
       {
         id:1,
         image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        project_name: "Project Name1",
       },
       {
         id:2,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel2.jpg",
+        project_name: "Project Name2",
       },
       {
         id:3,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel1.jpg",
+        project_name: "Project Name3",
       },
       {
         id:4,
-        image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        image: "assets/images/carousel/carousel4.jpg",
+        project_name: "Project Name4",
       },
       {
         id:5,
+        image: "assets/images/partners/partner1.jpeg",
+        project_name: "Project Name5",
+      },
+      {
+        id:6,
+        image: "assets/images/carousel/carousel3.jpg",
+        project_name: "Project Name6",
+      },
+      {
+        id:7,
         image: "assets/images/camps/baybayon/trashtag.jpg",
-        event_name: "Event Name",
+        project_name: "Project Name7",
+      },
+      {
+        id:8,
+        image: "assets/images/carousel/carousel1.jpg",
+        project_name: "Project Name8",
       },
     ],
-  }
-
-  customOptions: OwlOptions = {
-    loop: true,
-    mouseDrag: false,
-    touchDrag: false,
-    pullDrag: false,
-    dots: false,
-    navSpeed: 700,
-    navText: ['', ''],
-    responsive: {
-      0: {
-        items: 1
-      },
-      400: {
-        items: 2
-      },
-      740: {
-        items: 3
-      },
-      940: {
-        items: 4
-      }
-    },
-    nav: true
   }
 
   ngOnInit(): void {

@@ -25,18 +25,55 @@
 
     <div class="events">
         <p>Camp Events</p>
-        <owl-carousel-o [options]="customOptions">
-            <ng-container *ngFor="let event of camp.events">
-                <ng-template ngTemplate carouselSlide [id]="event.id">
-                  <img [src]="event.image" [alt]="event.id">
-                </ng-template>
-              </ng-container>
-        </owl-carousel-o>
+
+        <div class="carousel">
+            <div class="container-fluid">
+                <div class="slider-wrap">
+                    <div class="slider-main">
+                        <div class="item" *ngFor="let event of camp.events">
+                            <mat-card class="events-card" style="background-image: url('{{event.image}}');background-size: cover;background-position: center;" >
+                                <div>
+                                    <mat-card-content>
+                                        <h1>{{event.event_name}}</h1>
+                                    </mat-card-content>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="button-area">
+                        <button type="button" class="prev" appPrev><mat-icon>keyboard_arrow_left</mat-icon></button>
+                        <button type="button" class="next" appNext><mat-icon>keyboard_arrow_right</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
     <div class="projects" [style.background-color]="camp.theme_colors.main">
         <p>Camp Projects</p>
+
+        <div class="carousel">
+            <div class="container-fluid">
+                <div class="slider-wrap">
+                    <div class="slider-main">
+                        <div class="item" *ngFor="let project of camp.projects">
+                            <mat-card class="events-card" style="background-image: url('{{project.image}}');background-size: cover;background-position: center;" >
+                                <div>
+                                    <mat-card-content>
+                                        <h1>{{project.project_name}}</h1>
+                                    </mat-card-content>
+                                </div>
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="button-area">
+                        <button type="button" class="prev" appPrev><mat-icon>keyboard_arrow_left</mat-icon></button>
+                        <button type="button" class="next" appNext><mat-icon>keyboard_arrow_right</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 

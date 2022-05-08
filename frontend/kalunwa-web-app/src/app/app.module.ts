@@ -27,7 +27,17 @@ import { BaybayonComponent } from './features/components/indiv-camps/baybayon/ba
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
+<<<<<<< Updated upstream
 import { CarouselModule } from 'ngx-owl-carousel-o';
+=======
+import { JoinUsComponent } from './features/components/join-us/join-us.component';
+import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { NewsComponent } from './features/components/news/news/news.component';
+import { NewsListComponent } from './features/components/news/news-list/news-list.component';
+import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
+import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
+
+>>>>>>> Stashed changes
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +59,17 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     BaybayonComponent,
     LasangComponent,
     SubaComponent,
+<<<<<<< Updated upstream
     ZeroWasteComponent
+=======
+    ZeroWasteComponent,
+    JoinUsComponent,
+    ContactUsComponent,
+    MembersDialogComponent,
+    FilterProjectsDialogComponent,
+    NewsComponent,
+    NewsListComponent,
+>>>>>>> Stashed changes
   ],
   entryComponents:[
     MembersDialogComponent
@@ -63,8 +83,13 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
+<<<<<<< Updated upstream
     NgImageSliderModule,
     CarouselModule,
+=======
+    NextDirectiveModule,
+    PrevDirectiveModule,
+>>>>>>> Stashed changes
 
     MatCarouselModule.forRoot()
   ],

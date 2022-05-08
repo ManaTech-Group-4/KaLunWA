@@ -87,28 +87,120 @@
 }
 
 .events{
-    text-align: center;
     padding: 40px 50px;
     p{
-      font-family: header-font;
-      font-size: 120px;
-      line-height: 50px;
-      padding: 20px 0px;
-      color:#fafafa;
-      margin-bottom: 30px;
+        text-align: center;
+        font-family: header-font;
+        font-size: 120px;
+        line-height: 50px;
+        padding: 20px 0 0;
+        color:#fafafa;
+        margin-bottom: 30px;
     }
 }
 
 .projects{
-    text-align: center;
     padding: 40px 50px;
     p{
-      font-family: header-font;
-      font-size: 120px;
-      line-height: 50px;
-      padding: 20px 0px;
-      color:#fafafa;
-      margin-bottom: 30px;
+        text-align: center;
+        font-family: header-font;
+        font-size: 120px;
+        line-height: 50px;
+        padding: 20px 0 0;
+        color:#fafafa;
+        margin-bottom: 30px;
+    }
+}
+
+.carousel{
+    padding: 20px 0;
+    .slider-wrap{
+        position: relative;
+        overflow: hidden;
+        height: 200px;
+        .slider-main{
+            position: absolute;
+            width: 200%;
+            .item{
+                display: inline-block;
+                position: relative;
+                margin-right: 5px;
+                .events-card{
+                    border-radius: 8px;
+                    width: 205px;
+                    height: 205px;
+                    box-shadow: none;
+                    color: #fafafa;
+                    padding:0;
+                    div{
+                        position: absolute;
+                        display:flex;
+                        justify-content: left;
+                        flex-direction: row;
+                        align-items: flex-end;
+                        overflow: hidden;
+                        text-align: left;
+                        width:100%;
+                        height:100%;
+                  
+                        .mat-card-content{
+                          padding:0px 20px;
+                          font-size: 12px;
+                          opacity: 0;
+                  
+                          h1{
+                            font-size:25px;
+                            color:white;
+                            width: 100%;
+                            flex-grow: 5;
+                            font-family: monserrat;
+                            line-height:100%;
+                            padding:0;
+                            margin: 0;
+                          }
+                        }
+                        &:hover{
+                            background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+                            cursor: pointer;
+                            .mat-card-content{
+                                opacity: 1;
+                                transition: opacity 0.4s;
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        button{
+            width: 35px;
+            height: 35px;
+            border: none;
+            background-color: #fafafae5;
+            border-radius: 50%;
+            margin: 0;
+            padding: 0;
+            opacity: 0.6;
+            color: #628A3A;
+            &:hover{
+                cursor: pointer;
+                opacity: 1;
+                transition: opacity 0.3s;
+            }
+        }
+        .prev{
+            position: absolute;
+            top: 50%;
+            left: 2.25vw;
+            transform: translate(-50%,-50%);
+        }
+        .next{
+            position: absolute;
+            top: 50%;
+            right:-0.5vw;
+            transform: translate(-50%,-50%);
+        }
+        
     }
 }
 
@@ -220,6 +312,23 @@
           font-size: 110px;
         }
     }
+
+    .carousel{
+        .slider-wrap{
+            button{
+                width: 5vw;
+                height: 5vw;
+            }
+            .prev{
+                left: 24px;
+            }
+            .next{
+                right:-9px;
+            }
+            
+        }
+    }
+
     
     .other-camps{
         padding: 30px 50px;
@@ -299,7 +408,6 @@
         padding: 20px 30px;
         p{
             font-size: 80px;
-            margin-bottom: 20px;
         }
     }
     

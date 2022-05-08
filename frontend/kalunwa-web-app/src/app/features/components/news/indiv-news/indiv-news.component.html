@@ -1,0 +1,19 @@
+<div class="container"  *ngIf="(news$ | async) as news">
+  <div class ="header" style="background-image: url('{{news.image.image}}');background-size: cover;background-position: center;">
+  </div>
+
+  <div class="title">
+    <h1>{{news.title}}</h1>
+    <h5>{{news.date}}</h5>
+  </div>
+  <div class="content">
+      <div class="latest">
+        <h1>Latest News</h1>
+        <h5>Insert title here</h5>
+        <h5>Insert title here</h5>
+        <h5>Insert title here</h5>
+        <h5>Insert title here lorem ipsum dolor sit amet</h5>
+      </div>
+      <p>{{news.description}}</p>
+  </div>
+</div>

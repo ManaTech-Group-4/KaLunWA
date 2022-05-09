@@ -7,6 +7,7 @@ from kalunwa.content.models import(
     Commissioner,
     Event,
     Image,
+    News,
     OrgLeader,
 )
 from .utils import (
@@ -264,41 +265,38 @@ class ExcludeIDFilterTestCase(APITestCase):
         cls.image_file = get_test_image_file()    
         for _ in range(3):
             image = Image.objects.create(name=f'image', image=cls.image_file)            
-
-            Event.objects.create(
-                title= f'Event', 
-                description= f'description',
-                start_date=timezone.now(),
-                end_date=timezone.now(),
-                image = image,  
-                is_featured=True,
-            )   
-        cls.event_count = Event.objects.count()
+            News.objects.create(
+            title= f'News {_}', 
+            description= f'description {_}',
+            image = image              
+            )  
+    
+        cls.news_count = News.objects.count()
 
     def test_id_exists(self):
         # return all except the flagged id 
-        expected_event = Event.objects.last()
-        response = self.client.get(f'/api/events/?id__not={expected_event.id}')
-        self.assertEqual(self.event_count-1, len(response.data))
-        for event in response.data:
-            self.assertNotEqual(event['id'],expected_event.id)
+        expected_news = News.objects.last()
+        response = self.client.get(f'/api/news/?id__not={expected_news.id}')
+        self.assertEqual(self.news_count-1, len(response.data))
+        for news in response.data:
+            self.assertNotEqual(news['id'],expected_news.id)
 
     def test_id_doesnt_exist(self):
-        # return all events
-        response = self.client.get(f'/api/events/?id__not={self.event_count+1}')       
-        self.assertEqual(self.event_count, len(response.data))       
+        # return all news
+        response = self.client.get(f'/api/news/?id__not={self.news_count+1}')       
+        self.assertEqual(self.news_count, len(response.data))       
                 
     def test_id_is_invalid(self):
         # does not satisfy the isdigit check
-        #return all events
+        #return all news
         invalid_ids = ['aaa', '*&()', '']
         for invalid_id in invalid_ids:
-            response = self.client.get(f'/api/events/?id__not={invalid_id}')                   
-            self.assertEqual(self.event_count, len(response.data))             
+            response = self.client.get(f'/api/news/?id__not={invalid_id}')                   
+            self.assertEqual(self.news_count, len(response.data))             
 
     def test_no_id_not_param(self):
-        response = self.client.get(f'/api/events/')                   
-        self.assertEqual(self.event_count, len(response.data))    
+        response = self.client.get(f'/api/news/')                   
+        self.assertEqual(self.news_count, len(response.data))    
 
 
 class OrgLeaderPositionFilterTestCase(APITestCase):

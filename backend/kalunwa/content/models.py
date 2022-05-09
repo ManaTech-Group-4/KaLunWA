@@ -107,6 +107,7 @@ class Demographics(AuthoredModel):
 
 class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
+    tagline = models.CharField(max_length=225)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
     gallery = models.ManyToManyField(Image, related_name='gallery_camps', blank=True)
@@ -130,7 +131,8 @@ class LeaderBase(AuthoredModel):
     def get_fullname(self):
         return f'{self.first_name} {self.last_name}'
 
-
+    def get_position(self):
+        return f'{self.get_position_display()}'
 
 class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
@@ -148,10 +150,7 @@ class OrgLeader(LeaderBase): # how to make pres -> overseer unique
 
 
     def __str__(self) -> str:
-        return f'{self.get_position_display()} : {self.last_name}'
-
-    def get_position(self):
-        return f'{self.get_position_display()}'     
+        return f'{self.get_position_display()} : {self.last_name}'  
 
 
 class Commissioner(LeaderBase):
@@ -171,10 +170,7 @@ class Commissioner(LeaderBase):
 
     def __str__(self) -> str:
         return f'{self.get_category_display()} {self.get_position_display()}: {self.last_name}'
-        # e.g. Election Chief Commissioner: Junel
-
-    def get_position(self):
-        return f'{self.get_position_display()}'     
+        # e.g. Election Chief Commissioner: Junel 
 
     def get_category(self):
         return f'{self.get_category_display()}'             
@@ -195,10 +191,7 @@ class CampLeader(LeaderBase):
         # e.g. Camp Suba, Camp Leader: Junel  
 
     def get_camp(self):
-        return f'{self.get_camp_display()}'
-
-    def get_position(self):
-        return f'{self.get_position_display()}'        
+        return f'{self.get_camp_display()}'    
 
 
 class CabinOfficer(LeaderBase):
@@ -229,9 +222,6 @@ class CabinOfficer(LeaderBase):
 
     def get_category(self):
         return f'{self.get_category_display()}'     
-
-    def get_position(self):
-        return f'{self.get_position_display()}'
 
 
 class Contributor(models.Model):

@@ -4,11 +4,23 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
-    ABOUT_US_CAMP_URL, ABOUT_US_LEADERS, ABOUT_US_TOTAL_MEMBERS, ANNOUNCEMENT_LATEST_ONE,
-    EVENT_DETAIL_CONTRIBUTORS, EVENT_DETAIL_GALLERY_LIMIT,
-    HOMEPAGE_NEWS_URL, HOMEPAGE_PROJECT_URL, PROJECT_DETAIL_CONTRIBUTORS, 
-    PROJECT_DETAIL_GALLERY_LIMIT, get_expected_image_url, get_test_image_file, to_expected_iso_format,
-    to_formal_mdy, HOMEPAGE_JUMBOTRON_URL, HOMEPAGE_EVENT_URL
+    ANNOUNCEMENT_LATEST_ONE,
+    ABOUT_US_CAMP_URL, 
+    ABOUT_US_LEADERS,
+    ABOUT_US_TOTAL_MEMBERS, 
+    CAMP_DETAIL_GALLERY_LIMIT,
+    EVENT_DETAIL_CONTRIBUTORS,
+    EVENT_DETAIL_GALLERY_LIMIT,
+    HOMEPAGE_EVENT_URL,
+    HOMEPAGE_JUMBOTRON_URL,     
+    HOMEPAGE_NEWS_URL,
+    HOMEPAGE_PROJECT_URL, 
+    PROJECT_DETAIL_CONTRIBUTORS, 
+    PROJECT_DETAIL_GALLERY_LIMIT, 
+    get_expected_image_url, 
+    get_test_image_file, 
+    to_expected_iso_format,
+    to_formal_mdy, 
 )
 from kalunwa.content.models import(
     Announcement,
@@ -131,7 +143,6 @@ class HomepageEventsTestCase(APITestCase):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
         cls.url = HOMEPAGE_EVENT_URL
-
     
     def test_get_homepage_events(self):
         """
@@ -160,7 +171,7 @@ class HomepageEventsTestCase(APITestCase):
         """
 
         for _ in range(5): 
-            if _ == [0,1]: # first 2 events are featured, rest are not
+            if _ in [0,1]: # first 2 events are featured, rest are not
                 featured = True
             else:
                 featured = False
@@ -230,8 +241,7 @@ class HomepageProjectsTestCase(APITestCase):
             pk=_,
             name=f'image_{_}',
             image=self.image_file,
-        )       
-
+            )       
             Project.objects.create(
             title= f'Project {_}', 
             description= f'description {_}',
@@ -484,6 +494,7 @@ class AboutUsCampsTestCase(APITestCase):
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
             'description' : expected_camp.description,
+            'tagline' : expected_camp.tagline,
             'image' : {
                 'id' : expected_camp.image.pk,
                 'image' : camp_image_url,
@@ -564,6 +575,9 @@ class AboutUsLeadersTestCase(APITestCase):
         }
         self.assertDictEqual(expected_leader_data, response_leader)      
 
+
+# ------------------------------------------------------------------------------
+# website list and views
 
 class EventGetTestCase(APITestCase):
     """
@@ -926,6 +940,116 @@ class ProjectGetTestCase(APITestCase):
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
 
 
+class CampGetTestCase(APITestCase):
+    """
+    tests the get method for list and detail endpoints.
+        - test camp list endpoint (status ok), return created events
+        - test camp detail endpoint (status ok), return created camp
+        - test camp detail response data
+        - test camp endpoint (status ok) with expanded gallery
+        - test camp gallery limit
+        - test camp gallery response data
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
+
+    def test_get_camp_list(self):
+        """
+        - test project list endpoint (status ok), return created projects                
+        """
+        
+        for _ in range(5):
+            CampPage.objects.create(
+                name=CampEnum.values[_],
+                description = 'default description',
+                tagline = 'tagline',
+                image = Image.objects.create(name = 'name', image = self.image_file)
+            )            
+
+        response = self.client.get(reverse('camp-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertLessEqual( len(response.data), 5)
+
+    def test_camp_detail(self):
+        """
+        - test camp detail endpoint (status ok), return created camp            
+        """    
+        expected_camp = CampPage.objects.create(
+            name=CampEnum.GENERAL.value,
+            description = 'default description',
+            tagline = 'tagline',
+            image = Image.objects.create(name = 'name', image = self.image_file)
+        )        
+
+        response = self.client.get(reverse('camp-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response_camp = response.data
+
+        expected_camp_data = {
+            'id' : expected_camp.id,
+            'name': CampEnum.GENERAL.label,
+            'description': expected_camp.description,
+            'tagline': expected_camp.tagline,
+            'image' : expected_camp.image.pk, 
+            'camp_leader': None,
+            'created_at': to_expected_iso_format(expected_camp.created_at),
+            'updated_at': to_expected_iso_format(expected_camp.updated_at)
+        }
+        self.assertDictEqual(expected_camp_data, response_camp)
+        
+    def test_get_camp_gallery(self):
+        """
+        - test camp endpoint (status ok) with expanded gallery, return gallery images
+        - test camp gallery limit (10)
+        mock :
+            1 project related to 11 diff images
+        
+        """
+        camp = CampPage.objects.create(
+            name=CampEnum.GENERAL.value,
+            description = 'default description',
+            tagline = 'tagline',
+            image = Image.objects.create(name = 'name', image = self.image_file)
+        )    
+
+        for _ in range(11):
+            Image.objects.create(name='image_1', image=self.image_file)
+        
+        camp.gallery.set(Image.objects.all().values_list('id', flat=True))
+        response = self.client.get(CAMP_DETAIL_GALLERY_LIMIT)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)        
+        
+        gallery = response.data[0]['gallery']
+        self.assertEqual( len(gallery), 10)   
+
+    def test_get_project_gallery_data(self):
+        """
+        - test camp gallery response data        
+        data:
+            id, image_url
+        """
+        camp = CampPage.objects.create(
+            name=CampEnum.GENERAL.value,
+            description = 'default description',
+            tagline = 'tagline',
+            image = Image.objects.create(name = 'name', image = self.image_file)
+        )    
+        image = Image.objects.get(pk=1) 
+        camp.gallery.add(image)               
+
+        request = self.request_factory.get(CAMP_DETAIL_GALLERY_LIMIT)
+        response = self.client.get(CAMP_DETAIL_GALLERY_LIMIT)
+        gallery = json.loads(response.content)[0]['gallery']
+
+        expected_gallery_data = {
+            'id':image.id,
+            'image': get_expected_image_url(image.image.name, request)
+        } 
+        self.assertDictEqual(gallery[0], expected_gallery_data)   
+
+
 class AnnouncementGetTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:    
@@ -990,6 +1114,8 @@ class AnnouncementLatesTTestCase(APITestCase):
             'date': to_formal_mdy(expected_announcement.created_at)                  
         }        
         self.assertDictEqual(latest_announcement_data, response_announcement)
+            
+
 
 
 # ---------------------------------------------------------------------------        

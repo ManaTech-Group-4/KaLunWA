@@ -335,6 +335,7 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'title',
+            'meta_description',
             'description',
             'date',
             'created_at',

@@ -61,6 +61,7 @@ class News(ContentBase):
 
 
 class Announcement(ContentBase):
+    meta_description = models.CharField(max_length=225)
     def __str__(self) -> str:
         return self.title
 

@@ -1074,6 +1074,7 @@ class AnnouncementGetTestCase(APITestCase):
         """        
         expected_announcement = Announcement.objects.create(
                 title='announcement',
+                meta_description = 'meta_description',                
                 description = 'description'
         )
         response = self.client.get(reverse('announcement-detail', args=[1]))
@@ -1082,6 +1083,7 @@ class AnnouncementGetTestCase(APITestCase):
         expected_announcement_data = {
             'id': expected_announcement.id,
             'title': expected_announcement.title,
+            'meta_description' : expected_announcement.meta_description,              
             'description' : expected_announcement.description,    
             'date': to_formal_mdy(expected_announcement.created_at),          
             'created_at': to_expected_iso_format(expected_announcement.created_at), 
@@ -1100,6 +1102,7 @@ class AnnouncementLatesTTestCase(APITestCase):
         for _ in range(5):
             Announcement.objects.create(
                 title='announcement',
+                meta_description = 'meta_description',
                 description = 'description'
             )
 
@@ -1110,6 +1113,7 @@ class AnnouncementLatesTTestCase(APITestCase):
         latest_announcement_data = {
             'id': expected_announcement.id,
             'title': expected_announcement.title,
+            'meta_description' : expected_announcement.meta_description,             
             'description' : expected_announcement.description,  
             'date': to_formal_mdy(expected_announcement.created_at)                  
         }        

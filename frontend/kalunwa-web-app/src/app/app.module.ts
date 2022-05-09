@@ -16,7 +16,7 @@ import { EventPageListComponent } from './features/components/event-page-list/ev
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { ProjectListComponent } from './features/components/projects/project-list/project-list.component';
 import { FilterDialogComponent } from './features/dialog/filter-dialog/filter-dialog.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FilterProjectsDialogComponent } from './features/dialog/filter-projects-dialog/filter-projects-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MembersDialogComponent } from './features/components/members-dialog/members-dialog.component';
@@ -25,6 +25,12 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
 import { NewsComponent } from './features/components/news/news/news.component';
 import { NewsListComponent } from './features/components/news/news-list/news-list.component';
 import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
+import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
+import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
+import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
+import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
+import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
+import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 
 @NgModule({
@@ -50,6 +56,10 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     NewsComponent,
     NewsListComponent,
     IndivNewsComponent,
+    BaybayonComponent,
+    LasangComponent,
+    SubaComponent,
+    ZeroWasteComponent,
     ContactUsComponent
   ],
   entryComponents:[
@@ -64,7 +74,9 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    NextDirectiveModule,
+    PrevDirectiveModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

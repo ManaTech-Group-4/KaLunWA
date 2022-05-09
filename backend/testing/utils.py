@@ -22,19 +22,13 @@ def get_expected_image_url(file_name, request):
 def to_formal_mdy(date:datetime)->str:
     return f'{date.strftime("%B")} {date.day}, {date.year}'    
 
-def get_camp_value_via_label(label):
-    if label == CampEnum.BAYBAYON.label:
-        return CampEnum.BAYBAYON.value
-    if label == CampEnum.SUBA.label:
-        return CampEnum.SUBA.value
-    if label == CampEnum.LASANG.label:
-        return CampEnum.LASANG.value
-    if label == CampEnum.ZEROWASTE.label:
-        return CampEnum.ZEROWASTE.value
-    if label == CampEnum.GENERAL.label:
-        return CampEnum.GENERAL.value
-
-    return None
+def to_expected_iso_format(date: datetime)->str:
+    """
+    convert to iso-8061; how date is serialized by default        
+    """
+    date = date.isoformat()
+    # +00:00 marks for UTC, which Z also represents (used by serializer as well)
+    return str(date).replace('+00:00', 'Z')
 
 HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5'
 HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
@@ -48,3 +42,6 @@ EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_lim
 EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'
 PROJECT_DETAIL_GALLERY_LIMIT = '/api/projects/?expand=gallery,contributors&query_limit_gallery=10'
 PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'
+CAMP_DETAIL_GALLERY_LIMIT = '/api/camps/?expand=gallery&query_limit_gallery=10'
+
+ANNOUNCEMENT_LATEST_ONE = '/api/announcements/?omit=created_at,updated_at&query_limit=1'

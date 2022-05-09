@@ -61,6 +61,7 @@ class News(ContentBase):
 
 
 class Announcement(ContentBase):
+    meta_description = models.CharField(max_length=225)
     def __str__(self) -> str:
         return self.title
 
@@ -134,7 +135,6 @@ class LeaderBase(AuthoredModel):
     def get_position(self):
         return f'{self.get_position_display()}'
 
-
 class OrgLeader(LeaderBase): # how to make pres -> overseer unique
     class Positions(models.TextChoices):
         PRESIDENT = 'PR', 'President'
@@ -151,10 +151,7 @@ class OrgLeader(LeaderBase): # how to make pres -> overseer unique
 
 
     def __str__(self) -> str:
-        return f'{self.get_position_display()} : {self.last_name}'
-
-    def get_position(self):
-        return f'{self.get_position_display()}'     
+        return f'{self.get_position_display()} : {self.last_name}'  
 
 
 class Commissioner(LeaderBase):
@@ -174,10 +171,7 @@ class Commissioner(LeaderBase):
 
     def __str__(self) -> str:
         return f'{self.get_category_display()} {self.get_position_display()}: {self.last_name}'
-        # e.g. Election Chief Commissioner: Junel
-
-    def get_position(self):
-        return f'{self.get_position_display()}'     
+        # e.g. Election Chief Commissioner: Junel 
 
     def get_category(self):
         return f'{self.get_category_display()}'             
@@ -198,10 +192,7 @@ class CampLeader(LeaderBase):
         # e.g. Camp Suba, Camp Leader: Junel  
 
     def get_camp(self):
-        return f'{self.get_camp_display()}'
-
-    def get_position(self):
-        return f'{self.get_position_display()}'        
+        return f'{self.get_camp_display()}'    
 
 
 class CabinOfficer(LeaderBase):
@@ -232,9 +223,6 @@ class CabinOfficer(LeaderBase):
 
     def get_category(self):
         return f'{self.get_category_display()}'     
-
-    def get_position(self):
-        return f'{self.get_position_display()}'
 
 
 class Contributor(models.Model):

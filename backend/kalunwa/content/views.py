@@ -16,7 +16,9 @@ from .filters import (
     CampNameInFilter,
     OrgLeaderPositionFilter,
     CampFilter,
-    CommissionerCategoryFilter
+    CommissionerCategoryFilter,
+    CabinOfficerCategoryFilter,
+    ExcludeIDFilter,
 )
 
     
@@ -45,7 +47,7 @@ class JumbotronViewSet(viewsets.ModelViewSet):
 
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
-    filter_backends = [QueryLimitBackend]    
+    filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
 
 
@@ -58,7 +60,7 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
 class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
     queryset = CabinOfficer.objects.all()
-    filter_backends = [CampFilter]    
+    filter_backends = [CampFilter, CabinOfficerCategoryFilter]    
 
 
 class CommissionerViewSet(viewsets.ModelViewSet):
@@ -115,6 +117,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 class AnnouncementViewSet(viewsets.ModelViewSet):
     serializer_class = AnnouncementSerializer
     queryset = Announcement.objects.all()
+    filter_backends = [QueryLimitBackend]
 
 
 #-------------------------------------------------------

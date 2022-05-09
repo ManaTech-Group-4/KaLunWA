@@ -31,7 +31,7 @@ import { SubaComponent } from './features/components/indiv-camps/suba/suba.compo
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
-
+import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +59,8 @@ import { PrevDirectiveModule } from './features/shared/directives/prev/prev.dire
     BaybayonComponent,
     LasangComponent,
     SubaComponent,
-    ZeroWasteComponent
+    ZeroWasteComponent,
+    ContactUsComponent
   ],
   entryComponents:[
     MembersDialogComponent

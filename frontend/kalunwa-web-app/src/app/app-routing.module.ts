@@ -14,6 +14,7 @@ import { BaybayonComponent } from './features/components/indiv-camps/baybayon/ba
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
+import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -30,6 +31,7 @@ export const routes: Routes = [
   {path: 'lasang', component:LasangComponent},
   {path: 'suba', component:SubaComponent},
   {path: 'zero-waste', component:ZeroWasteComponent},
+  {path: "contact-us", component: ContactUsComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -50,4 +52,5 @@ export const routeComponents = [HomepageComponent,
                                 BaybayonComponent,
                                 LasangComponent,
                                 SubaComponent,
-                                ZeroWasteComponent];
+                                ZeroWasteComponent,
+                                ContactUsComponent];

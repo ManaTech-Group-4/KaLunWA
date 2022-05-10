@@ -1092,7 +1092,7 @@ class AnnouncementGetTestCase(APITestCase):
         self.assertDictEqual(expected_announcement_data, response_announcement)        
 
         
-class AnnouncementLatesTTestCase(APITestCase):
+class AnnouncementLatestTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:    
         cls.request_factory = APIRequestFactory()
@@ -1120,7 +1120,51 @@ class AnnouncementLatesTTestCase(APITestCase):
         self.assertDictEqual(latest_announcement_data, response_announcement)
             
 
+class NewsGetTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
 
+    def test_get_news_list(self):
+        """
+            - test news endpoint (status ok), return created news  
+        """        
+        for _ in range(5):
+            News.objects.create(
+                title='news {_}',
+                description = 'description',
+                image = Image.objects.create(name=f'image_{_}', image=self.image_file)
+            )
+        response = self.client.get(reverse('news-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual( len(response.data), 5)       
+
+    def test_get_news_detail(self):
+        """
+            - test news detail endpoint (status ok), return created news  
+        """        
+        expected_news = News.objects.create(
+                title='news',                
+                description = 'description',
+                image = Image.objects.create(name='image_1', image=self.image_file)
+        )
+
+        response = self.client.get(reverse('news-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response_news = response.data
+
+        expected_news_data = {
+            'id': expected_news.id,
+            'title': expected_news.title,           
+            'description' : expected_news.description,    
+            'image': expected_news.image.pk,   
+            'date': to_formal_mdy(expected_news.created_at),       
+            'created_at': to_expected_iso_format(expected_news.created_at), 
+            'updated_at': to_expected_iso_format(expected_news.updated_at),                      
+        }
+
+        self.assertDictEqual(expected_news_data, response_news)        
 
 # ---------------------------------------------------------------------------        
 # Post end-points

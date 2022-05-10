@@ -4,7 +4,6 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
-    NEWS_LATEST_ONE,
     ANNOUNCEMENT_LATEST_ONE,
     ABOUT_US_CAMP_URL, 
     ABOUT_US_LEADERS,

@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
+    NEWS_LATEST_ONE,
     ANNOUNCEMENT_LATEST_ONE,
     ABOUT_US_CAMP_URL, 
     ABOUT_US_LEADERS,
@@ -1120,7 +1121,79 @@ class AnnouncementLatesTTestCase(APITestCase):
         self.assertDictEqual(latest_announcement_data, response_announcement)
             
 
+class NewsGetTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:    
+        cls.image_file = get_test_image_file()
+        cls.request_factory = APIRequestFactory()
 
+    def test_get_news_list(self):
+        """
+            - test news endpoint (status ok), return created news  
+        """        
+        for _ in range(5):
+            News.objects.create(
+                title='news {_}',
+                description = 'description',
+                image = Image.objects.create(name=f'image_{_}', image=self.image_file)
+            )
+        response = self.client.get(reverse('news-list'))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual( len(response.data), 5)       
+
+    def test_get_news_detail(self):
+        """
+            - test news detail endpoint (status ok), return created news  
+        """        
+        expected_news = News.objects.create(
+                title='news',                
+                description = 'description',
+                image = Image.objects.create(name='image_1', image=self.image_file)
+        )
+
+        response = self.client.get(reverse('news-detail', args=[1]))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        response_news = response.data
+
+        expected_news_data = {
+            'id': expected_news.id,
+            'title': expected_news.title,           
+            'description' : expected_news.description,    
+            'image': expected_news.image.pk,   
+            'date': to_formal_mdy(expected_news.created_at),       
+            'created_at': to_expected_iso_format(expected_news.created_at), 
+            'updated_at': to_expected_iso_format(expected_news.updated_at),                      
+        }
+
+        self.assertDictEqual(expected_news_data, response_news)        
+
+class NewsLatestTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:   
+        cls.image_file = get_test_image_file() 
+        cls.request_factory = APIRequestFactory()
+        cls.url = NEWS_LATEST_ONE
+
+    def test_get_latest_news(self):      
+        for _ in range(5):
+            News.objects.create(
+                title='news {_}',
+                description = 'description',
+                image = Image.objects.create(name=f'image_{_}', image=self.image_file)
+            )
+
+        response = self.client.get(self.url)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        expected_news = News.objects.first() # ordered by latest
+        response_news = json.loads(response.content)[0]
+        latest_news_data = {
+            'id': expected_news.id,
+            'title': expected_news.title,           
+            'description' : expected_news.description,    
+            'image': expected_news.image.pk,   
+            'date': to_formal_mdy(expected_news.created_at),                
+        }        
+        self.assertDictEqual(latest_news_data, response_news)
 
 # ---------------------------------------------------------------------------        
 # Post end-points

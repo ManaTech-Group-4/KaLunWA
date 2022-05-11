@@ -24,7 +24,7 @@ export class OrgService {
   }
 
   getElection() : Observable<MembersDialogModel[]>{
-    return this.http.get<MembersDialogModel[]>('http://127.0.0.1:8000/api/commissioners/?expand=image&omit=created_at,updated_at&category=Grievance%20and%20Ethics');
+    return this.http.get<MembersDialogModel[]>('http://127.0.0.1:8000/api/commissioners/?expand=image&omit=created_at,updated_at&category=Election');
   }
 
   getCabin() : Observable<MembersDialogModel[]>{

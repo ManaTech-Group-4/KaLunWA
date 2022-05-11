@@ -112,5 +112,58 @@ describe('OrgStructureComponent', () => {
     expect(result).toEqual(response);
   }));
 
+  it("filter an observable with position", async(() => {
+    const response: Observable<MembersDialogModel[]> = of([
+      {id: 1,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "de la Cruz",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 2,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "Director",
+      quote: "advocacy"
+      },
+    ]);
+
+    const mock: Observable<MembersDialogModel[]>  = of([
+      {id: 1,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "de la Cruz",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 2,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 3,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "President",
+      quote: "advocacy"
+      },
+      {id: 4,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Tamad",
+      position: "Estambay",
+      quote: "advocacy"
+      }
+    ]);
+
+    component.getLeadersList("Director",mock);
+    expect(mock.subscribe()).toEqual(response.subscribe());
+  }));
+
 
 });

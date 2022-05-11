@@ -85,7 +85,7 @@ describe('EventspageService', () => {
       expect(testEvents).toBe(member,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/campleaders/?expand=image&omit=created_at,updated_at,camp,motto&camp=Lasang');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/events');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');

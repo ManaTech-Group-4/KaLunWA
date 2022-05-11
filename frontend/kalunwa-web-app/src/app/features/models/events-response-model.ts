@@ -9,5 +9,4 @@ export interface EventsResponseModel{
   end_date: string;
   camp: string;
   status: string;
-  updated_at: string;
 }

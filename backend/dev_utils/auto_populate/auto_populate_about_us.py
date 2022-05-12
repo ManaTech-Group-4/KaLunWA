@@ -5,12 +5,10 @@
 exec(open("dev_utils/auto_populate/auto_populate_about_us.py").read())    
 """
 from kalunwa.content.models import (
-    CampLeader, 
     Image, 
     CampEnum, 
     CampPage, 
     Demographics, 
-    OrgLeader
 )
 
 #-------------------------------------------------------------------------------

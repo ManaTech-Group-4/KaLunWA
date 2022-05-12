@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZeroWasteComponent } from './zero-waste.component';
@@ -8,7 +9,8 @@ describe('ZeroWasteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ZeroWasteComponent ]
+      declarations: [ ZeroWasteComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
   });

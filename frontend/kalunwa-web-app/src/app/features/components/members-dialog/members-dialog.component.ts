@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 export class MembersDialogComponent implements OnInit {
 
 
-
   constructor(@Inject(MAT_DIALOG_DATA) public members$: Observable<MembersDialogModel[]>,
               private matDialogRef:MatDialogRef<MembersDialogComponent>,
               private service: OrgService) { }

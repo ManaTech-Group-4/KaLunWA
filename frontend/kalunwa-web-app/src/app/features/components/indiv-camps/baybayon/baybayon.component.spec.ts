@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BaybayonComponent } from './baybayon.component';
@@ -8,7 +9,8 @@ describe('BaybayonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BaybayonComponent ]
+      declarations: [ BaybayonComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
   });

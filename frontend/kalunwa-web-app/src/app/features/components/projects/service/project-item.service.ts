@@ -12,7 +12,7 @@ export class ProjectItemService {
   constructor(private http:HttpClient) { }
 
   public getProjectList() : Observable<ProjectResponseModel[]>{
-    return this.http.get<ProjectResponseModel[]>('http://127.0.0.1:8000/api/projects');
+    return this.http.get<ProjectResponseModel[]>('http://127.0.0.1:8000/api/projects/?expand=image');
   }
   getProjectDetails(projectId: string | null) : Observable<IndivProjectsModel>{
     let address  = 'http://127.0.0.1:8000/api/projects/'+projectId+'/?expand=image,contributors.image,gallery&omit=created_at,updated_at&query_limit_gallery=10';

@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LasangComponent } from './lasang.component';
@@ -8,7 +9,8 @@ describe('LasangComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LasangComponent ]
+      declarations: [ LasangComponent ],
+      imports: [HttpClientTestingModule]
     })
     .compileComponents();
   });

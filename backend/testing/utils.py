@@ -30,8 +30,6 @@ def to_expected_iso_format(date: datetime)->str:
     # +00:00 marks for UTC, which Z also represents (used by serializer as well)
     return str(date).replace('+00:00', 'Z')
 
-
-
 HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5'
 HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
@@ -44,5 +42,6 @@ EVENT_DETAIL_GALLERY_LIMIT = '/api/events/?expand=gallery,contributors&query_lim
 EVENT_DETAIL_CONTRIBUTORS = '/api/events/?expand=contributors.image'
 PROJECT_DETAIL_GALLERY_LIMIT = '/api/projects/?expand=gallery,contributors&query_limit_gallery=10'
 PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'
+CAMP_DETAIL_GALLERY_LIMIT = '/api/camps/?expand=gallery&query_limit_gallery=10'
 
 ANNOUNCEMENT_LATEST_ONE = '/api/announcements/?omit=created_at,updated_at&query_limit=1'

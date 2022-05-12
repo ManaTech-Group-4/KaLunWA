@@ -26,7 +26,6 @@ export class FilterProjectsDialogComponent implements OnInit {
 
   @Output() applyFilter = new EventEmitter<{camps:string[], status: string}>();
 
-
   campControl = new FormControl([]);
   statusControl = new FormControl([]);
 

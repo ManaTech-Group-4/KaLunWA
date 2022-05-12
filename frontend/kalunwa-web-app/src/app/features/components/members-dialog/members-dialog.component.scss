@@ -11,7 +11,7 @@ mat-icon{
   float: right;
   top:-15px;
   right:-15px;
-  color: white;
+  color: #3b5c1e;
   cursor: pointer;
 }
 
@@ -27,7 +27,7 @@ mat-dialog-content{
     border-radius: 10px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #50772c;
+    background: #50772ccb;
     border-radius: 10px;
     &:hover {
       background: #3b5c1e;
@@ -45,8 +45,8 @@ mat-dialog-content{
 
     a{
       width: 13vw;
-      background-color: #3b5c1e;
-      border: 1px solid #fafcf8;
+      background-color: transparent;
+      border: 1.5px solid #3b5c1e;
       padding: 20px 10px;
       border-radius: 5px;
       display: inline-grid;
@@ -61,7 +61,7 @@ mat-dialog-content{
         span{
           margin: 7px;
           text-align: center;
-          color: white;
+          color: #3b5c1e;
           padding: 8px;
           letter-spacing: 1px;
           font-weight: 500;
@@ -75,7 +75,7 @@ mat-dialog-content{
             width: 100%;
             height: 2px;
             border: none;
-            background-color: white;
+            background-color: #3b5c1e;
           }
           h2{
             font-family: monserrat;

@@ -1,18 +1,29 @@
 import { Overlay } from '@angular/cdk/overlay';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable, of } from 'rxjs';
+import { MembersDialogModel } from '../../models/members-dialog-model';
+import { OrgService } from '../../service/org.service';
 
 import { OrgStructureComponent } from './org-structure.component';
+
+
 
 describe('OrgStructureComponent', () => {
   let component: OrgStructureComponent;
   let fixture: ComponentFixture<OrgStructureComponent>;
+  let testBedService : OrgService;
+  let dialogSpy: jasmine.Spy;
+  let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null })
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule],
-      declarations: [ OrgStructureComponent ]
+      imports: [MatDialogModule, HttpClientTestingModule, BrowserAnimationsModule],
+      declarations: [ OrgStructureComponent ],
+      providers: [OrgService]
     })
     .compileComponents();
   });
@@ -21,6 +32,8 @@ describe('OrgStructureComponent', () => {
     fixture = TestBed.createComponent(OrgStructureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    testBedService = TestBed.get(OrgService);
+    dialogSpy = spyOn(TestBed.get(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
   });
 
   it('should create', () => {
@@ -79,4 +92,78 @@ describe('OrgStructureComponent', () => {
 
     expect(component.showBoT).toBeFalse();
   });
+
+  it('Service injected via inject() and TestBed.get() should be the same instance (OrgService)',
+    inject([OrgService], (injectService: OrgService) => {
+      expect(injectService).toBe(testBedService);
+  }));
+
+  it("should call openDialog and get the list of events according to fiter", async(() => {
+    const response: MembersDialogModel[] = [];
+
+    spyOn(component, 'openDialog');
+
+    component.openDialog(component.directors$);
+
+    fixture.detectChanges();
+    let result= [] as MembersDialogModel[];
+    component.directors$.subscribe(events =>{result = events;
+    })
+    expect(result).toEqual(response);
+  }));
+
+  it("filter an observable with position", async(() => {
+    const response: Observable<MembersDialogModel[]> = of([
+      {id: 1,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "de la Cruz",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 2,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "Director",
+      quote: "advocacy"
+      },
+    ]);
+
+    const mock: Observable<MembersDialogModel[]>  = of([
+      {id: 1,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "de la Cruz",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 2,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "Director",
+      quote: "advocacy"
+      },
+      {id: 3,
+      first_name: "Jairus",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Chiu",
+      position: "President",
+      quote: "advocacy"
+      },
+      {id: 4,
+      first_name: "Juan",
+      image: {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+      last_name: "Tamad",
+      position: "Estambay",
+      quote: "advocacy"
+      }
+    ]);
+
+    component.getLeadersList("Director",mock);
+    expect(mock.subscribe()).toEqual(response.subscribe());
+  }));
+
+
 });

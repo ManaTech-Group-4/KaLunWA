@@ -1,6 +1,6 @@
 export interface MembersDialogModel{
   id:number
-  member_img: string;
+  image:{image: string};
   quote: string;
   first_name: string;
   last_name: string;

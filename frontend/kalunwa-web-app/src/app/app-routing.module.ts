@@ -10,6 +10,7 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
 import { NewsComponent } from './features/components/news/news/news.component';
 import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
+import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
@@ -27,6 +28,7 @@ export const routes: Routes = [
   {path: 'projects', component:ProjectPageComponent},
   {path: 'news', component:NewsComponent},
   {path: "indiv-news/:id", component: IndivNewsComponent},
+  {path: 'join-us', component:JoinUsComponent},
   {path: 'baybayon', component:BaybayonComponent},
   {path: 'lasang', component:LasangComponent},
   {path: 'suba', component:SubaComponent},
@@ -49,6 +51,7 @@ export const routeComponents = [HomepageComponent,
                                 ProjectPageComponent,
                                 NewsComponent,
                                 IndivNewsComponent,
+                                JoinUsComponent,
                                 BaybayonComponent,
                                 LasangComponent,
                                 SubaComponent,

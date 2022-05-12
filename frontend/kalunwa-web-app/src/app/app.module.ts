@@ -25,6 +25,7 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
 import { NewsComponent } from './features/components/news/news/news.component';
 import { NewsListComponent } from './features/components/news/news-list/news-list.component';
 import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
+import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
@@ -56,11 +57,12 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     NewsComponent,
     NewsListComponent,
     IndivNewsComponent,
+    JoinUsComponent,
     BaybayonComponent,
     LasangComponent,
     SubaComponent,
     ZeroWasteComponent,
-    ContactUsComponent
+    ContactUsComponent,
   ],
   entryComponents:[
     MembersDialogComponent

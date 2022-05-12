@@ -12,7 +12,7 @@ export class EventspageService {
   constructor(private http:HttpClient) { }
 
   getEventList() : Observable<EventsResponseModel[]>{
-    return this.http.get<EventsResponseModel[]>('http://127.0.0.1:8000/api/events');
+    return this.http.get<EventsResponseModel[]>('http://127.0.0.1:8000/api/events/?expand=image');
 
   }
 

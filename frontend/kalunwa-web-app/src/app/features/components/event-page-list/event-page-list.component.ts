@@ -23,28 +23,20 @@ export class EventPageListComponent implements OnInit {
   }
 
   updateDisplay(newPage:number){
-    if(newPage > this.activePage){
-      this.currentPage += 5;
-      if(this.lastPage+5 > this.events.length){
-        this.lastPage = this.events.length;
-        return;
-      }
-      else
-        this.lastPage += 5;
-    }
-    else if(newPage < this.activePage){
-      this.lastPage -= 5;
-      if(this.currentPage-5 <0){
-        this.currentPage = this.events.length;
-        return;
-      }
-      else
-        this.currentPage -= 5;
-    }
+    console.log(newPage,this.activePage);
+    this.currentPage += (5*(newPage-this.activePage));
+    if(this.currentPage < 0)
+      this.currentPage = 0;
+
+    this.lastPage = this.currentPage + 5;
+    if(this.lastPage > this.events.length)
+      this.lastPage = this.events.length;
+
     this.ref.detectChanges();
     this.activePage = newPage;
     let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
     window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
+    console.log(this.currentPage, this.lastPage);
   }
 
 

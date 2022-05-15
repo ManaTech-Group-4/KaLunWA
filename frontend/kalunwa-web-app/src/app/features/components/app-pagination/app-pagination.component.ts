@@ -61,12 +61,22 @@ export class AppPaginationComponent implements OnChanges {
           this.onPageChange.emit(this.activePage);
           this.aheadPages = [];
           this.behindPages = [];
-          for(let i = this.activePage-1; i>this.activePage-2 && i>=1; i--)
-            this.aheadPages.push(i);
-
-          this.aheadPages.reverse();
           for(let i = this.activePage; i<=this.activePage+2 && i<=this.pages.length; i++)
             this.behindPages.push(i);
+
+          for(let i = this.activePage-1; i>=this.activePage-2 && i>=1; i--)
+            this.aheadPages.push(i);
+
+          if(this.behindPages.length<3){
+            for(let i = 1; i<=3-this.behindPages.length && this.activePage-2-i>=1; i++)
+              this.aheadPages.push(this.activePage-2-i);
+          }
+          this.aheadPages.reverse();
+
+          if(this.aheadPages.length<3){
+            for(let i = 1; i<=3-this.aheadPages.length && this.activePage+2+i<=this.pages.length; i++)
+              this.behindPages.push(this.activePage+2+i);
+          }
 
       }
   }

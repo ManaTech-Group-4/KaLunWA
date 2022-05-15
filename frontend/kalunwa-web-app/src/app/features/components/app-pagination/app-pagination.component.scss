@@ -10,19 +10,24 @@ ul{
     font-family: monserrat;
     font-size: 20px;
     padding:4px;
-    margin: 0px 8px;
-    color: #628A3A;
+    margin: 0px 4px;
+    text-align: center;
+    width:20px;
   }
   li:hover{
     cursor: pointer;
   }
   .active{
-    color: red;
+    color: #628A3A;
+    font-weight: 700;
+    background: #628a3a3b;
   }
   .icon{
     border-radius: 3px;
     color: white;
-    background: #628A3A
+    background: #628A3A;
+    width:24px;
+    height:24px;
   }
   .disable{
     background: #8eaa72;

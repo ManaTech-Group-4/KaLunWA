@@ -1,0 +1,33 @@
+ul{
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  li{
+    font-family: monserrat;
+    font-size: 20px;
+    padding:4px;
+    margin: 0px 8px;
+    color: #628A3A;
+  }
+  li:hover{
+    cursor: pointer;
+  }
+  .active{
+    color: red;
+  }
+  .icon{
+    border-radius: 3px;
+    color: white;
+    background: #628A3A
+  }
+  .disable{
+    background: #8eaa72;
+  }
+  .active:hover, .disable:hover{
+    cursor: default;
+  }
+}

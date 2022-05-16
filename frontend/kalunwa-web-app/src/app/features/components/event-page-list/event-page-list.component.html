@@ -1,5 +1,5 @@
-<h1 class='no-events' *ngIf='events.length < 1'>No event matched</h1>
-<mat-card class="event-card" *ngFor="let event of events">
+<h1 class='no-events' *ngIf="!events || events.length < 1">No event matched</h1>
+<mat-card class="event-card" *ngFor="let event of events | slice:currentPage:lastPage">
 
   <img mat-card-image src="{{event.image}}">
 
@@ -33,4 +33,6 @@
   </mat-card-content>
 
 </mat-card>
+
+<app-app-pagination *ngIf="events && events.length >= 1" [totalRecords]="events.length" [recordsPerPage]="5" (onPageChange)="updateDisplay($event)"  ></app-app-pagination>
 

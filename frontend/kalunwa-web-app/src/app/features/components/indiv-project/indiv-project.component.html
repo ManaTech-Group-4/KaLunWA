@@ -10,16 +10,15 @@
       <img src="{{project.image.image}}" alt="{{project.title}}_img">
       <p>{{project.description}}</p>
   </div>
-  <div class="gallery">
+  <div class="gallery" *ngIf="project.gallery.length">
       <p>Project Gallery</p>
 
-      <ng-image-slider *ngIf="project.gallery.length > 1; else noItem" [images]="project.gallery"
+      <ng-image-slider  [images]="project.gallery"
         [infinite]="false"
         [imageSize]="{width: '350', height: 300}"
         [slideImage]="2" #nav></ng-image-slider>
-      <ng-template #noItem><p class="noProj">No image available for this project</p></ng-template>
   </div>
-  <div class="partners">
+  <div class="partners" *ngIf="project.contributors.length">
       <p>Partners & Sponsors</p>
       <div class="logos" >
           <span *ngFor="let p of project.contributors">

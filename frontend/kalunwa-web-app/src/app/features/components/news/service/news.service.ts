@@ -19,4 +19,9 @@ export class NewsService {
     let address  = 'http://127.0.0.1:8000/api/news/'+newsId+'/?expand=image&omit=created_at,updated_at';
     return this.http.get<IndivNewsModel>(address);
   }
+
+  public getLatestNews(newsId:string | null): Observable<{id: number, title: string}[]>{
+    let address  = 'http://127.0.0.1:8000/api/news/?id__not='+newsId+'&query_limit=3';
+    return this.http.get<{id: number, title: string}[]>(address);
+  }
 }

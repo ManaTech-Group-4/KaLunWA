@@ -33,6 +33,15 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatListModule} from '@angular/material/list';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { HeaderComponent } from './features/components/CMS/header/header.component';
+import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +72,9 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     SubaComponent,
     ZeroWasteComponent,
     ContactUsComponent,
+    DashboardComponent,
+    HeaderComponent,
+    SidenavComponent,
   ],
   entryComponents:[
     MembersDialogComponent
@@ -78,7 +90,13 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     FormsModule,
     MatDialogModule,
     NextDirectiveModule,
-    PrevDirectiveModule
+    PrevDirectiveModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

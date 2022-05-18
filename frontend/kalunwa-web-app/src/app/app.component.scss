@@ -9,14 +9,9 @@
   background-color: #628A3A;
 }
 
-.mat-drawer-container{
-  height: 100%;
-}
-
-
 
 .mat-drawer-container{
-  overflow:visible;
+  overflow: visible;
   box-shadow: 0px 2px 15px #00000050;
   .sidemenu{
 
@@ -74,7 +69,7 @@
   }
   .mat-drawer-content{
     overflow: hidden;
-    width:100vw;
+    min-width: calc(100vw - 260px);
 
     .space{
       height:64px;

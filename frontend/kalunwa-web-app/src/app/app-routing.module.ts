@@ -19,7 +19,7 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AuthGuard } from './admin/auth.guard';
-import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component.html';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,

@@ -20,6 +20,7 @@ import { AdminHomeComponent } from './admin/components/admin-home/admin-home.com
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AuthGuard } from './admin/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -43,6 +44,7 @@ export const routes: Routes = [
     {path: "contact-us", component: ContactUsComponent}]},
   {path: "admin", component: AdminHomeComponent},
   {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: "admin-list", component: AdminListComponent, canActivate: [AuthGuard]},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -68,4 +70,5 @@ export const routeComponents = [HomepageComponent,
                                 ContactUsComponent,
                                 AdminHomeComponent,
                                 DashboardComponent,
+                                AdminListComponent,
                               ];

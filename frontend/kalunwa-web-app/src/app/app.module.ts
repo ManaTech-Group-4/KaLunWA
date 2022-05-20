@@ -45,6 +45,7 @@ import { AppPaginationComponent } from './features/components/app-pagination/app
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
+import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     AppPaginationComponent,
     AdminHomeComponent,
     VisitorLandingComponent,
-    DummyLandingComponent
+    DummyLandingComponent,
+    AdminListComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -100,7 +102,6 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     PrevDirectiveModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatMenuModule,
     MatIconModule,
     MatDividerModule,
     MatListModule,

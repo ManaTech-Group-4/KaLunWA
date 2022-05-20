@@ -43,6 +43,7 @@ import { HeaderComponent } from './features/components/CMS/header/header.compone
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     HeaderComponent,
     SidenavComponent,
     AppPaginationComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    SinglePageListComponent,
   ],
   entryComponents:[
     MembersDialogComponent
@@ -96,7 +98,6 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     PrevDirectiveModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatMenuModule,
     MatIconModule,
     MatDividerModule,
     MatListModule,

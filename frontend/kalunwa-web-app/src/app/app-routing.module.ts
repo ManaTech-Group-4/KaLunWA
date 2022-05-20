@@ -17,6 +17,7 @@ import { SubaComponent } from './features/components/indiv-camps/suba/suba.compo
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -36,6 +37,7 @@ export const routes: Routes = [
   {path: 'zero-waste', component:ZeroWasteComponent},
   {path: "contact-us", component: ContactUsComponent},
   {path: 'dashboard', component:DashboardComponent},
+  {path: 'single-page-list', component:SinglePageListComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -60,4 +62,5 @@ export const routeComponents = [HomepageComponent,
                                 ZeroWasteComponent,
                                 ContactUsComponent,
                                 DashboardComponent,
+                                SinglePageListComponent,
                               ];

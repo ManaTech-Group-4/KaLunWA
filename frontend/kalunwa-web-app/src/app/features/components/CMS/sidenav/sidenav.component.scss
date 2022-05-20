@@ -11,12 +11,12 @@
     .mat-list-item{
         font-family: monserrat;
         color: #fafafa;
-        height: 50px !important;
-        margin: 8px 0;
+        height: 60px !important;
+        margin: 10px 0;
         ::ng-deep{
             .mat-list-item-content{
                 border-radius: 5px;
-                margin: 0 8px;
+                margin: 0 10px;
                 &:hover{
                     background-color: #7bad49;
                 }
@@ -35,10 +35,10 @@
 
     .dropdown{
         padding: 1px 0;
-        margin: 8px 0;
+        margin: 10px 0;
         background-color: #7bad49;
         .mat-list-item{
-            margin: 8px 0;
+            margin: 10px 0;
             ::ng-deep{
                 .mat-list-item-content{
                     padding-left: 55px;

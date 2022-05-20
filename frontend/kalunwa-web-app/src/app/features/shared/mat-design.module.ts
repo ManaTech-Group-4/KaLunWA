@@ -14,6 +14,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { NgImageSliderModule } from 'ng-image-slider';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 const MATERIAL = [
   MatToolbarModule,
   MatButtonModule,
@@ -28,7 +30,8 @@ const MATERIAL = [
   MatDialogModule,
   MatInputModule,
   MatSelectModule,
-  NgImageSliderModule
+  NgImageSliderModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

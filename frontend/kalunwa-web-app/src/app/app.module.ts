@@ -25,6 +25,7 @@ import { IndivProjectComponent } from './features/components/indiv-project/indiv
 import { NewsComponent } from './features/components/news/news/news.component';
 import { NewsListComponent } from './features/components/news/news-list/news-list.component';
 import { IndivNewsComponent } from './features/components/news/indiv-news/indiv-news.component';
+import { JoinUsComponent } from './features/components/join-us/join-us.component';
 import { BaybayonComponent } from './features/components/indiv-camps/baybayon/baybayon.component';
 import { LasangComponent } from './features/components/indiv-camps/lasang/lasang.component';
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
@@ -32,6 +33,19 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatListModule} from '@angular/material/list';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { HeaderComponent } from './features/components/CMS/header/header.component';
+import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
+import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
+import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
+import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 
 @NgModule({
   declarations: [
@@ -56,11 +70,20 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     NewsComponent,
     NewsListComponent,
     IndivNewsComponent,
+    JoinUsComponent,
     BaybayonComponent,
     LasangComponent,
     SubaComponent,
     ZeroWasteComponent,
-    ContactUsComponent
+    ContactUsComponent,
+    DashboardComponent,
+    HeaderComponent,
+    SidenavComponent,
+    AppPaginationComponent,
+    AdminHomeComponent,
+    SinglePageListComponent,
+    VisitorLandingComponent,
+    DummyLandingComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -76,7 +99,12 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
     FormsModule,
     MatDialogModule,
     NextDirectiveModule,
-    PrevDirectiveModule
+    PrevDirectiveModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

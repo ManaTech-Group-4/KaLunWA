@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MembersDialogModel } from '../../models/members-dialog-model';
+import { OrgService } from '../../service/org.service';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 
 @Component({
@@ -9,9 +13,25 @@ import { MembersDialogComponent } from '../members-dialog/members-dialog.compone
 })
 export class OrgStructureComponent implements OnInit {
 
-  constructor(private matDialog:MatDialog) { }
+  constructor(private matDialog:MatDialog, private orgService: OrgService) { }
+  execs$: Observable<MembersDialogModel[]>;
+  directors$ :  Observable<MembersDialogModel[]>;
+  campLeaders$: Observable<MembersDialogModel[]>;
+  cabinOfficers$: Observable<MembersDialogModel[]>;
+  grievance$: Observable<MembersDialogModel[]>;
+  election$: Observable<MembersDialogModel[]>;
+  selectedCamp: string = '';
 
   ngOnInit(): void {
+    this.execs$ = this.orgService.getExec().pipe(map(
+      list => list.filter(member => member.position != 'Director')
+    ));
+    this.directors$ = this.orgService.getExec().pipe(map(
+      list => list.filter(member => member.position == 'Director')
+    ));
+    this.cabinOfficers$ = this.orgService.getCabin();
+    this.grievance$ = this.orgService.getGrievance();
+    this.election$ = this.orgService.getElection();
   }
 
   showBaybayon:boolean=false;
@@ -22,6 +42,13 @@ export class OrgStructureComponent implements OnInit {
 
   clickBaybayon(){
     this.showBaybayon=!this.showBaybayon;
+
+    if(this.showBaybayon == true){
+      this.selectedCamp = "Baybayon";
+      this.campLeaders$ = this.orgService.getCampLeaders(this.selectedCamp);
+    }
+    else
+      this.selectedCamp = '';
 
     if (this.showLasang){
       this.showLasang=!this.showLasang
@@ -40,8 +67,16 @@ export class OrgStructureComponent implements OnInit {
     }
   }
   clickLasang(){
-    this.showLasang=!this.showLasang
-    
+    this.showLasang=!this.showLasang;
+
+    if(this.showLasang == true){
+      this.selectedCamp = "Lasang";
+      this.campLeaders$ = this.orgService.getCampLeaders(this.selectedCamp);
+    }
+    else
+      this.selectedCamp = '';
+
+
     if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
     }
@@ -59,8 +94,15 @@ export class OrgStructureComponent implements OnInit {
     }
   }
   clickSuba(){
-    this.showSuba=!this.showSuba
-    
+    this.showSuba=!this.showSuba;
+
+    if(this.showSuba == true){
+      this.selectedCamp = "Suba";
+      this.campLeaders$ = this.orgService.getCampLeaders(this.selectedCamp);
+    }
+    else
+      this.selectedCamp = '';
+
     if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
     }
@@ -78,8 +120,15 @@ export class OrgStructureComponent implements OnInit {
     }
   }
   clickZW(){
-    this.showZW=!this.showZW
-    
+    this.showZW=!this.showZW;
+
+    if(this.showZW == true){
+      this.selectedCamp = "Zero Waste";
+      this.campLeaders$ = this.orgService.getCampLeaders(this.selectedCamp);
+    }
+    else
+      this.selectedCamp = '';
+
     if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
     }
@@ -97,7 +146,8 @@ export class OrgStructureComponent implements OnInit {
     }
   }
   clickBoT(){
-    this.showBoT=!this.showBoT
+    this.showBoT=!this.showBoT;
+    this.selectedCamp = '';
 
     if (this.showBaybayon==true){
       this.showBaybayon=!this.showBaybayon
@@ -110,12 +160,22 @@ export class OrgStructureComponent implements OnInit {
     }
   }
 
-  openDialog(members:number){
+  getLeadersList(filter: string, members: Observable<MembersDialogModel[]>){
+    if(filter != ''){
+      members = members.pipe(map(
+        list => list.filter(member => member.position == filter)
+      ));
+    }
+
+    this.openDialog(members);
+  }
+
+  openDialog(members:Observable<MembersDialogModel[]>){
     this.matDialog.open(MembersDialogComponent,
     {
       data: members
     });
 
-    
+
   }
 }

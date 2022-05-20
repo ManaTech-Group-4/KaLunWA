@@ -1,14 +1,14 @@
 <mat-icon (click)="close()">close</mat-icon>
 <br>
 <mat-dialog-content>
-  <div class="member" *ngFor="let member of members | slice: 0:getLimit()">
+  <div class="member" *ngFor="let member of members$ | async">
 
     <a>
-      <img src="{{member.member_img}}"/>
+      <img src="{{member.image.image}}"/>
       <span>
         <p>{{member.quote}}</p>
         <hr>
-        <p>{{member.name}}</p>
+        <p>{{member.first_name}} {{member.last_name}}</p>
         <h2>{{member.position}}</h2>
       </span>
     </a>

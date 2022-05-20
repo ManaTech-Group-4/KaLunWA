@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FilterDialogComponent } from '../../dialog/filter-dialog/filter-dialog.component';
 import { EventsItemsModel } from '../../models/event-items-model';
@@ -54,10 +54,11 @@ export class EventsPageComponent implements OnInit {
             event => data.camps.every((tag: string) => event.tags.includes(tag))
           )
         )
-      ).subscribe(res => console.log(res));
+      )
     });
     dialogRef.afterClosed().subscribe(result => {
       subscribeDialog.unsubscribe();
     });
   }
+
 }

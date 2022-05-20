@@ -45,4 +45,3 @@ PROJECT_DETAIL_CONTRIBUTORS = '/api/projects/?expand=contributors.image'
 CAMP_DETAIL_GALLERY_LIMIT = '/api/camps/?expand=gallery&query_limit_gallery=10'
 
 ANNOUNCEMENT_LATEST_ONE = '/api/announcements/?omit=created_at,updated_at&query_limit=1'
-NEWS_LATEST_ONE = '/api/news/?omit=created_at,updated_at&query_limit=1'

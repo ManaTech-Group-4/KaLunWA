@@ -15,17 +15,16 @@ export class FilterProjectsDialogComponent implements OnInit {
     'Baybayon':'#D9B863',
     'Lasang':'#3F6218',
     'Suba':'#1C8BD4',
-    'Zero-Waste':'#9CCC65',
+    'Zero Waste':'#9CCC65',
   };
 
   allStatus: {[status_name: string]: string;} = {
-    'Upcoming': '#f44336',
+    'Ongoing': '#f44336',
     'Past':'#C4C4C4'
   };
 
 
   @Output() applyFilter = new EventEmitter<{camps:string[], status: string}>();
-
 
   campControl = new FormControl([]);
   statusControl = new FormControl([]);

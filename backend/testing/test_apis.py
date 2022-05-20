@@ -4,7 +4,6 @@ from django.utils import timezone
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
 from .utils import  (
-    NEWS_LATEST_ONE,
     ANNOUNCEMENT_LATEST_ONE,
     ABOUT_US_CAMP_URL, 
     ABOUT_US_LEADERS,
@@ -1093,7 +1092,7 @@ class AnnouncementGetTestCase(APITestCase):
         self.assertDictEqual(expected_announcement_data, response_announcement)        
 
         
-class AnnouncementLatesTTestCase(APITestCase):
+class AnnouncementLatestTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:    
         cls.request_factory = APIRequestFactory()
@@ -1166,34 +1165,6 @@ class NewsGetTestCase(APITestCase):
         }
 
         self.assertDictEqual(expected_news_data, response_news)        
-
-class NewsLatestTestCase(APITestCase):
-    @classmethod
-    def setUpTestData(cls) -> None:   
-        cls.image_file = get_test_image_file() 
-        cls.request_factory = APIRequestFactory()
-        cls.url = NEWS_LATEST_ONE
-
-    def test_get_latest_news(self):      
-        for _ in range(5):
-            News.objects.create(
-                title='news {_}',
-                description = 'description',
-                image = Image.objects.create(name=f'image_{_}', image=self.image_file)
-            )
-
-        response = self.client.get(self.url)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        expected_news = News.objects.first() # ordered by latest
-        response_news = json.loads(response.content)[0]
-        latest_news_data = {
-            'id': expected_news.id,
-            'title': expected_news.title,           
-            'description' : expected_news.description,    
-            'image': expected_news.image.pk,   
-            'date': to_formal_mdy(expected_news.created_at),                
-        }        
-        self.assertDictEqual(latest_news_data, response_news)
 
 # ---------------------------------------------------------------------------        
 # Post end-points

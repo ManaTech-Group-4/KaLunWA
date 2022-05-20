@@ -77,7 +77,7 @@ describe('HomepageService', () => {
       expect(testJumbotrons).toBe(jumbotrons,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&query_limit=5');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');

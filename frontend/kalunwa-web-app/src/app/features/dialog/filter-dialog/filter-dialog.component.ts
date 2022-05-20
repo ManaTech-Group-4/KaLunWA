@@ -19,7 +19,7 @@ export class FilterDialogComponent implements OnInit {
     'Baybayon':'#D9B863',
     'Lasang':'#3F6218',
     'Suba':'#1C8BD4',
-    'Zero-Waste':'#9CCC65',
+    'Zero Waste':'#9CCC65',
   };
 
   allStatus: {[status_name: string]: string;} = {

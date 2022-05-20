@@ -1,13 +1,10 @@
+import { CampEventModel, CampProjectModel } from "./campReqests/campRequests-model";
+
 export interface IndivCampModel{
   id: number,
-  theme_colors: any,
-  camp_name: string,
-  header_img: string,
-  tagline: string,
-  socmed: any,
-  content_image: any,
+  content_image: string,
   content: string,
-  gallery: Array<any>,
-  events: Array<any>,
-  projects: Array<any>,
+  gallery: Array<{id:number, image: string, thumbImage: string}>,
+  events: Array<CampEventModel>,
+  projects: Array<CampProjectModel>
 }

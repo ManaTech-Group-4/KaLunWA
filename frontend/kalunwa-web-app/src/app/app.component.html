@@ -1,4 +1,4 @@
-<mat-sidenav-container class="example-container" [hasBackdrop]="true">
+<mat-sidenav-container class="example-container" [hasBackdrop]="true" *ngIf="!isAdmin; else admin">
   <mat-sidenav #sidenav mode="over" class="sidemenu">
     <img src="assets/images/word_logo.png"/>
     <ul id="mobileNav">
@@ -36,3 +36,7 @@
 
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #admin>
+  <app-admin-home></app-admin-home>
+</ng-template>

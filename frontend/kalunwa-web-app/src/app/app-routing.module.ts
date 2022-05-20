@@ -16,10 +16,12 @@ import { LasangComponent } from './features/components/indiv-camps/lasang/lasang
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomepageComponent},
+  {path: "admin-login", component: AdminHomeComponent},
   {path: 'about',  component: AboutPageComponent},
   {path: 'org-struct',  component: OrgStructureComponent},
   {path: "indiv-event/:id", component: IndiEventComponent},
@@ -56,4 +58,5 @@ export const routeComponents = [HomepageComponent,
                                 LasangComponent,
                                 SubaComponent,
                                 ZeroWasteComponent,
-                                ContactUsComponent];
+                                ContactUsComponent,
+                                AdminHomeComponent];

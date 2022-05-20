@@ -11,7 +11,7 @@ export class AdminListComponent implements OnInit {
   admin_list: AdminListModel[] = [
     {
       id:1,
-      admin_name: "Admin_1",
+      picture: "assets/images/person-icon.jpg",
       username: "admin_1",
       first_name: "Jose",
       last_name: "Rizal",
@@ -21,7 +21,7 @@ export class AdminListComponent implements OnInit {
     },
     {
       id:2,
-      admin_name: "Admin_2",
+      picture: "assets/images/person-icon.jpg",
       username: "admin_2",
       first_name: "Juan",
       last_name: "Dela Cruz",
@@ -31,19 +31,25 @@ export class AdminListComponent implements OnInit {
     },
     {
       id:3,
-      admin_name: "Admin_3",
+      picture: "assets/images/person-icon.jpg",
       username: "admin_3",
       first_name: "Joferlyn",
-      last_name: "Robredo",
+      last_name: "Robs",
       email: "doc.joferlyn@gmail.com",
       role: "Admin",
       date_added: "09/12/21",
     },
   ]
+  
+  selectedAdmin?:AdminListModel = this.admin_list[0];
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  displayInfo(admin:AdminListModel){
+    this.selectedAdmin = admin;
   }
 
 }

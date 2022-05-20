@@ -1,6 +1,6 @@
 export interface AdminListModel{
   id: number;
-  admin_name: string;
+  picture: string;
   username: string;
   first_name: string;
   last_name: string;

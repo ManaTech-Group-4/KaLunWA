@@ -1,40 +1,36 @@
 <div>
-    <div class="profile">
-        <img src="" alt="">
-        <p><strong></strong></p>
-        <p></p>
-        <br>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+    <div class="profile" *ngIf="selectedAdmin">
+        <img src="{{selectedAdmin.picture}}" alt="picture">
+        <h4>{{selectedAdmin.username}}</h4>
+        <h5>username</h5>
+        <hr>
+        <p>First Name: {{selectedAdmin.first_name}}</p>
+        <p>Last Name: {{selectedAdmin.last_name}}</p>
+        <p>Email: {{selectedAdmin.email}}</p>
+        <p>Role: {{selectedAdmin.role}}</p>
+        <p>Date Added: {{selectedAdmin.date_added}}</p>
     </div>
 
-    <!--
-
-    <div class="table">
+    <div class="admin-list">
         <table class="table">
             <tr class="table-header">
-                <th colspan="5">Administrators</th>
+                <th colspan="5">Administrators
+                    <button mat-button><mat-icon>add</mat-icon> Add Admin</button>
+                </th>
             </tr>
             <tr class="col-header">
-                <th>Administrator</th>
-                <th>Content Changed</th>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Date Added</th>
                 <th>Action</th>
-                <th>Date</th>
-                <th>Time</th>
             </tr>
-            <tr  class="table-content" *ngFor="let item of dashboard.audit_logs | slice:0:5">
-                <td>{{item.administrator}}</td>
-                <td>{{item.content_changed}}</td>
-                <td>{{item.action}}</td>
-                <td>{{item.date}}</td>
-                <td>{{item.time}}</td>
+            <tr  class="table-content" *ngFor="let item of admin_list" (click)="displayInfo(item)">
+                <td>{{item.id}}</td>
+                <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
+                <td>{{item.date_added}}</td>
+                <td><mat-icon>edit</mat-icon> <mat-icon>delete</mat-icon></td>
             </tr>
         </table>
     </div>
 
-    -->
-    
 </div>

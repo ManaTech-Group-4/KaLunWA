@@ -3,8 +3,8 @@
 }
 
 .event-card{
-  width:700px;
-  height: 250px;
+  width:920px;
+  height:260px;
   display: flex;
   flex-direction: row;
   padding:0;
@@ -14,8 +14,8 @@
 
 
   img{
-    width:250px;
-    height:250px;
+    width: 260px;
+    height:260px;
     object-fit: cover;
     margin:0;
 
@@ -32,7 +32,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-      -webkit-line-clamp: 5;
+      -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
     }
     .event-header{
@@ -42,6 +42,7 @@
 
       .mat-card-title{
         font-family: monserrat;
+        line-height: 30px;
         font-weight:700;
       }
     }

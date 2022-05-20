@@ -1,5 +1,5 @@
-<h1 class='no-events' *ngIf='projects.length < 1'>No project matched</h1>
-<mat-card class="project-card" *ngFor="let project of projects">
+<h1 class='no-events' *ngIf='!projects || projects.length < 1'>No project matched</h1>
+<mat-card class="project-card" *ngFor="let project of projects | slice: currentPage:lastPage">
 
   <img mat-card-image src="{{project.image}}">
 
@@ -33,5 +33,10 @@
   </mat-card-content>
 
 </mat-card>
+
+<app-app-pagination *ngIf="projects && projects.length >= 1" [totalRecords]="projects.length" [recordsPerPage]="5" (onPageChange)="updateDisplay($event)"  ></app-app-pagination>
+
+
+
 
 

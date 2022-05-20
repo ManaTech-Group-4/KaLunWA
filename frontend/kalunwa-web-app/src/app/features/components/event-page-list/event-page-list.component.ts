@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { EventsItemsModel } from '../../models/event-items-model';
 import { EventspageService } from '../../service/eventspage.service';
 
@@ -11,9 +12,32 @@ export class EventPageListComponent implements OnInit {
 
   @Input()
   events = [] as EventsItemsModel[];
-  constructor() { }
+  constructor(private ref: ChangeDetectorRef) { }
 
+  activePage:number = 1;
+  currentPage = 0;
+  lastPage = 4;
 
+  detectIfChanges(){
+    this.ref.detectChanges();
+  }
+
+  updateDisplay(newPage:number){
+    console.log(newPage,this.activePage);
+    this.currentPage += (5*(newPage-this.activePage));
+    if(this.currentPage < 0)
+      this.currentPage = 0;
+
+    this.lastPage = this.currentPage + 5;
+    if(this.lastPage > this.events.length)
+      this.lastPage = this.events.length;
+
+    this.ref.detectChanges();
+    this.activePage = newPage;
+    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
+    window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
+    console.log(this.currentPage, this.lastPage);
+  }
 
 
   ngOnInit(): void {

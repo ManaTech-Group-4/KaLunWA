@@ -35,13 +35,14 @@ import { PrevDirectiveModule } from './features/shared/directives/prev/prev.dire
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatListModule} from '@angular/material/list';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
+import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,8 @@ import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.comp
     DashboardComponent,
     HeaderComponent,
     SidenavComponent,
+    AppPaginationComponent,
+    AdminHomeComponent
   ],
   entryComponents:[
     MembersDialogComponent

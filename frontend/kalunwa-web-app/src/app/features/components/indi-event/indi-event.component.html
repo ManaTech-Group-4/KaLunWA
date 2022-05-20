@@ -12,17 +12,16 @@
       <img src="{{event.image.image}}" alt="{{event.title}}_img">
       <p>{{event.description}}</p>
   </div>
-  <div class="gallery">
+  <div class="gallery" *ngIf="event.gallery.length">
       <p>Event Gallery</p>
       <div class="slider">
-        <ng-image-slider  *ngIf="event.gallery.length > 1; else noItem" [images]="event.gallery" #nav
+        <ng-image-slider  [images]="event.gallery" #nav
         [infinite]="false"
         [imageSize]="{width: '350', height: 300}"
         [slideImage]="2"></ng-image-slider>
-        <ng-template #noItem><p class="noEvent">No image available for this event</p></ng-template>
       </div>
   </div>
-  <div class="partners">
+  <div class="partners" *ngIf="event.contributors.length">
       <p>Partners & Sponsors</p>
       <div class="logos" >
           <span *ngFor="let p of event.contributors">

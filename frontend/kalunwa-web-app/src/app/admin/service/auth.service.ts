@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { StringifyOptions } from 'querystring';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Admin } from '../model/user-model';
 
@@ -11,8 +10,8 @@ export class AuthService {
   public currentUser: Observable<Admin>;
 
   constructor() {
-    this.currentUserSubject = new BehaviorSubject<Admin>(JSON.parse(localStorage.getItem('currentUser')|| ""));
-    this.currentUser = this.currentUserSubject.asObservable();
+    // this.currentUserSubject = new BehaviorSubject<Admin>(JSON.parse(localStorage.getItem('user')|| ""));
+    // this.currentUser = this.currentUserSubject.asObservable();
   }
 
   login(username:string, password:string)

@@ -34,7 +34,7 @@ import { NextDirectiveModule } from './features/shared/directives/next/next.dire
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
-import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 
 @NgModule({
   declarations: [

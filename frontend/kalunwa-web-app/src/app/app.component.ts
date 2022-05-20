@@ -11,7 +11,7 @@ export class AppComponent implements AfterViewInit {
   title = 'kalunwa-web-app';
   @ViewChild('sidenav') sidenav: ElementRef | undefined;
 
-
+  isAdmin = true;
   constructor(private navService: NavService) { }
 
   whatWeDo : boolean = false;

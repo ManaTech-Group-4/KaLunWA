@@ -72,6 +72,11 @@ print('populated about us stuff')
 exec(open("dev_utils/auto_populate/auto_populate_camp_events_and_projects.py").read())
 print('populated camp events and projects')
 #-------------------------------------------------------------------------------
+# actual execomm, camp leaders then dummy for commissioners and cabin officers
+#     - see comments in auto_populate_org_struct file
+exec(open("dev_utils/auto_populate/auto_populate_org_struct.py").read())
+print('populated org struct people')
+#-------------------------------------------------------------------------------
 print('end of script')
 
 

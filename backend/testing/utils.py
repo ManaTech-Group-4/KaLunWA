@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.utils import timezone
 from io import BytesIO
 import PIL.Image
 from django.core.files.images import ImageFile
@@ -24,12 +25,14 @@ def to_formal_mdy(date:datetime)->str:
 
 def to_expected_iso_format(date: datetime)->str:
     """
+    serializers use local time as set in settings.py, TIME_ZONE
     convert to iso-8061; how date is serialized by default        
     """
-    date = date.isoformat()
-    # +00:00 marks for UTC, which Z also represents (used by serializer as well)
-    return str(date).replace('+00:00', 'Z')
+    # change UTC date here to Asia/Manila
+    local_date = timezone.localtime(date)
+    return  local_date.isoformat()
 
+    
 HOMEPAGE_JUMBOTRON_URL = '/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&is_featured=True&query_limit=5'
 HOMEPAGE_EVENT_URL = '/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'
 HOMEPAGE_PROJECT_URL = '/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3'

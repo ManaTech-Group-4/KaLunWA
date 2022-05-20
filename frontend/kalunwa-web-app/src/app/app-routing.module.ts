@@ -20,6 +20,7 @@ import { AdminHomeComponent } from './admin/components/admin-home/admin-home.com
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AuthGuard } from './admin/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -41,8 +42,12 @@ export const routes: Routes = [
     {path: 'suba', component:SubaComponent},
     {path: 'zero-waste', component:ZeroWasteComponent},
     {path: "contact-us", component: ContactUsComponent}]},
-  {path: "admin", component: AdminHomeComponent},
-  {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: "login", component: AdminHomeComponent},
+  {path: "admin", component: AdminTemplateComponent, canActivate: [AuthGuard],
+    children:[
+    {path: '', redirectTo: 'dashboard', pathMatch:"full"},
+    {path: "dashboard", component: DashboardComponent}]
+  },
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({

@@ -33,7 +33,7 @@ export class ProjectListComponent implements OnInit {
 
     this.ref.detectChanges();
     this.activePage = newPage;
-    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
+    let y =  document.querySelector('.project-card')?.getBoundingClientRect().top;
     window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
     console.log(this.currentPage, this.lastPage);
   }

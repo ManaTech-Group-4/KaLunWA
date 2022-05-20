@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Admin } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 
@@ -17,7 +18,8 @@ export class AdminHomeComponent implements OnInit {
 
   constructor(
         private formBuilder: FormBuilder,
-        private authService: AuthService,) {
+        private authService: AuthService,
+        private router: Router) {
         }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class AdminHomeComponent implements OnInit {
 
     this.loading = true;
     this.authService.login(this.f.username.value, this.f.password.value);
+    this.router.navigateByUrl("dashboard");
     // this.authService.login(this.f.username.value, this.f.password.value)
     //     .pipe(first())
     //     .subscribe(

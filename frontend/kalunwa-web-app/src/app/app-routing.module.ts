@@ -17,25 +17,32 @@ import { SubaComponent } from './features/components/indiv-camps/suba/suba.compo
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
+import { AuthGuard } from './admin/auth.guard';
+import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', component: HomepageComponent},
-  {path: "admin-login", component: AdminHomeComponent},
-  {path: 'about',  component: AboutPageComponent},
-  {path: 'org-struct',  component: OrgStructureComponent},
-  {path: "indiv-event/:id", component: IndiEventComponent},
-  {path: "indiv-project/:id", component: IndivProjectComponent},
-  {path: 'events', component:EventsPageComponent},
-  {path: 'projects', component:ProjectPageComponent},
-  {path: 'news', component:NewsComponent},
-  {path: "indiv-news/:id", component: IndivNewsComponent},
-  {path: 'join-us', component:JoinUsComponent},
-  {path: 'baybayon', component:BaybayonComponent},
-  {path: 'lasang', component:LasangComponent},
-  {path: 'suba', component:SubaComponent},
-  {path: 'zero-waste', component:ZeroWasteComponent},
-  {path: "contact-us", component: ContactUsComponent},
+  {path: '', component: VisitorLandingComponent,
+  children:[
+    {path: '', redirectTo: 'home', pathMatch:"full"},
+    {path: 'home', component: HomepageComponent},
+    {path: "admin-login", component: AdminHomeComponent},
+    {path: 'about',  component: AboutPageComponent},
+    {path: 'org-struct',  component: OrgStructureComponent},
+    {path: "indiv-event/:id", component: IndiEventComponent},
+    {path: "indiv-project/:id", component: IndivProjectComponent},
+    {path: 'events', component:EventsPageComponent},
+    {path: 'projects', component:ProjectPageComponent},
+    {path: 'news', component:NewsComponent},
+    {path: "indiv-news/:id", component: IndivNewsComponent},
+    {path: 'join-us', component:JoinUsComponent},
+    {path: 'baybayon', component:BaybayonComponent},
+    {path: 'lasang', component:LasangComponent},
+    {path: 'suba', component:SubaComponent},
+    {path: 'zero-waste', component:ZeroWasteComponent},
+    {path: "contact-us", component: ContactUsComponent}]},
+  {path: "admin", component: AdminHomeComponent},
+  {path: "dashboard", component: DummyLandingComponent, canActivate: [AuthGuard]},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({

@@ -2,7 +2,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+from .serializers import (
+    UserSerializer, 
+    CustomTokenObtainPairSerializer
+)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import(
     AllowAny, 
@@ -11,11 +14,16 @@ from rest_framework.permissions import(
 
 ################
 # logging in is done in api/token/
-################
-
-################
 # registration is done in api/users/register/
 ################
+
+class CustomObtainTokenPairView(TokenObtainPairView):
+    """
+    added given username addition on payload. 
+    """
+    permission_classes = (AllowAny,)
+    serializer_class = CustomTokenObtainPairSerializer
+
 class UserCreate(APIView):
     """
     Creates a user 
@@ -47,14 +55,14 @@ class BlacklistTokenUpdateView(APIView):
     # user presses logout; fires api to this view, process the refresh token and
     put it in the blacklist db table 
     """
-    permission_classes = [IsAuthenticated] #shouldn't this be is_authenticated
+   # permission_classes = [IsAuthenticated] #should this be is_authenticated
     authentication_classes = ()
 
     def post(self, request):
         try:
             # warning message if refresh_token none (this is required etc.)
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
+            refresh = request.data["refresh"]
+            token = RefreshToken(refresh)
             token.blacklist()
             # # tell client to reset the view (back to login page)
             return Response(status=status.HTTP_205_RESET_CONTENT) 

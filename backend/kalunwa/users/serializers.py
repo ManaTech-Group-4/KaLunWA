@@ -1,6 +1,17 @@
 from rest_framework import serializers
 from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(CustomTokenObtainPairSerializer, cls).get_token(user)
+
+        # will be changed to first & last name when user profile is set up 
+        token['email'] = user.email
+        return token
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

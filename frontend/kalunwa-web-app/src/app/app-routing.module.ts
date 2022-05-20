@@ -19,7 +19,7 @@ import { ContactUsComponent } from './features/components/contact-us/contact-us.
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AuthGuard } from './admin/auth.guard';
-import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component.html';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -42,7 +42,7 @@ export const routes: Routes = [
     {path: 'zero-waste', component:ZeroWasteComponent},
     {path: "contact-us", component: ContactUsComponent}]},
   {path: "admin", component: AdminHomeComponent},
-  {path: "dashboard", component: DummyLandingComponent, canActivate: [AuthGuard]},
+  {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -66,4 +66,6 @@ export const routeComponents = [HomepageComponent,
                                 SubaComponent,
                                 ZeroWasteComponent,
                                 ContactUsComponent,
-                                AdminHomeComponent];
+                                AdminHomeComponent,
+                                DashboardComponent,
+                              ];

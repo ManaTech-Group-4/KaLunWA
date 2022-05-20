@@ -33,6 +33,14 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatListModule} from '@angular/material/list';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { HeaderComponent } from './features/components/CMS/header/header.component';
+import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
@@ -67,6 +75,9 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     SubaComponent,
     ZeroWasteComponent,
     ContactUsComponent,
+    DashboardComponent,
+    HeaderComponent,
+    SidenavComponent,
     AppPaginationComponent,
     AdminHomeComponent,
     VisitorLandingComponent,
@@ -86,7 +97,13 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     FormsModule,
     MatDialogModule,
     NextDirectiveModule,
-    PrevDirectiveModule
+    PrevDirectiveModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

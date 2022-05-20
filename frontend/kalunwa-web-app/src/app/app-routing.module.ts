@@ -44,7 +44,7 @@ export const routes: Routes = [
     {path: "contact-us", component: ContactUsComponent}]},
   {path: "admin", component: AdminHomeComponent},
   {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
-  {path: "single-page-list", component: SinglePageListComponent, canActivate: [AuthGuard]},
+  {path: "single-page-list", component: SinglePageListComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({

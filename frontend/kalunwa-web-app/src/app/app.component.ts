@@ -14,10 +14,11 @@ export class AppComponent implements AfterViewInit {
 
   constructor(private navService: NavService) { }
 
-
   whatWeDo : boolean = false;
   about: boolean = false;
   orgOverview : boolean = false;
+
+  sidebarOpen:boolean=true;
 
   ngAfterViewInit() {
     this.navService.sidenav = this.sidenav;
@@ -27,6 +28,10 @@ export class AppComponent implements AfterViewInit {
     this.whatWeDo = false;
     this.about = false;
     this.orgOverview = false;
+  }
+
+  sidebarToggle(){
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
 

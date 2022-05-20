@@ -320,18 +320,51 @@ class OrgLeaderPositionFilterTestCase(APITestCase):
         for position in positions:
             response = self.client.get(f'/api/orgleaders/?position={position}')       
             self.assertEqual(len(response.data), 1) 
-    def test_execomm_camp_input(self):
+    def test_execomm_position_input(self):
         position = 'ExeComm'
         response = self.client.get(f'/api/orgleaders/?position={position}')        
         self.assertEqual(len(response.data), 7)  
-    def test_none_camp_value_input(self):
+    def test_none_position_value_input(self):
         positions = [0, 'aaa', '@!*']
         for position in positions:
             response = self.client.get(f'/api/orgleaders/?position={position}')    
             self.assertEqual(len(response.data), 0) 
-    def test_none_camp_input(self):
+    def test_none_position_input(self):
         response = self.client.get(f'/api/orgleaders/?')       
         self.assertEqual(len(response.data), self.orgleaders_count)  
+
+
+class CampLeaderPositionFilterTestCase(APITestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.image_file = get_test_image_file()
+
+        for _ in range(3): 
+            CampLeader.objects.create(
+            first_name = f'first_name {_}', 
+            last_name = f'last_name {_}',
+            quote = f'quote {_}',
+            image = Image.objects.create(name=f'image_{_}', image=cls.image_file),  
+            camp = CampEnum.values[_],
+            position = CampLeader.Positions.values[_],
+            motto = f'motto {_}'
+            )           
+
+        cls.campleader_count = len(CampLeader.objects.all())  
+
+    def test_correct_position_input(self): #all positions tested
+        positions = ['Camp Leader','Assistant Camp Leader','Other']
+        for position in positions:
+            response = self.client.get(f'/api/campleaders/?position={position}')       
+            self.assertEqual(len(response.data), 1) 
+    def test_none_position_value_input(self):
+        positions = [0, 'aaa', '@!*']
+        for position in positions:
+            response = self.client.get(f'/api/campleaders/?position={position}')    
+            self.assertEqual(len(response.data), 0) 
+    def test_none_position_input(self):
+        response = self.client.get(f'/api/campleaders/?')       
+        self.assertEqual(len(response.data), self.campleader_count) 
 
 
 class CampFilterTestCase(APITestCase):

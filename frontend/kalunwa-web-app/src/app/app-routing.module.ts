@@ -21,6 +21,7 @@ import { VisitorLandingComponent } from './features/components/visitor-landing/v
 import { AuthGuard } from './admin/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -45,8 +46,10 @@ export const routes: Routes = [
   {path: "login", component: AdminHomeComponent},
   {path: "admin", component: AdminTemplateComponent, canActivate: [AuthGuard],
     children:[
-    {path: '', redirectTo: 'dashboard', pathMatch:"full"},
-    {path: "dashboard", component: DashboardComponent}]
+      {path: '', redirectTo: 'dashboard', pathMatch:"full"},
+      {path: "dashboard", component: DashboardComponent},
+      {path: "projects", component: CollectivePageListComponent}
+    ]
   },
   {path: "**", component: PageNotFoundComponent}];
 

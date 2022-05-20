@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DummyLandingComponent } from './dummy-landing.component';
+import { CollectivePageListComponent } from './collective-page-list.component';
 
-describe('DummyLandingComponent', () => {
-  let component: DummyLandingComponent;
-  let fixture: ComponentFixture<DummyLandingComponent>;
+describe('CollectivePageListComponent', () => {
+  let component: CollectivePageListComponent;
+  let fixture: ComponentFixture<CollectivePageListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DummyLandingComponent ]
+      declarations: [ CollectivePageListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DummyLandingComponent);
+    fixture = TestBed.createComponent(CollectivePageListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

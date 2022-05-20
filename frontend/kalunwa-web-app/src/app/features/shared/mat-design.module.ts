@@ -15,6 +15,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { NgImageSliderModule } from 'ng-image-slider';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 const MATERIAL = [
   MatToolbarModule,
@@ -31,7 +32,8 @@ const MATERIAL = [
   MatInputModule,
   MatSelectModule,
   NgImageSliderModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatCheckboxModule
 ];
 
 @NgModule({

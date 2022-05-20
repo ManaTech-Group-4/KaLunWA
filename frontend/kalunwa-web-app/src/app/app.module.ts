@@ -44,8 +44,8 @@ import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.comp
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 
 @NgModule({
   declarations: [
@@ -82,8 +82,8 @@ import { AdminTemplateComponent } from './admin/components/admin-template/admin-
     AppPaginationComponent,
     AdminHomeComponent,
     VisitorLandingComponent,
-    DummyLandingComponent,
-    AdminTemplateComponent
+    AdminTemplateComponent,
+    CollectivePageListComponent
   ],
   entryComponents:[
     MembersDialogComponent

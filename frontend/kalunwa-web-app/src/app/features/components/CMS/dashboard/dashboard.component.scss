@@ -26,7 +26,7 @@
                 justify-content: center;
                 margin-right: 20px;
                 background-color: #7bad49;
-                
+
                 .mat-icon{
                     font-size: 37px;
                     height: auto;
@@ -51,7 +51,7 @@
                 }
             }
 
-            
+
         }
 
         .card{
@@ -119,6 +119,7 @@
             width: 100%;
             border-radius: 10px;
             background-color: #fafafa;
+            border-collapse: collapse;
             tr{
                 height: 50px;
                 td{
@@ -127,6 +128,7 @@
             }
             .table-header{
                 background-color: #7bad49;
+                height:60px;
                 th{
                     &:first-child{
                         border-radius:10px 10px 0 0;

@@ -42,7 +42,9 @@ import { DashboardComponent } from './features/components/CMS/dashboard/dashboar
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
-import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
+import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,9 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     HeaderComponent,
     SidenavComponent,
     AppPaginationComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    VisitorLandingComponent,
+    DummyLandingComponent
   ],
   entryComponents:[
     MembersDialogComponent

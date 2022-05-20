@@ -42,6 +42,7 @@ import { DashboardComponent } from './features/components/CMS/dashboard/dashboar
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
@@ -80,6 +81,7 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     SidenavComponent,
     AppPaginationComponent,
     AdminHomeComponent,
+    SinglePageListComponent,
     VisitorLandingComponent,
     DummyLandingComponent
   ],
@@ -100,7 +102,6 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     PrevDirectiveModule,
     MatSidenavModule,
     MatToolbarModule,
-    MatMenuModule,
     MatIconModule,
     MatDividerModule,
     MatListModule,

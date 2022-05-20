@@ -14,7 +14,6 @@ export class DashboardComponent implements OnInit {
     pages: 18,
     administrators: 6,
     newsletter_subs: 24,
-    applicants: 13,
     audit_logs: [
       {
         id: 1,

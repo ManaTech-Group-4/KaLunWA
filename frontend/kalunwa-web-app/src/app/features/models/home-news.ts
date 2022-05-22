@@ -1,7 +1,7 @@
 export interface HomeNewsModel{
   id: number;
   title: string;
-  image: {image: string};
+  image: string;
   date: string;
   description: string;
 }

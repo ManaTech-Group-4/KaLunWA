@@ -13,11 +13,11 @@ export class AboutpageService {
 
 
   public getDemographics(): Observable<TotalDemographicsModel>{
-    return this.http.get<TotalDemographicsModel>('http://127.0.0.1:8000/api/demographics/total-members/');
+    return this.http.get<TotalDemographicsModel>('http://127.0.0.1:8000/api/about-us/demographics');
   }
 
 
   public getCampLeaders(): Observable<AboutCampModel[]>{
-    return this.http.get<AboutCampModel[]>('http://127.0.0.1:8000/api/camps/?expand=image&omit=created_at,updated_at&name__in=Suba,Zero%20Waste,Baybayon,Lasang');
+    return this.http.get<AboutCampModel[]>('http://127.0.0.1:8000/api/about-us/camps');
   }
 }

@@ -8,13 +8,13 @@
     <mat-button-toggle value="3"><img src ="assets/images/zero.png"/></mat-button-toggle>
   </mat-button-toggle-group>
   <div class="image-section">
-    <img src="{{camps[group.value]?.image?.image}}"/>
+    <img src="{{camps[group.value]?.camp_image}}"/>
   </div>
   <div class="content" [style.background]="colors[group.value]">
-    <h1>{{camps[group.value]?.name}}</h1>
+    <h1>{{camps[group.value]?.camp_name}}</h1>
     <p>{{camps[group.value]?.description}}</p>
     <div class="leader">
-      <img src="{{camps[group.value]?.camp_leader?.image?.image}}"/>
+      <img src="{{camps[group.value]?.camp_leader?.image}}"/>
       <span>
         <p>"{{camps[group.value]?.camp_leader?.motto}}"</p>
         <h2>{{camps[group.value]?.camp_leader?.name}}</h2>

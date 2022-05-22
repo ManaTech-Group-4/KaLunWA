@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from .filters import (
     QueryLimitBackend, 
     CampNameInFilter,
@@ -103,7 +105,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ImageSerializer
     # prefetched so that related objects are cached, and query only hits db once
     queryset = Image.objects.prefetch_related('gallery_events', 'gallery_projects', 'gallery_camps') 
-    related_objects = ['has_event']
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         event_pk = self.request.query_params.get(f'has_event', None)      

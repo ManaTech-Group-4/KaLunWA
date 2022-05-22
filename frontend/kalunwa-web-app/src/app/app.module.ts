@@ -11,6 +11,8 @@ import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
+<<<<<<< HEAD
+=======
 import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
@@ -42,10 +44,15 @@ import { DashboardComponent } from './features/components/CMS/dashboard/dashboar
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+<<<<<<< HEAD
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
+=======
+import { AdminHomeComponent } from './admin-home/admin-home.component';
+>>>>>>> main
+>>>>>>> f7d4bc3e457799addec5e273255ce9282c64d29b
 
 @NgModule({
   declarations: [
@@ -55,6 +62,9 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     FooterComponent,
     AboutCampComponent,
     routeComponents,
+<<<<<<< HEAD
+    OrgStructureComponent
+=======
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
@@ -87,6 +97,7 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
   ],
   entryComponents:[
     MembersDialogComponent
+>>>>>>> main
   ],
   imports: [
     BrowserModule,
@@ -94,6 +105,7 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
+<<<<<<< HEAD
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
@@ -105,6 +117,9 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     MatIconModule,
     MatDividerModule,
     MatListModule,
+=======
+    MatCarouselModule.forRoot()
+>>>>>>> f7d4bc3e457799addec5e273255ce9282c64d29b
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

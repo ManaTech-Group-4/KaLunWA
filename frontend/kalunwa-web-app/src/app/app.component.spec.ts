@@ -7,4 +7,55 @@ import { NavService } from './features/service/nav.service';
 
 describe('AppComponent', () => {
 
+<<<<<<< HEAD
+=======
+  let component: AppComponent;
+  let service: NavService;
+  let fixture: ComponentFixture<AppComponent>;
+  let el: DebugElement;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        AppComponent
+      ],
+    }).compileComponents();
+  });
+
+
+  beforeEach(() => {
+    service = new NavService();
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app =  fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it(`should have as title 'kalunwa-web-app'`, () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.title).toEqual('kalunwa-web-app');
+  });
+
+  it('navBar is closed naturally', () => {
+    expect(fixture.debugElement.query(By.css('.dropdowns'))).toBeNull();
+  });
+
+  it('navBar is opened when clicked', fakeAsync(() => {
+      spyOn(component, 'onSelect');
+
+      let button = fixture.debugElement.nativeElement.querySelector('.drop-triggers');
+      button.click();
+
+      tick();
+      expect(component.whatWeDo).toBeTruthy();
+  }));
+>>>>>>> f7d4bc3e457799addec5e273255ce9282c64d29b
 });

@@ -1,7 +1,11 @@
+<<<<<<< HEAD
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+=======
 import { Overlay } from '@angular/cdk/overlay';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+>>>>>>> main
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable, of } from 'rxjs';
@@ -21,9 +25,13 @@ describe('OrgStructureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+<<<<<<< HEAD
+      declarations: [ OrgStructureComponent ]
+=======
       imports: [MatDialogModule, HttpClientTestingModule, BrowserAnimationsModule],
       declarations: [ OrgStructureComponent ],
       providers: [OrgService]
+>>>>>>> main
     })
     .compileComponents();
   });
@@ -64,6 +72,8 @@ describe('OrgStructureComponent', () => {
       expect(component.showBoT).toBeTruthy();
     });
   }));
+<<<<<<< HEAD
+=======
 
   it('changes the value of BoT(if true) to false after clicking to Baybayon', () =>{
     component.showBoT = true;
@@ -166,4 +176,5 @@ describe('OrgStructureComponent', () => {
   }));
 
 
+>>>>>>> main
 });

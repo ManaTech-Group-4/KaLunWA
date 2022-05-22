@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
+=======
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MembersDialogModel } from '../../models/members-dialog-model';
 import { OrgService } from '../../service/org.service';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
+>>>>>>> main
 
 @Component({
   selector: 'app-org-structure',
@@ -13,6 +16,9 @@ import { MembersDialogComponent } from '../members-dialog/members-dialog.compone
 })
 export class OrgStructureComponent implements OnInit {
 
+<<<<<<< HEAD
+  constructor() { }
+=======
   constructor(private matDialog:MatDialog, private orgService: OrgService) { }
   execs$: Observable<MembersDialogModel[]>;
   directors$ :  Observable<MembersDialogModel[]>;
@@ -21,6 +27,7 @@ export class OrgStructureComponent implements OnInit {
   grievance$: Observable<MembersDialogModel[]>;
   election$: Observable<MembersDialogModel[]>;
   selectedCamp: string = '';
+>>>>>>> main
 
   ngOnInit(): void {
     this.execs$ = this.orgService.getExec().pipe(map(
@@ -43,6 +50,12 @@ export class OrgStructureComponent implements OnInit {
   clickBaybayon(){
     this.showBaybayon=!this.showBaybayon;
 
+<<<<<<< HEAD
+    if((this.showLasang=true) && (this.showSuba=true) && (this.showZW=true)){
+      this.showLasang=!this.showLasang;
+      this.showSuba=!this.showSuba;
+      this.showZW=!this.showZW;
+=======
     if(this.showBaybayon == true){
       this.selectedCamp = "Baybayon";
       this.campLeaders$ = this.orgService.getCampLeaders(this.selectedCamp);
@@ -60,6 +73,7 @@ export class OrgStructureComponent implements OnInit {
 
     if (this.showZW){
       this.showZW=!this.showZW
+>>>>>>> main
     }
 
     if (this.showBoT){
@@ -68,6 +82,8 @@ export class OrgStructureComponent implements OnInit {
   }
   clickLasang(){
     this.showLasang=!this.showLasang;
+<<<<<<< HEAD
+=======
 
     if(this.showLasang == true){
       this.selectedCamp = "Lasang";
@@ -80,13 +96,12 @@ export class OrgStructureComponent implements OnInit {
     if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
     }
+>>>>>>> main
 
-    if (this.showSuba){
-      this.showSuba=!this.showSuba
-    }
-
-    if (this.showZW){
-      this.showZW=!this.showZW
+    if((this.showBaybayon=true) && (this.showSuba=true) && (this.showZW=true)){
+      this.showBaybayon=!this.showBaybayon;
+      this.showSuba=!this.showSuba;
+      this.showZW=!this.showZW;
     }
 
     if (this.showBoT){
@@ -95,6 +110,8 @@ export class OrgStructureComponent implements OnInit {
   }
   clickSuba(){
     this.showSuba=!this.showSuba;
+<<<<<<< HEAD
+=======
 
     if(this.showSuba == true){
       this.selectedCamp = "Suba";
@@ -110,9 +127,12 @@ export class OrgStructureComponent implements OnInit {
     if (this.showLasang){
       this.showLasang=!this.showLasang
     }
+>>>>>>> main
 
-    if (this.showZW){
-      this.showZW=!this.showZW
+    if((this.showLasang=true) && (this.showBaybayon=true) && (this.showZW=true)){
+      this.showLasang=!this.showLasang;
+      this.showBaybayon=!this.showBaybayon;
+      this.showZW=!this.showZW;
     }
 
     if (this.showBoT){
@@ -121,6 +141,8 @@ export class OrgStructureComponent implements OnInit {
   }
   clickZW(){
     this.showZW=!this.showZW;
+<<<<<<< HEAD
+=======
 
     if(this.showZW == true){
       this.selectedCamp = "Zero Waste";
@@ -132,13 +154,12 @@ export class OrgStructureComponent implements OnInit {
     if (this.showBaybayon){
       this.showBaybayon=!this.showBaybayon
     }
+>>>>>>> main
 
-    if (this.showSuba){
-      this.showSuba=!this.showSuba
-    }
-
-    if (this.showLasang){
-      this.showLasang=!this.showLasang
+    if((this.showLasang=true) && (this.showSuba=true) && (this.showBaybayon=true)){
+      this.showLasang=!this.showLasang;
+      this.showSuba=!this.showSuba;
+      this.showBaybayon=!this.showBaybayon;
     }
 
     if (this.showBoT){
@@ -147,6 +168,8 @@ export class OrgStructureComponent implements OnInit {
   }
   clickBoT(){
     this.showBoT=!this.showBoT;
+<<<<<<< HEAD
+=======
     this.selectedCamp = '';
 
     if (this.showBaybayon==true){
@@ -177,5 +200,6 @@ export class OrgStructureComponent implements OnInit {
     });
 
 
+>>>>>>> main
   }
 }

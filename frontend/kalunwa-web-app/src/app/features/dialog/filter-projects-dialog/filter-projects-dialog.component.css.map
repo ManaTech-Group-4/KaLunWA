@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,aAAa,CAAA;EACX,KAAK,EAAE,KAAK;CAEb",
-    "sources": [
-        "filter-projects-dialog.component.scss"
-    ],
-    "names": [],
-    "file": "filter-projects-dialog.component.css"
-}

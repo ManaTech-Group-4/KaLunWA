@@ -38,7 +38,7 @@ describe('AboutpageService', () => {
       expect(testMembers).toBe(member,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/demographics/total-members/');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/about-us/demographics');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');
@@ -50,43 +50,43 @@ describe('AboutpageService', () => {
 
   it('should retrieve all camp info and leaders', () => {
     const testCampLeaders: AboutCampModel[] = [{
-          "name": "Suba",
+          "camp_name": "Suba",
           "description": "default description",
-          "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
+          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
           "camp_leader": {
               "name": "firstname 1 lastname 1",
               "motto": "",
-              "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
+              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
           }
       },
       {
-        "name": "Baybayon",
-        "description": "default description",
-        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
-        "camp_leader": {
-            "name": "firstname 1 lastname 1",
-            "motto": "",
-            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
+          "camp_name": "Baybayon",
+          "description": "default description",
+          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
+          "camp_leader": {
+              "name": "firstname 0 lastname 0",
+              "motto": "",
+              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
           }
       },
       {
-        "name": "Zero Waste",
-        "description": "default description",
-        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
-        "camp_leader": {
-            "name": "firstname 1 lastname 1",
-            "motto": "",
-            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
+          "camp_name": "Zero Waste",
+          "description": "default description",
+          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
+          "camp_leader": {
+              "name": "firstname 3 lastname 3",
+              "motto": "",
+              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
           }
       },
       {
-        "name": "Lasang",
-        "description": "default description",
-        "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"},
-        "camp_leader": {
-            "name": "firstname 1 lastname 1",
-            "motto": "",
-            "image": {image: "http://127.0.0.1:8000/media/images/content/event.jpg"}
+          "camp_name": "Lasang",
+          "description": "default description",
+          "camp_image": "http://127.0.0.1:8000/media/images/content/event.jpg",
+          "camp_leader": {
+              "name": "firstname 2 lastname 2",
+              "motto": "",
+              "image": "http://127.0.0.1:8000/media/images/content/event.jpg"
           }
       }];
 
@@ -94,7 +94,7 @@ describe('AboutpageService', () => {
       expect(testCampLeaders).toBe(camps,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/camps/?expand=image&omit=created_at,updated_at&name__in=Suba,Zero%20Waste,Baybayon,Lasang');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/about-us/camps');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');

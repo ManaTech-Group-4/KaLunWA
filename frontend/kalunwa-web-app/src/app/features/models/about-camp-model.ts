@@ -1,8 +1,8 @@
 import { CampLeaderModel } from "./camp-leader-model";
 
 export interface AboutCampModel{
-  name: string;
+  camp_name: string;
   description: string;
-  image: {image: string};
+  camp_image: string;
   camp_leader: CampLeaderModel;
 }

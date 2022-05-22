@@ -41,17 +41,11 @@ hr{
 	margin: 0px;
 	box-sizing: border-box;
 }
-
-.null{
-    cursor: default !important;
-}
-
 .tree-container {
 	display: grid;
 	align-items: center;
 
     .tree {
-        font-family: monserrat;
         width: 100%;
         height: auto;
         text-align: center;
@@ -127,15 +121,12 @@ hr{
                 }
             }
             a {
-                border: 1px solid #91ad75;
+                border: 1px solid #ccc;
                 padding: 10px;
                 display: inline-grid;
                 border-radius: 5px;
                 text-decoration-line: none;
                 transition: .5s;
-                cursor: pointer;
-
-
                 img {
                     width: 50px;
                     height: 50px;
@@ -144,14 +135,14 @@ hr{
                     margin: auto;
                 }
                 span {
-                    border: 1px solid #91ad75;
+                    border: 1px solid #ccc;
                     border-radius: 5px;
-                    color: #628A3A;
+                    color: #666;
                     padding: 8px;
                     font-size: 12px;
                     text-transform: uppercase;
                     letter-spacing: 1px;
-                    font-weight: 600;
+                    font-weight: 500;
                 }
                 &:hover {
                     background: #628A3A;
@@ -198,24 +189,25 @@ hr{
 
 //--------------------------MEDIA QUERY-----------------------------------
 
-@media screen and (max-width: 936px){
-  div{
-    .subhead{
-      h1{
-        font-size: 140px;
-      }
-    }
-  }
-  .container{
-    .block{
-      .announcements{
-        width: 94vw;
-        padding: 10px 3vw;
-        height: auto;
-      }
-    }
-  }
+@media screen and (max-width: 786px){
 
+    div{
+        .header{
+            height:150px;
+        }
+        .subhead{
+            padding: 50px 0px;
+            h1{
+            font-size: 100px;
+            line-height: 85px;
+            padding: 20px 0px;
+            }
+
+            p{
+            font-size: 16px;
+            }
+        }
+    }
     hr{
         border-top:20px solid #628A3A;
     }
@@ -262,16 +254,23 @@ hr{
 
 
   @media screen and (max-width: 450px){
+
     div{
-      .subhead{
-        padding: 40px 0px;
-        h1{
-          font-size: 100px;
-          line-height: 90px;
-          padding: 5px 10px;
-          margin-bottom: 0px;
+        .header{
+            height:125px;
         }
-      }
+        .subhead{
+            padding: 30px 20px;
+            h1{
+            font-size: 80px;
+            line-height: 60px;
+            padding: 10px 0px;
+            }
+
+            p{
+            font-size: 13px;
+            }
+        }
     }
     hr{
         border-top:15px solid #628A3A;

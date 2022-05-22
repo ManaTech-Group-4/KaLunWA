@@ -16,10 +16,6 @@ export class AboutPageComponent implements OnInit {
   public members: TotalDemographicsModel=
   {total_members: 180};
   ngOnInit(): void {
-    this.getDemographics();
-  }
-
-  getDemographics(){
     this.aboutService.getDemographics()
       .subscribe(data => this.members = data);
   }

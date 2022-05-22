@@ -16,17 +16,29 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-
 # to be used for url patterns
 from django.conf.urls.static import static
+from kalunwa.users.views import CustomObtainTokenPairView
+
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 # add /api to access api's
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('api/', include([
-        path('', include('kalunwa.content.urls'))
-    ]) )
+    path('api/', include(
+            [
+                path('token/', CustomObtainTokenPairView.as_view(), name='token_obtain_pair'),
+                path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),                
+                path('', include('kalunwa.content.urls')),
+                path('users/', include('kalunwa.users.urls')),                
+            ]
+        )
+    )
 ]
 
 if settings.DEBUG:

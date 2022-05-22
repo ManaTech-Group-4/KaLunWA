@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { ActivatedRoute, Router} from "@angular/router";
+import { Router} from "@angular/router";
 
 import { routes } from "./app-routing.module";
 import { HomepageComponent } from "./features/components/homepage/homepage.component";
@@ -10,7 +10,6 @@ import { OrgStructureComponent } from "./features/components/org-structure/org-s
 import { PageNotFoundComponent } from "./features/components/page-not-found/page-not-found.component";
 import { AppComponent } from "./app.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 describe('Router: App', () => {
 
@@ -20,14 +19,14 @@ describe('Router: App', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports:[RouterTestingModule.withRoutes(routes), HttpClientTestingModule, MatDialogModule],
+      imports:[RouterTestingModule.withRoutes(routes), HttpClientTestingModule],
       declarations: [
         HomepageComponent,
         AboutPageComponent,
         OrgStructureComponent,
         PageNotFoundComponent,
         AppComponent
-      ],
+      ]
     });
 
     router = TestBed.get(Router);

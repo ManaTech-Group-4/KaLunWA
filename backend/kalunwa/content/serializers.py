@@ -37,7 +37,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(FlexFieldsModelSerializer):
-    image = serializers.ImageField(use_url=True, required=False)
+    image = serializers.ImageField(use_url=True)
     tags = TagSerializer(many=True, required=False)
 
     class Meta:

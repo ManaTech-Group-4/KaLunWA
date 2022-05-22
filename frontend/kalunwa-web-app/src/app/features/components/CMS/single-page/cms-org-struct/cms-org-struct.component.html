@@ -10,7 +10,12 @@
         <button (click)="getLeadersList('', election$)">Election Committee</button>
     </div>
     <div class="members-card" *ngIf="selectedComm">
-        <h2>Update Committee or Camp</h2>
+        <div class="header">
+            <span>
+                <h2>Update Committee or Camp</h2>
+                <button mat-button><mat-icon>add</mat-icon> Add Member</button>
+            </span>
+        </div>
         <div class="members-container">
             <div class="members" *ngFor="let item of selectedComm | async">
                 <img src="{{item.image.image}}" alt="image">

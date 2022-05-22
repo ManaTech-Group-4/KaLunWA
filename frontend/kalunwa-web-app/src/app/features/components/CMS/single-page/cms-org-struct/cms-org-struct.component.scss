@@ -40,20 +40,43 @@ div{
         border-radius: 10px;
         padding: 5px;
         max-height: 70vh;
-        h2{
+        width: auto;
+        .header{
             background-color: #7bad49;
             width: 100%;
-            padding: 8px 0;
+            padding: 0px;
             border-radius: 10px 10px 0 0;
-            font-family: monserrat;
-            text-align: center;
             margin-bottom: 5px;
             color: #fafafa;
+            span{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px;
+                h2{
+                    font-size: 18px;
+                    font-family: monserrat;
+                    text-align: center;
+                    margin: 0;
+                }
+                button{
+                    font-size: 12px;
+                    padding: 0 5px;
+                    margin-left: 8px;
+                    .mat-icon{
+                        font-size: 12px;
+                        width: auto;
+                        height: auto;
+                    }
+                }
+            }
         }
         .members-container{
             overflow-y: auto;
             display: block;
             padding: 0;
+            width: 100%;
             .members{
                 display: flex;
                 justify-content: space-between;

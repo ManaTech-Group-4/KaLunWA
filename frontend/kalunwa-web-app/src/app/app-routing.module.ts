@@ -21,6 +21,7 @@ import { VisitorLandingComponent } from './features/components/visitor-landing/v
 import { AuthGuard } from './admin/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -45,6 +46,7 @@ export const routes: Routes = [
   {path: "admin", component: AdminHomeComponent},
   {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
   {path: "single-page-list", component: SinglePageListComponent},
+  {path: "cms-homepage", component: CmsHomepageComponent},
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({

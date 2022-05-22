@@ -46,6 +46,7 @@ import { SinglePageListComponent } from './features/components/CMS/single-page/s
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     AdminHomeComponent,
     SinglePageListComponent,
     VisitorLandingComponent,
-    DummyLandingComponent
+    DummyLandingComponent,
+    CmsHomepageComponent
   ],
   entryComponents:[
     MembersDialogComponent

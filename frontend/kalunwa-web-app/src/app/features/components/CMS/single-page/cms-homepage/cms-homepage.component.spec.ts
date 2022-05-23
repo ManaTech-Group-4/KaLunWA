@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CmsHomepageComponent } from './cms-homepage.component';
@@ -8,7 +9,8 @@ describe('CmsHomepageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CmsHomepageComponent ]
+      declarations: [ CmsHomepageComponent ],
+      imports:[HttpClientModule]
     })
     .compileComponents();
   });

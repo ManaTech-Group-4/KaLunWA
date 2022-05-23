@@ -37,7 +37,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(FlexFieldsModelSerializer):
-    image = serializers.ImageField(use_url=True, required=False)
+    image = serializers.ImageField(use_url=True)
     tags = TagSerializer(many=True, required=False)
 
     class Meta:
@@ -166,6 +166,11 @@ class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
 
     def get_status(self, obj)->str:
         return self.determine_status(obj)
+
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Event.objects.create(**validated_data)
+
            
 
 class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
@@ -177,6 +182,10 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
         if not obj.end_date: # if end_date does not exist
             return StatusEnum.ONGOING.value
         return self.determine_status(obj)       
+    
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Project.objects.create(**validated_data)
 
 
 class NewsSerializer(FlexFieldsModelSerializer):
@@ -203,7 +212,11 @@ class NewsSerializer(FlexFieldsModelSerializer):
 
     def get_date(self, obj):
         return to_formal_mdy(obj.created_at)
-        
+
+    def create(self, validated_data):
+        print('Create method called..')
+        return  News.objects.create(**validated_data)
+
 
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
@@ -351,6 +364,9 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
     def get_date(self, obj):
         return to_formal_mdy(obj.created_at)
 
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Announcement.objects.create(**validated_data)
 
 class DemographicsSerializer(serializers.ModelSerializer):
 
@@ -417,4 +433,5 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+
 

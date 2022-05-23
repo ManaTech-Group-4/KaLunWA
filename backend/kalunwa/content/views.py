@@ -1,3 +1,4 @@
+from urllib import request
 from django.db.models import Sum
 from .models import Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
@@ -6,11 +7,10 @@ from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampL
                         DemographicsSerializer, EventSerializer,ImageSerializer, JumbotronSerializer,
                          OrgLeaderSerializer, ProjectSerializer, NewsSerializer) 
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, status, mixins
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.parsers import MultiPartParser, FormParser
-
 from .filters import (
     QueryLimitBackend, 
     CampNameInFilter,
@@ -22,7 +22,14 @@ from .filters import (
     ExcludeIDFilter,
 )
 
-    
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
+)
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+
+
 class EventViewSet(viewsets.ModelViewSet):
     model = Event
     queryset = Event.objects.all() # prefetch_related
@@ -115,25 +122,142 @@ class ImageViewSet(viewsets.ModelViewSet):
         return super().get_queryset() 
 
 
-class AnnouncementViewSet(viewsets.ModelViewSet):
+class AnnouncementViewSet(viewsets.ModelViewSet):      
+        serializer_class = AnnouncementSerializer
+        queryset = Announcement.objects.all()
+        filter_backends = [QueryLimitBackend]
+
+
+class ImageUploadView(APIView): 
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        print(request.data)
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+''''
+class AnnouncementCreateView(APIView): 
+
+    def post(self, request, format=None):
+        print(request.data)
+        serializer = AnnouncementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
+
+class AnnouncementListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated)
+    parser_classes = [MultiPartParser, FormParser]
     serializer_class = AnnouncementSerializer
     queryset = Announcement.objects.all()
     filter_backends = [QueryLimitBackend]
 
+    def create(self, request):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
+    def retrieve(self, request, ID):
+        try:
+            serializer_instance = self.queryset.get(id=ID)
+        except Announcement.DoesNotExist:
+            raise NotFound('Announcement with this ID does not exist.')
 
-#-------------------------------------------------------
-# Prep for file uploading
-# 
-# class ImageUploadView(APIView): 
-#     parser_classes = [MultiPartParser, FormParser]
+        serializer = self.serializer_class(serializer_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-#     def post(self, request, format=None):
-# #        print(request.data)
-#         serializer = ImageSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         else: 
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def update(self, request, ID):
+        serializer_context = {'request': request}
+
+        try:
+            serializer_instance = self.queryset.get(id=ID)
+        except Announcement.DoesNotExist:
+            raise NotFound('Announcement with this ID does not exist.')
+            
+        serializer_data = request.data.get('announcement', {})
+
+        serializer = self.serializer_class(
+            serializer_instance, 
+            context=serializer_context,
+            data=serializer_data, 
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
 
+class CommentsDestroyAPIView(generics.DestroyAPIView):
+    lookup_url_kwarg = 'comment_pk'
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = Comment.objects.all()
+
+    def destroy(self, request, article_slug=None, comment_pk=None):
+        try:
+            comment = Comment.objects.get(pk=comment_pk)
+        except Comment.DoesNotExist:
+            raise NotFound('A comment with this ID does not exist.')
+
+        comment.delete()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+'''
+
+class NewsListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated)
+    parser_classes = [MultiPartParser, FormParser]
+    serializer_class = NewsSerializer
+    queryset = News.objects.all()
+    filter_backends = [QueryLimitBackend]
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProjectListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated)
+    parser_classes = [MultiPartParser, FormParser]
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
+    filter_backends = [QueryLimitBackend]
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EventListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated)
+    parser_classes = [MultiPartParser, FormParser]
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()
+    filter_backends = [QueryLimitBackend]
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

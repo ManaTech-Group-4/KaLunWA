@@ -2,7 +2,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (AnnouncementViewSet, CabinOfficerViewSet, CampLeaderViewSet, 
                 CampPageViewSet, CommissionerViewSet, DemographicsViewSet, 
                 EventViewSet, ImageViewSet, JumbotronViewSet, NewsViewSet, 
-                OrgLeaderViewSet, ProjectViewSet, )
+                OrgLeaderViewSet, ProjectViewSet)
  
 
 router = DefaultRouter()
@@ -20,4 +20,5 @@ router.register(r'orgleaders', OrgLeaderViewSet, basename='orgleader')
 router.register(r'commissioners', CommissionerViewSet, basename='commissioner')
 router.register(r'campleaders', CampLeaderViewSet, basename='campleader')
 router.register(r'cabinofficers', CabinOfficerViewSet, basename='cabinofficer')
+
 urlpatterns = router.urls

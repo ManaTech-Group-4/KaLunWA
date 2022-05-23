@@ -44,7 +44,7 @@ export class AdminHomeComponent implements OnInit {
 
     this.loading = true;
     this.authService.login(this.f.username.value, this.f.password.value);
-    this.router.navigateByUrl("dashboard");
+    this.router.navigateByUrl("admin");
     // this.authService.login(this.f.username.value, this.f.password.value)
     //     .pipe(first())
     //     .subscribe(

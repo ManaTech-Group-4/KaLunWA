@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from .filters import (
     QueryLimitBackend, 
     CampNameInFilter,
@@ -94,6 +96,12 @@ class ContributorViewset(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     queryset = Contributor.objects.all()
 
+
+class AnnouncementViewSet(viewsets.ModelViewSet):
+    serializer_class = AnnouncementSerializer
+    queryset = Announcement.objects.all()
+    filter_backends = [QueryLimitBackend]
+
 # -----------------------------------------------------------------------------    
 # tester for gallery 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -102,21 +110,12 @@ class ImageViewSet(viewsets.ModelViewSet):
     """
     serializer_class = ImageSerializer
     # prefetched so that related objects are cached, and query only hits db once
-    queryset = Image.objects.prefetch_related('gallery_events', 'gallery_projects', 'gallery_camps') 
-    related_objects = ['has_event']
-
-    def get_queryset(self):
-        event_pk = self.request.query_params.get(f'has_event', None)      
-        if event_pk is not None: 
-            event = Event.objects.get(pk=event_pk).prefetch_related('gallery')
-            return event.gallery.all()
-        return super().get_queryset() 
+    queryset = Image.objects.all()
 
 
-class AnnouncementViewSet(viewsets.ModelViewSet):
-    serializer_class = AnnouncementSerializer
-    queryset = Announcement.objects.all()
-    filter_backends = [QueryLimitBackend]
+
+
+
 
 
 #-------------------------------------------------------
@@ -133,5 +132,3 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 #             return Response(serializer.data, status=status.HTTP_200_OK)
 #         else: 
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-

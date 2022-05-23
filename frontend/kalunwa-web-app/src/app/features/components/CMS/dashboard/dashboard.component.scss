@@ -70,6 +70,7 @@
             overflow: hidden;
             .first{
                 opacity: 0;
+                z-index:2;
                 .single, .collective{
                     display: flex;
                     flex-direction: column;
@@ -97,6 +98,7 @@
                 opacity: 1;
                 width: max-content;
                 padding: 20px;
+                z-index:1;
             }
             &:hover{
                 .first{
@@ -105,7 +107,6 @@
                 }
                 .overlay{
                     transition: all 0.3s ease;
-                    opacity: 0;
                 }
             }
         }

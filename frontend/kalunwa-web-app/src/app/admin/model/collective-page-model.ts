@@ -6,3 +6,9 @@ export class CollectivePageModel {
   status: string;
   checked: boolean;
 }
+export class ImageSnippet {
+  constructor(
+    public src: number,
+    public file:File){}
+}
+

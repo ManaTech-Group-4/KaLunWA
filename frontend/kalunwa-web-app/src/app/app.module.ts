@@ -46,6 +46,7 @@ import { AdminHomeComponent } from './admin/components/admin-home/admin-home.com
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { CollectivePageListComponent } from './admin/components/collective-page-
     AdminHomeComponent,
     VisitorLandingComponent,
     AdminTemplateComponent,
-    CollectivePageListComponent
+    CollectivePageListComponent,
+    AddCollectiveComponent
   ],
   entryComponents:[
     MembersDialogComponent

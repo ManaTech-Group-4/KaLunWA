@@ -19,7 +19,7 @@ export class CollectivePageListComponent implements OnInit {
   activePage:number = 1;
   currentPage = 0;
   lastPage = 4;
-  selected="projects";
+  selected="project";
 
   constructor(private service:CollectivePagesService,private ref: ChangeDetectorRef) { }
 
@@ -66,9 +66,9 @@ export class CollectivePageListComponent implements OnInit {
 
   changeCollection(collection:string){
     this.selected=collection;
-    if(collection == "projects")
+    if(collection == "project")
       this.displayList = this.projects;
-    else if(collection == "events")
+    else if(collection == "event")
       this.displayList = this.events;
     else if(collection == "news")
       this.displayList = this.news;
@@ -76,6 +76,7 @@ export class CollectivePageListComponent implements OnInit {
 
     this.updateDisplay(1);
   }
+
 }
 
 

@@ -7,6 +7,7 @@ import { NavService } from './features/service/nav.service';
 
 describe('AppComponent', () => {
 
+<<<<<<< HEAD
   let component: AppComponent;
   let service: NavService;
   let fixture: ComponentFixture<AppComponent>;
@@ -55,4 +56,6 @@ describe('AppComponent', () => {
       tick();
       expect(component.whatWeDo).toBeTruthy();
   }));
+=======
+>>>>>>> main
 });

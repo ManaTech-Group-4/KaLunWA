@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { CollectivePageModel } from '../../model/collective-page-model';
 import { CollectivePagesService } from '../../service/collective-pages.service';
 
+
 @Component({
   selector: 'app-collective-page-list',
   templateUrl: './collective-page-list.component.html',

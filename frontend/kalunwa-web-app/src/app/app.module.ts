@@ -42,6 +42,7 @@ import { DashboardComponent } from './features/components/CMS/dashboard/dashboar
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
@@ -82,6 +83,7 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     SidenavComponent,
     AppPaginationComponent,
     AdminHomeComponent,
+    SinglePageListComponent,
     VisitorLandingComponent,
     AdminTemplateComponent,
     CollectivePageListComponent,

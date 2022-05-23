@@ -4,6 +4,5 @@ export interface DashboardModel{
   pages: number;
   administrators: number;
   newsletter_subs: number;
-  applicants: number;
   audit_logs: Array<any>;
 }

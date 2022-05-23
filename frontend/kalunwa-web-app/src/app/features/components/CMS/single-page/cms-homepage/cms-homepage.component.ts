@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventsModel } from 'src/app/features/models/events';
 import { HomepageService } from 'src/app/features/service/homepage.service';
-import { HomeNewsModel } from 'src/app/features/models/home-news';
 import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
 
 @Component({
@@ -16,7 +15,6 @@ export class CmsHomepageComponent implements OnInit {
   public jumbotron = [] as EventsModel[];
   public events = [] as EventsModel[];
   public projects = [] as EventsModel[];
-  public news =[] as HomeNewsModel[];
 
   sectionChoice: string = 'jumbotron';
 
@@ -41,9 +39,6 @@ export class CmsHomepageComponent implements OnInit {
     //---for projects
     this.homeService.getProjects()
       .subscribe(data => this.projects = data);
-    //---for news
-    this.homeService.getNews()
-    .subscribe(data => this.news = data);
   }
 
   toggleSection(section:string){

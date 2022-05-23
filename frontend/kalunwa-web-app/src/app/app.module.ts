@@ -45,7 +45,6 @@ import { AppPaginationComponent } from './features/components/app-pagination/app
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
@@ -88,8 +87,7 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     AdminHomeComponent,
     SinglePageListComponent,
     VisitorLandingComponent,
-    DummyLandingComponent,
-    CmsOrgStructComponent
+    CmsOrgStructComponent,
     CmsHomepageComponent,
     AdminTemplateComponent,
     CollectivePageListComponent,

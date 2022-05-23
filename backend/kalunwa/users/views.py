@@ -30,7 +30,7 @@ class UserCreate(APIView):
         - UserSerializer -> email & password
     change permission here: either admin or superadmin
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format='json'):
         """

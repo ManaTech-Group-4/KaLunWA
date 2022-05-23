@@ -26,7 +26,7 @@
                 justify-content: center;
                 margin-right: 20px;
                 background-color: #7bad49;
-                
+
                 .mat-icon{
                     font-size: 37px;
                     height: auto;
@@ -51,7 +51,7 @@
                 }
             }
 
-            
+
         }
 
         .card{
@@ -70,6 +70,7 @@
             overflow: hidden;
             .first{
                 opacity: 0;
+                z-index:2;
                 .single, .collective{
                     display: flex;
                     flex-direction: column;
@@ -97,6 +98,7 @@
                 opacity: 1;
                 width: max-content;
                 padding: 20px;
+                z-index:1;
             }
             &:hover{
                 .first{
@@ -105,7 +107,6 @@
                 }
                 .overlay{
                     transition: all 0.3s ease;
-                    opacity: 0;
                 }
             }
         }
@@ -119,6 +120,7 @@
             width: 100%;
             border-radius: 10px;
             background-color: #fafafa;
+            border-collapse: collapse;
             tr{
                 height: 50px;
                 td{
@@ -127,6 +129,7 @@
             }
             .table-header{
                 background-color: #7bad49;
+                height:60px;
                 th{
                     &:first-child{
                         border-radius:10px 10px 0 0;

@@ -45,7 +45,9 @@ import { AppPaginationComponent } from './features/components/app-pagination/app
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     AdminHomeComponent,
     SinglePageListComponent,
     VisitorLandingComponent,
-    DummyLandingComponent
+    AdminTemplateComponent,
+    CollectivePageListComponent,
+    AddCollectiveComponent
   ],
   entryComponents:[
     MembersDialogComponent
@@ -104,7 +108,7 @@ import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-la
     MatToolbarModule,
     MatIconModule,
     MatDividerModule,
-    MatListModule,
+    MatListModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

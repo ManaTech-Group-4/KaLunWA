@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DummyLandingComponent } from './dummy-landing.component';
+import { AdminTemplateComponent } from './admin-template.component';
 
-describe('DummyLandingComponent', () => {
-  let component: DummyLandingComponent;
-  let fixture: ComponentFixture<DummyLandingComponent>;
+describe('AdminTemplateComponent', () => {
+  let component: AdminTemplateComponent;
+  let fixture: ComponentFixture<AdminTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DummyLandingComponent ]
+      declarations: [ AdminTemplateComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DummyLandingComponent);
+    fixture = TestBed.createComponent(AdminTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

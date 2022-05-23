@@ -47,6 +47,10 @@ import { AdminHomeComponent } from './admin/components/admin-home/admin-home.com
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { DummyLandingComponent } from './admin/components/dummy-landing/dummy-landing.component';
 import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +90,10 @@ import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms
     VisitorLandingComponent,
     DummyLandingComponent,
     CmsOrgStructComponent
+    CmsHomepageComponent,
+    AdminTemplateComponent,
+    CollectivePageListComponent,
+    AddCollectiveComponent,
   ],
   entryComponents:[
     MembersDialogComponent
@@ -106,7 +114,7 @@ import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms
     MatToolbarModule,
     MatIconModule,
     MatDividerModule,
-    MatListModule,
+    MatListModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

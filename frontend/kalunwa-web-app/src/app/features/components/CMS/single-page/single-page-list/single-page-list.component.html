@@ -10,7 +10,7 @@
             <th>Last Updated</th>
         </tr>
         <tr  class="table-content" *ngFor="let item of singlePageList | slice:0:10">
-            <td class="page_name" *ngIf="item.page == 'Homepage'" routerLink="/home">{{item.page}}</td>
+            <td class="page_name" *ngIf="item.page == 'Homepage'" routerLink="/cms-homepage">{{item.page}}</td>
             <td class="page_name" *ngIf="item.page == 'Org Structure'" routerLink="/cms-org-struct">{{item.page}}</td>
             <td class="page_name" *ngIf="item.page == 'Baybayon'" routerLink="/baybayon">{{item.page}}</td>
             <td class="page_name" *ngIf="item.page == 'Lasang'" routerLink="/lasang">{{item.page}}</td>

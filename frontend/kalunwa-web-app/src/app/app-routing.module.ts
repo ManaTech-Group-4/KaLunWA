@@ -20,8 +20,12 @@ import { AdminHomeComponent } from './admin/components/admin-home/admin-home.com
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { AuthGuard } from './admin/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -43,10 +47,19 @@ export const routes: Routes = [
     {path: 'suba', component:SubaComponent},
     {path: 'zero-waste', component:ZeroWasteComponent},
     {path: "contact-us", component: ContactUsComponent}]},
-  {path: "admin", component: AdminHomeComponent},
-  {path: "dashboard", component: DashboardComponent, canActivate: [AuthGuard]},
-  {path: "single-page-list", component: SinglePageListComponent},
-  {path: "cms-org-struct", component: CmsOrgStructComponent},
+  {path: "login", component: AdminHomeComponent},
+  {path: "admin", component: AdminTemplateComponent, canActivate: [AuthGuard],
+    children:[
+      {path: '', redirectTo: 'dashboard', pathMatch:"full"},
+      {path: "dashboard", component: DashboardComponent},
+      {path: "single-page-list", component: SinglePageListComponent},
+      {path: "cms-homepage", component: CmsHomepageComponent},
+      {path: "cms-org-struct", component: CmsOrgStructComponent},
+      {path: "collective", component: CollectivePageListComponent},
+      {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
+      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
+    ]
+  },
   {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
@@ -74,4 +87,5 @@ export const routeComponents = [HomepageComponent,
                                 DashboardComponent,
                                 SinglePageListComponent,
                                 CmsOrgStructComponent,
+                                CmsHomepageComponent,
                               ];

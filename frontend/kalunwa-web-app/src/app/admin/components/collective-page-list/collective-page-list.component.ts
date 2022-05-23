@@ -13,6 +13,7 @@ export class CollectivePageListComponent implements OnInit {
 
 
   projects: CollectivePageModel[];
+  announcement: CollectivePageModel[];
   events: CollectivePageModel[];
   news: CollectivePageModel[];
   displayList: CollectivePageModel[];
@@ -41,6 +42,11 @@ export class CollectivePageListComponent implements OnInit {
           this.news = data;
         }
       );
+      this.service.getAnnouncementList().subscribe(
+        (data) => {
+          this.announcement = data;
+        }
+      );
         console.log(this.projects);
     }
 
@@ -54,8 +60,8 @@ export class CollectivePageListComponent implements OnInit {
       this.currentPage = 0;
 
     this.lastPage = this.currentPage + 8;
-    if(this.lastPage > this.projects.length)
-      this.lastPage = this.projects.length;
+    if(this.lastPage > this.displayList.length)
+      this.lastPage = this.displayList.length;
 
 
     this.activePage = newPage;
@@ -72,6 +78,8 @@ export class CollectivePageListComponent implements OnInit {
       this.displayList = this.events;
     else if(collection == "news")
       this.displayList = this.news;
+    else if(collection == "announcement")
+      this.displayList = this.announcement;
 
 
     this.updateDisplay(1);

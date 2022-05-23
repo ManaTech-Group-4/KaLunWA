@@ -28,7 +28,7 @@
           <mat-datepicker #picker ></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
           <mat-label>End Date</mat-label>
           <input matInput [matDatepicker]="endpicker" formControlName="end_date"  (dateChange)="updateStatus()">
           <mat-hint>MM/DD/YYYY</mat-hint>
@@ -37,13 +37,13 @@
         </mat-form-field>
       </div>
       <div class="form-row">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
           <mat-label>Status</mat-label>
           <input matInput disabled [value]="status">
         </mat-form-field>
       </div>
       <div class="form-row">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
           <mat-label>Camps</mat-label>
           <mat-select formControlName="camp">
             <mat-option value="Baybayon">Baybayon</mat-option>
@@ -61,7 +61,7 @@
           <textarea matInput formControlName="description"></textarea>
         </mat-form-field>
       </div>
-      <div class="form-row">
+      <div class="form-row" >
         <input type="file" class="file-input" id="fileImg"
         accept="image/*"
         (change)="onFileChange(fileUpload)" #fileUpload formControlName="image">

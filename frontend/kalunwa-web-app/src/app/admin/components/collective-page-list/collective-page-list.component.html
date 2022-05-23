@@ -11,6 +11,7 @@
           <mat-chip (click)="changeCollection('project')"  [style.background-color]="selected == 'project'? '#7bad49': '#c1c1c1'"  [style.border]="selected == 'project'? 'none': '2px solid black'" [style.color]="selected == 'project'? 'white': 'black'">Projects</mat-chip>
           <mat-chip (click)="changeCollection('event')"  [style.background-color]="selected == 'event'? '#7bad49': '#c1c1c1'"  [style.border]="selected == 'event'? 'none': '2px solid black'" [style.color]="selected == 'event'? 'white': 'black'">Events</mat-chip>
           <mat-chip (click)="changeCollection('news')"  [style.background-color]="selected == 'news'? '#7bad49': '#c1c1c1'" [style.border]="selected == 'news'? 'none': '2px solid black'" [style.color]="selected == 'news'? 'white': 'black'">News</mat-chip>
+          <mat-chip (click)="changeCollection('announcement')"  [style.background-color]="selected == 'announcement'? '#7bad49': '#c1c1c1'" [style.border]="selected == 'announcement'? 'none': '2px solid black'" [style.color]="selected == 'announcement'? 'white': 'black'">Announcement</mat-chip>
           </mat-chip-list>
         </td>
       </tr>
@@ -23,8 +24,11 @@
       <tr  class="table-content" *ngFor="let item of displayList | slice:currentPage:lastPage" routerLink='/admin/collective-add-edit/{{selected}}/{{item.id}}'>
         <td width="40%"><mat-checkbox color="primary">{{item.title}}</mat-checkbox>
         <td width="20%">{{item.start_date}}</td>
-        <td *ngIf="selected != 'news'" width="20%">{{item.camp}}</td>
-        <td *ngIf="selected != 'news'" width="20%">{{item.status}}</td>
+        <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.camp}}</td>
+        <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.status}}</td>
+      </tr>
+      <tr *ngIf="!displayList || displayList.length < 1" class="empty-case">
+        <th colspan="4">{{selected | titlecase}} is empty</th>
       </tr>
   </table>
 

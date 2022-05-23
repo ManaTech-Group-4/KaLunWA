@@ -72,6 +72,13 @@ div{
           }
         }
       }
+      .empty-case{
+        th{
+          text-align:center !important;
+          color:rgb(73, 80, 66);
+          font-weight: 400;
+        }
+      }
       tr{
           height: 50px;
           td,th{

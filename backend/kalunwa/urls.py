@@ -24,9 +24,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('api/', include([
-        path('', include('kalunwa.content.urls'))
-    ]) )
+    path('api/', include(
+        [
+            path('', include('kalunwa.content.urls')),
+            path('', include('kalunwa.page_containers.urls')),
+        ]
+        ) 
+    )
 ]
 
 if settings.DEBUG:

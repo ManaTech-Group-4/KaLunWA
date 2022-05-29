@@ -26,6 +26,8 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
+import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -57,7 +59,9 @@ export const routes: Routes = [
       {path: "cms-org-struct", component: CmsOrgStructComponent},
       {path: "collective", component: CollectivePageListComponent},
       {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
-      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
+      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent},
+      {path: "newsletter", component:NewsletterComponent},
+      {path: "audit", component:AuditLogsComponent},
     ]
   },
   {path: "**", component: PageNotFoundComponent}];

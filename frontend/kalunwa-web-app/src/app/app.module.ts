@@ -50,6 +50,8 @@ import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
+import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
+import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +94,8 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     AdminTemplateComponent,
     CollectivePageListComponent,
     AddCollectiveComponent,
+    NewsletterComponent,
+    AuditLogsComponent,
   ],
   entryComponents:[
     MembersDialogComponent

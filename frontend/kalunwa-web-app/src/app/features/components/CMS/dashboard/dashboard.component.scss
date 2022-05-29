@@ -124,13 +124,16 @@
             tr{
                 height: 50px;
                 td{
-                    padding: 5px 10px;
+                    padding: 5px 20px;
                 }
             }
             .table-header{
                 background-color: #7bad49;
                 height:60px;
                 th{
+                    font-size: 18px;
+                    text-align: left;
+                    padding: 5px 20px;
                     &:first-child{
                         border-radius:10px 10px 0 0;
                     }
@@ -138,6 +141,10 @@
             }
             .col-header, .footer{
                 background-color: #abada7;
+                th{
+                    text-align: left;
+                    padding: 5px 20px;
+                }
             }
             .table-content{
                 color: #233620;
@@ -148,8 +155,8 @@
             }
             .footer{
                 th{
+                    text-align: right;
                     a{
-                        text-align: right;
                         text-decoration: none;
                         color: #fafafa;
                     }

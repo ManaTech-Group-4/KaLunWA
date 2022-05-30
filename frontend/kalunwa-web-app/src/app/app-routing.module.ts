@@ -17,6 +17,7 @@ import { LasangComponent } from './features/components/indiv-camps/lasang/lasang
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+<<<<<<< HEAD
 >>>>>>> main
 
 export const routes: Routes = [
@@ -38,6 +39,50 @@ export const routes: Routes = [
   {path: 'suba', component:SubaComponent},
   {path: 'zero-waste', component:ZeroWasteComponent},
   {path: "contact-us", component: ContactUsComponent},
+>>>>>>> main
+=======
+import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
+import { AuthGuard } from './admin/auth.guard';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+
+export const routes: Routes = [
+  {path: '', component: VisitorLandingComponent,
+  children:[
+    {path: '', redirectTo: 'home', pathMatch:"full"},
+    {path: 'home', component: HomepageComponent},
+    {path: "admin-login", component: AdminHomeComponent},
+    {path: 'about',  component: AboutPageComponent},
+    {path: 'org-struct',  component: OrgStructureComponent},
+    {path: "indiv-event/:id", component: IndiEventComponent},
+    {path: "indiv-project/:id", component: IndivProjectComponent},
+    {path: 'events', component:EventsPageComponent},
+    {path: 'projects', component:ProjectPageComponent},
+    {path: 'news', component:NewsComponent},
+    {path: "indiv-news/:id", component: IndivNewsComponent},
+    {path: 'join-us', component:JoinUsComponent},
+    {path: 'baybayon', component:BaybayonComponent},
+    {path: 'lasang', component:LasangComponent},
+    {path: 'suba', component:SubaComponent},
+    {path: 'zero-waste', component:ZeroWasteComponent},
+    {path: "contact-us", component: ContactUsComponent}]},
+  {path: "login", component: AdminHomeComponent},
+  {path: "admin", component: AdminTemplateComponent, canActivate: [AuthGuard],
+    children:[
+      {path: '', redirectTo: 'dashboard', pathMatch:"full"},
+      {path: "dashboard", component: DashboardComponent},
+      {path: "single-page-list", component: SinglePageListComponent},
+      {path: "cms-homepage", component: CmsHomepageComponent},
+      {path: "collective", component: CollectivePageListComponent},
+      {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
+      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
+    ]
+  },
 >>>>>>> main
   {path: "**", component: PageNotFoundComponent}];
 
@@ -64,5 +109,14 @@ export const routeComponents = [HomepageComponent,
                                 LasangComponent,
                                 SubaComponent,
                                 ZeroWasteComponent,
+<<<<<<< HEAD
                                 ContactUsComponent];
+>>>>>>> main
+=======
+                                ContactUsComponent,
+                                AdminHomeComponent,
+                                DashboardComponent,
+                                SinglePageListComponent,
+                                CmsHomepageComponent,
+                              ];
 >>>>>>> main

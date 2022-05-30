@@ -35,8 +35,26 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { NextDirectiveModule } from './features/shared/directives/next/next.directive';
 import { PrevDirectiveModule } from './features/shared/directives/prev/prev.directive';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatListModule} from '@angular/material/list';
+import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
+import { HeaderComponent } from './features/components/CMS/header/header.component';
+import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
+<<<<<<< HEAD
 import { AdminHomeComponent } from './admin-home/admin-home.component';
+>>>>>>> main
+=======
+import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
+import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 >>>>>>> main
 
 @NgModule({
@@ -71,8 +89,17 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     SubaComponent,
     ZeroWasteComponent,
     ContactUsComponent,
+    DashboardComponent,
+    HeaderComponent,
+    SidenavComponent,
     AppPaginationComponent,
-    AdminHomeComponent
+    AdminHomeComponent,
+    SinglePageListComponent,
+    VisitorLandingComponent,
+    CmsHomepageComponent,
+    AdminTemplateComponent,
+    CollectivePageListComponent,
+    AddCollectiveComponent,
   ],
   entryComponents:[
     MembersDialogComponent
@@ -84,7 +111,21 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
+<<<<<<< HEAD
     MatCarouselModule.forRoot()
+=======
+    MatCarouselModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    NextDirectiveModule,
+    PrevDirectiveModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule
+>>>>>>> main
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

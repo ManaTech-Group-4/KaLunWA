@@ -3,6 +3,9 @@ import { EventsModel } from 'src/app/features/models/events';
 import { HomepageService } from 'src/app/features/service/homepage.service';
 import { HomeNewsModel } from 'src/app/features/models/home-news';
 import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
+import { ProjectItemService } from '../../../projects/service/project-item.service';
+import { EventspageService } from 'src/app/features/service/eventspage.service';
+import { NewsService } from '../../../news/service/news.service';
 
 @Component({
   selector: 'app-cms-homepage',
@@ -11,7 +14,7 @@ import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-lis
 })
 export class CmsHomepageComponent implements OnInit {
 
-  constructor(private homeService: HomepageService) { }
+  constructor(private projectService: ProjectItemService, private eventsService: EventspageService, private newsService: NewsService) { }
 
   public jumbotron = [] as EventsModel[];
   public events = [] as EventsModel[];
@@ -30,19 +33,19 @@ export class CmsHomepageComponent implements OnInit {
 
   ngOnInit(): void {
     //---for jumbotron
-    this.homeService.getEvents()
+    this.eventsService.getEventList()
       .subscribe(data => this.jumbotron = data);
 
-    this.homeService.getProjects()
+    this.projectService.getProjectList()
       .subscribe(data => this.jumbotron = this.jumbotron.concat(data));
     //---for events
-    this.homeService.getEvents()
+    this.eventsService.getEventList()
     .subscribe(data => this.events = data);
     //---for projects
-    this.homeService.getProjects()
+    this.projectService.getProjectList()
       .subscribe(data => this.projects = data);
     //---for news
-    this.homeService.getNews()
+    this.newsService.getNewsList()
     .subscribe(data => this.news = data);
   }
 

@@ -20,7 +20,28 @@ def unique_slugify(instance, string):
 	slug = slugify(string)
 	unique_slug = slug
 	suffix = 1
-	while model.objects.filter(slug=unique_slug).exists():
-		unique_slug = f'{slug}-{suffix}'
-		suffix += 1
-	return unique_slug 
+	
+	# ensure that when doing a put request, or updating an entry in the database,
+	# it does not change the slug of the object
+	# why does the slug change? this is because the presave signal triggers the
+		# updating of the slug value, to which a search is done to see if an existing
+		# slug had been used. The problem is, when a record is saved due to an update, 
+		# it retriggers the signal to generate a slug value from the name, and when this
+		# name is not changed during an update, the slug generated from it is compared
+		# to the old record, which is still the same name. It detects it as a duplicate, 
+		# and rewrites the slug by appending the corresponding suffix.
+
+	while True:
+		db_instance_list = model.objects.filter(slug=unique_slug)
+
+		if not db_instance_list: # empty
+		# if it's empty then the slug is unique
+			return unique_slug
+
+		if len(db_instance_list) == 1 and db_instance_list[0].id == instance.id:
+		# check to avoid rewriting its own slug 
+			return unique_slug
+		else:
+			unique_slug = f'{slug}-{suffix}'
+			suffix += 1
+		

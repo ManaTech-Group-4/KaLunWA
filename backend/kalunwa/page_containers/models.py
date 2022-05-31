@@ -35,6 +35,13 @@ class PageContainedJumbotron(models.Model):
     container = models.ForeignKey(PageContainer, on_delete=models.CASCADE) 
     jumbotron = models.ForeignKey(Jumbotron, on_delete=models.CASCADE)
     section_order = models.IntegerField()
+    # class Meta:
+        # avoid duplicates when using update_or_create
+        # unique_together = ('container', 'jumbotron', 'section_order')            
+        # container should only have 1 jumbotron at a position/order        
+        # unique_together = ('container', 'section_order') 
+        # container should have unique jumbotrons
+        # unique_together = ('container', 'jumbotron')            
 
 # class PageContainedEvents(models.Model):
 #     container = models.ForeignKey(PageContainer, on_delete=models.CASCADE) 

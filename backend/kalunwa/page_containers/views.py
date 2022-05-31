@@ -21,16 +21,11 @@ from kalunwa.page_containers.models import PageContainer
 from .serializers import HomePageContainerSerializer, PageContainerSerializer
 # Create your views here.
 
-# works, 
-    #   readAPIView
-    # listAPIView
-    # ListModelMixin, GenericAPIView -> doesn't work
 
-class PageContainerListView(ListCreateAPIView):# GenericAPIView, ListModelMixin, RetrieveModelMixin
+class PageContainerListView(ListCreateAPIView):
     # permission_classes = (IsAuthenticatedOrReadOnly,)    
     queryset = PageContainer.objects.all()
     serializer_class = PageContainerSerializer
-    # slug of the object is not see in this case 
 
 class PageContainerDetailView(RetrieveUpdateDestroyAPIView):
     queryset = PageContainer.objects.all()
@@ -39,6 +34,6 @@ class PageContainerDetailView(RetrieveUpdateDestroyAPIView):
 
 
 # /api/page-containers/<lookup>
-# /api/page-containers/homepage
+# /api/page-containers/<slug:slug>/contained_jumbotrons/<int:>
 # /api/page-containers/organization-structure
 

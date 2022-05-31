@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+from kalunwa.content.models import Jumbotron
 from kalunwa.content.serializers import JumbotronSerializer
 from .models import PageContainer, PageContainedJumbotron
 
@@ -25,12 +27,14 @@ class PageContainedJumbotronSerializer(serializers.ModelSerializer):
         model = PageContainedJumbotron
         fields = (
             # 'container', #tried to get value for field`container`
+            'id', # for some reason, it's not included
+            # 'container',            
             'jumbotron',
             'section_order',
         )
 
 class PageContainerSerializer(serializers.ModelSerializer):
-    jumbotrons = PageContainedJumbotronSerializer(
+    page_contained_jumbotrons = PageContainedJumbotronSerializer(
         source='pagecontainedjumbotron_set', many=True, required=False)
 
     class Meta:
@@ -39,7 +43,7 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'slug',
-            'jumbotrons',
+            'page_contained_jumbotrons',
             'created_at',
             'updated_at',
         )
@@ -49,17 +53,38 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'updated_at',            
         )
         lookup_field = 'slug'
+    
+    # validate if jumbotron -> less than or equal to 5 entries
+    # validate uniqueness 
+    #   -> container & section order
+    #   -> container & jumbotron
 
+    def create_or_update_contained_jumbotrons(self, instance, contained_jumbotrons:dict)-> list: # get or create page_contained_jumbotrons
+        contained_jumbotron_objects = []
+        # update or create a record of page contained jumbotrons
+            # update if there is an old record of a container and section_order
+                #together, which would mean that the jumbotron is the one being
+                # change per request
+            # create a new entry if container does not have this section_order yet. 
+        for contained_jumbotron in contained_jumbotrons:
+            jumbotron_obj, created = PageContainedJumbotron.objects.update_or_create(
+                container=instance,
+                section_order=contained_jumbotron['section_order'],
+                defaults=contained_jumbotron)
+            contained_jumbotron_objects.append(jumbotron_obj)
 
-    # def create(self, validated_data):
-    #     # will not create related objects
-    #     # pop out related objects
-    #     jumbotrons = validated_data.pop('jumbotrons', [])
-    #         # check if related obj does not exist (exists):
-    #             # raise error
-    #         # create page container, 
-    #             # then link it to the ...set() -> obj.jumbotrons.set() -> or sumth like that
-    #     # return page
+        return contained_jumbotron_objects
 
-        # return super().create(validated_data)
+    def update(self, instance, validated_data):
+        # validated_data here needs to refer to db source (pagecontainedjumbotron_set)
+        contained_jumbotrons = validated_data.pop('pagecontainedjumbotron_set', [])  
+        instance.pagecontainedjumbotron_set.set(self.create_or_update_contained_jumbotrons(instance, contained_jumbotrons)) # get jumbotron by id 
+        fields = ['name'] # direct fields in a container that can be updated 
+        for field in fields:
+            try:
+                setattr(instance, field, validated_data[field])
+            except KeyError:  # validated_data may not contain all fields during HTTP PATCH
+                pass        
+        instance.save()
 
+        return instance

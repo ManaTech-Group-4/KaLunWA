@@ -16,9 +16,9 @@ from rest_framework.permissions import (
      IsAuthenticatedOrReadOnly
 )
 
-from kalunwa.page_containers.models import PageContainer
+from kalunwa.page_containers.models import PageContainedJumbotron, PageContainer
 
-from .serializers import HomePageContainerSerializer, PageContainerSerializer
+from .serializers import HomePageContainerSerializer, PageContainedJumbotronSerializer, PageContainerSerializer
 # Create your views here.
 
 
@@ -32,6 +32,10 @@ class PageContainerDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = PageContainerSerializer
     lookup_field = 'slug'
 
+
+class PageContainedJumbotronDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = PageContainedJumbotron.objects.all()
+    serializer_class = PageContainedJumbotronSerializer
 
 # /api/page-containers/<lookup>
 # /api/page-containers/<slug:slug>/contained_jumbotrons/<int:>

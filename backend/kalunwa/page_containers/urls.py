@@ -10,6 +10,7 @@ from .views import (
 
 urlpatterns = [
     path('page-containers/', PageContainerListView.as_view(), name='page-container-list'),
+    path('page-containers/<int:pk>/', PageContainerDetailView.as_view(), name='page-container-detail'),    
     path('page-containers/<slug:slug>/', PageContainerDetailView.as_view(), name='page-container-detail'),
     path('page-contained-jumbotrons/<int:pk>/', 
         PageContainedJumbotronDetailView.as_view(), 

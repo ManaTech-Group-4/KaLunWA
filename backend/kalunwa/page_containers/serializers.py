@@ -1,8 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from kalunwa.content.models import Jumbotron
 from kalunwa.content.serializers import JumbotronSerializer
 from .models import PageContainer, PageContainedJumbotron
-
+from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
 
 
@@ -28,10 +29,24 @@ class PageContainedJumbotronSerializer(serializers.ModelSerializer):
         fields = (
             # 'container', #tried to get value for field`container`
             'id', # for some reason, it's not included
-            # 'container',            
+            'container',            
             'jumbotron',
             'section_order',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=PageContainedJumbotron.objects.all(),
+                fields=["container", "jumbotron", "section_order"],
+            ),
+            UniqueTogetherValidator(
+                queryset=PageContainedJumbotron.objects.all(),
+                fields=["container", "section_order"],
+            ),            
+            UniqueTogetherValidator(
+                queryset=PageContainedJumbotron.objects.all(),
+                fields=["container", "jumbotron"],
+            )                        
+        ]           
 
 class PageContainerSerializer(serializers.ModelSerializer):
     page_contained_jumbotrons = PageContainedJumbotronSerializer(
@@ -53,6 +68,8 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'updated_at',            
         )
         lookup_field = 'slug'
+
+     
     
     # validate if jumbotron -> less than or equal to 5 entries
     # validate uniqueness 
@@ -60,18 +77,26 @@ class PageContainerSerializer(serializers.ModelSerializer):
     #   -> container & jumbotron
 
     def create_or_update_contained_jumbotrons(self, instance, contained_jumbotrons:dict)-> list: # get or create page_contained_jumbotrons
-        contained_jumbotron_objects = []
-        # update or create a record of page contained jumbotrons
-            # update if there is an old record of a container and section_order
-                #together, which would mean that the jumbotron is the one being
-                # change per request
-            # create a new entry if container does not have this section_order yet. 
+        contained_jumbotron_objects = []       
         for contained_jumbotron in contained_jumbotrons:
-            jumbotron_obj, created = PageContainedJumbotron.objects.update_or_create(
-                container=instance,
-                section_order=contained_jumbotron['section_order'],
-                defaults=contained_jumbotron)
-            contained_jumbotron_objects.append(jumbotron_obj)
+            try: 
+                contained_jumbotron_obj = PageContainedJumbotron.objects.get(
+                    container=instance,
+                    section_order=contained_jumbotron['section_order']
+                )
+                contained_jumbotron_obj.jumbotron = contained_jumbotron['jumbotron']
+
+            except ObjectDoesNotExist:
+                if instance.name == 'homepage' and PageContainedJumbotron.objects.count() == 5:
+                    raise serializers.ValidationError({"detail": "Homepage can only contain 5 jumbotrons at most."})
+
+                contained_jumbotron_obj = PageContainedJumbotron.objects.create(
+                    container=instance,
+                    section_order=contained_jumbotron['section_order'],
+                    jumbotron=contained_jumbotron['jumbotron']
+                )
+            
+            contained_jumbotron_objects.append(contained_jumbotron_obj)
 
         return contained_jumbotron_objects
 

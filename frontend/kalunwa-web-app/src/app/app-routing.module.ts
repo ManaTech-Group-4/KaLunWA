@@ -24,10 +24,11 @@ import { AdminTemplateComponent } from './admin/components/admin-template/admin-
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
-import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
+import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp/cms-camp.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -62,6 +63,7 @@ export const routes: Routes = [
       {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent},
       {path: "newsletter", component:NewsletterComponent},
       {path: "audit", component:AuditLogsComponent},
+      {path: "cms-camp/:camp-type", component:CmsCampComponent},
     ]
   },
   {path: "**", component: PageNotFoundComponent}];
@@ -92,4 +94,7 @@ export const routeComponents = [HomepageComponent,
                                 SinglePageListComponent,
                                 CmsOrgStructComponent,
                                 CmsHomepageComponent,
+                                NewsletterComponent,
+                                AuditLogsComponent,
+                                CmsCampComponent,
                               ];

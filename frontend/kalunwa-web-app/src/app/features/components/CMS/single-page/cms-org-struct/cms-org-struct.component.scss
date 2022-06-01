@@ -1,11 +1,29 @@
-div{
+.back{
+    display: flex;
+    flex-direction: row;
+    padding: 10px 30px;
+    background-color: #628A3A;
+    color: #fafafa;
+    align-items: center;
+    .mat-icon{
+        font-size: 25px;
+        width: auto;
+        height: auto;
+    }
+    h3{
+        font-size: 15px;
+        font-family: montserrat;
+        margin: 0;
+    }
+}
+.container{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center;
+    align-items:flex-start;
     background-color: rgb(228, 228, 228);
     min-height: 100%;
-    
+    padding-top: 25px;
     .committees{
         display: flex;
         flex-direction: row;

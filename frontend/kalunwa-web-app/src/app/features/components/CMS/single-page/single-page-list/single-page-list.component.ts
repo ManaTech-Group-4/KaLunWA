@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
+import { SinglePageService } from 'src/app/features/service/single-page.service';
 
 @Component({
   selector: 'app-single-page-list',
@@ -8,6 +9,7 @@ import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-lis
 })
 export class SinglePageListComponent implements OnInit {
 
+  selectedCamp: string;
   singlePageList: SinglePageListModel[]=[
     {
       id: 1,
@@ -52,7 +54,7 @@ export class SinglePageListComponent implements OnInit {
       last_updated: "01/11/21",
     },
   ]
-  constructor() { }
+  constructor(private service: SinglePageService) { }
 
   ngOnInit(): void {
   }

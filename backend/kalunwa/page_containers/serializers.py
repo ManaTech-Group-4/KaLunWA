@@ -5,7 +5,7 @@ from kalunwa.content.serializers import JumbotronSerializer
 from .models import PageContainer, PageContainedJumbotron
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
-
+from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
 
 class HomePageContainerSerializer(serializers.Serializer): # be used on different views 
     jumbotrons = JumbotronSerializer(many=True) 
@@ -21,22 +21,23 @@ class HomePageContainerSerializer(serializers.Serializer): # be used on differen
 
 # error
 # if we were to post directly to featured jumbotrons 
+
 class PageContainedJumbotronSerializer(serializers.ModelSerializer):
     # jumbotron = JumbotronSerializer() # change to get related_ID
     # container = PageContainerSerializer() # change to get related_ID
     class Meta:
         model = PageContainedJumbotron
         fields = (
-            # 'container', #tried to get value for field`container`
+            # 
             'id', # for some reason, it's not included
-            'container',            
+            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
             'jumbotron',
             'section_order',
         )
         validators = [
             UniqueTogetherValidator(
                 queryset=PageContainedJumbotron.objects.all(),
-                fields=["container", "jumbotron", "section_order"],
+                fields=["container", "jumbotron", "section_order"], 
             ),
             UniqueTogetherValidator(
                 queryset=PageContainedJumbotron.objects.all(),
@@ -47,6 +48,48 @@ class PageContainedJumbotronSerializer(serializers.ModelSerializer):
                 fields=["container", "jumbotron"],
             )                        
         ]           
+
+class PageContainedJumbotronReadSerializer(FlexFieldsModelSerializer):
+    # jumbotron = JumbotronSerializer()
+    class Meta:
+        model = PageContainedJumbotron
+        fields = (
+            # 
+            'id', # for some reason, it's not included
+            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'jumbotron',
+            'section_order',
+        )
+        expandable_fields = {
+            'jumbotron' : ('kalunwa.content.JumbotronSerializer')
+        }        
+
+class PageContainerReadSerializer(FlexFieldsModelSerializer): 
+    page_contained_jumbotrons = PageContainedJumbotronReadSerializer(
+        source='pagecontainedjumbotron_set', many=True, required=False)
+    class Meta:
+        model = PageContainer
+        fields = (
+            'id',
+            'name',
+            'slug',
+            'page_contained_jumbotrons',
+            'created_at',
+            'updated_at',
+        )
+        read_only_fields = (
+            'slug',
+            'created_at',
+            'updated_at',            
+        )
+        lookup_field = 'slug'
+
+        expandable_fields = {
+            'page_contained_jumbotrons' : 
+                ('kalunwa.page_containers.PageContainedJumbotronReadSerializer',
+                 {'many': True, 'source': 'pagecontainedjumbotron_set'}),        
+        }
+
 
 class PageContainerSerializer(serializers.ModelSerializer):
     page_contained_jumbotrons = PageContainedJumbotronSerializer(
@@ -69,7 +112,6 @@ class PageContainerSerializer(serializers.ModelSerializer):
         )
         lookup_field = 'slug'
 
-     
     
     # validate if jumbotron -> less than or equal to 5 entries
     # validate uniqueness 

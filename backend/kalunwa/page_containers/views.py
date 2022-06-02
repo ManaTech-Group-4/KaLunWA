@@ -17,18 +17,34 @@ from rest_framework.permissions import (
 )
 from kalunwa.core.views import MultipleFieldLookupORMixin
 from kalunwa.page_containers.models import PageContainedJumbotron, PageContainer
-from .serializers import HomePageContainerSerializer, PageContainedJumbotronSerializer, PageContainerSerializer
+from .serializers import (
+    PageContainedJumbotronSerializer, 
+    PageContainerSerializer,
+    PageContainerReadSerializer,
+    )
 # Create your views here.
 
 class PageContainerListView(ListCreateAPIView):
     # permission_classes = (IsAuthenticatedOrReadOnly,)    
     queryset = PageContainer.objects.all()
-    serializer_class = PageContainerSerializer
+
+    def get_serializer_class(self):
+        print('in here')
+        if self.request.method == 'GET':        
+            return PageContainerReadSerializer
+        return PageContainerSerializer
+
 
 class PageContainerDetailView(MultipleFieldLookupORMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainer.objects.all()
     serializer_class = PageContainerSerializer
     lookup_fields = ['slug', 'id']
+
+    def get_serializer_class(self):
+        print('in here')
+        if self.request.method == 'GET':        
+            return PageContainerReadSerializer
+        return PageContainerSerializer
 
 
 class PageContainedJumbotronDetailView(RetrieveUpdateDestroyAPIView):

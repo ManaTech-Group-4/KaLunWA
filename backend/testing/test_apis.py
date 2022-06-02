@@ -1182,6 +1182,6 @@ class NewsSerializerTestCase(APITestCase):
                 is_published=True,
             )        
         
-    def test_news_validation_post(self):
-        response = self.client.post(reverse('news-list'))
+    # def test_news_validation_post(self):
+    #     response = self.client.post(reverse('news-list'))
 

@@ -33,21 +33,8 @@ class PageContainedJumbotronSerializer(serializers.ModelSerializer):
             'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
             'jumbotron',
             'section_order',
-        )
-        validators = [
-            UniqueTogetherValidator(
-                queryset=PageContainedJumbotron.objects.all(),
-                fields=["container", "jumbotron", "section_order"], 
-            ),
-            UniqueTogetherValidator(
-                queryset=PageContainedJumbotron.objects.all(),
-                fields=["container", "section_order"],
-            ),            
-            UniqueTogetherValidator(
-                queryset=PageContainedJumbotron.objects.all(),
-                fields=["container", "jumbotron"],
-            )                        
-        ]           
+        )          
+
 
 class PageContainedJumbotronReadSerializer(FlexFieldsModelSerializer):
     # jumbotron = JumbotronSerializer()
@@ -127,6 +114,7 @@ class PageContainerSerializer(serializers.ModelSerializer):
                     section_order=contained_jumbotron['section_order']
                 )
                 contained_jumbotron_obj.jumbotron = contained_jumbotron['jumbotron']
+                contained_jumbotron_obj.save()
 
             except ObjectDoesNotExist:
                 if instance.name == 'homepage' and PageContainedJumbotron.objects.count() == 5:

@@ -10,7 +10,9 @@ class MultipleFieldLookupORMixin(object):
         queryset = self.get_queryset()             # Get the base queryset
         queryset = self.filter_queryset(queryset)  # Apply any filter backends
         filter = {}
-        print(self.kwargs)
+        # self.kwargs are what is captured on the url
+        # e.g. {'slug':'homepage', 'pk':1}
+
         for field in self.lookup_fields:
             try:                                  # Get the result with one or more fields.
                 filter[field] = self.kwargs[field]

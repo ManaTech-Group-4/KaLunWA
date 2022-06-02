@@ -29,7 +29,6 @@ class PageContainerListView(ListCreateAPIView):
     queryset = PageContainer.objects.all()
 
     def get_serializer_class(self):
-        print('in here')
         if self.request.method == 'GET':        
             return PageContainerReadSerializer
         return PageContainerSerializer
@@ -41,7 +40,6 @@ class PageContainerDetailView(MultipleFieldLookupORMixin, RetrieveUpdateDestroyA
     lookup_fields = ['slug', 'id']
 
     def get_serializer_class(self):
-        print('in here')
         if self.request.method == 'GET':        
             return PageContainerReadSerializer
         return PageContainerSerializer

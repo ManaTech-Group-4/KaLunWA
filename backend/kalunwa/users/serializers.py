@@ -4,14 +4,18 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-
+    """
+    Override to put additional info on the token's payload (e.g. email). 
+    """
     @classmethod
     def get_token(cls, user):
         token = super(CustomTokenObtainPairSerializer, cls).get_token(user)
-
         # will be changed to first & last name when user profile is set up 
+          # token['username']
         token['email'] = user.email
+        token['is_superuser'] = user.is_superuser
         return token
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -41,7 +41,7 @@ class CustomAccountManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin): # permission for django facilities
     email = models.EmailField(unique=True)
     start_date = models.DateTimeField(default=timezone.now)
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     objects = CustomAccountManager()

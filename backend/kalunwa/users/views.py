@@ -2,36 +2,45 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import (
-    UserSerializer, 
-    CustomTokenObtainPairSerializer
-)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import(
     AllowAny, 
     IsAuthenticated,
 ) 
+from rest_framework.generics import (
+    RetrieveUpdateDestroyAPIView,
+    ListAPIView
+)
+from .permissions import (
+    AuthenticatedOnlyWithSafeMethods,
+    SuperUserOnly,
+    AccountOwnerOnlyCanEditDeleteDetail
+)
+from .serializers import (
+    UserSerializer, 
+    CustomTokenObtainPairSerializer
+)
+from .models import User
 
-################
-# logging in is done in api/token/
-# registration is done in api/users/register/
-################
 
 class CustomObtainTokenPairView(TokenObtainPairView):
     """
-    added given username addition on payload. 
+    Where users submit their credentials (email & password). Serves as the login
+    endpoint.
+    - TokenObtainPairView is extended to add flexibility (additional info on 
+    token payload e.g. role, username etc.), by using a custom serializer.
     """
     permission_classes = (AllowAny,)
     serializer_class = CustomTokenObtainPairSerializer
 
-class UserCreate(APIView):
+
+class UserCreateView(APIView):
     """
     Creates a user 
         - UserSerializer -> email & password
     change permission here: either admin or superadmin
     """
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [SuperUserOnly] # IsAuthenticated  -> if 2 versions aren't implemented
     def post(self, request, format='json'):
         """
         create signal to create a profile if user creation is successful 
@@ -46,16 +55,32 @@ class UserCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-################
-# logging in is done in api/users/logout/blacklist/
-################
+class UserListView(ListAPIView):
+    """
+    Authenticated users can view basic user list. 
+    """
+    permission_classes = [AuthenticatedOnlyWithSafeMethods] 
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """
+    SuperUsers and Owners can edit and delete user information. 
+    Authenticated Users would only be permitted to view user information. 
+    """
+    permission_classes = [SuperUserOnly | AccountOwnerOnlyCanEditDeleteDetail
+                         | AuthenticatedOnlyWithSafeMethods] 
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class BlacklistTokenUpdateView(APIView):
     """
     use cases: blacklist token after user logs out
     # user presses logout; fires api to this view, process the refresh token and
     put it in the blacklist db table 
     """
-   # permission_classes = [IsAuthenticated] #should this be is_authenticated
     authentication_classes = ()
 
     def post(self, request):

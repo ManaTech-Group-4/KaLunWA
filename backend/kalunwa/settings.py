@@ -15,15 +15,14 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from datetime import timedelta
-from decouple import config # for secret key
+# from decouple import config -> prod
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
-
-SECRET_KEY = config("SECRET_KEY") 
+SECRET_KEY = 'django-insecure-3@f(id^#8khy0r-zx#r@hi#cey9028avo2b5d#(k3%5)pxg5ks'
+# SECRET_KEY = config("SECRET_KEY") -> prod
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

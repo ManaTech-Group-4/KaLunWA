@@ -13,6 +13,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # will be changed to first & last name when user profile is set up 
           # token['username']
         token['email'] = user.email
+        token['is_superuser'] = user.is_superuser
         return token
 
 

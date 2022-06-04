@@ -24,6 +24,7 @@ import { AdminTemplateComponent } from './admin/components/admin-template/admin-
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -51,6 +52,7 @@ export const routes: Routes = [
       {path: '', redirectTo: 'dashboard', pathMatch:"full"},
       {path: "dashboard", component: DashboardComponent},
       {path: "single-page-list", component: SinglePageListComponent},
+      {path: "cms-homepage", component: CmsHomepageComponent},
       {path: "collective", component: CollectivePageListComponent},
       {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
       {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
@@ -82,4 +84,5 @@ export const routeComponents = [HomepageComponent,
                                 AdminHomeComponent,
                                 DashboardComponent,
                                 SinglePageListComponent,
+                                CmsHomepageComponent,
                               ];

@@ -11,11 +11,13 @@ from kalunwa.core.views import MultipleFieldLookupORMixin
 from kalunwa.page_containers.models import (
     PageContainedJumbotron,
     PageContainedEvent,
+    PageContainedProject,
     PageContainer,
 )
 from .serializers import (
     PageContainedJumbotronSerializer, 
     PageContainedEventSerializer,
+    PageContainedProjectSerializer,
     PageContainerSerializer,
     PageContainerReadSerializer,
     )
@@ -49,6 +51,11 @@ class PageContainedJumbotronDetailView(RetrieveUpdateDestroyAPIView):
 class PageContainedEventDetailView(RetrieveUpdateDestroyAPIView):
     queryset = PageContainedEvent.objects.all()
     serializer_class = PageContainedEventSerializer    
+
+
+class PageContainedProjectDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = PageContainedProject.objects.all() 
+    serializer_class = PageContainedProjectSerializer       
 
 # /api/page-containers/<lookup>
 # /api/page-containers/<slug:slug>/contained_jumbotrons/<int:>

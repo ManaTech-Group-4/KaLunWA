@@ -3,6 +3,7 @@ from rest_framework.routers import (
     DefaultRouter
 )
 from .views import (
+    PageContainedProjectDetailView,
     PageContainerListView,
     PageContainerDetailView,
     PageContainedJumbotronDetailView,
@@ -20,5 +21,9 @@ urlpatterns = [
     path('page-contained-events/<int:pk>/', 
         PageContainedEventDetailView.as_view(), 
         name='page-contained-event-detail', 
-        )            
+        ),
+    path('page-contained-projects/<int:pk>/', 
+        PageContainedProjectDetailView.as_view(), 
+        name='page-contained-project-detail', 
+        )                          
 ]

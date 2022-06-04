@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from kalunwa.content.models import Jumbotron
 from kalunwa.content.serializers import JumbotronSerializer
 from .models import (
+    PageContainedProject,
     PageContainer, 
     PageContainedJumbotron,
     PageContainedEvent,
@@ -14,13 +15,11 @@ from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSe
 
 
 class PageContainedJumbotronSerializer(serializers.ModelSerializer):
-    # jumbotron = JumbotronSerializer() # change to get related_ID
-    # container = PageContainerSerializer() # change to get related_ID
     class Meta:
         model = PageContainedJumbotron
         fields = (
             # 
-            'id', # for some reason, it's not included
+            'id', 
             'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
             'jumbotron',
             'section_order',
@@ -32,8 +31,8 @@ class PageContainedJumbotronReadSerializer(FlexFieldsModelSerializer):
         model = PageContainedJumbotron
         fields = (
             # 
-            'id', # for some reason, it's not included
-            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'id', 
+            'container', 
             'jumbotron',
             'section_order',
         )
@@ -47,8 +46,8 @@ class PageContainedEventSerializer(serializers.ModelSerializer):
         model = PageContainedEvent
         fields = (
             # 
-            'id', # for some reason, it's not included
-            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'id', 
+            'container', 
             'event',
             'section_order',
         )          
@@ -60,7 +59,7 @@ class PageContainedEventReadSerializer(FlexFieldsModelSerializer):
         fields = (
             # 
             'id', 
-            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'container', 
             'event',
             'section_order',
         )
@@ -68,6 +67,32 @@ class PageContainedEventReadSerializer(FlexFieldsModelSerializer):
             'event' : ('kalunwa.content.EventSerializer')
         } 
 
+
+class PageContainedProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageContainedProject
+        fields = (
+            # 
+            'id',
+            'container', 
+            'project',
+            'section_order',
+        )          
+
+
+class PageContainedProjectReadSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = PageContainedProject
+        fields = (
+            # 
+            'id', 
+            'container', 
+            'project',
+            'section_order',
+        )
+        expandable_fields = {
+            'project' : ('kalunwa.content.ProjectSerializer')
+        } 
 
 class PageContainerReadSerializer(FlexFieldsModelSerializer):    
     """
@@ -182,12 +207,38 @@ class PageContainerSerializer(serializers.ModelSerializer):
 
         return contained_event_objects
 
+    def create_or_update_contained_projects(self, instance, contained_projects:dict)-> list: # get or create page_contained_jumbotrons
+        contained_project_objects = []       
+        for contained_project in contained_projects:
+            try: 
+                contained_project_obj = PageContainedProject.objects.get(
+                    container=instance,
+                    section_order=contained_project['section_order']
+                )
+                contained_project_obj.project = contained_project['project']
+                contained_project_obj.save()
+
+            except ObjectDoesNotExist:
+                if instance.name == 'homepage' and PageContainedProject.objects.count() == 3:
+                    raise serializers.ValidationError({"detail": "Homepage can only contain 3 projects at most."})
+
+                contained_project_obj = PageContainedProject.objects.create(
+                    container=instance,
+                    section_order=contained_project['section_order'],
+                    project=contained_project['project']
+                )
+            contained_project_objects.append(contained_project_obj)
+
+        return contained_project_objects
+
     def update(self, instance, validated_data):
         # validated_data here needs to refer to the model's manytomany referral source (pagecontainedjumbotron_set)
         contained_jumbotrons = validated_data.pop('pagecontainedjumbotron_set', [])  
-        contained_events = validated_data.pop('pagecontainedevent_set', [])          
+        contained_events = validated_data.pop('pagecontainedevent_set', [])   
+        contained_projects = validated_data.pop('pagecontainedproject_set', [])       
         instance.pagecontainedjumbotron_set.add(*self.create_or_update_contained_jumbotrons(instance, contained_jumbotrons)) 
         instance.pagecontainedevent_set.add(*self.create_or_update_contained_events(instance, contained_events))         
+        instance.pagecontainedproject_set.add(*self.create_or_update_contained_projects(instance, contained_projects))
         fields = ['name'] # direct fields in a container that can be updated 
         for field in fields:
             try:

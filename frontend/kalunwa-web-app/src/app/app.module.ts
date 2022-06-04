@@ -11,8 +11,6 @@ import { FooterComponent } from './features/components/footer/footer.component';
 import { AboutCampComponent } from './features/components/about-camp/about-camp.component';
 import { HttpClientModule } from '@angular/common/http';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
-<<<<<<< HEAD
-=======
 import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { EventPageListComponent } from './features/components/event-page-list/event-page-list.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
@@ -44,10 +42,6 @@ import { DashboardComponent } from './features/components/CMS/dashboard/dashboar
 import { HeaderComponent } from './features/components/CMS/header/header.component';
 import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
-<<<<<<< HEAD
-import { AdminHomeComponent } from './admin-home/admin-home.component';
->>>>>>> main
-=======
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
@@ -55,8 +49,6 @@ import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
->>>>>>> main
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,9 +57,6 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     FooterComponent,
     AboutCampComponent,
     routeComponents,
-<<<<<<< HEAD
-    OrgStructureComponent
-=======
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
@@ -103,7 +92,6 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
   ],
   entryComponents:[
     MembersDialogComponent
->>>>>>> main
   ],
   imports: [
     BrowserModule,
@@ -111,9 +99,6 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     BrowserAnimationsModule,
     MatDesignModule,
     HttpClientModule,
-<<<<<<< HEAD
-    MatCarouselModule.forRoot()
-=======
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
@@ -125,7 +110,6 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     MatIconModule,
     MatDividerModule,
     MatListModule
->>>>>>> main
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [],

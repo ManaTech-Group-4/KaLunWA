@@ -31,9 +31,9 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
     path('api/', include(
             [
-                path('token/', CustomObtainTokenPairView.as_view(), name='token_obtain_pair'),
-                path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-                path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),                
+                path('token/', CustomObtainTokenPairView.as_view(), name='token-obtain-pair'),
+                path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+                path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),                
                 path('', include('kalunwa.content.urls')),
                 path('users/', include('kalunwa.users.urls')),                
             ]

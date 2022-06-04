@@ -20,7 +20,7 @@ from .utils import  (
     get_expected_image_url, 
     get_test_image_file, 
     to_expected_iso_format,
-    to_formal_mdy, 
+    # to_formal_mdy, 
 )
 from kalunwa.content.models import(
     Announcement,
@@ -380,7 +380,6 @@ class HomepageNewsTestCase(APITestCase):
             'id' : expected_news.id,
             'title' : expected_news.title,
             'description' : expected_news.description,
-            'date' : to_formal_mdy(expected_news.created_at),
             'image' : {'image' : image_url}
         } 
         self.assertDictEqual(news, expected_news_data)
@@ -637,11 +636,11 @@ class EventGetTestCase(APITestCase):
             'title': expected_event.title,
             'image': expected_event.image.pk, 
             'description' : expected_event.description,
-            'start_date' : to_formal_mdy(expected_event.start_date),
-            'end_date' : to_formal_mdy(expected_event.end_date),
+            'start_date' : to_expected_iso_format(expected_event.start_date),
+            'end_date' : to_expected_iso_format(expected_event.end_date),
             'camp' : expected_event.get_camp_display(),
-            'created_at': to_formal_mdy(expected_event.created_at),
-            'updated_at': to_formal_mdy(expected_event.updated_at),
+            'created_at': to_expected_iso_format(expected_event.created_at),
+            'updated_at': to_expected_iso_format(expected_event.updated_at),
             'status': StatusEnum.PAST.value # based on dates set
         }
         self.assertDictEqual(expected_event_data, response_event)
@@ -817,11 +816,11 @@ class ProjectGetTestCase(APITestCase):
             'title': expected_project.title,
             'image': expected_project.image.pk, 
             'description' : expected_project.description,
-            'start_date' : to_formal_mdy(expected_project.start_date),
-            'end_date' : to_formal_mdy(expected_project.end_date),
+            'start_date' : to_expected_iso_format(expected_project.start_date),
+            'end_date' : to_expected_iso_format(expected_project.end_date),
             'camp' : expected_project.get_camp_display(),
-            'created_at': to_formal_mdy(expected_project.created_at),
-            'updated_at': to_formal_mdy(expected_project.updated_at),
+            'created_at': to_expected_iso_format(expected_project.created_at),
+            'updated_at': to_expected_iso_format(expected_project.updated_at),
             'status': StatusEnum.PAST.value # based on dates set
         }
         self.assertDictEqual(expected_project_data, response_project)
@@ -1084,8 +1083,7 @@ class AnnouncementGetTestCase(APITestCase):
             'id': expected_announcement.id,
             'title': expected_announcement.title,
             'meta_description' : expected_announcement.meta_description,              
-            'description' : expected_announcement.description,    
-            'date': to_formal_mdy(expected_announcement.created_at),          
+            'description' : expected_announcement.description,      
             'created_at': to_expected_iso_format(expected_announcement.created_at), 
             'updated_at': to_expected_iso_format(expected_announcement.updated_at),                      
         }
@@ -1114,8 +1112,7 @@ class AnnouncementLatestTestCase(APITestCase):
             'id': expected_announcement.id,
             'title': expected_announcement.title,
             'meta_description' : expected_announcement.meta_description,             
-            'description' : expected_announcement.description,  
-            'date': to_formal_mdy(expected_announcement.created_at)                  
+            'description' : expected_announcement.description,                
         }        
         self.assertDictEqual(latest_announcement_data, response_announcement)
             
@@ -1158,8 +1155,7 @@ class NewsGetTestCase(APITestCase):
             'id': expected_news.id,
             'title': expected_news.title,           
             'description' : expected_news.description,    
-            'image': expected_news.image.pk,   
-            'date': to_formal_mdy(expected_news.created_at),       
+            'image': expected_news.image.pk,       
             'created_at': to_expected_iso_format(expected_news.created_at), 
             'updated_at': to_expected_iso_format(expected_news.updated_at),                      
         }
@@ -1186,6 +1182,6 @@ class NewsSerializerTestCase(APITestCase):
                 is_published=True,
             )        
         
-    def test_news_validation_post(self):
-        response = self.client.post(reverse('news-list'))
+    # def test_news_validation_post(self):
+    #     response = self.client.post(reverse('news-list'))
 

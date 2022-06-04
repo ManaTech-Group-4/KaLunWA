@@ -1,14 +1,15 @@
 .back{
     display: flex;
     flex-direction: row;
-    padding: 10px 30px;
+    padding: 5px 30px;
     background-color: #628A3A;
     color: #fafafa;
     align-items: center;
     .mat-icon{
-        font-size: 25px;
+        font-size: 18px;
         width: auto;
         height: auto;
+        margin: 0;
     }
     h3{
         font-size: 15px;
@@ -22,7 +23,7 @@
     justify-content: space-around;
     align-items:flex-start;
     background-color: rgb(228, 228, 228);
-    min-height: 100%;
+    height: calc(100vh - 180px);
     padding-top: 25px;
     .committees{
         display: flex;
@@ -37,12 +38,12 @@
             background-color: #fafafa;
             text-align: center;
             box-shadow: 5px 5px #7bad49;
-            padding: 20px;
+            padding: 8px;
             font-family: monserrat;
-            font-size: 20px;
+            font-size: 15px;
             width: 150px;
             height: 100px;
-            color: #233620;
+            color:#628A3A;
             &:hover{
                 transition: all 0.3s ease;
                 background-color: #a9cf6b;

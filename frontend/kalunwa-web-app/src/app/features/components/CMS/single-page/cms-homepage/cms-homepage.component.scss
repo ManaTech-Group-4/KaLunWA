@@ -1,14 +1,15 @@
 .back{
     display: flex;
     flex-direction: row;
-    padding: 10px 30px;
+    padding: 5px 30px;
     background-color: #628A3A;
     color: #fafafa;
     align-items: center;
     .mat-icon{
-        font-size: 25px;
+        font-size: 18px;
         width: auto;
         height: auto;
+        margin: 0;
     }
     h3{
         font-size: 15px;
@@ -36,7 +37,8 @@
             color: #7bad49;
             box-shadow: 5px 5px #7bad49;
             font-family: monserrat;
-            padding: 10px;
+            padding: 8px;
+            font-size: 15px;
             &:hover{
                 background-color: #a9cf6b;
                 color: #fafafa;

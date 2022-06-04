@@ -53,6 +53,8 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
 import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp/cms-camp.component';
+import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
+
 
 @NgModule({
   declarations: [
@@ -98,6 +100,7 @@ import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp
     NewsletterComponent,
     AuditLogsComponent,
     CmsCampComponent,
+    AdminListComponent
   ],
   entryComponents:[
     MembersDialogComponent

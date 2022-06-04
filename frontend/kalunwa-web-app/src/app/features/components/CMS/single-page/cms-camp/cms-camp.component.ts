@@ -77,12 +77,18 @@ export class CmsCampComponent implements OnInit {
 
         this.selectedFile = new ImageSnippet(event.target.result, file);
 
-        /*this.service.uploadImage(this.fileName,file).subscribe(
+        this.service.uploadImage(this.headerFileName,file).subscribe(
           (res) => {
           },
           (err) => {
 
-        })*/
+        })
+        this.service.uploadImage(this.contentFileName,file).subscribe(
+          (res) => {
+          },
+          (err) => {
+
+        })
       });
 
       reader.readAsDataURL(file);

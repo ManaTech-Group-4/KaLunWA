@@ -1,11 +1,12 @@
 <div class="body">
   <div class="container">
+    <alert></alert>
     <h2>KL Admin Panel</h2>
     <form class="formBody" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
             <mat-label>Username</mat-label>
-            <input type="text" formControlName="username" matInput />
-              <mat-error *ngIf="f.username.invalid">{{getErrorMessage("username")}}</mat-error>
+            <input type="email" formControlName="email" matInput />
+              <mat-error *ngIf="f.email.invalid">{{getErrorMessage("email")}}</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Password</mat-label>

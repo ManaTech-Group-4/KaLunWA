@@ -4,8 +4,6 @@ import { AboutPageComponent } from './features/components/about-page/about-page.
 import { HomepageComponent } from './features/components/homepage/homepage.component';
 import { OrgStructureComponent } from './features/components/org-structure/org-structure.component';
 import { PageNotFoundComponent } from './features/components/page-not-found/page-not-found.component';
-<<<<<<< HEAD
-=======
 import { IndiEventComponent } from './features/components/indi-event/indi-event.component';
 import { IndivProjectComponent } from './features/components/indiv-project/indiv-project.component';
 import { ProjectPageComponent } from './features/components/projects/project-page/project-page.component';
@@ -17,33 +15,10 @@ import { LasangComponent } from './features/components/indiv-camps/lasang/lasang
 import { SubaComponent } from './features/components/indiv-camps/suba/suba.component';
 import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste/zero-waste.component';
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
-<<<<<<< HEAD
->>>>>>> main
-
-export const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', component: HomepageComponent},
-  {path: 'about',  component: AboutPageComponent},
-  {path: 'org-struct',  component: OrgStructureComponent},
-<<<<<<< HEAD
-=======
-  {path: "indiv-event/:id", component: IndiEventComponent},
-  {path: "indiv-project/:id", component: IndivProjectComponent},
-  {path: 'events', component:EventsPageComponent},
-  {path: 'projects', component:ProjectPageComponent},
-  {path: 'news', component:NewsComponent},
-  {path: "indiv-news/:id", component: IndivNewsComponent},
-  {path: 'join-us', component:JoinUsComponent},
-  {path: 'baybayon', component:BaybayonComponent},
-  {path: 'lasang', component:LasangComponent},
-  {path: 'suba', component:SubaComponent},
-  {path: 'zero-waste', component:ZeroWasteComponent},
-  {path: "contact-us", component: ContactUsComponent},
->>>>>>> main
-=======
+import { EventsPageComponent } from './features/components/events-page/events-page.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { AuthGuard } from './admin/auth.guard';
+import { AuthGuard } from './admin/helper/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
@@ -81,10 +56,9 @@ export const routes: Routes = [
       {path: "collective", component: CollectivePageListComponent},
       {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
       {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
-    ]
+  ]
   },
->>>>>>> main
-  {path: "**", component: PageNotFoundComponent}];
+    {path: "**", component: PageNotFoundComponent}];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
@@ -94,9 +68,7 @@ export class AppRoutingModule { }
 export const routeComponents = [HomepageComponent,
                                 AboutPageComponent,
                                 OrgStructureComponent,
-<<<<<<< HEAD
-                                PageNotFoundComponent];
-=======
+                                PageNotFoundComponent,
                                 IndiEventComponent,
                                 IndivProjectComponent,
                                 PageNotFoundComponent,
@@ -109,14 +81,9 @@ export const routeComponents = [HomepageComponent,
                                 LasangComponent,
                                 SubaComponent,
                                 ZeroWasteComponent,
-<<<<<<< HEAD
-                                ContactUsComponent];
->>>>>>> main
-=======
                                 ContactUsComponent,
                                 AdminHomeComponent,
                                 DashboardComponent,
                                 SinglePageListComponent,
                                 CmsHomepageComponent,
                               ];
->>>>>>> main

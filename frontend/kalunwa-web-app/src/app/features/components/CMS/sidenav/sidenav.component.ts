@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/admin/service/auth.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -8,7 +10,8 @@ import { Component, OnInit } from '@angular/core';
 export class SidenavComponent implements OnInit {
 
   dropdown:boolean = false;
-  constructor() { }
+  constructor(private authenticationService: AuthService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -18,5 +21,9 @@ export class SidenavComponent implements OnInit {
 
   resetDropdown(){
     this.dropdown = false;
+  }
+  logout() {
+      this.authenticationService.logout();
+      this.router.navigate(['/login']);
   }
 }

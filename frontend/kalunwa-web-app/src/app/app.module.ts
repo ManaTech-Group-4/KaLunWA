@@ -49,6 +49,7 @@ import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
+import { AlertComponent } from './admin/shared/alert/alert.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,6 +90,7 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     AdminTemplateComponent,
     CollectivePageListComponent,
     AddCollectiveComponent,
+    AlertComponent,
   ],
   entryComponents:[
     MembersDialogComponent

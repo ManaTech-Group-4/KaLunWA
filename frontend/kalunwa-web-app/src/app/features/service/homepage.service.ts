@@ -29,11 +29,7 @@ export class HomepageService {
   }
 
   public getJumbotron():Observable<JumbotronModel[]> {
-<<<<<<< HEAD
-    return this.http.get<JumbotronModel[]>('http://127.0.0.1:8000/api/homepage/jumbotrons');
-=======
     return this.http.get<JumbotronModel[]>('http://127.0.0.1:8000/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&query_limit=5');
->>>>>>> main
   }
 
 }

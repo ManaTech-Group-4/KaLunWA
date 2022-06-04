@@ -7,8 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-<<<<<<< HEAD
-=======
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -23,7 +21,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
->>>>>>> main
 
 const MATERIAL = [
   MatToolbarModule,
@@ -32,9 +29,6 @@ const MATERIAL = [
   MatIconModule,
   MatSidenavModule,
   MatCardModule,
-<<<<<<< HEAD
-  MatButtonToggleModule
-=======
   MatButtonToggleModule,
   MatPaginatorModule,
   MatChipsModule,
@@ -50,7 +44,6 @@ const MATERIAL = [
   MatFormFieldModule,
   BrowserAnimationsModule,
   BrowserModule
->>>>>>> main
 ];
 
 @NgModule({

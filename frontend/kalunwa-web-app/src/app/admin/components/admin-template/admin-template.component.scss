@@ -1,6 +1,11 @@
 .mat-drawer-container{
   height:100%;
   overflow-y:scroll !important;
+  mat-drawer{
+    div.mat-drawer-inner-container{
+      overflow-x: hidden !important;
+    }
+  }
   .mat-drawer-content{
     overflow-y:scroll !important;
     background-color: #e4e4e4;

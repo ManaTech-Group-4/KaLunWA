@@ -36,18 +36,6 @@
         <ul *ngIf="showBaybayon" id="Baybayon">
             <li><a (click)="clickBaybayon()"><img src="assets/images/baybayon.png" alt="camp logo"><span>Baybayon</span></a>
                 <ul>
-<<<<<<< HEAD
-                    <li><a><span>Camp Leader</span></a>
-                        <ul>
-                            <li><a><span>Asst. Camp Leader</span></a>
-                                <ul>
-                                    <li><a><span>Finance<br>Cabin</span></a></li>
-                                    <li><a><span>Publicity<br>Cabin</span></a></li>
-                                    <li><a><span>Ways and Means<br>Cabin</span></a></li>
-                                    <li><a><span>Secretariat<br>Cabin</span></a></li>
-                                    <li><a><span>Programs<br>Cabin</span></a></li>
-                                    <li><a><span>Research<br>Cabin</span></a></li>
-=======
                     <li><a (click)="getLeadersList('Camp Leader', campLeaders$)"><span>Camp Leader</span></a>
                         <ul>
                             <li><a (click)="getLeadersList('Asst. Camp Leader', campLeaders$)"><span>Asst. Camp Leader</span></a>
@@ -58,7 +46,6 @@
                                     <li><a (click)="getLeadersList('Secretary', campLeaders$)"><span>Secretariat<br>Cabin</span></a></li>
                                     <li><a (click)="getLeadersList('Program', campLeaders$)"><span>Programs<br>Cabin</span></a></li>
                                     <li><a (click)="getLeadersList('Research', campLeaders$)"><span>Research<br>Cabin</span></a></li>
->>>>>>> main
                                 </ul>
                             </li>
                         </ul>

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Admin } from 'src/app/admin/model/user-model';
+import { AuthService } from 'src/app/admin/service/auth.service';
 import { DashboardModel } from 'src/app/features/models/CMS/dashboard-model';
 
 @Component({
@@ -7,6 +10,8 @@ import { DashboardModel } from 'src/app/features/models/CMS/dashboard-model';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  currentUser: Admin;
+  user:any;
 
   dashboard: DashboardModel={
     id: 1,
@@ -58,10 +63,14 @@ export class DashboardComponent implements OnInit {
     ],
   }
 
-  constructor() { }
+  constructor(
+    private authenticationService: AuthService
+    ) {
+    this.currentUser = this.authenticationService.currentUserValue; }
 
   ngOnInit(): void {
-    
   }
+
+
 
 }

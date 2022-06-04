@@ -12,9 +12,9 @@ from rest_framework.generics import (
     ListAPIView
 )
 from .permissions import (
-    AuthenticatedOnlyWithSafeMethods,
+    AuthenticatedAndReadOnly,
     SuperUserOnly,
-    AccountOwnerOnlyCanEditDeleteDetail
+    SelfUserOnly
 )
 from .serializers import (
     UserSerializer, 
@@ -40,7 +40,8 @@ class UserCreateView(APIView):
         - UserSerializer -> email & password
     change permission here: either admin or superadmin
     """
-    permission_classes = [SuperUserOnly] # IsAuthenticated  -> if 2 versions aren't implemented
+    
+    permission_classes = [IsAuthenticated, SuperUserOnly] # IsAuthenticated  -> if 2 versions aren't implemented
     def post(self, request, format='json'):
         """
         create signal to create a profile if user creation is successful 
@@ -59,7 +60,7 @@ class UserListView(ListAPIView):
     """
     Authenticated users can view basic user list. 
     """
-    permission_classes = [AuthenticatedOnlyWithSafeMethods] 
+    permission_classes = [IsAuthenticated] 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -69,8 +70,8 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     SuperUsers and Owners can edit and delete user information. 
     Authenticated Users would only be permitted to view user information. 
     """
-    permission_classes = [SuperUserOnly | AccountOwnerOnlyCanEditDeleteDetail
-                         | AuthenticatedOnlyWithSafeMethods] 
+    permission_classes = [SuperUserOnly | SelfUserOnly
+                         | AuthenticatedAndReadOnly] 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 

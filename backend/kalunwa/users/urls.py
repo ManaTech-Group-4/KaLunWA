@@ -11,7 +11,7 @@ urlpatterns = [
     path('register/', UserCreateView.as_view(), name='user-register'),
     path('logout/blacklist/',
             BlacklistTokenUpdateView.as_view(),
-            name='user-blacklist'),    
+            name='token-blacklist'),    
     path('<int:pk>/', UserRetrieveUpdateDestroyView.as_view(), name='user-detail'),
     path('', UserListView.as_view(), name='user-list')    
 ]

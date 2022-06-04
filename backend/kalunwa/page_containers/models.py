@@ -20,7 +20,7 @@ class PageContainer(TimestampedModel):
     slug = models.SlugField(max_length = 255, null = True, blank = True, unique=True)
     # edited_by
     jumbotrons = models.ManyToManyField(Jumbotron, through='PageContainedJumbotron')
-#     events = models.ManyToManyField(Event, through='PageContainedEvents')  
+    events = models.ManyToManyField(Event, through='PageContainedEvent')    
 #     projects = models.ManyToManyField(Project, through='PageContainedProjects')        
 
    # flexible to put constraints on serializer validator .. 
@@ -44,17 +44,33 @@ class PageContainedJumbotron(models.Model):
         # container should only have 1 jumbotron at a position/order  
                     models.UniqueConstraint(
                         fields= ['container', 'section_order'],
-                        name='unique_container_order'),
+                        name='unique_container_order_for_contained_jumbotron'),
         # container should have unique jumbotrons                        
                     models.UniqueConstraint(
                         fields= ['container', 'jumbotron'],
                         name='unique_container_jumbotron'),                        
                 ]        
 
-      
 
-
-       
+class PageContainedEvent(models.Model):
+    container = models.ForeignKey(PageContainer, on_delete=models.CASCADE) 
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    section_order = models.IntegerField()
+    class Meta:
+        # avoid duplicates when using update_or_create
+        constraints = [
+                    models.UniqueConstraint(
+                        fields= ['container', 'event', 'section_order'],
+                        name='unique_container_event_order'),
+        # container should only have 1 jumbotron at a position/order  
+                    models.UniqueConstraint(
+                        fields= ['container', 'section_order'],
+                        name='unique_container_order_for_contained_event'),
+        # container should have unique jumbotrons                        
+                    models.UniqueConstraint(
+                        fields= ['container', 'event'],
+                        name='unique_container_event'),                        
+                ]              
 
 # class PageContainedEvents(models.Model):
 #     container = models.ForeignKey(PageContainer, on_delete=models.CASCADE) 

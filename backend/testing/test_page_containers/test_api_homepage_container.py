@@ -7,20 +7,13 @@ from testing.utils import  (
     HOMEPAGE_EXPANDED_JUMBO_DETAIL_URL,
     get_test_image_file,
     get_expected_image_url,
+    reverse_with_query_params,
     to_expected_iso_format,    
 )
 from kalunwa.content.models import(
-    Announcement,
-    CampEnum, 
-    CampLeader, 
-    CampPage, 
-    Contributor, 
-    Demographics,  
     Event,
     Image, 
     Jumbotron, 
-    News, 
-    OrgLeader, 
     Project,     
 )
 from kalunwa.page_containers.views import (
@@ -68,7 +61,12 @@ class GetHomepageContainerJumbotronsTestCase(APITestCase):
                 section_order= _,
                 )            
         ## REQUEST
-        response = self.client.get(reverse('page-container-detail', kwargs={'slug':'homepage'}))
+        url = reverse_with_query_params(
+            viewname='page-container-detail',
+            kwargs={'slug':'homepage'}, 
+            query_kwargs={'expand':'page_contained_jumbotrons'}
+            )
+        response = self.client.get(url)
         ## TEST
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         # test number of contained jumbotrons

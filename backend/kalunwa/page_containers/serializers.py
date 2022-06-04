@@ -2,25 +2,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from kalunwa.content.models import Jumbotron
 from kalunwa.content.serializers import JumbotronSerializer
-from .models import PageContainer, PageContainedJumbotron
+from .models import (
+    PageContainer, 
+    PageContainedJumbotron,
+    PageContainedEvent,
+)
+
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework import serializers
 from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
 
-class HomePageContainerSerializer(serializers.Serializer): # be used on different views 
-    jumbotrons = JumbotronSerializer(many=True) 
-
-    class Meta:
-        fields = (
-            'name',
-            'jumbotrons',
-            'created_at',
-            'updated_at',
-        )
-
-
-# error
-# if we were to post directly to featured jumbotrons 
 
 class PageContainedJumbotronSerializer(serializers.ModelSerializer):
     # jumbotron = JumbotronSerializer() # change to get related_ID
@@ -37,7 +28,6 @@ class PageContainedJumbotronSerializer(serializers.ModelSerializer):
 
 
 class PageContainedJumbotronReadSerializer(FlexFieldsModelSerializer):
-    # jumbotron = JumbotronSerializer()
     class Meta:
         model = PageContainedJumbotron
         fields = (
@@ -51,16 +41,49 @@ class PageContainedJumbotronReadSerializer(FlexFieldsModelSerializer):
             'jumbotron' : ('kalunwa.content.JumbotronSerializer')
         }        
 
-class PageContainerReadSerializer(FlexFieldsModelSerializer): 
-    page_contained_jumbotrons = PageContainedJumbotronReadSerializer(
-        source='pagecontainedjumbotron_set', many=True, required=False)
+
+class PageContainedEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageContainedEvent
+        fields = (
+            # 
+            'id', # for some reason, it's not included
+            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'event',
+            'section_order',
+        )          
+
+
+class PageContainedEventReadSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = PageContainedEvent
+        fields = (
+            # 
+            'id', 
+            'container', #requiring this because of the unique validator check, but can be removed if validator is changed            
+            'event',
+            'section_order',
+        )
+        expandable_fields = {
+            'event' : ('kalunwa.content.EventSerializer')
+        } 
+
+
+class PageContainerReadSerializer(FlexFieldsModelSerializer):    
+    """
+    Many to many related records are made deferred fields. This means that 
+    when accessing the base endpoint e.g. api/page-containers/homepage/,
+    only the fields explicitly written on the fields under Meta are shown. 
+    
+    Deferred fields should be expanded for the data to be seen. 
+
+    """
     class Meta:
         model = PageContainer
-        fields = (
+        fields = ( 
             'id',
             'name',
-            'slug',
-            'page_contained_jumbotrons',
+            'slug',          
             'created_at',
             'updated_at',
         )
@@ -73,14 +96,24 @@ class PageContainerReadSerializer(FlexFieldsModelSerializer):
 
         expandable_fields = {
             'page_contained_jumbotrons' : 
-                ('kalunwa.page_containers.PageContainedJumbotronReadSerializer',
-                 {'many': True, 'source': 'pagecontainedjumbotron_set'}),        
+            (
+                'kalunwa.page_containers.PageContainedJumbotronReadSerializer',
+                {'many': True, 'source': 'pagecontainedjumbotron_set'}
+            ),        
+            'page_contained_events' : 
+            (
+                'kalunwa.page_containers.PageContainedEventReadSerializer',
+                {'many': True, 'source': 'pagecontainedevent_set'}
+            ),                   
+
         }
 
 
 class PageContainerSerializer(serializers.ModelSerializer):
     page_contained_jumbotrons = PageContainedJumbotronSerializer(
         source='pagecontainedjumbotron_set', many=True, required=False)
+    page_contained_events = PageContainedEventSerializer(
+        source='pagecontainedevent_set', many=True, required=False)
 
     class Meta:
         model = PageContainer
@@ -89,6 +122,7 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'name',
             'slug',
             'page_contained_jumbotrons',
+            'page_contained_events',
             'created_at',
             'updated_at',
         )
@@ -98,12 +132,6 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'updated_at',            
         )
         lookup_field = 'slug'
-
-    
-    # validate if jumbotron -> less than or equal to 5 entries
-    # validate uniqueness 
-    #   -> container & section order
-    #   -> container & jumbotron
 
     def create_or_update_contained_jumbotrons(self, instance, contained_jumbotrons:dict)-> list: # get or create page_contained_jumbotrons
         contained_jumbotron_objects = []       
@@ -130,10 +158,36 @@ class PageContainerSerializer(serializers.ModelSerializer):
 
         return contained_jumbotron_objects
 
+    def create_or_update_contained_events(self, instance, contained_events:dict)-> list: # get or create page_contained_jumbotrons
+        contained_event_objects = []       
+        for contained_event in contained_events:
+            try: 
+                contained_event_obj = PageContainedEvent.objects.get(
+                    container=instance,
+                    section_order=contained_event['section_order']
+                )
+                contained_event_obj.event = contained_event['event']
+                contained_event_obj.save()
+
+            except ObjectDoesNotExist:
+                if instance.name == 'homepage' and PageContainedEvent.objects.count() == 3:
+                    raise serializers.ValidationError({"detail": "Homepage can only contain 3 events at most."})
+
+                contained_event_obj = PageContainedEvent.objects.create(
+                    container=instance,
+                    section_order=contained_event['section_order'],
+                    event=contained_event['event']
+                )
+            contained_event_objects.append(contained_event_obj)
+
+        return contained_event_objects
+
     def update(self, instance, validated_data):
-        # validated_data here needs to refer to db source (pagecontainedjumbotron_set)
+        # validated_data here needs to refer to the model's manytomany referral source (pagecontainedjumbotron_set)
         contained_jumbotrons = validated_data.pop('pagecontainedjumbotron_set', [])  
-        instance.pagecontainedjumbotron_set.set(self.create_or_update_contained_jumbotrons(instance, contained_jumbotrons)) # get jumbotron by id 
+        contained_events = validated_data.pop('pagecontainedevent_set', [])          
+        instance.pagecontainedjumbotron_set.add(*self.create_or_update_contained_jumbotrons(instance, contained_jumbotrons)) 
+        instance.pagecontainedevent_set.add(*self.create_or_update_contained_events(instance, contained_events))         
         fields = ['name'] # direct fields in a container that can be updated 
         for field in fields:
             try:
@@ -141,5 +195,4 @@ class PageContainerSerializer(serializers.ModelSerializer):
             except KeyError:  # validated_data may not contain all fields during HTTP PATCH
                 pass        
         instance.save()
-
         return instance

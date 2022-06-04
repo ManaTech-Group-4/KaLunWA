@@ -23,38 +23,6 @@
                     </select>
                     <button mat-icon-button (click)="reset('slide1')"><mat-icon>delete</mat-icon></button>
                 </div>
-                <div class="label">
-                    <p>Slide 2</p>
-                    <select id="slide2">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('slide2')"><mat-icon>delete</mat-icon></button>
-                </div>
-                <div class="label">
-                    <p>Slide 3</p>
-                    <select id="slide3">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button  (click)="reset('slide3')"><mat-icon>delete</mat-icon></button>
-                </div>
-                <div class="label">
-                    <p>Slide 4</p>
-                    <select id="slide4">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button  (click)="reset('slide4')"><mat-icon>delete</mat-icon></button>
-                </div>
-                <div class="label">
-                    <p>Slide 5</p>
-                    <select id="slide5">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button  (click)="reset('slide5')"><mat-icon>delete</mat-icon></button>
-                </div>
             </div>
         </div>
         <div *ngIf="sectionChoice=='event'">

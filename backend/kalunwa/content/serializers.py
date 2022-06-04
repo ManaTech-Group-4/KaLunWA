@@ -88,10 +88,6 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
         # might be more appropriate to do display manipulations at the frontend
     # alternative: another field for datetime (for post/create) and display (get/list)? 
     status = serializers.SerializerMethodField()
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()   
-    created_at =  serializers.SerializerMethodField()
-    updated_at = serializers.SerializerMethodField()
     camp = serializers.CharField(source='get_camp')
 
     class Meta:
@@ -129,18 +125,6 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
             )               
 
         }
-
-    def get_start_date(self, obj):
-        return to_formal_mdy(obj.start_date)
-
-    def get_end_date(self, obj):
-        return to_formal_mdy(obj.end_date)
-
-    def get_created_at(self, obj):
-        return to_formal_mdy(obj.created_at)
-
-    def get_updated_at(self, obj):
-        return to_formal_mdy(obj.updated_at)
 
     def validate(self, data): # object-level validation
         data = self.get_initial() # gets pre-validation data
@@ -180,7 +164,6 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
 
 
 class NewsSerializer(FlexFieldsModelSerializer):
-    date = serializers.SerializerMethodField()    
     class Meta:
         model = News
         fields = (
@@ -188,7 +171,6 @@ class NewsSerializer(FlexFieldsModelSerializer):
             'title',
             'description',
             'image',
-            'date', # might ask frontend to do the formal format (Month dd, yyyy)
             'created_at',
             'updated_at',
         )
@@ -201,11 +183,10 @@ class NewsSerializer(FlexFieldsModelSerializer):
             ),
         }        
 
-    def get_date(self, obj):
-        return to_formal_mdy(obj.created_at)
-        
-
 # prep for about us 
+# will have separate serializer when posting 
+    # position, camp, and name fields cannot be posted given the use of get_methods
+    # unless the to_internal value is changed
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
     position = serializers.CharField(source='get_position')
     camp = serializers.CharField(source='get_camp')   
@@ -235,8 +216,9 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             ),
         }           
 
-
-
+# will have separate serializer when posting 
+    # name cannot be posted given the use of a get method
+    # unless the to_internal value is changed
 class CampPageSerializer(FlexFieldsModelSerializer):
     name = serializers.CharField(source='get_name') # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
@@ -286,6 +268,9 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             return None
 
 
+# will have separate serializer when posting 
+    # position cannot be posted given the use of a get method
+    # unless the to_internal value is changed
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
     position = serializers.CharField(source='get_position')
 
@@ -310,6 +295,10 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
             ),
         } 
 
+
+# will have separate serializer when posting 
+    # category cannot be posted given the use of a get method
+    # unless the to_internal value is changed
 class ContributorSerializer(FlexFieldsModelSerializer):
     category = serializers.CharField(source='get_category') 
 
@@ -336,7 +325,6 @@ class ContributorSerializer(FlexFieldsModelSerializer):
 
 
 class AnnouncementSerializer(FlexFieldsModelSerializer):
-    date = serializers.SerializerMethodField()    
     class Meta:
         model = Announcement
         fields = (
@@ -344,12 +332,9 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
             'title',
             'meta_description',
             'description',
-            'date',
             'created_at',
             'updated_at',
         )
-    def get_date(self, obj):
-        return to_formal_mdy(obj.created_at)
 
 
 class DemographicsSerializer(serializers.ModelSerializer):
@@ -364,6 +349,9 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+# will have separate serializer when posting 
+    # position & category cannot be posted given the use of a get method
+    # unless the to_internal value is changed
 class CommissionerSerializer(FlexFieldsModelSerializer):
     position = serializers.CharField(source='get_position')
     category = serializers.CharField(source='get_category')
@@ -390,6 +378,10 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
             ),
         } 
 
+
+# will have separate serializer when posting 
+    # position & category cannot be posted given the use of a get method
+    # unless the to_internal value is changed
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
     position = serializers.CharField(source='get_position')
     camp = serializers.CharField(source='get_camp')

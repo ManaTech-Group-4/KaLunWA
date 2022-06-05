@@ -23,7 +23,7 @@ export class SidenavComponent implements OnInit {
     this.dropdown = false;
   }
   logout() {
-      this.authenticationService.logout();
+      this.authenticationService.logout().subscribe();
       this.router.navigate(['/login']);
   }
 }

@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Admin } from '../../model/user-model';
-import { AlertService } from '../../service/alert.service';
 import { AuthService } from '../../service/auth.service';
 
 @Component({
@@ -16,11 +15,11 @@ export class AdminHomeComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   submitted = false;
+  isInvalid = false;
 
 
   constructor(
         private formBuilder: FormBuilder,
-        private alertService: AlertService,
         private authService: AuthService,
         private router: Router) {
         }
@@ -45,32 +44,20 @@ export class AdminHomeComponent implements OnInit {
     }
     this.loginForm.disable();
 
+    this.isInvalid = false;
     this.loading = true;
     this.authService.login(this.f.email.value, this.f.password.value)
         .pipe(first())
         .subscribe(
             data => {
-              console.log("Asdfasdf")
               this.router.navigateByUrl("admin/dashboard");
-              console.log("Asdfasasdaaaadf")
             },
             error => {
-              console.log("wtf")
-                this.loading = false;
-                this.alertService.error(error);
-                this.loginForm.enable();
+              this.isInvalid = true;
+              console.log(this.isInvalid);
+              this.loading = false;
+              this.loginForm.enable();
             });
-    // this.authService.login(this.f.username.value, this.f.password.value)
-    //     .pipe(first())
-    //     .subscribe(
-    //         data => {
-    //             this.router.navigate([this.returnUrl]);
-    //         },
-    //         error => {
-    //             this.alertService.error(error);
-    //             this.loading = false;
-    //         });
-
   }
 
   getErrorMessage(field: string): string {

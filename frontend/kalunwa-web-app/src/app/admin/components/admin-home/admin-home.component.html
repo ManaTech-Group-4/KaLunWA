@@ -1,6 +1,5 @@
 <div class="body">
   <div class="container">
-    <alert></alert>
     <h2>KL Admin Panel</h2>
     <form class="formBody" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
@@ -13,6 +12,7 @@
             <input type="password" formControlName="password" matInput />
               <mat-error *ngIf="f.password.invalid">{{getErrorMessage("password")}}</mat-error>
         </mat-form-field>
+        <h1 id="error-alert"  *ngIf="isInvalid">Username or Password is invalid.</h1>
             <button mat-raised-button [disabled]="loading">
                 Login
             </button>

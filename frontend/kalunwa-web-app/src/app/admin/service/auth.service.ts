@@ -1,42 +1,88 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { Admin } from '../model/user-model';
+import * as jwtDecode from 'jwt-decode';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<Admin>;
-  public currentUser: Observable<Admin>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<Admin>(JSON.parse(localStorage.getItem('currentUser')!));
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): Admin {
-      return this.currentUserSubject.value;
+  get refresh(): string {
+    return localStorage.getItem('refresh')!;
+  }
+  get access(): string {
+    return localStorage.getItem('access')!;
+  }
+
+
+  private setSession(authResult:any) {
+    const payload = <Admin> jwtDecode.default(authResult.access);
+    const expiresAt = moment.unix(payload.exp);
+
+    localStorage.setItem('access', authResult.access);
+    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
   }
 
 
   login(email:string, password:string)
   {
-    console.log(email,password);
-    return this.http.post<Admin>(`http://127.0.0.1:8000/api/token/`, {email,password})
-      .pipe(map(user => {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
-      }));
+    return this.http.post(`http://127.0.0.1:8000/api/token/`, {email,password})
+      .pipe(
+        tap((response:any) => {this.setSession(response);
+                              localStorage.setItem('refresh', response.refresh);
+                      }),
+        shareReplay(),
+      );
   }
 
   logout() {
-    // remove user from local storage and set current user to null
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{headers: {'Authorization': "Bearer " + this.access}, refresh: this.refresh}).pipe(
+      tap(() => {
+        localStorage.removeItem('refresh');
+        localStorage.removeItem('access');
+        localStorage.removeItem('expires_at');
+      })
+    )
+  }
+
+
+  // refreshToken() {
+  //   if (moment().isBetween(this.getExpiration().subtract(1, 'days'), this.getExpiration())) {
+  //     return this.http.post(
+  //       `http://127.0.0.1:8000/api/token/refresh/`,
+  //       { refresh: this.refresh}
+  //     ).pipe(
+  //       tap(response => this.setSession(response)),
+  //       shareReplay(),
+  //     ).subscribe();
+  //   }
+  // }
+
+  getExpiration() {
+    const expiration = localStorage.getItem('expires_at');
+    const expiresAt = JSON.parse(expiration!);
+
+    return moment(expiresAt);
+  }
+
+
+  isLoggedIn() {
+    return moment().isBefore(this.getExpiration());
+  }
+
+  isLoggedOut() {
+    return !this.isLoggedIn();
+  }
+
+  getUsers(){
+    return this.http.get<Admin[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization': "Bearer " + this.access}});
   }
 
 }

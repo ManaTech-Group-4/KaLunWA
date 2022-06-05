@@ -1,4 +1,4 @@
-<div>
+<div class="container">
     <div class="profile" *ngIf="selectedAdmin">
         <img src="{{selectedAdmin.picture}}" alt="picture">
         <h4>{{selectedAdmin.username}}</h4>
@@ -13,23 +13,27 @@
 
     <div class="admin-list">
         <table class="table">
-            <tr class="table-header">
-                <th colspan="5">Administrators
-                    <button mat-button><mat-icon>add</mat-icon> Add Admin</button>
-                </th>
-            </tr>
-            <tr class="col-header">
-                <th>ID</th>
-                <th>Username</th>
-                <th>Date Added</th>
-                <th>Action</th>
-            </tr>
-            <tr  class="table-content" *ngFor="let item of admin_list" (click)="displayInfo(item)">
-                <td>{{item.id}}</td>
-                <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
-                <td>{{item.date_added}}</td>
-                <td><mat-icon>edit</mat-icon> <mat-icon>delete</mat-icon></td>
-            </tr>
+            <thead>
+                <tr class="table-header">
+                    <th colspan="5">Administrators
+                        <button mat-raised-button color="primary"><mat-icon>add</mat-icon> Add Admin</button>
+                    </th>
+                </tr>
+                <tr class="col-header">
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Date Added</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr  class="table-content" *ngFor="let item of admin_list" (click)="displayInfo(item)">
+                    <td>{{item.id}}</td>
+                    <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
+                    <td>{{item.date_added}}</td>
+                    <td><mat-icon>edit</mat-icon> <mat-icon>delete</mat-icon></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 

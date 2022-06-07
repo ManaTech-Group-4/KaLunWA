@@ -130,7 +130,11 @@ class PageContainerReadSerializer(FlexFieldsModelSerializer):
                 'kalunwa.page_containers.PageContainedEventReadSerializer',
                 {'many': True, 'source': 'pagecontainedevent_set'}
             ),                   
-
+            'page_contained_projects' : 
+            (
+                'kalunwa.page_containers.PageContainedProjectReadSerializer',
+                {'many': True, 'source': 'pagecontainedproject_set'}
+            ), 
         }
 
 
@@ -139,6 +143,8 @@ class PageContainerSerializer(serializers.ModelSerializer):
         source='pagecontainedjumbotron_set', many=True, required=False)
     page_contained_events = PageContainedEventSerializer(
         source='pagecontainedevent_set', many=True, required=False)
+    page_contained_projects = PageContainedProjectSerializer(
+        source='pagecontainedproject_set', many=True, required=False)        
 
     class Meta:
         model = PageContainer
@@ -148,6 +154,7 @@ class PageContainerSerializer(serializers.ModelSerializer):
             'slug',
             'page_contained_jumbotrons',
             'page_contained_events',
+            'page_contained_projects',            
             'created_at',
             'updated_at',
         )

@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     'django_filters',
 
     # user apps
-    'kalunwa.core',
-    'kalunwa.content'
+    'kalunwa.core.apps.CoreConfig',
+    'kalunwa.content.apps.ContentConfig'
 ]
 
 MIDDLEWARE = [

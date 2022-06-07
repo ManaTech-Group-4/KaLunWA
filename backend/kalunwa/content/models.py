@@ -108,6 +108,7 @@ class Demographics(AuthoredModel):
 
 class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
+    slug = models.SlugField(max_length = 255, null = True, blank = True, unique=True)
     tagline = models.CharField(max_length=225)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 

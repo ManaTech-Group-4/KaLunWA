@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ProjectItemsModel } from 'src/app/features/models/project-items-model';
+import { ProjectItemsModel } from 'src/app/features/models/project-item-model';
 import { ProjectItemService } from '../service/project-item.service';
 
 import { ProjectPageComponent } from './project-page.component';

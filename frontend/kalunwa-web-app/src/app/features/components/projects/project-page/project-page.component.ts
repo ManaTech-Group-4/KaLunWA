@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog'
 import { Observable } from 'rxjs';;
 import { map } from 'rxjs/operators';
 import { FilterProjectsDialogComponent } from 'src/app/features/dialog/filter-projects-dialog/filter-projects-dialog.component';
-import { ProjectItemsModel } from 'src/app/features/models/project-items-model';
+import { ProjectItemsModel } from 'src/app/features/models/project-item-model';
 import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
 import { ProjectItemService } from '../service/project-item.service';
 

@@ -68,20 +68,16 @@ describe('HomepageService', () => {
 
   it('should retrieve all jumbotrons', () => {
     const testJumbotrons: JumbotronModel[] = [
-        {id: 1, header_title:'Jumbotron 1', image: 'image/link/1', short_description: 'sample body 1'},
-        {id: 1, header_title:'Jumbotron 2', image: 'image/link/2', short_description: 'sample body 2'},
-        {id: 1, header_title:'Jumbotron 3', image: 'image/link/3', short_description: 'sample body 3'},
-        {id: 1, header_title:'Jumbotron 4', image: 'image/link/4', short_description: 'sample body 4'}];
+        {id: 1, header_title:'Jumbotron 1', image: {image:'image/link/1'}, short_description: 'sample body 1'},
+        {id: 1, header_title:'Jumbotron 2', image:{image: 'image/link/2'}, short_description: 'sample body 2'},
+        {id: 1, header_title:'Jumbotron 3', image: {image:'image/link/3'}, short_description: 'sample body 3'},
+        {id: 1, header_title:'Jumbotron 4', image: {image:'image/link/4'}, short_description: 'sample body 4'}];
 
     homepageService.getJumbotron().subscribe((jumbotrons)=>{
       expect(testJumbotrons).toBe(jumbotrons,'should check mocked data');
     });
 
-<<<<<<< HEAD
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/homepage/jumbotrons');
-=======
     const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&query_limit=5');
->>>>>>> main
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');

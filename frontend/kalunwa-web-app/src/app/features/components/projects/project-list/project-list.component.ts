@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { ProjectItemsModel } from 'src/app/features/models/project-items-model';
+import { ProjectItemsModel } from 'src/app/features/models/project-item-model';
 import { ProjectItemService } from '../service/project-item.service';
 
 @Component({

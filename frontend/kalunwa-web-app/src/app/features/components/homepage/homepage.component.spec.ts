@@ -2,6 +2,7 @@ import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HomepageComponent } from './homepage.component';
 import { HomepageService } from '../../service/homepage.service';
+import { MatDesignModule } from '../../shared/mat-design.module';
 
 describe('HomepageComponent', () => {
   let component: HomepageComponent;
@@ -11,7 +12,7 @@ describe('HomepageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ HomepageComponent ],
-      imports : [ HttpClientTestingModule ],
+      imports : [ HttpClientTestingModule, MatDesignModule ],
       providers: [HomepageService]
     })
     .compileComponents();

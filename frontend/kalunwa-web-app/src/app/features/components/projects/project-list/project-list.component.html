@@ -1,5 +1,5 @@
 <h1 class='no-events' *ngIf='!projects || projects.length < 1'>No project matched</h1>
-<mat-card class="project-card" *ngFor="let project of projects | slice: currentPage:lastPage">
+<mat-card class="project-card event-card" *ngFor="let project of projects | slice: currentPage:lastPage">
 
   <img mat-card-image src="{{project.image}}">
 

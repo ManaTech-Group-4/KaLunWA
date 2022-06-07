@@ -1,5 +1,6 @@
 import { HttpClientTestingModule,} from '@angular/common/http/testing';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 import { AboutpageService } from '../../service/aboutpage.service';
 
 import { AboutPageComponent } from './about-page.component';

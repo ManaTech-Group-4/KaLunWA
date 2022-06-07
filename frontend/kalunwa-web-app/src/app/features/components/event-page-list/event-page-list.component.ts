@@ -18,9 +18,6 @@ export class EventPageListComponent implements OnInit {
   currentPage = 0;
   lastPage = 4;
 
-  detectIfChanges(){
-    this.ref.detectChanges();
-  }
 
   updateDisplay(newPage:number){
     console.log(newPage,this.activePage);
@@ -34,10 +31,9 @@ export class EventPageListComponent implements OnInit {
 
     this.ref.detectChanges();
     this.activePage = newPage;
-    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
-    window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
     console.log(this.currentPage, this.lastPage);
   }
+
 
 
   ngOnInit(): void {

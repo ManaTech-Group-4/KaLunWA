@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+import {CommonModule} from '@angular/common';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
+import {MatIconModule } from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -13,7 +13,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import { NgImageSliderModule } from 'ng-image-slider';
+import {NgImageSliderModule} from 'ng-image-slider';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -21,11 +22,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatOptionModule } from '@angular/material/core';
 
 const MATERIAL = [
   MatToolbarModule,
   MatButtonModule,
   MatMenuModule,
+  MatOptionModule,
   MatIconModule,
   MatSidenavModule,
   MatCardModule,
@@ -43,7 +46,8 @@ const MATERIAL = [
   MatNativeDateModule,
   MatFormFieldModule,
   BrowserAnimationsModule,
-  BrowserModule
+  BrowserModule,
+  MatCarouselModule.forRoot()
 ];
 
 @NgModule({

@@ -13,7 +13,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {NgImageSliderModule} from '../../../../node_modules/ng-image-slider';
+import {NgImageSliderModule} from 'ng-image-slider';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';

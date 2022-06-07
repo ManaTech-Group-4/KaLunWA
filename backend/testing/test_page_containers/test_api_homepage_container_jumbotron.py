@@ -4,17 +4,14 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory
 from testing.utils import  (
-    HOMEPAGE_EXPANDED_JUMBO_DETAIL_URL,
     get_test_image_file,
     get_expected_image_url,
     reverse_with_query_params,
     to_expected_iso_format,    
 )
 from kalunwa.content.models import(
-    Event,
     Image, 
-    Jumbotron, 
-    Project,     
+    Jumbotron,  
 )
 from kalunwa.page_containers.views import (
     PageContainerListView,
@@ -93,7 +90,12 @@ class GetHomepageContainerJumbotronsTestCase(APITestCase):
         section_order= 1,
         )          
         ## REQUEST
-        request = self.request_factory.get(HOMEPAGE_EXPANDED_JUMBO_DETAIL_URL)  
+        url = reverse_with_query_params(
+            viewname='page-container-detail',
+            kwargs={'slug':'homepage'}, 
+            query_kwargs={'expand':'page_contained_jumbotrons.jumbotron.image'}
+            )        
+        request = self.request_factory.get(url)  
         response = self.view(request)
         response_contained_jumbotron = response.data['page_contained_jumbotrons'][0]        
         image_url = get_expected_image_url(jumbotron.image.image.name, request)

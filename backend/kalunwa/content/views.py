@@ -10,7 +10,8 @@ from .serializers import (
     AnnouncementSerializer,
     CabinOfficerSerializer, 
     CampLeaderSerializer, 
-    CampPageSerializer, 
+    CampPageReadSerializer, 
+    CampPageWriteSerializer,     
     CommissionerSerializer, 
     ContributorSerializer, 
     DemographicsSerializer, 
@@ -93,11 +94,16 @@ class CampLeaderViewSet(viewsets.ModelViewSet):
     filter_backends = [CampFilter, CampLeaderPositionFilter]               
 
 
-class CampPageViewSet(viewsets.ModelViewSet):
+class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
     model = CampPage
-    serializer_class = CampPageSerializer
     filter_backends = [CampNameInFilter, QueryLimitBackend]   
     queryset = CampPage.objects.all()
+    lookup_fields = ['id', 'slug']
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':        
+            return CampPageReadSerializer
+        return CampPageWriteSerializer
 
 
 class DemographicsViewSet(viewsets.ModelViewSet):

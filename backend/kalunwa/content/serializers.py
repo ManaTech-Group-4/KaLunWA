@@ -228,6 +228,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'name',
+            'slug',
             'description',
             'tagline',
             'image',

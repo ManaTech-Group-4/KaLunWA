@@ -1,16 +1,33 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import NotFound
+from rest_framework import status
 from django.db.models import Sum
+from django.forms import ValidationError
 from .models import Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
-from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampLeaderSerializer, 
-                        CampPageSerializer, CommissionerSerializer, ContributorSerializer, 
-                        DemographicsSerializer, EventSerializer,ImageSerializer, JumbotronSerializer,
-                         OrgLeaderSerializer, ProjectSerializer, NewsSerializer) 
+from .serializers import (
+    AnnouncementSerializer,
+    CabinOfficerSerializer, 
+    CampLeaderSerializer, 
+    CampPageSerializer, 
+    CommissionerSerializer, 
+    ContributorSerializer, 
+    DemographicsSerializer, 
+    EventSerializer,
+    ImageSerializer, 
+    JumbotronSerializer,
+    OrgLeaderSerializer,
+    ProjectSerializer,
+    NewsSerializer,
+) 
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework.generics import (
+    ListCreateAPIView,
+)
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.parsers import MultiPartParser, FormParser
-
 from .filters import (
     QueryLimitBackend, 
     CampNameInFilter,
@@ -21,7 +38,7 @@ from .filters import (
     CabinOfficerCategoryFilter,
     ExcludeIDFilter,
 )
-
+from kalunwa.core.views import MultipleFieldLookupORMixin
     
 class EventViewSet(viewsets.ModelViewSet):
     model = Event
@@ -102,8 +119,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     queryset = Announcement.objects.all()
     filter_backends = [QueryLimitBackend]
 
-# -----------------------------------------------------------------------------    
-# tester for gallery 
+
 class ImageViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving images.
@@ -113,9 +129,42 @@ class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
 
 
+class CampPageGalleryListCreateView(MultipleFieldLookupORMixin, ListCreateAPIView):
+    """
+    Allows the creation of an Image object directly to the related Camp. 
+    Will be called when the user wants to upload a new image in the gallery.
+    """
+    serializer_class = ImageSerializer
+    lookup_fields = ['id', 'slug']
 
+    def get_camp_object(self):
+        for field in self.lookup_fields:
+            try:                                  # Get the result with one or more fields.
+                look_up_value = self.kwargs[field]
+                kwargs = {f'{field}' : look_up_value}                 
+                return CampPage.objects.get(**kwargs)
+            except KeyError: # Key error, look up field not in url 
+                pass
+        raise NotFound(detail="Camp page does not exist.", code=status.HTTP_404_NOT_FOUND)
 
+    def get_queryset(self): # get list of images related to the camp
+        camp = self.get_camp_object()
+        return camp.gallery 
 
+    def perform_link_image_to_camp(self, image:int):
+        camp = self.get_camp_object()
+        camp.gallery.add(image)        
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        image = Image.objects.get(
+            id = serializer.data['id']    
+        )
+        self.perform_link_image_to_camp(image)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 #-------------------------------------------------------

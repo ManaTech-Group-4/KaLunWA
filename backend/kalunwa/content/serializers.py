@@ -208,7 +208,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             'updated_at',
         )    
 
-        expandable_fields = {
+        expandable_fields = { 
             'image' : ('kalunwa.content.ImageSerializer', 
                 {
                  'fields':['id','image']
@@ -216,10 +216,9 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             ),
         }           
 
-# will have separate serializer when posting 
-    # name cannot be posted given the use of a get method
-    # unless the to_internal value is changed
-class CampPageSerializer(FlexFieldsModelSerializer):
+
+## Read for flexibly retrieving galleries and the like 
+class CampPageReadSerializer(FlexFieldsModelSerializer): 
     name = serializers.CharField(source='get_name') # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
 
@@ -268,6 +267,25 @@ class CampPageSerializer(FlexFieldsModelSerializer):
         except ObjectDoesNotExist:
             return None
 
+
+## Read for flexibly retrieving galleries and the like 
+class CampPageWriteSerializer(FlexFieldsModelSerializer):
+    """
+    adding this to allow the adding of the field 'name'.
+    """
+    name = serializers.CharField() 
+    class Meta:
+        model = CampPage
+        fields = (
+            'id',
+            'name',
+            'description',
+            'tagline',
+            'image',
+            'gallery',
+            'created_at',
+            'updated_at',
+        )
 
 # will have separate serializer when posting 
     # position cannot be posted given the use of a get method

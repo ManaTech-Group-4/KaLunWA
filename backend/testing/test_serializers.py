@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.utils import timezone
 from .utils import  get_test_image_file
 from kalunwa.content.models import CampEnum, CampLeader, CampPage, Image, Project, Event
-from kalunwa.content.serializers import CampPageSerializer, EventSerializer, ProjectSerializer
+from kalunwa.content.serializers import CampPageReadSerializer, EventSerializer, ProjectSerializer
 from kalunwa.content.serializers import StatusEnum
 
 
@@ -68,7 +68,7 @@ class CampSerializertestCase(TestCase):
         test to serialize camp details when a camp leader exists
         """
         camp_with_leader = CampPage.objects.get(name=CampEnum.SUBA)
-        serializer = CampPageSerializer(camp_with_leader)
+        serializer = CampPageReadSerializer(camp_with_leader)
         
         self.assertTrue(serializer.data['camp_leader']) # exists
 
@@ -78,7 +78,7 @@ class CampSerializertestCase(TestCase):
         returns none, or a non-truthy value (false)
         """
         camp_without_leader = CampPage.objects.get(name=CampEnum.BAYBAYON)
-        serializer = CampPageSerializer(camp_without_leader)
+        serializer = CampPageReadSerializer(camp_without_leader)
         self.assertFalse(serializer.data['camp_leader']) # does not exist (null)
 
 

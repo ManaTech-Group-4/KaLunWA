@@ -47,7 +47,7 @@ urlpatterns += [
                 'get': 'list',
                 'post': 'create',
             }, 
-            name = 'camp-list')  
+            ), name = 'camp-list'  
     ),
     path('camps/<int:pk>/', CampPageViewSet.as_view(
             {
@@ -56,7 +56,7 @@ urlpatterns += [
                 'patch': 'partial_update',
                 'delete': 'destroy'
             },
-            name = 'camp-detail')              
+            ), name = 'camp-detail'              
     ),
     path('camps/<slug:slug>/', CampPageViewSet.as_view(
             {
@@ -65,7 +65,7 @@ urlpatterns += [
                 'patch': 'partial_update',
                 'delete': 'destroy'
             },
-            name = 'camp-detail')              
+            ), name = 'camp-detail'              
     ),    
     path('camps/<int:pk>/gallery/', CampPageGalleryListCreateView.as_view(), name='camp-gallery-list'),
     path('camps/<slug:slug>/gallery/', CampPageGalleryListCreateView.as_view(), name='camp-gallery-list'),    

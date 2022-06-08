@@ -492,6 +492,7 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp_data = {
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
+            'slug': expected_camp.slug, 
             'description' : expected_camp.description,
             'tagline' : expected_camp.tagline,
             'image' : {
@@ -989,6 +990,7 @@ class CampGetTestCase(APITestCase):
         expected_camp_data = {
             'id' : expected_camp.id,
             'name': CampEnum.GENERAL.label,
+            'slug': 'general', 
             'description': expected_camp.description,
             'tagline': expected_camp.tagline,
             'image' : expected_camp.image.pk, 

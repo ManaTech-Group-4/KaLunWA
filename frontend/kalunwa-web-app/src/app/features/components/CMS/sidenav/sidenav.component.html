@@ -1,5 +1,4 @@
 <mat-nav-list>
-<<<<<<< HEAD
   <div class="logo">
       <img src="../../assets/images/word_logo_ng.svg" alt="KL Logo"/>
   </div>
@@ -33,39 +32,5 @@
       Administrators
   </a>
   <a id="logout" (click)="logout()"><mat-icon style="transform: scaleX(-1);">logout</mat-icon></a>
-=======
-    <div class="logo">
-        <img src="../../assets/images/word_logo_ng.svg" alt="KL Logo"/>
-    </div>
-    <mat-divider></mat-divider>
-    <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="list-item-active" (click)="resetDropdown()">
-        <mat-icon>dashboard</mat-icon>
-        Dashboard
-    </a>
-    <a mat-list-item routerLink="/home" routerLinkActive="list-item-active" (click)="resetDropdown()">
-        <mat-icon>insights</mat-icon>
-        Analytics
-    </a>
-    <a mat-list-item (click)="clickDropdown()">
-        <mat-icon>web</mat-icon>
-        Page Content
-    </a>
-    <div class="dropdown" *ngIf="dropdown">
-        <a mat-list-item routerLink="/admin/single-page-list" routerLinkActive="list-item-active">
-            Singular
-        </a>
-        <a mat-list-item routerLink="/admin/org-struct" routerLinkActive="list-item-active">
-            Collective
-        </a>
-    </div>
-    <a mat-list-item routerLink="/contact-us" routerLinkActive="list-item-active" (click)="resetDropdown()">
-        <mat-icon>contact_mail</mat-icon>
-        Newsletter Subscriptions
-    </a>
-    <a mat-list-item routerLink="/lasang" routerLinkActive="list-item-active" (click)="resetDropdown()">
-        <mat-icon>supervisor_account</mat-icon>
-        Administrators
-    </a>
-    <a routerLink="" id="logout"><mat-icon style="transform: scaleX(-1);">logout</mat-icon></a>
->>>>>>> main
+
 </mat-nav-list>

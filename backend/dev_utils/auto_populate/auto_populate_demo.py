@@ -44,14 +44,14 @@ to populate database, run the script ONCE:
 
     python manage.py shell
             - this opens the interactive python shell. Then enter  
-    
+
     exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())    
 """
 
 from django.contrib.auth.models import User
 #-------------------------------------------------------------------------------
 # create superuser
-superuser = User.objects.create_user('admin', password='admin123')     
+superuser = User.objects.create_user('superadmin@gmail.com', password='admin123')     
 superuser.is_superuser=True
 superuser.is_staff=True
 superuser.save()
@@ -76,6 +76,10 @@ print('populated camp events and projects')
 #     - see comments in auto_populate_org_struct file
 exec(open("dev_utils/auto_populate/auto_populate_org_struct.py").read())
 print('populated org struct people')
+#-------------------------------------------------------------------------------
+# create homepage container
+exec(open("dev_utils/auto_populate/auto_populate_homepage_container.py").read())
+print('created homepage container')
 #-------------------------------------------------------------------------------
 print('end of script')
 

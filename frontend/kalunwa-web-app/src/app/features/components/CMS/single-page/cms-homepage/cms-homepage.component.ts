@@ -3,6 +3,11 @@ import { EventsModel } from 'src/app/features/models/events';
 import { HomepageService } from 'src/app/features/service/homepage.service';
 import { HomeNewsModel } from 'src/app/features/models/home-news';
 import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
+import { JumbotronModel } from 'src/app/features/models/slides-model';
+import { EventspageService } from 'src/app/features/service/eventspage.service';
+import { ProjectItemService } from '../../../projects/service/project-item.service';
+import { EventsResponseModel } from 'src/app/features/models/events-response-model';
+import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
 
 @Component({
   selector: 'app-cms-homepage',
@@ -11,11 +16,11 @@ import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-lis
 })
 export class CmsHomepageComponent implements OnInit {
 
-  constructor(private homeService: HomepageService) { }
+  constructor(private homeService: HomepageService, private eventService: EventspageService,  private projectService: ProjectItemService ) { }
 
-  public jumbotron = [] as EventsModel[];
-  public events = [] as EventsModel[];
-  public projects = [] as EventsModel[];
+  public jumbotron = [] as EventsResponseModel[];
+  public events = [] as EventsResponseModel[];
+  public projects = [] as ProjectResponseModel[];
   public news =[] as HomeNewsModel[];
 
   sectionChoice: string = 'jumbotron';
@@ -30,16 +35,16 @@ export class CmsHomepageComponent implements OnInit {
 
   ngOnInit(): void {
     //---for jumbotron
-    this.homeService.getEvents()
+    this.eventService.getEventList()
       .subscribe(data => this.jumbotron = data);
 
-    this.homeService.getProjects()
+    this.projectService.getProjectList()
       .subscribe(data => this.jumbotron = this.jumbotron.concat(data));
     //---for events
-    this.homeService.getEvents()
+    this.eventService.getEventList()
     .subscribe(data => this.events = data);
     //---for projects
-    this.homeService.getProjects()
+    this.projectService.getProjectList()
       .subscribe(data => this.projects = data);
     //---for news
     this.homeService.getNews()

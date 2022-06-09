@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     # user apps
     'kalunwa.core',
-    'kalunwa.content'
+    'kalunwa.content',
+    'kalunwa.page_containers',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,6 @@ CORS_ORIGIN_WHITELIST = (
 'http://localhost:4200', # angular
 'http://localhost:8000',
 )
+
+# exception handling
+REST_FRAMEWORK = {'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler'}

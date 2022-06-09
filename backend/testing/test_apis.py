@@ -660,9 +660,16 @@ class EventGetTestCase(APITestCase):
             start_date=timezone.now(),
             end_date=timezone.now(),
             image = Image.objects.create(name='image_1', image=self.image_file),
-            is_featured=True,
         )     
-
+#############
+            # Event.objects.create(
+            #     title= f'Event {_}', 
+            #     description= f'description {_}',
+            #     start_date=timezone.now(),
+            #     end_date=timezone.now(),
+            #     image = Image.objects.create(name=f'image_{_}', image=self.image_file), 
+            # ) 
+#############
         for _ in range(11):
             Image.objects.create(name='image_1', image=self.image_file)
         
@@ -1182,6 +1189,6 @@ class NewsSerializerTestCase(APITestCase):
                 is_published=True,
             )        
         
-    def test_news_validation_post(self):
-        response = self.client.post(reverse('news-list'))
+    # def test_news_validation_post(self):
+    #     response = self.client.post(reverse('news-list'))
 

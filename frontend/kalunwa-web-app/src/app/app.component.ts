@@ -1,4 +1,5 @@
 import { Component, ViewChild, ElementRef, ViewEncapsulation, AfterViewInit} from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { NavService } from './features/service/nav.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav: ElementRef | undefined;
 
   isAdmin = true;
-  constructor(private navService: NavService) { }
+  constructor(private navService: NavService, private router: Router) { }
 
   whatWeDo : boolean = false;
   about: boolean = false;
@@ -22,6 +23,14 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.navService.sidenav = this.sidenav;
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+          return;
+      }
+      window.scrollTo(0, 0)
+  });
+
   }
 
   onSelect(){

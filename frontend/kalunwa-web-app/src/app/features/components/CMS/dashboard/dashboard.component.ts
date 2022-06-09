@@ -10,8 +10,6 @@ import { DashboardModel } from 'src/app/features/models/CMS/dashboard-model';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  currentUser: Admin;
-  user:any;
 
   dashboard: DashboardModel={
     id: 1,

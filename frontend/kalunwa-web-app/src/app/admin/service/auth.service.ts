@@ -72,6 +72,11 @@ export class AuthService {
     return moment(expiresAt);
   }
 
+  get adminName(): string{
+    const jwtToken = JSON.parse(localStorage.getItem('access')!);
+    return jwtToken.email;
+  }
+
 
   isLoggedIn() {
     return moment().isBefore(this.getExpiration());

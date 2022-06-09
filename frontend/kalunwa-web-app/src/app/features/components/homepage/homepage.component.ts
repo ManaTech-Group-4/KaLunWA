@@ -3,6 +3,8 @@ import { EventsModel } from './../../models/events';
 import { HomepageService } from './../../service/homepage.service';
 import { HomeCampModel } from './../../models/home-camp';
 import { HomeNewsModel } from './../../models/home-news';
+import { map, subscribeOn } from 'rxjs/operators';
+import { homepageInfo } from '../../models/homepage-container-model';
 
 @Component({
   selector: 'app-homepage',
@@ -19,8 +21,9 @@ export class HomepageComponent implements OnInit {
   about: boolean = false;
   orgOverview : boolean = false;
 
-  public events = [] as EventsModel[];
-  public projects = [] as EventsModel[];
+  public events = [] as homepageInfo.PageContainedEvent[];
+  public projects = [] as homepageInfo.PageContainedProject[];
+  public jumbotron = [] as homepageInfo.PageContainedJumbotron[];
   public news =[] as HomeNewsModel[];
   public camps : HomeCampModel[] = [
     {
@@ -50,11 +53,20 @@ export class HomepageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.homeService.getEvents()
-      .subscribe(data => this.events = data);
+    // this.homeService.getHomepage()
+    //   .subscribe((data: HomepageContainer) => {
+    //     this.events = data.page_contained_events;
+    //     this.projects = data.page_contained_projects;
+    //     console.log(this.events);
+    //     console.log(this.projects);
+    //   });
 
-    this.homeService.getProjects()
-      .subscribe(data => this.projects = data);
+
+    this.homeService.getHomepage().subscribe((data: homepageInfo.HomepageContainer) => {
+        this.events = data.page_contained_events;
+        this.projects = data.page_contained_projects;
+        this.jumbotron = data.page_contained_jumbotrons;
+      });
 
     this.homeService.getNews()
     .subscribe(data => this.news = data);

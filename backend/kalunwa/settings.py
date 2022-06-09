@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'kalunwa.core',
     'kalunwa.content',
     'kalunwa.users',
+    'kalunwa.page_containers',
 ]
 
 MIDDLEWARE = [
@@ -153,13 +154,15 @@ CORS_ORIGIN_WHITELIST = (
 'http://localhost:8000',
 )
 
+
 # authentication
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler',
 
 }
 

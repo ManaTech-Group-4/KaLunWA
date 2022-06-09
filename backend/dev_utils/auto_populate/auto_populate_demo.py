@@ -43,7 +43,7 @@ to populate database, run the script ONCE:
 
     python manage.py shell
             - this opens the interactive python shell. Then enter  
-    
+
     exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())    
 """
 
@@ -80,6 +80,10 @@ print('populated camp events and projects')
 #     - see comments in auto_populate_org_struct file
 exec(open("dev_utils/auto_populate/auto_populate_org_struct.py").read())
 print('populated org struct people')
+#-------------------------------------------------------------------------------
+# create homepage container
+exec(open("dev_utils/auto_populate/auto_populate_homepage_container.py").read())
+print('created homepage container')
 #-------------------------------------------------------------------------------
 print('end of script')
 

@@ -1,5 +1,5 @@
 <div class="back">
-    <button mat-icon-button routerLink="/single-page-list"><mat-icon>arrow_back</mat-icon></button>
+    <button mat-icon-button routerLink="/admin/single-page-list"><mat-icon>arrow_back</mat-icon></button>
     <h3>Back to Page List</h3>
 </div>
 <div class="container">
@@ -125,7 +125,7 @@
             </div>
             <div class="dropdown">
                 <div class="label">
-                    <p>News 1</p> 
+                    <p>News 1</p>
                     <select id="news1">
                         <option disabled selected value> -- none selected -- </option>
                         <option *ngFor="let item of news">{{item.title}}</option>
@@ -133,7 +133,7 @@
                     <button mat-icon-button (click)="reset('news1')"><mat-icon>delete</mat-icon></button>
                 </div>
                 <div class="label">
-                    <p>News 2</p> 
+                    <p>News 2</p>
                     <select id="news2">
                         <option disabled selected value> -- none selected -- </option>
                         <option *ngFor="let item of news">{{item.title}}</option>
@@ -141,7 +141,7 @@
                     <button mat-icon-button (click)="reset('news2')"><mat-icon>delete</mat-icon></button>
                 </div>
                 <div class="label">
-                    <p>News 3</p> 
+                    <p>News 3</p>
                     <select id="news3">
                         <option disabled selected value> -- none selected -- </option>
                         <option *ngFor="let item of news">{{item.title}}</option>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {MatCarouselComponent, MatCarousel } from '@ngmodule/material-carousel';
+import { homepageInfo } from '../../models/homepage-container-model';
 import { JumbotronModel } from '../../models/slides-model';
 import { HomepageService } from '../../service/homepage.service';
 
@@ -11,18 +12,14 @@ import { HomepageService } from '../../service/homepage.service';
 })
 export class JumbotronComponent implements OnInit {
 
-  public slides: JumbotronModel[]=[];
+  @Input()
+  slides: homepageInfo.PageContainedJumbotron[];
 
   constructor(private homeService: HomepageService) {
   }
 
 
   ngOnInit(): void {
-    this.getJumbotron();
   }
 
-  getJumbotron(){
-    this.homeService.getJumbotron()
-      .subscribe(data => this.slides = data);
-  }
 }

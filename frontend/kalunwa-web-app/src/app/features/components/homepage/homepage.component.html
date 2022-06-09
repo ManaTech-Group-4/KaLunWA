@@ -1,4 +1,4 @@
-<app-jumbotron></app-jumbotron>
+<app-jumbotron [slides]="jumbotron"></app-jumbotron>
 <div class ="subhead">
   <h1>
     For a Cleaner and Greener Bohol
@@ -24,10 +24,10 @@
   <h1>Projects</h1>
   <mat-card class="events-card"  *ngFor="let project of projects">
     <div>
-      <img mat-card-xl-image src="{{project.image.image}}" >
+      <img mat-card-xl-image src="{{project.project.image.image}}" >
     </div>
     <mat-card-content>
-      <h1>{{project.title}}</h1>
+      <h1>{{project.project.title}}</h1>
     </mat-card-content>
     <mat-card-actions>
       <p>Know More</p>
@@ -45,10 +45,10 @@
   <h1>Events</h1>
   <mat-card class="events-card"  *ngFor="let event of events">
     <div>
-      <img mat-card-xl-image src="{{event.image.image}}" >
+      <img mat-card-xl-image src="{{event.event.image.image}}" >
     </div>
     <mat-card-content>
-      <h1>{{event.title}}</h1>
+      <h1>{{event.event.title}}</h1>
     </mat-card-content>
     <mat-card-actions>
       <p>Know More</p>

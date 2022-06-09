@@ -30,13 +30,14 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls), 
     path('api/', include(
-            [
-                path('token/', CustomObtainTokenPairView.as_view(), name='token-obtain-pair'),
-                path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-                path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),                
-                path('', include('kalunwa.content.urls')),
-                path('users/', include('kalunwa.users.urls')),                
-            ]
+        [
+            path('token/', CustomObtainTokenPairView.as_view(), name='token-obtain-pair'),
+            path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+            path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),                
+            path('', include('kalunwa.content.urls')),
+            path('users/', include('kalunwa.users.urls')),              
+            path('', include('kalunwa.page_containers.urls')),                  
+        ]
         )
     )
 ]

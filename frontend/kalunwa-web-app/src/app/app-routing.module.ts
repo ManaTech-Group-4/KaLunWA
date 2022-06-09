@@ -18,7 +18,7 @@ import { ZeroWasteComponent } from './features/components/indiv-camps/zero-waste
 import { ContactUsComponent } from './features/components/contact-us/contact-us.component';
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { AuthGuard } from './admin/auth.guard';
+import { AuthGuard } from './admin/helper/auth.guard';
 import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';

@@ -77,8 +77,15 @@ export class AppPaginationComponent implements OnChanges {
             for(let i = 1; i<=3-this.aheadPages.length && this.activePage+2+i<=this.pages.length; i++)
               this.behindPages.push(this.activePage+2+i);
           }
+          this.scrollDown();
 
       }
+  }
+
+  scrollDown(){
+    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
+    window.scrollTo({top: 250, behavior: 'smooth'});
+
   }
 }
 

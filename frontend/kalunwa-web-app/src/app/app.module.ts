@@ -100,7 +100,7 @@ import { AdminListComponent } from './features/components/CMS/administrators/adm
     NewsletterComponent,
     AuditLogsComponent,
     CmsCampComponent,
-    AdminListComponent
+    AdminListComponent,
   ],
   entryComponents:[
     MembersDialogComponent

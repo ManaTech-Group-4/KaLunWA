@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,7 +14,7 @@ describe('AdminHomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ AdminHomeComponent ],
-      imports:[ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes(routes)]
+      imports:[ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes(routes), HttpClientTestingModule]
     })
     .compileComponents();
   });

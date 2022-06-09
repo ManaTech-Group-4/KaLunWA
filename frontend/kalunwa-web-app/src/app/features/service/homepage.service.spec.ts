@@ -4,6 +4,7 @@ import { HomepageService } from './homepage.service';
 import { EventsModel } from '../models/events';
 import { JumbotronModel } from '../models/slides-model';
 import { HomeNewsModel } from '../models/home-news';
+import { homepageInfo } from '../models/homepage-container-model';
 
 describe('HomepageService', () => {
   let homepageService: HomepageService,
@@ -25,64 +26,84 @@ describe('HomepageService', () => {
   });
 
 
-
-  it('should retrieve all events', () => {
-    const testEvents: EventsModel[] = [
-        {id: 1, title:'Event 1', image: {image: 'image/link/1'}},
-        {id: 2, title:'Event E', image: {image: 'image/link/2'}},
-        {id: 3, title:'Event 2', image: {image: 'image/link/3'}}];
-
-    homepageService.getEvents().subscribe((events)=>{
-      expect(testEvents).toBe(events,'should check mocked data');
-    });
-
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/events/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3');
-
-    expect(req.cancelled).toBeFalsy();
-    expect(req.request.responseType).toEqual('json');
-
-    req.flush(testEvents);
-
-  });
-
-
-
-  it('should retrieve all projects', () => {
-    const testProjects: EventsModel[] = [
-        {id: 1, title:'Project 1', image: {image: 'image/link/1'}},
-        {id: 2, title:'Project 2', image: {image: 'image/link/2'}},
-        {id: 3, title:'Project 3', image: {image: 'image/link/3'}}];
-
-    homepageService.getProjects().subscribe((projects)=>{
-      expect(testProjects).toBe(projects,'should check mocked data');
-    });
-
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/projects/?expand=image&fields=id,title,image.image&is_featured=True&query_limit=3');
-
-    expect(req.cancelled).toBeFalsy();
-    expect(req.request.responseType).toEqual('json');
-
-    req.flush(testProjects);
-
-  });
-
   it('should retrieve all jumbotrons', () => {
-    const testJumbotrons: JumbotronModel[] = [
-        {id: 1, header_title:'Jumbotron 1', image: {image: 'image/link/1'}, short_description: 'sample body 1'},
-        {id: 1, header_title:'Jumbotron 2', image: {image: 'image/link/2'}, short_description: 'sample body 2'},
-        {id: 1, header_title:'Jumbotron 3', image: {image: 'image/link/3'}, short_description: 'sample body 3'},
-        {id: 1, header_title:'Jumbotron 4', image: {image: 'image/link/4'}, short_description: 'sample body 4'}];
-
-    homepageService.getJumbotron().subscribe((jumbotrons)=>{
-      expect(testJumbotrons).toBe(jumbotrons,'should check mocked data');
+    const homepageTest: homepageInfo.HomepageContainer = {
+        id: 1,
+        name: "homepage",
+        slug: "homepage",
+        page_contained_jumbotrons: [
+            {
+                id: 1,
+                container: 1,
+                jumbotron: {
+                    id: 1,
+                    header_title: "Plant.",
+                    subtitle: "Let's grow and foster together.",
+                    image: {
+                        id: 1,
+                        image: "http://127.0.0.1:8000/media/images/content/carousel1.jpg"
+                    },
+                    created_at: new Date(),
+                    updated_at: new Date()
+                },
+                section_order: 1
+            }
+        ],
+        page_contained_projects: [
+            {
+                id: 1,
+                container: 1,
+                project: {
+                    id: 1,
+                    title: "Project 1",
+                    image: {
+                        id: 9,
+                        image: "http://127.0.0.1:8000/media/images/content/project.jpg"
+                    },
+                    description: "description 1",
+                    start_date: new Date(),
+                    end_date: new Date(),
+                    camp: "General",
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    status: "Past"
+                },
+                section_order: 1
+            }
+        ],
+        page_contained_events: [
+            {
+                id: 1,
+                container: 1,
+                event: {
+                    id: 1,
+                    title: "Event 1",
+                    image: {
+                        id: 7,
+                        image: "http://127.0.0.1:8000/media/images/content/event.jpg"
+                    },
+                    description: "description 1",
+                    start_date: new Date(),
+                    end_date: new Date(),
+                    camp: "General",
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    status: "Past"
+                },
+                "section_order": 1
+            }
+        ]
+    }
+    homepageService.getHomepage().subscribe((homepageData)=>{
+      expect(homepageTest).toBe(homepageData,'should check mocked data');
     });
 
-    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/jumbotrons/?expand=image&omit=created_at,updated_at,image.id&query_limit=5');
+    const req = httpTestingController.expectOne('http://127.0.0.1:8000/api/page-containers/homepage/?expand=page_contained_jumbotrons.jumbotron.image,page_contained_events.event.image,page_contained_projects.project.image');
 
     expect(req.cancelled).toBeFalsy();
     expect(req.request.responseType).toEqual('json');
 
-    req.flush(testJumbotrons);
+    req.flush(homepageTest);
 
   });
 

@@ -5,6 +5,13 @@ import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-lis
 import { ProjectItemService } from '../../../projects/service/project-item.service';
 import { EventspageService } from 'src/app/features/service/eventspage.service';
 import { NewsService } from '../../../news/service/news.service';
+import { HomeNewsModel } from 'src/app/features/models/home-news';
+import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
+import { JumbotronModel } from 'src/app/features/models/slides-model';
+import { EventspageService } from 'src/app/features/service/eventspage.service';
+import { ProjectItemService } from '../../../projects/service/project-item.service';
+import { EventsResponseModel } from 'src/app/features/models/events-response-model';
+import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
 
 @Component({
   selector: 'app-cms-homepage',
@@ -12,7 +19,6 @@ import { NewsService } from '../../../news/service/news.service';
   styleUrls: ['./cms-homepage.component.scss']
 })
 export class CmsHomepageComponent implements OnInit {
-
   constructor(private projectService: ProjectItemService, private eventsService: EventspageService, private newsService: NewsService) { }
 
   public jumbotron = [] as EventsModel[];
@@ -37,6 +43,7 @@ export class CmsHomepageComponent implements OnInit {
     this.projectService.getProjectList()
       .subscribe(data => this.jumbotron = this.jumbotron.concat(data));
     //---for events
+
     this.eventsService.getEventList()
     .subscribe(data => this.events = data);
     //---for projects

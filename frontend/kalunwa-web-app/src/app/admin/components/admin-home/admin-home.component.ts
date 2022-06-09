@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { Admin } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 
@@ -14,6 +15,7 @@ export class AdminHomeComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   submitted = false;
+  isInvalid = false;
 
 
   constructor(
@@ -24,7 +26,7 @@ export class AdminHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-        username: ['', Validators.required],
+        email: ['', Validators.required],
         password: ['', Validators.required]
     });
 
@@ -42,26 +44,26 @@ export class AdminHomeComponent implements OnInit {
     }
     this.loginForm.disable();
 
+    this.isInvalid = false;
     this.loading = true;
-    this.authService.login(this.f.username.value, this.f.password.value);
-    this.router.navigateByUrl("admin");
-    // this.authService.login(this.f.username.value, this.f.password.value)
-    //     .pipe(first())
-    //     .subscribe(
-    //         data => {
-    //             this.router.navigate([this.returnUrl]);
-    //         },
-    //         error => {
-    //             this.alertService.error(error);
-    //             this.loading = false;
-    //         });
-
+    this.authService.login(this.f.email.value, this.f.password.value)
+        .pipe(first())
+        .subscribe(
+            data => {
+              this.router.navigateByUrl("admin/dashboard");
+            },
+            error => {
+              this.isInvalid = true;
+              console.log(this.isInvalid);
+              this.loading = false;
+              this.loginForm.enable();
+            });
   }
 
   getErrorMessage(field: string): string {
     if(field == "username"){
-      if (this.f.username.hasError('required')) {
-        return 'Please enter a username';
+      if (this.f.email.hasError('required')) {
+        return 'Please enter an email';
       }
     }
     if(field == "password"){

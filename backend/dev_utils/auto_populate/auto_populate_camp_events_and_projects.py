@@ -154,7 +154,7 @@ Project.objects.create(
     # events
 Event.objects.create(
     title= "Tintinan: Moving Towards Zero Waste", 
-    description= "A webinar featuring the Zero Waste Island team, it aims to present the Zero Waste Island Tintinan Youth Catalyst Action—its purpose and goal. It will discuss the problem, the intended solution, and what the organization and camp has done so far and what they hope to achieve.",
+    description= "A webinar featuring the Zero Waste Island team, it aims to present the Zero Waste Island Tintinan Youth Catalyst Action-its purpose and goal. It will discuss the problem, the intended solution, and what the organization and camp has done so far and what they hope to achieve.",
     start_date=timezone.now(),  # not final -> date, image   
     end_date=timezone.now(), 
     camp=CampEnum.ZEROWASTE, 

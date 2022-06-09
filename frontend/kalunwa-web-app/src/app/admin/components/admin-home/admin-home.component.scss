@@ -17,6 +17,7 @@
     border-radius: 10px;
     box-shadow: 5px 5px #536B3C;
 
+
     h2{
       color: #536B3C;
       font-size: 30px;
@@ -37,6 +38,15 @@
             }
           }
         }
+      }
+
+      #error-alert{
+        background: #ff9999;
+        font-size: 11px;
+        width:100%;
+        padding:3px;
+        text-align: center;
+        border-radius: 2px;
       }
 
       button{

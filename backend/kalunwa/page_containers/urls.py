@@ -3,9 +3,11 @@ from rest_framework.routers import (
     DefaultRouter
 )
 from .views import (
+    PageContainedProjectDetailView,
     PageContainerListView,
     PageContainerDetailView,
     PageContainedJumbotronDetailView,
+    PageContainedEventDetailView
 )
 
 urlpatterns = [
@@ -15,5 +17,13 @@ urlpatterns = [
     path('page-contained-jumbotrons/<int:pk>/', 
         PageContainedJumbotronDetailView.as_view(), 
         name='page-contained-jumbotron-detail', 
-        )    
+        ),    
+    path('page-contained-events/<int:pk>/', 
+        PageContainedEventDetailView.as_view(), 
+        name='page-contained-event-detail', 
+        ),
+    path('page-contained-projects/<int:pk>/', 
+        PageContainedProjectDetailView.as_view(), 
+        name='page-contained-project-detail', 
+        )                          
 ]

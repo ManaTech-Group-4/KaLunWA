@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { EventsModel } from 'src/app/features/models/events';
 import { HomepageService } from 'src/app/features/service/homepage.service';
-import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
-import { ProjectItemService } from '../../../projects/service/project-item.service';
-import { EventspageService } from 'src/app/features/service/eventspage.service';
 import { NewsService } from '../../../news/service/news.service';
+import { HomeNewsModel } from 'src/app/features/models/home-news';
+import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
+import { JumbotronModel } from 'src/app/features/models/slides-model';
+import { EventspageService } from 'src/app/features/service/eventspage.service';
+import { ProjectItemService } from '../../../projects/service/project-item.service';
+import { EventsResponseModel } from 'src/app/features/models/events-response-model';
+import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
 
 @Component({
   selector: 'app-cms-homepage',
@@ -12,12 +16,11 @@ import { NewsService } from '../../../news/service/news.service';
   styleUrls: ['./cms-homepage.component.scss']
 })
 export class CmsHomepageComponent implements OnInit {
-
   constructor(private projectService: ProjectItemService, private eventsService: EventspageService, private newsService: NewsService) { }
 
-  public jumbotron = [] as EventsModel[];
-  public events = [] as EventsModel[];
-  public projects = [] as EventsModel[];
+  public jumbotron = [] as EventsResponseModel[];
+  public events = [] as EventsResponseModel[];
+  public projects = [] as EventsResponseModel[];
 
   sectionChoice: string = 'jumbotron';
 
@@ -37,6 +40,7 @@ export class CmsHomepageComponent implements OnInit {
     this.projectService.getProjectList()
       .subscribe(data => this.jumbotron = this.jumbotron.concat(data));
     //---for events
+
     this.eventsService.getEventList()
     .subscribe(data => this.events = data);
     //---for projects

@@ -1,8 +1,11 @@
 from datetime import datetime
+from django.utils import timezone
 from io import BytesIO
 import PIL.Image
 from django.core.files.images import ImageFile
 from kalunwa.content.models import CampEnum
+from django.utils.http import urlencode
+from django.urls import reverse
 
 def get_test_image_file(filename="test.jpg", colour=0, size=(1, 1))->ImageFile:
     f = BytesIO()
@@ -30,6 +33,24 @@ def to_expected_iso_format(date: datetime)->str:
     # +00:00 marks for UTC, which Z also represents (used by serializer as well)
     return str(date).replace('+00:00', 'Z')
 
+
+
+def reverse_with_query_params(viewname, kwargs=None, query_kwargs=None):
+    """
+    Custom reverse to add a query string after the url
+    Example usage:
+    url = my_reverse('my_test_url', kwargs={'pk': object.id}, query_kwargs={'next': reverse('home')})
+    """
+    url = reverse(viewname, kwargs=kwargs)
+    
+    if query_kwargs:
+        return f'{url}?{urlencode(query_kwargs)}'
+    
+    return url
+
+# what's written below may be replaced with the reverse_with_query_params function
+
+HOMEPAGE_EXPANDED_CONTAINED_JUMBOS = '/api/page-containers/homepage/?expand=page_contained_jumbotrons'
 HOMEPAGE_EXPANDED_JUMBO_DETAIL_URL = '/api/page-containers/homepage/?expand=page_contained_jumbotrons.jumbotron.image'
 PAGE_CONTAINED_JUMBOTRONS = 'api/page-contained-jumbotrons/'
 

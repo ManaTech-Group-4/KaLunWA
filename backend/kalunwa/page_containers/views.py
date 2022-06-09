@@ -1,14 +1,6 @@
 from rest_framework.generics import (
-    GenericAPIView,
-    CreateAPIView,
-    RetrieveAPIView,
-    ListAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView
-)
-from rest_framework.mixins import (
-    ListModelMixin,
-    RetrieveModelMixin,
 )
 from rest_framework.permissions import (
     AllowAny,
@@ -16,9 +8,16 @@ from rest_framework.permissions import (
      IsAuthenticatedOrReadOnly
 )
 from kalunwa.core.views import MultipleFieldLookupORMixin
-from kalunwa.page_containers.models import PageContainedJumbotron, PageContainer
+from kalunwa.page_containers.models import (
+    PageContainedJumbotron,
+    PageContainedEvent,
+    PageContainedProject,
+    PageContainer,
+)
 from .serializers import (
     PageContainedJumbotronSerializer, 
+    PageContainedEventSerializer,
+    PageContainedProjectSerializer,
     PageContainerSerializer,
     PageContainerReadSerializer,
     )
@@ -48,6 +47,15 @@ class PageContainerDetailView(MultipleFieldLookupORMixin, RetrieveUpdateDestroyA
 class PageContainedJumbotronDetailView(RetrieveUpdateDestroyAPIView):
     queryset = PageContainedJumbotron.objects.all()
     serializer_class = PageContainedJumbotronSerializer
+
+class PageContainedEventDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = PageContainedEvent.objects.all()
+    serializer_class = PageContainedEventSerializer    
+
+
+class PageContainedProjectDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = PageContainedProject.objects.all() 
+    serializer_class = PageContainedProjectSerializer       
 
 # /api/page-containers/<lookup>
 # /api/page-containers/<slug:slug>/contained_jumbotrons/<int:>

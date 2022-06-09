@@ -4,14 +4,15 @@
     <form class="formBody" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
             <mat-label>Username</mat-label>
-            <input type="text" formControlName="username" matInput />
-              <mat-error *ngIf="f.username.invalid">{{getErrorMessage("username")}}</mat-error>
+            <input type="email" formControlName="email" matInput />
+              <mat-error *ngIf="f.email.invalid">{{getErrorMessage("email")}}</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Password</mat-label>
             <input type="password" formControlName="password" matInput />
               <mat-error *ngIf="f.password.invalid">{{getErrorMessage("password")}}</mat-error>
         </mat-form-field>
+        <h1 id="error-alert"  *ngIf="isInvalid">Username or Password is invalid.</h1>
             <button mat-raised-button [disabled]="loading">
                 Login
             </button>

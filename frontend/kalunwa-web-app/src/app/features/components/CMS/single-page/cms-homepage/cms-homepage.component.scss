@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
     padding: 5px 30px;
-    background-color: #628A3A;
+    background-color: #3D512C;
     color: #fafafa;
     align-items: center;
     .mat-icon{
@@ -34,13 +34,13 @@
         button{
             border-radius: 10px;
             background-color: #fafafa;
-            color: #7bad49;
-            box-shadow: 5px 5px #7bad49;
+            color: #536B3C;
+            box-shadow: 5px 5px #536B3C;
             font-family: monserrat;
             padding: 8px;
             font-size: 15px;
             &:hover{
-                background-color: #a9cf6b;
+                background-color: #5C7437d2;
                 color: #fafafa;
             }
         }
@@ -54,7 +54,7 @@
         height:fit-content;
         margin-left: 20vw;
         .header{
-            background-color: #7bad49;
+            background-color: #536B3C;
             border-radius: 10px 10px 0 0;
             color: #fafafa;
             margin-bottom: 8px;
@@ -79,22 +79,22 @@
                 justify-content: center;
                 p{
                     font-size: 15px;
-                    color: #628A3A;
+                    color: #536B3C;
                     margin: 0;
                 }
                 select{
                     width: auto;
                     margin: 0 15px;
                     padding: 8px 10px;
-                    border: 1px solid #628A3A;
+                    border: 1px solid #536B3C;
                     border-radius: 10px;
                     font-family: monserrat;
                     font-size: 13px;
-                    color:#628A3A;
+                    color:#536B3C;
                     option{
                         box-shadow: none;
                         &:focus{
-                            background-color: #7bad49;
+                            background-color: #5C7437d2;
                             color: #fafafa;
                             border: none;
                         }
@@ -105,7 +105,7 @@
                     }
                 }
                 button{
-                    color: #628A3A;
+                    color: #536B3C;
                 }
                 
             }
@@ -116,17 +116,17 @@
     }
     .details{
         background-color:#fafafa;
-        color: #7bad49;
+        color: #536B3C;
         justify-content: center;
         align-items: center;
         border-radius: 10px;
         padding: 10px;
         text-align: center;
         height: max-content;
-        margin-left: 20%;
+        margin-left: 15%;
         hr{
             border: none;
-            background-color: #7bad49;
+            background-color: #536B3C;
             height: 1px;
             width: 50%;
         }

@@ -25,7 +25,7 @@
                 align-items: center;
                 justify-content: center;
                 margin-right: 20px;
-                background-color: #7bad49;
+                background-color: #536B3C;
 
                 .mat-icon{
                     font-size: 37px;
@@ -55,11 +55,11 @@
         }
 
         .card{
-            box-shadow: 5px 5px #7bad49;
+            box-shadow: 5px 5px #536B3C;
             padding: 20px;
             &:hover{
                 transition: all 0.5s ease;
-                background-color: #a9cf6b;
+                background-color: #5c7437d2;
                 color: #fafafa;
                 cursor: pointer;
             }
@@ -84,7 +84,7 @@
                     }
                     &:hover{
                         transition: all 0.5s ease;
-                        background-color: #a9cf6b;
+                        background-color: #5c7437d2;
                         color: #fafafa;
                         cursor: pointer;
                     }
@@ -128,7 +128,7 @@
                 }
             }
             .table-header{
-                background-color: #7bad49;
+                background-color: #536B3C;
                 height:60px;
                 th{
                     font-size: 18px;
@@ -149,7 +149,7 @@
             .table-content{
                 color: #233620;
                 &:hover{
-                    background-color: #a9cf6b;
+                    background-color: #5c7437d2;
                     color: #fafafa;
                 }
             }

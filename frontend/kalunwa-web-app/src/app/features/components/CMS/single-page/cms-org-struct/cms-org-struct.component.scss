@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
     padding: 5px 30px;
-    background-color: #628A3A;
+    background-color: #3D512C;
     color: #fafafa;
     align-items: center;
     .mat-icon{
@@ -37,16 +37,16 @@
             border-radius: 10px;
             background-color: #fafafa;
             text-align: center;
-            box-shadow: 5px 5px #7bad49;
+            box-shadow: 5px 5px #536B3C;
             padding: 8px;
             font-family: monserrat;
             font-size: 15px;
             width: 150px;
             height: 100px;
-            color:#628A3A;
+            color:#536B3C;
             &:hover{
                 transition: all 0.3s ease;
-                background-color: #a9cf6b;
+                background-color: #5C7437d2;
                 color: #fafafa;
                 cursor: pointer;
             }
@@ -61,7 +61,7 @@
         max-height: 70vh;
         width: auto;
         .header{
-            background-color: #7bad49;
+            background-color: #536B3C;
             width: 100%;
             padding: 0px;
             border-radius: 10px 10px 0 0;
@@ -132,7 +132,7 @@
                         height: auto;
                         width: auto;
                         &:hover{
-                            color: #7bad49;
+                            color: #5C7437d2;
                             cursor: pointer;
                         }
                     }
@@ -149,10 +149,10 @@
                 border-radius: 10px;
             }
             &::-webkit-scrollbar-thumb {
-                background: #7bad49a4;
+                background: #5C7437d2;
                 border-radius: 10px;
                 &:hover {
-                    background: #7bad49;
+                    background: #536B3C;
                 }
             }
         }

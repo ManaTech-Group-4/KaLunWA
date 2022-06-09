@@ -18,12 +18,12 @@
         width: 250px;
         height: max-content;
         font-family: monserrat;
-        box-shadow: 5px 5px #7bad49;
+        box-shadow: 5px 5px #536B3C;
         hr{
             height: 2px;
             width: 50%;
             margin: 20px 0;
-            background-color:#7bad49;
+            background-color:#536B3C;
             border: none;
         }
         img{
@@ -63,7 +63,7 @@
             }
             thead{
                 .table-header{
-                    background-color: #7bad49;
+                    background-color: #536B3C;
                     th{
                         button{
                             margin-left: 75px;
@@ -98,13 +98,17 @@
                     }
                     .mat-icon{
                         margin: 0 5px;
+                        color: #3D512C;
                         &:hover{
                             cursor: pointer;
                         }
                     }
                     &:hover{
-                        background-color: #a9cf6b;
+                        background-color: #5C7437d2;
                         color: #fafafa;
+                        .mat-icon{
+                            color: #fafafa;
+                        }
                     }
                 }
             }

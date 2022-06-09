@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr  class="table-content" *ngFor="let item of admin_list" (click)="displayInfo(item)">
+                <tr  class="table-content" *ngFor="let item of admin_list | slice:currentPage:lastPage" (click)="displayInfo(item)">
                     <td>{{item.id}}</td>
                     <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
                     <td>{{item.date_added}}</td>
@@ -35,6 +35,7 @@
                 </tr>
             </tbody>
         </table>
+        <app-app-pagination *ngIf="admin_list && admin_list.length >= 1" [totalRecords]="admin_list.length" [recordsPerPage]="6" (onPageChange)="updateDisplay($event)"></app-app-pagination>
     </div>
 
 </div>

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
@@ -9,7 +10,8 @@ from rest_framework.permissions import(
 ) 
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
-    ListAPIView
+    ListAPIView,
+    RetrieveUpdateAPIView,
 )
 from .permissions import (
     AuthenticatedAndReadOnly,
@@ -18,9 +20,13 @@ from .permissions import (
 )
 from .serializers import (
     UserSerializer, 
-    CustomTokenObtainPairSerializer
+    CustomTokenObtainPairSerializer,
+    UserChangePasswordSerializer,
 )
 from .models import User
+from kalunwa.profiles.models import Profile
+from kalunwa.profiles.serializers import ProfileSerializer
+from rest_framework.response import Response
 
 
 class CustomObtainTokenPairView(TokenObtainPairView):
@@ -45,7 +51,7 @@ class UserCreateView(APIView):
     def post(self, request, format='json'):
         """
         create signal to create a profile if user creation is successful 
-        (if admin profile needs to be created)
+        (if admin profile needs to be created) -> done
         """
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -93,4 +99,32 @@ class BlacklistTokenUpdateView(APIView):
             # # tell client to reset the view (back to login page)
             return Response(status=status.HTTP_205_RESET_CONTENT) 
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=e.__cause__,status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileDetailView(RetrieveUpdateAPIView): 
+    """
+    Access profile using user ID.
+    """
+    # permission -> only can update if owner of profile
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+    def get_object(self, **kwargs):
+        user_id = self.kwargs.pop('pk', None)
+        profile = get_object_or_404(Profile, user__pk=user_id)
+        return profile
+
+
+class UserChangePasswordView(APIView):
+    def get_object(self, pk):
+        return get_object_or_404(User, pk=pk)
+
+    def put(self, request, pk):
+        user = self.get_object(pk)
+        serializer = UserChangePasswordSerializer(user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data="Password change successful.", status=status.HTTP_200_OK)
+        return Response(data=serializer.errors,status=status.HTTP_400_BAD_REQUEST)

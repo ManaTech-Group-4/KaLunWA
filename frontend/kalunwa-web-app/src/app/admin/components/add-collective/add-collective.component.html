@@ -6,9 +6,9 @@
         <button mat-button type="button" routerLink="/admin/collective"><mat-icon>arrow_left</mat-icon></button>
         Collective Pages
       </span>
-      <span><button mat-raised-button *ngIf="isAdd; else update" type="submit">Save {{collectiveType | titlecase}}</button>
+      <span><button mat-raised-button *ngIf="isAdd; else update" type="submit" color="primary">Save {{collectiveType | titlecase}}</button>
             <ng-template #update><button mat-raised-button type="submit">Update {{collectiveType | titlecase}}</button></ng-template>
-        <button mat-button type="button"><mat-icon class="delete">delete_forever</mat-icon></button></span>
+        <button mat-button type="button"><mat-icon class="delete">delete</mat-icon></button></span>
     </div>
     <div class="body">
       <h1 *ngIf="isAdd; else edit">New {{collectiveType | titlecase}}</h1>

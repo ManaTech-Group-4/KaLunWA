@@ -38,36 +38,9 @@ class EventViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
     permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_fields = ['is_featured']
-    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # def create(self, request):
-    #     serializer = self.serializer_class(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     else: 
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # def update(self,request, pk):
-    #     try:
-    #         serializer_instance = self.queryset.get(id=pk)
-    #     except Event.DoesNotExist:
-    #         raise NotFound('Event with this ID does not exist.')
-    #     data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-    #     if data.is_valid():
-    #         data.save()
-    #         return Response(data.data)
-    #     else:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-'''
-    def delete(self, request, pk):
-        news = get_object_or_404(Event, id=pk)
-        news.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
-        #returns http 204 no content, handle redirect or frontend?
-'''
+
 class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
     queryset = Project.objects.all()
@@ -75,30 +48,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
     filterset_fields = ['is_featured']
-    parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # def create(self, request):
-    #     print(request.data)
-    #     serializer = self.serializer_class(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     else: 
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def update(self,request, pk):
-    #     try:
-    #         serializer_instance = self.queryset.get(id=pk)
-    #     except Project.DoesNotExist:
-    #         raise NotFound('Project with this ID does not exist.')
-    #     data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-    #     if data.is_valid():
-    #         data.save()
-    #         return Response(data.data)
-    #     else:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class NewsViewSet(viewsets.ModelViewSet):
@@ -106,30 +57,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except News.DoesNotExist:
-            raise NotFound('News with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):      
@@ -138,26 +66,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     filter_backends = [QueryLimitBackend]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except Announcement.DoesNotExist:
-            raise NotFound('Announcement with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class JumbotronViewSet(viewsets.ModelViewSet):
@@ -175,27 +83,6 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     #position only accepts KEY from choices enums eg. LDR
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except OrgLeader.DoesNotExist:
-            raise NotFound('Leader with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
     #delete function default in viewsets
 
@@ -203,92 +90,29 @@ class CabinOfficerViewSet(viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
     queryset = CabinOfficer.objects.all()
     filter_backends = [CampFilter, CabinOfficerCategoryFilter]    
-    parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     #position only accepts KEY from choices enums eg. DIR
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except CabinOfficer.DoesNotExist:
-            raise NotFound('Leader with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class CommissionerViewSet(viewsets.ModelViewSet):
     serializer_class = CommissionerSerializer
     queryset = Commissioner.objects.all()
     filter_backends = [CommissionerCategoryFilter]
-    parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     #position only accepts KEY from choices enums eg. CHF cat = GAE
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except Commissioner.DoesNotExist:
-            raise NotFound('Leader with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class CampLeaderViewSet(viewsets.ModelViewSet): 
     serializer_class = CampLeaderSerializer
     queryset = CampLeader.objects.all()
     filter_backends = [CampFilter, CampLeaderPositionFilter]
-    parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]               
 
     #position only accepts KEY from choices enums eg. DIR
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except CampLeader.DoesNotExist:
-            raise NotFound('Leader with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class CampPageViewSet(viewsets.ModelViewSet):
     model = CampPage
@@ -307,27 +131,6 @@ class DemographicsViewSet(viewsets.ModelViewSet):
     def total_members(self, request):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
 
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except Demographics.DoesNotExist:
-            raise NotFound('Municipality/City with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
-    
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ContributorViewset(viewsets.ModelViewSet):

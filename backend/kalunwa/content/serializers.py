@@ -225,7 +225,19 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
         image_id = validated_data.pop('image')
         project_image = get_object_or_404(Image, pk=image_id)
         instance.image = project_image
-        
+        camp = validated_data.pop('camp')
+        camp = get_value_by_label(camp, CampEnum)
+        instance.camp = camp
+
+        start_date = validated_data.pop('start_date')
+        instance.start_date = iso_to_datetime(start_date)
+        end_date = validated_data.pop('end_date')        
+        instance.end_date = iso_to_datetime(end_date)
+        # update the rest of the attributes
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()        
         return instance
 
 class NewsSerializer(FlexFieldsModelSerializer):
@@ -251,13 +263,22 @@ class NewsSerializer(FlexFieldsModelSerializer):
     def create(self, validated_data):
         image_id = validated_data.pop('image')
         news_image = get_object_or_404(Image, pk=image_id)
-        return  News.objects.create(image=news_image,**validated_data)
+
+        return News.objects.create(
+            image=news_image,            
+            **validated_data
+            )
 
     def update(self, instance, validated_data):
         image_id = validated_data.pop('image')
         news_image = get_object_or_404(Image, pk=image_id)
         instance.image = news_image
         
+        # update the rest of the attributes
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()          
         return instance
 
 class AnnouncementSerializer(FlexFieldsModelSerializer):
@@ -273,10 +294,18 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
         )
 
     def create(self, validated_data):
-        print('Create method called..')
-        return  Announcement.objects.create(**validated_data)
+        #no image to validate
+        return  Announcement.objects.create(          
+            **validated_data
+            )
     
-    #no need to override update since no image needed for this to validate
+    def update(self, instance, validated_data):
+        
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()          
+        return instance
 
 # will have separate serializer when posting 
     # name cannot be posted given the use of a get method
@@ -369,8 +398,17 @@ class DemographicsSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        print('Create method called..')
-        return  Demographics.objects.create(**validated_data)
+        return  Demographics.objects.create(          
+            **validated_data
+            )
+    
+    def update(self, instance, validated_data):
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()          
+        return instance
+
 
 # will have separate serializer when posting 
     # position & category cannot be posted given the use of a get method

@@ -5,7 +5,7 @@ div{
   color: #fafafa;
   height: calc(100vh - 88px);
   .table-head{
-      background-color: #7bad49;
+      background-color: #536B3C;
       display:flex;
       flex-direction: row;
       justify-content: space-between;
@@ -19,7 +19,7 @@ div{
       border-collapse: collapse;
       overflow:hidden;
       tr.table-header{
-          background-color: #7bad49;
+          background-color: #536B3C;
           width:100%;
           text-align: left;
           padding: 15px;
@@ -34,13 +34,13 @@ div{
               font-size:15px;
               margin:0;
             }
-            .mat-raised-button{
+            /*.mat-raised-button{
               background:#adda81;
               height:40px;
               padding:0px 7px;
               background:#fafafa;
               color:#7bad49;
-            }
+            }*/
             .mat-button{
               min-width: 40px !important;
               width:40px;
@@ -65,7 +65,7 @@ div{
         background: #c1c1c1;
         .mat-chip-list{
           .mat-chip{
-            border:2px solid black;
+            border:2px solid #3D512C;
             &:hover{
               cursor:pointer;
             }
@@ -96,7 +96,7 @@ div{
       .table-content{
           color: #233620;
           &:hover{
-              background-color: #a9cf6b;
+              background-color: #5C7437d2;
               color: #fafafa;
           }
           .page_name{

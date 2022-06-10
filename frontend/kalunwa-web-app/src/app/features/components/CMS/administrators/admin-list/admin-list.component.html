@@ -16,7 +16,7 @@
             <thead>
                 <tr class="table-header">
                     <th colspan="5">Administrators
-                        <button mat-raised-button color="primary"><mat-icon>add</mat-icon> Add Admin</button>
+                        <button mat-raised-button color="primary" routerLink="/admin/add-admin"><mat-icon>add</mat-icon> Add Admin</button>
                     </th>
                 </tr>
                 <tr class="col-header">
@@ -31,7 +31,7 @@
                     <td>{{item.id}}</td>
                     <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
                     <td>{{item.date_added}}</td>
-                    <td><mat-icon>edit</mat-icon> <mat-icon>delete</mat-icon></td>
+                    <td><mat-icon >edit</mat-icon> <mat-icon>delete</mat-icon></td>
                 </tr>
             </tbody>
         </table>

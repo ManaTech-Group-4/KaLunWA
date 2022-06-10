@@ -40,7 +40,7 @@ export class AdminListComponent implements OnInit {
       date_added: "09/12/21",
     },
     {
-      id:1,
+      id:4,
       picture: "assets/images/person-icon.jpg",
       username: "admin_1",
       first_name: "Jose",
@@ -50,7 +50,7 @@ export class AdminListComponent implements OnInit {
       date_added: "12/30/21",
     },
     {
-      id:2,
+      id:5,
       picture: "assets/images/person-icon.jpg",
       username: "admin_2",
       first_name: "Juan",
@@ -60,7 +60,7 @@ export class AdminListComponent implements OnInit {
       date_added: "04/05/21",
     },
     {
-      id:3,
+      id:6,
       picture: "assets/images/person-icon.jpg",
       username: "admin_3",
       first_name: "Joferlyn",
@@ -70,7 +70,7 @@ export class AdminListComponent implements OnInit {
       date_added: "09/12/21",
     },
     {
-      id:1,
+      id:7,
       picture: "assets/images/person-icon.jpg",
       username: "admin_1",
       first_name: "Jose",
@@ -80,7 +80,7 @@ export class AdminListComponent implements OnInit {
       date_added: "12/30/21",
     },
     {
-      id:2,
+      id:8,
       picture: "assets/images/person-icon.jpg",
       username: "admin_2",
       first_name: "Juan",
@@ -90,7 +90,7 @@ export class AdminListComponent implements OnInit {
       date_added: "04/05/21",
     },
     {
-      id:3,
+      id:9,
       picture: "assets/images/person-icon.jpg",
       username: "admin_3",
       first_name: "Joferlyn",
@@ -100,7 +100,7 @@ export class AdminListComponent implements OnInit {
       date_added: "09/12/21",
     },
     {
-      id:1,
+      id:10,
       picture: "assets/images/person-icon.jpg",
       username: "admin_1",
       first_name: "Jose",
@@ -110,7 +110,7 @@ export class AdminListComponent implements OnInit {
       date_added: "12/30/21",
     },
   ]
-  
+
   selectedAdmin?:AdminListModel = this.admin_list[0];
 
   constructor(private ref: ChangeDetectorRef) { }

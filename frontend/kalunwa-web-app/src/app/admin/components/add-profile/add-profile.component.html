@@ -1,0 +1,70 @@
+<div class="container">
+  <form [formGroup]="profile" (ngSubmit)="onSubmit()">
+    <div class="header">
+      <span>
+        <button mat-button type="button" routerLink="/admin/admin-list"><mat-icon>arrow_left</mat-icon></button>
+        Create New Admin
+      </span>
+      <span><button mat-raised-button type="submit" color="primary">Save Admin</button>
+        <button mat-button type="button"><mat-icon class="delete">delete</mat-icon></button></span>
+    </div>
+    <div class="body">
+      <span *ngIf="loading" class="loadSpinner"><mat-spinner></mat-spinner></span>
+      <h1 id="error-alert"  *ngIf="submitted">Admin creation unsuccessful.</h1>
+      <div class="form-row">
+          <mat-label style="margin:10px">Profile Picture</mat-label>
+          <div class="profile-container">
+            <img src="{{profileImage}}" />
+            <input type="text" class="file-input" id="fileImg"
+            accept="image/*" #fileUpload formControlName="image"/>
+
+            <div class="file-upload">
+
+              {{filename || "No Picture Provided"}}
+
+              <button mat-icon-button class="upload-btn"
+              (click)="fileUpload.value = '';fileUpload.click()" type="button">
+              <mat-icon>attach_file</mat-icon>
+              </button>
+            </div>
+          </div>
+
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill" >
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstname"/>
+          <mat-error *ngIf="f.firstname.hasError('required')">First Name is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill" >
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastname"/>
+          <mat-error *ngIf="f.lastname.hasError('required')">Last Name is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill" >
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email"/>
+          <mat-error *ngIf="f.email.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password"  formControlName="password"/>
+          <mat-error *ngIf="f.repassword.invalid">{{getErrorPassMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password"  formControlName="repassword"/>
+          <mat-error *ngIf="f.repassword.invalid">{{getErrorRepassMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>

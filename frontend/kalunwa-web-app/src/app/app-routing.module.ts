@@ -30,6 +30,7 @@ import { NewsletterComponent } from './features/components/CMS/newsletter/newsle
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp/cms-camp.component';
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
+import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -66,6 +67,7 @@ export const routes: Routes = [
       {path: "audit", component:AuditLogsComponent},
       {path: "cms-camp/:camp-type", component:CmsCampComponent},
       {path: "admin-list", component: AdminListComponent},
+      {path: "add-admin", component: AddProfileComponent},
     ]
   },
   {path: "**", component: PageNotFoundComponent}];
@@ -101,4 +103,5 @@ export const routeComponents = [HomepageComponent,
                                 CmsCampComponent,
                                 AdminListComponent,
                                 CmsHomepageComponent,
+                                AddProfileComponent
                               ];

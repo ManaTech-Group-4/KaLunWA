@@ -50,6 +50,7 @@
             width: 100%;
             border-radius: 10px;
             background-color: #fafafa;
+            border-collapse: collapse;
             tr{
                 height: 50px;
                 td{
@@ -72,7 +73,7 @@
                                 font-size: 10px;
                                 width: auto;
                                 height: auto;
-                            }     
+                            }
                         }
                         &:first-child{
                             border-radius:10px 10px 0 0;
@@ -82,7 +83,7 @@
                 .col-header{
                     background-color: #abada7;
                     th{
-                        position: sticky; 
+                        position: sticky;
                         top: 0;
                         padding: 5px 10px;
                     }
@@ -115,5 +116,5 @@
         }
     }
 
-    
+
 }

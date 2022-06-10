@@ -297,7 +297,7 @@ class CampPageViewSet(viewsets.ModelViewSet):
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
     queryset = Demographics.objects.all()
-    #permission_classes = [IsAuthenticatedOrReadOnly]               
+    permission_classes = [IsAuthenticatedOrReadOnly]               
 
 
     @action(detail=False, url_path='total-members')

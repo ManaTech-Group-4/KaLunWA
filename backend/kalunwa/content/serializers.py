@@ -347,6 +347,10 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Demographics.objects.create(**validated_data)
+
 # will have separate serializer when posting 
     # position & category cannot be posted given the use of a get method
     # unless the to_internal value is changed
@@ -375,6 +379,7 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+
     def create(self, validated_data):
         print('Create method called..')
         return  Commissioner.objects.create(**validated_data)

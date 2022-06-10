@@ -297,10 +297,34 @@ class CampPageViewSet(viewsets.ModelViewSet):
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
     queryset = Demographics.objects.all()
+    #permission_classes = [IsAuthenticatedOrReadOnly]               
+
 
     @action(detail=False, url_path='total-members')
     def total_members(self, request):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
+
+    def create(self, request):
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self,request, pk):
+        try:
+            serializer_instance = self.queryset.get(id=pk)
+        except Demographics.DoesNotExist:
+            raise NotFound('Municipality/City with this ID does not exist.')
+        data = self.serializer_class(instance=serializer_instance, data=request.data)
+    
+        if data.is_valid():
+            data.save()
+            return Response(data.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ContributorViewset(viewsets.ModelViewSet):

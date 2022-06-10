@@ -54,6 +54,7 @@ class UserRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)    
     password = serializers.CharField(
         max_length=128,
         min_length=8,

@@ -1,5 +1,12 @@
-from .views import ProfileDetailView, ProfileListView
+from .views import (
+    ProfileListView, 
+    UserProfileDetailView, 
+    UpdateProfilePhotoView,
+)
 from django.urls import path
+
+
+
 
 urlpatterns = [
     path('profiles/', ProfileListView.as_view(), name='userprofile-list'),
@@ -13,7 +20,11 @@ urlpatterns = [
     # patch method should be used. 
 
     # id here is profile id
-    path('profiles/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),    
+    # path('profiles/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),    
+
+    path('users/<int:pk>/profile/', UserProfileDetailView.as_view(), name='user-profile-detail'),     
+    path('users/<int:pk>/profile/update-image/', UpdateProfilePhotoView.as_view(), name='update-profile-photo'),        
+    
     # change file upload
     # id here is user id 
 

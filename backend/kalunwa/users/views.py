@@ -15,6 +15,7 @@ from rest_framework.generics import (
 )
 from .permissions import (
     AuthenticatedAndReadOnly,
+    OwnersOnly,
     SuperUserOnly,
     SelfUserOnly
 )
@@ -24,8 +25,6 @@ from .serializers import (
     UserChangePasswordSerializer,
 )
 from .models import User
-from kalunwa.profiles.models import Profile
-from kalunwa.profiles.serializers import ProfileSerializer
 from rest_framework.response import Response
 
 
@@ -47,7 +46,7 @@ class UserCreateView(APIView):
     change permission here: either admin or superadmin
     """
 
-    permission_classes = [IsAuthenticated, SuperUserOnly] # IsAuthenticated  -> if 2 versions aren't implemented
+    permission_classes = [SuperUserOnly] 
     def post(self, request, format='json'):
         """
         create signal to create a profile if user creation is successful 
@@ -73,11 +72,14 @@ class UserListView(ListAPIView):
 
 class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
-    SuperUsers and Owners can edit and delete user information. 
+    SuperUsers and users account owners themselves can edit and delete user information. 
     Authenticated Users would only be permitted to view user information. 
     """
-    permission_classes = [SuperUserOnly | SelfUserOnly
-                         | AuthenticatedAndReadOnly] 
+    permission_classes = [
+        SuperUserOnly | # SuperUsers can edit and delete user information.
+        SelfUserOnly | # users account owners themselves can edit and delete their own user information.
+        AuthenticatedAndReadOnly # authenticated users can only view
+        ] 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -88,7 +90,6 @@ class BlacklistTokenUpdateView(APIView):
     # user presses logout; fires api to this view, process the refresh token and
     put it in the blacklist db table 
     """
-    authentication_classes = ()
 
     def post(self, request):
         try:
@@ -100,20 +101,6 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT) 
         except Exception as e:
             return Response(data=e.__cause__,status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserProfileDetailView(RetrieveUpdateAPIView): 
-    """
-    Access profile using user ID.
-    """
-    # permission -> only can update if owner of profile
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-    def get_object(self, **kwargs):
-        user_id = self.kwargs.pop('pk', None)
-        profile = get_object_or_404(Profile, user__pk=user_id)
-        return profile
 
 
 class UserChangePasswordView(APIView):

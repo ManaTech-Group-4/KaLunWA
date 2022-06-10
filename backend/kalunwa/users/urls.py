@@ -5,9 +5,7 @@ from .views import (
     UserCreateView,
     UserRetrieveUpdateDestroyView,     
     UserListView,
-    UserProfileDetailView
 )
-from kalunwa.profiles.views import ProfileDetailView
 
 
 urlpatterns = [
@@ -21,5 +19,4 @@ urlpatterns = [
     # returns about the same view as `profiles/<profile:pk>/`, though it's difference
     # is that this endpoint shows their relationship to a user, making it easier
     # to access when given the user id upon the admin's login
-    path('<int:pk>/profile/', UserProfileDetailView.as_view(), name='user-profile-detail'), 
 ]

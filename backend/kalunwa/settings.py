@@ -168,7 +168,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
 
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # minutes=15
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15), # minutes=15
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
     # Set these to true if you want new refresh tokens when submitting one in 

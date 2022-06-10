@@ -1,14 +1,15 @@
+from pickle import TRUE
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
-from .models import Contributor, Image, Jumbotron, Tag, Announcement, Event, Project, News 
+from .models import CampEnum, Contributor, Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
-from kalunwa.core.utils import to_formal_mdy
-
+from kalunwa.core.utils import iso_to_datetime
+from django.shortcuts import get_object_or_404
 
 class StatusEnum(Enum):
     PAST = 'Past'
@@ -150,10 +151,31 @@ class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
 
     def get_status(self, obj)->str:
         return self.determine_status(obj)
+    def create(self, validated_data):
+        print('Create method called..')
+        image_id = validated_data.pop('image')
+        event_image = get_object_or_404(Image, pk=image_id)
+
+        start_date = validated_data.pop('start_date')
+        end_date = validated_data.pop('end_date')
+        return Event.objects.create(
+            image=event_image,
+            start_date=iso_to_datetime(start_date),
+            end_date=iso_to_datetime(end_date),
+            **validated_data
+            )
+
+    def update(self, instance, validated_data):
+        print('Update method called..')
+        image_id = validated_data.pop('image')
+        event_image = get_object_or_404(Image, pk=image_id)
+        instance.image = event_image
+
+        return instance
            
 
 class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
-
+    
     class Meta(OccurenceSerializer.Meta):
         model = Project
 
@@ -161,7 +183,27 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
         if not obj.end_date: # if end_date does not exist
             return StatusEnum.ONGOING.value
         return self.determine_status(obj)       
+    
+    def create(self, validated_data):
+        print('Create method called..')
+        image_id = validated_data.pop('image')
+        event_image = get_object_or_404(Image, pk=image_id)
 
+        start_date = validated_data.pop('start_date')
+        end_date = validated_data.pop('end_date')
+        return Project.objects.create(
+            image=event_image,
+            start_date=iso_to_datetime(start_date),
+            end_date=iso_to_datetime(end_date),
+            **validated_data
+            )
+    def update(self, instance, validated_data):
+        print('Update method called..')
+        image_id = validated_data.pop('image')
+        project_image = get_object_or_404(Image, pk=image_id)
+        instance.image = project_image
+        
+        return instance
 
 class NewsSerializer(FlexFieldsModelSerializer):
     class Meta:
@@ -183,38 +225,37 @@ class NewsSerializer(FlexFieldsModelSerializer):
             ),
         }        
 
-# prep for about us 
-# will have separate serializer when posting 
-    # position, camp, and name fields cannot be posted given the use of get_methods
-    # unless the to_internal value is changed
-class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
-    position = serializers.CharField(source='get_position')
-    camp = serializers.CharField(source='get_camp')   
-    name = serializers.CharField(source='get_fullname')
+    def create(self, validated_data):
+        print('Create method called..')
+        image_id = validated_data.pop('image')
+        news_image = get_object_or_404(Image, pk=image_id)
+        return  News.objects.create(image=news_image,**validated_data)
 
+    def update(self, instance, validated_data):
+        print('Update method called..')
+        image_id = validated_data.pop('image')
+        news_image = get_object_or_404(Image, pk=image_id)
+        instance.image = news_image
+        
+        return instance
+
+class AnnouncementSerializer(FlexFieldsModelSerializer):
     class Meta:
-        model = CampLeader
+        model = Announcement
         fields = (
             'id',
-            'camp',
-            'position',
-            'name',
-            'first_name',
-            'last_name',
-            'quote',
-            'image',
-            'motto', 
+            'title',
+            'meta_description',
+            'description',
             'created_at',
             'updated_at',
-        )    
+        )
 
-        expandable_fields = {
-            'image' : ('kalunwa.content.ImageSerializer', 
-                {
-                 'fields':['id','image']
-                }
-            ),
-        }           
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Announcement.objects.create(**validated_data)
+    
+    #no need to override update since no image needed for this to validate
 
 # will have separate serializer when posting 
     # name cannot be posted given the use of a get method
@@ -268,37 +309,6 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             return None
 
 
-# will have separate serializer when posting 
-    # position cannot be posted given the use of a get method
-    # unless the to_internal value is changed
-class OrgLeaderSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position')
-
-    class Meta:
-        model = OrgLeader
-        fields = (
-            'id',
-            'position',
-            'first_name',
-            'last_name',
-            'quote',
-            'image',
-            'created_at',
-            'updated_at',
-        )
-
-        expandable_fields = {
-            'image' : ('kalunwa.content.ImageSerializer', 
-                {
-                 'fields':['id','image']
-                }
-            ),
-        } 
-
-
-# will have separate serializer when posting 
-    # category cannot be posted given the use of a get method
-    # unless the to_internal value is changed
 class ContributorSerializer(FlexFieldsModelSerializer):
     category = serializers.CharField(source='get_category') 
 
@@ -324,18 +334,6 @@ class ContributorSerializer(FlexFieldsModelSerializer):
 #  serializes all data fields
 
 
-class AnnouncementSerializer(FlexFieldsModelSerializer):
-    class Meta:
-        model = Announcement
-        fields = (
-            'id',
-            'title',
-            'meta_description',
-            'description',
-            'created_at',
-            'updated_at',
-        )
-
 
 class DemographicsSerializer(serializers.ModelSerializer):
 
@@ -353,8 +351,8 @@ class DemographicsSerializer(serializers.ModelSerializer):
     # position & category cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CommissionerSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position')
-    category = serializers.CharField(source='get_category')
+    #position = serializers.CharField(source='get_position')
+    #category = serializers.CharField(source='get_category')
 
     class Meta:
         model = Commissioner
@@ -377,15 +375,18 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+    def create(self, validated_data):
+        print('Create method called..')
+        return  Commissioner.objects.create(**validated_data)
 
 
 # will have separate serializer when posting 
     # position & category cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position')
-    camp = serializers.CharField(source='get_camp')
-    category = serializers.CharField(source='get_category')
+    #position = serializers.CharField(source='get_position')
+    #camp = serializers.CharField(source='get_camp')
+    #category = serializers.CharField(source='get_category')
 
     class Meta:
         model = CabinOfficer
@@ -409,4 +410,82 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+    
+    def create(self, validated_data):
+        print('Create method called..')
+        return  CabinOfficer.objects.create(**validated_data)
 
+# prep for about us 
+class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
+    #position = serializers.CharField(source='get_position')
+    #camp = serializers.CharField(source='get_camp')   
+    name = serializers.CharField(source='get_fullname', read_only=TRUE)
+
+    class Meta:
+        model = CampLeader
+        fields = (
+            'id',
+            'camp',
+            'position',
+            'name',
+            'first_name',
+            'last_name',
+            'quote',
+            'image',
+            'motto', 
+            'created_at',
+            'updated_at',
+        )    
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
+    
+    def create(self, validated_data):
+        print('Create method called..')
+        return  CampLeader.objects.create(**validated_data)
+    #no need to override update since image only needs ID in string
+    #to take care converting KEY to Label 
+
+
+class OrgLeaderSerializer(FlexFieldsModelSerializer):
+    position = serializers.CharField(source='get_position')
+
+    class Meta:
+        model = OrgLeader
+        fields = (
+            'id',
+            'position',
+            'first_name',
+            'last_name',
+            'quote',
+            'image',
+            'created_at',
+            'updated_at',
+        )
+
+        expandable_fields = {
+            'image' : ('kalunwa.content.ImageSerializer', 
+                {
+                 'fields':['id','image']
+                }
+            ),
+        } 
+
+    def create(self, validated_data):
+        print('Create method called..')
+        return  OrgLeader.objects.create(**validated_data)
+    #no need to override update since image only needs ID in string
+'''
+    def update(self, instance, validated_data):
+        print('Update method called..')
+        image_id = validated_data.pop('image')
+        orgleader_image = get_object_or_404(Image, pk=image_id)
+        instance.image = orgleader_image
+        
+        return instance
+'''

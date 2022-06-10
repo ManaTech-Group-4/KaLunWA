@@ -1,10 +1,7 @@
 from datetime import datetime
-from django.utils.text import slugify
+from rest_framework import fields
 
-def to_formal_mdy(date:datetime)->str:
-        if not date:
-            return None
-        return f'{date.strftime("%B")} {date.day}, {date.year}' 
+from django.utils.text import slugify
 
 def get_value_by_label(label:str, Enum): 
 	if not label in Enum.labels:
@@ -15,6 +12,13 @@ def get_value_by_label(label:str, Enum):
 			value = enum_obj.value
 	return value
 
+def iso_to_datetime(iso_date:str) -> datetime:
+	'''
+	takes an iso string and converts it to datetime object
+	'''
+
+	datetimefield = fields.DateTimeField()
+	return datetimefield.to_internal_value(iso_date)
 def unique_slugify(instance, string):
 	model = instance.__class__
 	slug = slugify(string)

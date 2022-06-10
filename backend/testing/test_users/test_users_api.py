@@ -15,65 +15,12 @@ test:
 # test refresh token
 # test user delete 
 # test user logout
-import json
 from django.urls import reverse
-from rest_framework import serializers
-from unittest import mock
-from rest_framework.test import APITestCase
 from rest_framework import status
 from kalunwa.users.models import (
     User,
 )
-
-
-class BaseUserTestCase(APITestCase):
-    user_credentials = {
-        'email':'test@test.com',
-        'password':'test'        
-    }
-    admin_credentials = {
-        'email':'admin@test.com',
-        'password':'admin'
-    }    
-
-    def create_user(self):
-        user = User.objects.create_user(
-            email=self.user_credentials['email'],
-            password=self.user_credentials['password']
-        )
-        return user
-
-    def create_superuser(self):
-        User.objects.create_superuser(
-            email=self.admin_credentials['email'],
-            password=self.admin_credentials['password']
-        )
-
-    def get_superuser_tokens(self):
-        self.create_superuser()
-        url = reverse('token-obtain-pair')
-        response = self.client.post(url, self.admin_credentials)   
-        return response.data  
-
-    def get_user_tokens(self):
-        self.create_user()
-        url = reverse('token-obtain-pair')
-        response = self.client.post(url, self.user_credentials)   
-        return response.data     
-
-class BaseWithClientCredentialsTestCase(BaseUserTestCase):
-    def load_user_client_credentials(self, token=None):
-        if not token:
-            tokens = self.get_user_tokens()
-            token = tokens['access']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
-
-    def load_superuser_client_credentials(self, token=None):
-        if not token:
-            tokens = self.get_superuser_tokens()
-            token = tokens['access']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)        
-
+from testing.base_test_cases import BaseUserTestCase, BaseWithClientCredentialsTestCase
 
 class UserLoginTestCase(BaseUserTestCase):
 
@@ -203,7 +150,6 @@ class VerifyTokenTestCase(BaseUserTestCase):
         }         
         response = self.client.post(url, token)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
     def test_verify_on_blacklisted_refresh_token(self):
         """
         When blacklisting a refresh token, it does not force expire it. So it 
@@ -357,7 +303,6 @@ class UserDeleteTestCase(BaseWithClientCredentialsTestCase):
         url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)    
-
     def test_unauthenticated_client_attempts_delete(self):
         to_delete_user = self.create_to_delete_user()            
         url = reverse('user-detail', kwargs={"pk":to_delete_user.id})

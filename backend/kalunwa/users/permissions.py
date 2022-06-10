@@ -128,27 +128,3 @@ class AdminAuthorPermission(BasePermission):
 
 class SuperAdminAuthorPermission(BasePermission):
     pass
-
-# check the roles before doing an action?
-# using these because we can attach them to classes .. and are much cleaner
-
-# # is admin
-#     # has object permissions for:
-#     # - profile
-#         - edit, update
-#     # add, edit, update, delete:
-#         - events 
-#         - projects
-#         - news
-#         - announcements
-#         - jumbotrons
-#         - org_leaders
-#         - image
-#         - demographics
-#         - contributor 
-#     # edit, update
-#         - camppage 
-
-# # is superadmin
-#     # has add and delete permissions:
-#         - profile and user

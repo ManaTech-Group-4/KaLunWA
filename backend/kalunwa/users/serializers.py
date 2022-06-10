@@ -16,6 +16,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['first_name'] = user.first_name
         token['last_name'] = user.last_name
         token['is_superadmin'] = user.is_superuser
+        token['image'] = user.image.name
         return token
 
 
@@ -32,6 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
     image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)
     is_superadmin = serializers.BooleanField(source='is_superuser', read_only=True)
+    date_added = serializers.CharField(source="created_at")
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
     class Meta:
@@ -44,6 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'is_superadmin',
+            'date_added'
             ]
 
 

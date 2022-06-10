@@ -1,9 +1,28 @@
+from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import (AnnouncementViewSet, CabinOfficerViewSet, CampLeaderViewSet, 
-                CampPageViewSet, CommissionerViewSet, DemographicsViewSet, 
-                EventViewSet, ImageViewSet, JumbotronViewSet, NewsViewSet, 
-                OrgLeaderViewSet, ProjectViewSet, )
- 
+# from .views import (AnnouncementViewSet, CabinOfficerViewSet, CampLeaderViewSet, 
+#                 CampPageViewSet, CommissionerViewSet, DemographicsViewSet, 
+#                 EventViewSet, ImageViewSet, JumbotronViewSet, NewsViewSet, 
+#                 OrgLeaderViewSet, ProjectViewSet, )
+from .views import (
+    AnnouncementViewSet, 
+    CabinOfficerViewSet, 
+    CampLeaderViewSet,
+    CampPageViewSet, 
+    CommissionerViewSet, 
+    DemographicsViewSet, 
+    EventViewSet, 
+    ImageViewSet, 
+    JumbotronViewSet, 
+    NewsViewSet, 
+    OrgLeaderViewSet, 
+    ProjectViewSet, 
+
+    ## Gallery views
+    EventGalleryListCreateView,
+
+    
+)
 
 router = DefaultRouter()
 
@@ -21,3 +40,8 @@ router.register(r'commissioners', CommissionerViewSet, basename='commissioner')
 router.register(r'campleaders', CampLeaderViewSet, basename='campleader')
 router.register(r'cabinofficers', CabinOfficerViewSet, basename='cabinofficer')
 urlpatterns = router.urls
+
+urlpatterns += [
+    path('events/<int:pk>/gallery/', EventGalleryListCreateView.as_view(), name='event-gallery-list'),
+]
+

@@ -25,6 +25,10 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
+from kalunwa.core.views import MultipleFieldLookupORMixin
+from rest_framework.generics import (
+    ListCreateAPIView
+)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -326,6 +330,42 @@ class ImageViewSet(viewsets.ModelViewSet):
             return event.gallery.all()
         return super().get_queryset() 
 
+
+
+class EventGalleryListCreateView(ListCreateAPIView):
+    """
+    Allows the creation of an Image object directly to the related Event. 
+    Will be called when the user wants to upload a new image in the gallery.
+    """
+    serializer_class = ImageSerializer
+    lookup_fields = ['pk']
+
+    def get_event_object(self):
+        event_id = self.kwargs['pk']
+        print(event_id)
+        return get_object_or_404(Event, pk=event_id)
+
+    def get_queryset(self): # get list of images related to the event
+        event = self.get_event_object()
+        return event.gallery 
+
+    def perform_link_image_to_event(self, image:int):
+        """
+        automatically add image to the gallery of the event upon implementing.
+        """
+        event = self.get_event_object()
+        event.gallery.add(image)        
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        image = Image.objects.get(
+            id = serializer.data['id']    
+        )
+        self.perform_link_image_to_event(image)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class ImageUploadView(APIView): 

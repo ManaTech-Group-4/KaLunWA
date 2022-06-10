@@ -17,6 +17,7 @@ export class EventPageListComponent implements OnInit {
   activePage:number = 1;
   currentPage = 0;
   lastPage = 4;
+  height:number;
 
   detectIfChanges(){
     this.ref.detectChanges();
@@ -34,9 +35,6 @@ export class EventPageListComponent implements OnInit {
 
     this.ref.detectChanges();
     this.activePage = newPage;
-    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
-    window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
-    console.log(this.currentPage, this.lastPage);
   }
 
 

@@ -55,6 +55,15 @@ Jumbotron.objects.create(
     header_title = 'Home.',
     subtitle = "Sharing the warmth of family."
 )
+
+Jumbotron.objects.create(
+    image= Image.objects.create(
+        name = 'carousel image 5',
+        image = 'images/content/carousel4.jpg'
+    ),
+    header_title = 'Extra Jumbo.',
+    subtitle = "I am the 5th Jumbotron."
+)
 print('populated homepage jumbotrons')
 #-------------------------------------------------------------------------------
 # create sample featured events, projects

@@ -27,7 +27,7 @@
             margin-right: 15px;
         }
     }
-    
+
     .mat-divider{
         border-top-width: 2px;
         border-color: #fafafa;
@@ -68,6 +68,7 @@
     #logout{
         color: #fafafa;
         position: absolute;
+        cursor:pointer;
         bottom: 8px;
         left: 88%;
         transform: translate(-50%);

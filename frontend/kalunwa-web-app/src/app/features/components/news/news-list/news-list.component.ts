@@ -34,9 +34,6 @@ export class NewsListComponent implements OnInit {
 
     this.ref.detectChanges();
     this.activePage = newPage;
-    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
-    window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
-    console.log(this.currentPage, this.lastPage);
   }
 
   ngOnInit(): void {

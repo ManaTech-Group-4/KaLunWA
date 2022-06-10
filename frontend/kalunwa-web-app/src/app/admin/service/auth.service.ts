@@ -48,6 +48,7 @@ export class AuthService {
         localStorage.removeItem('refresh');
         localStorage.removeItem('access');
         localStorage.removeItem('expires_at');
+        console.log("logged out");
       })
     )
   }

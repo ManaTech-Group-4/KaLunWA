@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { SinglePageListComponent } from './single-page-list.component';
+import { CmsOrgStructComponent } from './cms-org-struct.component';
 
-describe('SinglePageListComponent', () => {
-  let component: SinglePageListComponent;
-  let fixture: ComponentFixture<SinglePageListComponent>;
+describe('CmsOrgStructComponent', () => {
+  let component: CmsOrgStructComponent;
+  let fixture: ComponentFixture<CmsOrgStructComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SinglePageListComponent ],
+      declarations: [ CmsOrgStructComponent ],
       imports:[HttpClientTestingModule]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SinglePageListComponent);
+    fixture = TestBed.createComponent(CmsOrgStructComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -46,9 +46,16 @@ import { SinglePageListComponent } from './features/components/CMS/single-page/s
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { CmsOrgStructComponent } from 'src/app/features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
+import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
+import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
+import { CmsCampComponent } from 'src/app/features/components/CMS/single-page/cms-camp/cms-camp.component';
+import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
+import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
+
 
 @NgModule({
   declarations: [
@@ -86,10 +93,16 @@ import { AddCollectiveComponent } from './admin/components/add-collective/add-co
     AdminHomeComponent,
     SinglePageListComponent,
     VisitorLandingComponent,
+    CmsOrgStructComponent,
     CmsHomepageComponent,
     AdminTemplateComponent,
     CollectivePageListComponent,
     AddCollectiveComponent,
+    NewsletterComponent,
+    AuditLogsComponent,
+    CmsCampComponent,
+    AdminListComponent,
+    AddProfileComponent,
   ],
   entryComponents:[
     MembersDialogComponent

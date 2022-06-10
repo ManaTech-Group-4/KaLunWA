@@ -27,14 +27,14 @@
                 </div>
             </span>
         </div>
-        <span class="card">
+        <span class="card" routerLink="/admin/newsletter">
             <div class="icon"><mat-icon>contact_mail</mat-icon></div>
             <div class="label">
                 <p>100</p>
                 <h5>Newsletter Subscribers</h5>
             </div>
         </span>
-        <span class="card">
+        <span class="card" routerLink="/admin/admin-list">
             <div class="icon"><mat-icon>supervisor_account</mat-icon></div>
             <div class="label">
                 <p>15</p>
@@ -62,7 +62,7 @@
                 <td>{{item.time}}</td>
             </tr>
             <tr class="footer">
-                <th colspan="5"><a routerLink="">View all audit logs</a></th>
+                <th colspan="5"><a routerLink="/admin/audit">View all audit logs</a></th>
             </tr>
         </table>
     </div>

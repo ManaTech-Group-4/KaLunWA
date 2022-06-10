@@ -25,9 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
     -> UserRetrieveUpdateDestroy 
     
     """
-    first_name = serializers.CharField(max_length=255, required=False)
-    last_name = serializers.CharField(max_length=255, required=False)
-    username = serializers.CharField(max_length=255, required=False)
+    first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    username = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
@@ -46,9 +46,9 @@ class UserRegisterSerializer(serializers.Serializer):
     """
      Use in UserCreateView
     """
-    first_name = serializers.CharField(max_length=255, required=False)
-    last_name = serializers.CharField(max_length=255, required=False)
-    username = serializers.CharField(max_length=255, required=False)
+    first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    username = serializers.CharField(max_length=255, required=False, allow_blank=True)
     password = serializers.CharField(
         max_length=128,
         min_length=8,

@@ -37,7 +37,6 @@ urlpatterns = [
             path('', include('kalunwa.content.urls')),
             path('', include('kalunwa.page_containers.urls')),                  
             path('users/', include('kalunwa.users.urls')),                
-            path('', include('kalunwa.profiles.urls')),
         ]
         )
     )

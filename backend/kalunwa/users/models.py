@@ -41,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel): # permission f
     email = models.EmailField(unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='images/profile-photos/', null=True, blank=True)  
 
     objects = CustomAccountManager()
     # a username field is default for login, so we override it to use the 

@@ -13,14 +13,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # will be changed to first & last name when user profile is set up 
           # token['username']
         token['email'] = user.email
-        token['is_superuser'] = user.is_superuser
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['is_superadmin'] = user.is_superuser
         return token
 
 
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializers registration requests and creates a new user.
-    - Used for viewing and updating.
+    - Used for viewing and updating (except password)
     
     -> UserRetrieveUpdateDestroy 
     
@@ -28,17 +30,20 @@ class UserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
-
+    image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)
+    is_superadmin = serializers.BooleanField(source='is_superuser', read_only=True)
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
     class Meta:
-        model = User
+        model = User 
         fields = [
             'id',
             'first_name',
             'last_name',
+            'image', 
             'username',
             'email',
+            'is_superadmin',
             ]
 
 

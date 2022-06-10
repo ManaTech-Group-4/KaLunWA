@@ -20,7 +20,7 @@ from rest_framework import status
 from kalunwa.users.models import (
     User,
 )
-from testing.base_test_cases import BaseUserTestCase, BaseWithClientCredentialsTestCase
+from testing.base_test_case import BaseUserTestCase, BaseWithClientCredentialsTestCase
 
 class UserLoginTestCase(BaseUserTestCase):
 

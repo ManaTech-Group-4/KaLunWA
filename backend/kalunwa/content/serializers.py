@@ -168,14 +168,30 @@ class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
             end_date=iso_to_datetime(end_date),
             camp=camp,
             **validated_data
-            )
+        )
 
     def update(self, instance, validated_data):
-        print('Update method called..')
+        # pop stuff that needs to be processed
         image_id = validated_data.pop('image')
         event_image = get_object_or_404(Image, pk=image_id)
         instance.image = event_image
+        camp = validated_data.pop('camp')
+        camp = get_value_by_label(camp, CampEnum)
+        instance.camp = camp
 
+        # process datetime to iso format
+        start_date = validated_data.pop('start_date')
+        instance.start_date = iso_to_datetime(start_date)
+        end_date = validated_data.pop('end_date')        
+        instance.end_date = iso_to_datetime(end_date)
+
+        # update the rest of the attributes
+        for key, value in validated_data.items():
+        # setattr updates an instance's attribute (key) with the value
+            setattr(instance, key, value) 
+        # always do instance.save() when editing an attribute, because assignment
+        # itself does not commit to the database 
+        instance.save()
         return instance
            
 
@@ -190,20 +206,22 @@ class ProjectSerializer(OccurenceSerializer, serializers.ModelSerializer):
         return self.determine_status(obj)       
     
     def create(self, validated_data):
-        print('Create method called..')
         image_id = validated_data.pop('image')
         event_image = get_object_or_404(Image, pk=image_id)
 
         start_date = validated_data.pop('start_date')
         end_date = validated_data.pop('end_date')
+        camp = validated_data.pop('camp')
+
         return Project.objects.create(
             image=event_image,
             start_date=iso_to_datetime(start_date),
             end_date=iso_to_datetime(end_date),
+            camp=camp,
             **validated_data
             )
+
     def update(self, instance, validated_data):
-        print('Update method called..')
         image_id = validated_data.pop('image')
         project_image = get_object_or_404(Image, pk=image_id)
         instance.image = project_image
@@ -231,13 +249,11 @@ class NewsSerializer(FlexFieldsModelSerializer):
         }        
 
     def create(self, validated_data):
-        print('Create method called..')
         image_id = validated_data.pop('image')
         news_image = get_object_or_404(Image, pk=image_id)
         return  News.objects.create(image=news_image,**validated_data)
 
     def update(self, instance, validated_data):
-        print('Update method called..')
         image_id = validated_data.pop('image')
         news_image = get_object_or_404(Image, pk=image_id)
         instance.image = news_image
@@ -266,7 +282,7 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
     # name cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CampPageSerializer(FlexFieldsModelSerializer):
-    name = serializers.CharField(source='get_name') # behavior for creating data
+    name = serializers.CharField(source='get_name', validators=[]) # behavior for creating data
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -390,7 +406,7 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
     # unless the to_internal value is changed
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
     #position = serializers.CharField(source='get_position')
-    #camp = serializers.CharField(source='get_camp')
+    camp = serializers.CharField(source='get_camp', validators=[])
     #category = serializers.CharField(source='get_category')
 
     class Meta:
@@ -415,15 +431,24 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+
+    def validate(self, data): 
+        validate_camp(data['camp'])
+        return data
+
     
     def create(self, validated_data):
-        print('Create method called..')
-        return  CabinOfficer.objects.create(**validated_data)
+        camp = validated_data.pop('camp')
+        camp = get_value_by_label(camp, CampEnum)
+
+        return  CabinOfficer.objects.create(
+            camp=camp,
+            **validated_data)
 
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
     #position = serializers.CharField(source='get_position')
-    #camp = serializers.CharField(source='get_camp')   
+    camp = serializers.CharField(source='get_camp', validators=[])   
     name = serializers.CharField(source='get_fullname', read_only=TRUE)
 
     class Meta:
@@ -449,9 +474,14 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
                 }
             ),
         } 
-    
+
+    def validate(self, data): 
+        validate_camp(data['camp'])
+        return data
+
     def create(self, validated_data):
-        print('Create method called..')
+        camp = validated_data.pop('camp')
+        camp = get_value_by_label(camp, CampEnum)
         return  CampLeader.objects.create(**validated_data)
     #no need to override update since image only needs ID in string
     #to take care converting KEY to Label 
@@ -480,10 +510,10 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
-    
+
+
 
     def create(self, validated_data):
-        print('Create method called..')
         return  OrgLeader.objects.create(**validated_data)
     #no need to override update since image only needs ID in string
 '''

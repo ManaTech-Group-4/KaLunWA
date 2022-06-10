@@ -7,8 +7,8 @@ from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSe
 from .models import CampEnum, Contributor, Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
-from .validators import validate_start_date_and_end_date
-from kalunwa.core.utils import iso_to_datetime
+from .validators import validate_camp, validate_start_date_and_end_date
+from kalunwa.core.utils import get_value_by_label, iso_to_datetime
 from django.shortcuts import get_object_or_404
 
 class StatusEnum(Enum):
@@ -130,6 +130,7 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
     def validate(self, data): # object-level validation
         data = self.get_initial() # gets pre-validation data
         validate_start_date_and_end_date(data['start_date'], data['end_date'])
+        validate_camp(data['camp'])
         return data
 
     def determine_status(self, obj):
@@ -151,17 +152,21 @@ class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
 
     def get_status(self, obj)->str:
         return self.determine_status(obj)
+
     def create(self, validated_data):
-        print('Create method called..')
         image_id = validated_data.pop('image')
         event_image = get_object_or_404(Image, pk=image_id)
 
         start_date = validated_data.pop('start_date')
         end_date = validated_data.pop('end_date')
+        camp = validated_data.pop('camp')
+        camp = get_value_by_label(camp, CampEnum)
+
         return Event.objects.create(
             image=event_image,
             start_date=iso_to_datetime(start_date),
             end_date=iso_to_datetime(end_date),
+            camp=camp,
             **validated_data
             )
 
@@ -453,7 +458,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
 
 
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position')
+    position = serializers.CharField(source='get_position', validators=[])
 
     class Meta:
         model = OrgLeader
@@ -475,6 +480,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
+    
 
     def create(self, validated_data):
         print('Create method called..')

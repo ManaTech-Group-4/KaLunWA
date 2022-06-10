@@ -38,30 +38,29 @@ class EventViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
     permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_fields = ['is_featured']
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def create(self, request):
+    #     serializer = self.serializer_class(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     else: 
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except Event.DoesNotExist:
-            raise NotFound('Event with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
+    # def update(self,request, pk):
+    #     try:
+    #         serializer_instance = self.queryset.get(id=pk)
+    #     except Event.DoesNotExist:
+    #         raise NotFound('Event with this ID does not exist.')
+    #     data = self.serializer_class(instance=serializer_instance, data=request.data)
     
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    #     if data.is_valid():
+    #         data.save()
+    #         return Response(data.data)
+    #     else:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
 '''
     def delete(self, request, pk):
         news = get_object_or_404(Event, id=pk)
@@ -79,27 +78,27 @@ class ProjectViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def create(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def create(self, request):
+    #     print(request.data)
+    #     serializer = self.serializer_class(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     else: 
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self,request, pk):
-        try:
-            serializer_instance = self.queryset.get(id=pk)
-        except Project.DoesNotExist:
-            raise NotFound('Project with this ID does not exist.')
-        data = self.serializer_class(instance=serializer_instance, data=request.data)
+    # def update(self,request, pk):
+    #     try:
+    #         serializer_instance = self.queryset.get(id=pk)
+    #     except Project.DoesNotExist:
+    #         raise NotFound('Project with this ID does not exist.')
+    #     data = self.serializer_class(instance=serializer_instance, data=request.data)
     
-        if data.is_valid():
-            data.save()
-            return Response(data.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    #     if data.is_valid():
+    #         data.save()
+    #         return Response(data.data)
+    #     else:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class NewsViewSet(viewsets.ModelViewSet):
@@ -172,7 +171,7 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
     queryset = OrgLeader.objects.all()
     filter_backends = [OrgLeaderPositionFilter]
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     #position only accepts KEY from choices enums eg. LDR

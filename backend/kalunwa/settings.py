@@ -158,15 +158,9 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',     
     ),
     'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler',
-
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ]
-
 }
 
 SIMPLE_JWT = {

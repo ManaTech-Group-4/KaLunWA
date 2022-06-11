@@ -6,12 +6,13 @@ import { AuthService } from '../../service/auth.service';
 import { CustomValidators } from '../../shared/customValidation';
 
 @Component({
-  selector: 'app-add-profile',
-  templateUrl: './add-profile.component.html',
-  styleUrls: ['./add-profile.component.scss']
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.scss']
 })
-export class AddProfileComponent implements OnInit {
+export class EditProfileComponent implements OnInit {
   profile: FormGroup;
+  updatePass: FormGroup;
   isAdd = false;
   filename = "";
   profileImage:string;
@@ -30,17 +31,24 @@ export class AddProfileComponent implements OnInit {
       firstname:['', Validators.required],
       lastname:['', Validators.required],
       username:['', Validators.required],
-      email:['', [Validators.required, Validators.email]],
-      password:['', [Validators.required, Validators.minLength(8)]],
+      email:['', [Validators.required, Validators.email]]
+    }
+    );
+
+    this.updatePass = this.formBuilder.group({
+      oldpassword:['', [Validators.required, Validators.minLength(8)]],
+      newpassword:['', [Validators.required, Validators.minLength(8)]],
       repassword:['', [Validators.required]]
     },
-      {validators: CustomValidators.mustMatch('password', 'repassword')}
+      {validators: CustomValidators.mustMatch('newpassword', 'repassword')}
     );
 
     this.profileImage = "../../assets/images/person-icon.jpg";
   }
 
   get f() { return this.profile.controls;}
+
+  get form2() { return this.updatePass.controls;}
 
 
 
@@ -125,18 +133,18 @@ export class AddProfileComponent implements OnInit {
     return this.f.email.hasError('email') ? 'Not a valid email' : '';
   }
   getErrorPassMessage() {
-    if (this.f.password.hasError('required')) {
+    if (this.form2.newpassword.hasError('required')) {
       return 'Password is required';
     }
 
-    return this.f.password.invalid ? 'Password must atleast be 8 characters' : '';
+    return this.form2.newpassword.invalid ? 'Password must atleast be 8 characters' : '';
   }
   getErrorRepassMessage() {
-    if (this.f.repassword.hasError('required')) {
+    if (this.form2.repassword.hasError('required')) {
       return 'Confirm Password is required';
     }
 
-    return this.f.repassword.hasError('mustMatch') ? 'Password and confirm password not match' : '';
+    return this.form2.repassword.hasError('mustMatch') ? 'Password and confirm password not match' : '';
   }
 
 }

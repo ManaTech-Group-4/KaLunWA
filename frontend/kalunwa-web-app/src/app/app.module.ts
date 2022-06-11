@@ -55,6 +55,7 @@ import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-l
 import { CmsCampComponent } from 'src/app/features/components/CMS/single-page/cms-camp/cms-camp.component';
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
 import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
+import { EditProfileComponent } from './admin/components/edit-profile/edit-profile.component';
 
 
 @NgModule({
@@ -103,6 +104,7 @@ import { AddProfileComponent } from './admin/components/add-profile/add-profile.
     CmsCampComponent,
     AdminListComponent,
     AddProfileComponent,
+    EditProfileComponent,
   ],
   entryComponents:[
     MembersDialogComponent

@@ -58,18 +58,36 @@
           <mat-error *ngIf="f.email.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
       </div>
+    </div>
+  </form>
+
+  <form [formGroup]="updatePass">
+    <div class="header">
+      <span>
+        Change Admin Password
+      </span>
+      <span><button mat-raised-button type="submit" color="primary">Update Password</button></span>
+    </div>
+    <div class="body">
       <div class="form-row">
         <mat-form-field appearance="fill">
-          <mat-label>Password</mat-label>
-          <input matInput type="password"  formControlName="password"/>
-          <mat-error *ngIf="f.repassword.invalid">{{getErrorPassMessage()}}</mat-error>
+          <mat-label>Old Password</mat-label>
+          <input matInput type="password"  formControlName="oldpassword"/>
+          <mat-error *ngIf="form2.oldpassword.hasError('required')">Old Password is required</mat-error>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="fill">
-          <mat-label>Confirm Password</mat-label>
+          <mat-label>New Password</mat-label>
+          <input matInput type="password"  formControlName="newpassword"/>
+          <mat-error *ngIf="form2.newpassword.invalid">{{getErrorPassMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Confirm New Password</mat-label>
           <input matInput type="password"  formControlName="repassword"/>
-          <mat-error *ngIf="f.repassword.invalid">{{getErrorRepassMessage()}}</mat-error>
+          <mat-error *ngIf="form2.repassword.invalid">{{getErrorRepassMessage()}}</mat-error>
         </mat-form-field>
       </div>
     </div>

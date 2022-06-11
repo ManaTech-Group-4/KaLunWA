@@ -194,6 +194,78 @@ class EventGalleryListCreateView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class ProjectGalleryListCreateView(ListCreateAPIView):
+    """
+    Allows the creation of an Image object directly to the related Project. 
+    Will be called when the user wants to upload a new image in the gallery.
+    """
+    serializer_class = ImageSerializer
+    lookup_fields = ['pk']
+
+    def get_project_object(self):
+        project_id = self.kwargs['pk']
+        print(project_id)
+        return get_object_or_404(Project, pk=project_id)
+
+    def get_queryset(self): # get list of images related to the project
+        project = self.get_project_object()
+        return project.gallery 
+
+    def perform_link_image_to_project(self, image:int):
+        """
+        automatically add image to the gallery of the project upon implementing.
+        """
+        project = self.get_project_object()
+        project.gallery.add(image)        
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        image = Image.objects.get(
+            id = serializer.data['id']    
+        )
+        self.perform_link_image_to_project(image)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class CampGalleryListCreateView(ListCreateAPIView):
+    """
+    Allows the creation of an Image object directly to the related Project. 
+    Will be called when the user wants to upload a new image in the gallery.
+    """
+    serializer_class = ImageSerializer
+    lookup_fields = ['pk']
+
+    def get_project_object(self):
+        camp_id = self.kwargs['pk']
+        print(camp_id)
+        return get_object_or_404(CampPage, pk=camp_id)
+
+    def get_queryset(self): # get list of images related to the camp
+        camp = self.get_camp_object()
+        return camp.gallery 
+
+    def perform_link_image_to_camp(self, image:int):
+        """
+        automatically add image to the gallery of the camp upon implementing.
+        """
+        camp = self.get_camp_object()
+        camp.gallery.add(image)        
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        image = Image.objects.get(
+            id = serializer.data['id']    
+        )
+        self.perform_link_image_to_camp(image)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        
 class ImageUploadView(APIView): 
     parser_classes = [MultiPartParser, FormParser]
 

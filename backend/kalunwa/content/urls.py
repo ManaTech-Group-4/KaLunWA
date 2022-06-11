@@ -15,11 +15,14 @@ from .views import (
     ImageViewSet, 
     JumbotronViewSet, 
     NewsViewSet, 
-    OrgLeaderViewSet, 
+    OrgLeaderViewSet,
     ProjectViewSet, 
-
+    CampGalleryListCreateView,
+    ProjectGalleryListCreateView,     
+    EventGalleryListCreateView,    
     ## Gallery views
-    EventGalleryListCreateView,
+    
+    # ProjectGalleryListCreateView    
 
     
 )
@@ -43,5 +46,7 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path('events/<int:pk>/gallery/', EventGalleryListCreateView.as_view(), name='event-gallery-list'),
+   path('projects/<int:pk>/gallery/', ProjectGalleryListCreateView.as_view(), name='project-gallery-list'),    
+   path('camps/<int:pk>/gallery/', CampGalleryListCreateView.as_view(), name='project-gallery-list')
 ]
 

@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)
+    image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False, use_url=True)
     is_superadmin = serializers.BooleanField(source='is_superuser', read_only=True)
     date_added = serializers.CharField(source="created_at", read_only=True) 
     # Ensure passwords are at least 8 characters long, no longer than 128

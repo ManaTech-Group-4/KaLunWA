@@ -65,8 +65,6 @@ export class AddProfileComponent implements OnInit {
           this.profile.enable();
         });
 
-    console.log("submitted");
-
   }
 
 
@@ -81,7 +79,6 @@ export class AddProfileComponent implements OnInit {
       this.profile.controls["image"].setErrors(null);
 
       this.filename = file.name;
-      console.log(this.filename)
     }
 
 

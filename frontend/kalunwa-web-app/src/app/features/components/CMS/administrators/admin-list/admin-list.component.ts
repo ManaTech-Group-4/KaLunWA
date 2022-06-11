@@ -39,7 +39,6 @@ export class AdminListComponent implements OnInit {
     this.activePage = newPage;
     let y =  document.querySelector('.table-content')?.getBoundingClientRect().top;
     window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
-    console.log(this.currentPage, this.lastPage);
   }
 
   ngOnInit(): void {

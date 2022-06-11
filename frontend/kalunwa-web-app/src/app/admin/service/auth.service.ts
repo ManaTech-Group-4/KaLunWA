@@ -48,14 +48,13 @@ export class AuthService {
         localStorage.removeItem('refresh');
         localStorage.removeItem('access');
         localStorage.removeItem('expires_at');
-        console.log("logged out");
       })
     )
   }
 
 
   register(email: string, password: string){
-    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, {headers: {'Authorization': `Bearer ${this.access}`}, body: {email, password}})
+    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, {headers: {'Authorization': `Bearer ${this.access}`}, body: {email, password}});
   }
 
 

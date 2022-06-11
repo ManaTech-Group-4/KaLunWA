@@ -47,10 +47,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',    
 
     # user apps
-    'kalunwa.core',
-    'kalunwa.content',
-    'kalunwa.users',
-    'kalunwa.page_containers',
+    'kalunwa.core.apps.CoreConfig',
+    'kalunwa.content.apps.ContentConfig',
+    'kalunwa.users.apps.UsersConfig',
+    'kalunwa.page_containers.apps.PageContainersConfig',
 ]
 
 MIDDLEWARE = [

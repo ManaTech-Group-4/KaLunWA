@@ -21,11 +21,9 @@ from .filters import (
     ExcludeIDFilter,
 )
 
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from kalunwa.core.views import MultipleFieldLookupORMixin
 from rest_framework.generics import (
     ListCreateAPIView
 )

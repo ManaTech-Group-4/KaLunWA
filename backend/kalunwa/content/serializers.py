@@ -1,4 +1,3 @@
-from pickle import TRUE
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from rest_framework import serializers
@@ -58,6 +57,7 @@ class ImageSerializer(FlexFieldsModelSerializer):
             'camps' : ('kalunwa.content.CampPageSerializer', {'many': True, 'source': 'gallery_camps','fields':['id','name']}),
         }
 
+
 class JumbotronSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Jumbotron
@@ -77,6 +77,25 @@ class JumbotronSerializer(FlexFieldsModelSerializer):
                 }
             ),
         }
+        def create(self, validated_data):
+            image_id = validated_data.pop('image')
+            jumbotron_image = get_object_or_404(Image, pk=image_id)
+
+            return Jumbotron.objects.create(
+                image=jumbotron_image,
+                **validated_data
+            )
+
+        def update(self, instance, validated_data):
+            image_id = validated_data.pop('image')
+            jumbotron_image = get_object_or_404(Image, pk=image_id)
+            instance.image = jumbotron_image
+            # update the rest of the attributes
+            for key, value in validated_data.items():
+                setattr(instance, key, value) 
+
+            instance.save()        
+            return instance
 
 
 class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
@@ -292,26 +311,15 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
             'created_at',
             'updated_at',
         )
-
-    def create(self, validated_data):
-        #no image to validate
-        return  Announcement.objects.create(          
-            **validated_data
-            )
-    
-    def update(self, instance, validated_data):
-        
-        for key, value in validated_data.items():
-            setattr(instance, key, value) 
-
-        instance.save()          
-        return instance
+# if there's no fields to do extra processes to, create & update don't need to 
+# be overwritten
 
 # will have separate serializer when posting 
     # name cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CampPageSerializer(FlexFieldsModelSerializer):
-    name = serializers.CharField(source='get_name', validators=[]) # behavior for creating data
+    # empty default validators to not force shortened version
+    name = serializers.CharField(source='get_name', validators=[]) 
     camp_leader = serializers.SerializerMethodField()
 
     class Meta:
@@ -359,8 +367,43 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             return None
 
 
+    def validate(self, data): 
+        validate_camp(data['name'])
+        return data
+
+    def create(self, validated_data):
+        image_id = validated_data.pop('image')
+        camp_image = get_object_or_404(Image, pk=image_id)
+        name = validated_data.pop('name')
+        camp_name = get_value_by_label(name, CampEnum)
+
+        return CampPage.objects.create(
+            image=camp_image,
+            name=camp_name,
+            **validated_data
+        )
+
+    def update(self, instance, validated_data):
+        # pop stuff that needs to be processed
+        image_id = validated_data.pop('image')
+        camp_image = get_object_or_404(Image, pk=image_id)
+        instance.image = camp_image
+        camp = validated_data.pop('name')
+        camp_name = get_value_by_label(camp, CampEnum)
+        instance.name = camp_name
+
+        # update the rest of the attributes
+        for key, value in validated_data.items():
+        # setattr updates an instance's attribute (key) with the value
+            setattr(instance, key, value) 
+        # always do instance.save() when editing an attribute, because assignment
+        # itself does not commit to the database 
+        instance.save()
+        return instance
+
+
 class ContributorSerializer(FlexFieldsModelSerializer):
-    category = serializers.CharField(source='get_category') 
+    category = serializers.CharField(source='get_category', validators=[]) 
 
     class Meta:
         model = Contributor
@@ -379,11 +422,44 @@ class ContributorSerializer(FlexFieldsModelSerializer):
             ),
         } 
 
+    def validate(self, data): 
+        if data['category'] not in Contributor.Categories.labels:
+            raise serializers.ValidationError("Contributor category is invalid.")
+        return data
+
+    def create(self, validated_data):
+        image_id = validated_data.pop('image')
+        contributor_image = get_object_or_404(Image, pk=image_id)
+
+        category = validated_data.pop('category')
+        category_value = get_value_by_label(category, Contributor.Categories)
+
+        return Contributor.objects.create(
+            image=contributor_image,
+            category=category_value,
+            **validated_data
+        )
+
+    def update(self, instance, validated_data):
+        # pop stuff that needs to be processed
+        image_id = validated_data.pop('image')
+        contributor_image = get_object_or_404(Image, pk=image_id)
+        instance.image = contributor_image
+
+        category = validated_data.pop('category')
+        category_value = get_value_by_label(category, Contributor.Categories)
+        instance.category = category_value
+        # update the rest of the attributes
+        for key, value in validated_data.items():
+        # setattr updates an instance's attribute (key) with the value
+            setattr(instance, key, value) 
+        # always do instance.save() when editing an attribute, because assignment
+        # itself does not commit to the database 
+        instance.save()
+        return instance
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields
-
-
 
 class DemographicsSerializer(serializers.ModelSerializer):
 
@@ -397,25 +473,10 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-    def create(self, validated_data):
-        return  Demographics.objects.create(          
-            **validated_data
-            )
-    
-    def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            setattr(instance, key, value) 
 
-        instance.save()          
-        return instance
-
-
-# will have separate serializer when posting 
-    # position & category cannot be posted given the use of a get method
-    # unless the to_internal value is changed
 class CommissionerSerializer(FlexFieldsModelSerializer):
-    #position = serializers.CharField(source='get_position')
-    #category = serializers.CharField(source='get_category')
+    position = serializers.CharField(source='get_position', validators=[])
+    category = serializers.CharField(source='get_category', validators=[]) 
 
     class Meta:
         model = Commissioner
@@ -439,18 +500,58 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
             ),
         } 
 
+    def validate(self, data):
+        if data['category'] not in Commissioner.Categories.labels:
+            raise serializers.ValidationError(
+                "Commissioner category invalid."
+            )
+
+        if data['position'] not in Commissioner.Positions.labels:
+            raise serializers.ValidationError(
+                "Commissioner position invalid."
+            )            
+
     def create(self, validated_data):
-        print('Create method called..')
-        return  Commissioner.objects.create(**validated_data)
+        category = validated_data.get('category')
+        category_value = get_value_by_label(category, Commissioner.Categories)
+        position = validated_data.get('position')
+        position_value = get_value_by_label(position, Commissioner.Positions)        
+        image_id = validated_data.get('image')
+        commissioner_image = get_object_or_404(Image, pk=image_id)
+
+        return  Commissioner.objects.create(
+            category=category_value,
+            position=position_value,
+            image=commissioner_image,
+            **validated_data)
+
+    def update(self, instance, validated_data):
+        category = validated_data.get('category')
+        category_value = get_value_by_label(category, Commissioner.Categories)
+        instance.category = category_value
+
+        position = validated_data.get('position')
+        position_value = get_value_by_label(position, Commissioner.Positions)        
+        instance.position = position_value
+
+        image_id = validated_data.get('image')
+        commissioner_image = get_object_or_404(Image, pk=image_id)
+        instance.image = commissioner_image
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()
+        return instance        
 
 
 # will have separate serializer when posting 
     # position & category cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
-    #position = serializers.CharField(source='get_position')
+    position = serializers.CharField(source='get_position', validators=[])
     camp = serializers.CharField(source='get_camp', validators=[])
-    #category = serializers.CharField(source='get_category')
+    category = serializers.CharField(source='get_category', validators=[]) 
 
     class Meta:
         model = CabinOfficer
@@ -477,22 +578,60 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
 
     def validate(self, data): 
         validate_camp(data['camp'])
+
+        if data['category'] not in CabinOfficer.Categories.labels:
+            raise serializers.ValidationError(
+                "CabinOfficer category invalid."
+            )
+
+        if data['position'] not in CabinOfficer.Positions.labels:
+            raise serializers.ValidationError(
+                "CabinOfficer position invalid."
+            )            
         return data
 
     
     def create(self, validated_data):
+        image_id = validated_data.get('image')
+        cabin_officer_image = get_object_or_404(Image, pk=image_id)        
+        category = validated_data.get('category')
+        category_value = get_value_by_label(category, CabinOfficer.Categories)
+        position = validated_data.get('position')
+        position_value = get_value_by_label(position, CabinOfficer.Positions)        
         camp = validated_data.pop('camp')
         camp = get_value_by_label(camp, CampEnum)
 
         return  CabinOfficer.objects.create(
+            category=category_value,
+            position=position_value,
             camp=camp,
+            image=cabin_officer_image,
             **validated_data)
+
+    def update(self, instance, validated_data):
+        category = validated_data.get('category')
+        category_value = get_value_by_label(category, CabinOfficer.Categories)
+        instance.category = category_value
+
+        position = validated_data.get('position')
+        position_value = get_value_by_label(position, CabinOfficer.Positions)        
+        instance.position = position_value
+        
+        image_id = validated_data.get('image')
+        cabin_officer_image = get_object_or_404(Image, pk=image_id)
+        instance.image = cabin_officer_image
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+        instance.save()
+        return instance 
 
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
-    #position = serializers.CharField(source='get_position')
+    position = serializers.CharField(source='get_position', validators=[])
     camp = serializers.CharField(source='get_camp', validators=[])   
-    name = serializers.CharField(source='get_fullname', read_only=TRUE)
+    name = serializers.CharField(source='get_fullname', read_only=True)
 
     class Meta:
         model = CampLeader
@@ -520,14 +659,50 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
 
     def validate(self, data): 
         validate_camp(data['camp'])
+        if data['position'] not in CampLeader.Positions.labels:
+            raise serializers.ValidationError(
+                "Camp Leader category invalid."
+            )       
         return data
 
     def create(self, validated_data):
+        image_id = validated_data.pop('image')
+        camp_leader_image = get_object_or_404(Image, pk=image_id)
+
+        position = validated_data.pop('position')
+        position_value = get_value_by_label(position, CampLeader.Positions)
+
         camp = validated_data.pop('camp')
         camp = get_value_by_label(camp, CampEnum)
-        return  CampLeader.objects.create(**validated_data)
+
+        return  CampLeader.objects.create(
+            position=position_value,
+            camp=camp,
+            image=camp_leader_image,
+            **validated_data)
     #no need to override update since image only needs ID in string
     #to take care converting KEY to Label 
+
+    def update(self, instance, validated_data):
+        image_id = validated_data.pop('image')
+        camp_leader_image = get_object_or_404(Image, pk=image_id)
+        instance.image = camp_leader_image
+
+        position = validated_data.pop('position')
+        position_value = get_value_by_label(position, CampLeader.Positions)
+        instance.position = position_value
+
+        camp = validated_data.pop('camp')
+        camp_value = get_value_by_label(camp, CampEnum)
+        instance.camp = camp_value   
+
+        for key, value in validated_data.items():
+                setattr(instance, key, value) 
+
+        instance.save()        
+        return instance
+
+
 
 
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
@@ -553,18 +728,36 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
                 }
             ),
         } 
-
-
+    def validate(self, data): # object-level validation
+        if data['position'] not in OrgLeader.Positions.labels:
+            raise serializers.ValidationError(
+            "Organization Leader position invalid."
+            )            
+        return data
 
     def create(self, validated_data):
-        return  OrgLeader.objects.create(**validated_data)
-    #no need to override update since image only needs ID in string
-'''
-    def update(self, instance, validated_data):
-        print('Update method called..')
+        position = validated_data.get('position')
+        position_value = get_value_by_label(position)
         image_id = validated_data.pop('image')
-        orgleader_image = get_object_or_404(Image, pk=image_id)
-        instance.image = orgleader_image
-        
-        return instance
-'''
+        org_lead_image = get_object_or_404(Image, pk=image_id)
+
+        return  OrgLeader.objects.create(
+            image=org_lead_image,
+            position=position_value,
+            **validated_data)
+
+    def update(self, instance, validated_data):
+        position = validated_data.pop('position')
+        position_value = get_value_by_label(position)
+        instance.position = position_value
+
+        image_id = validated_data.pop('image')
+        org_lead_image = get_object_or_404(Image, pk=image_id)
+        instance.image = org_lead_image
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value) 
+
+            instance.save()        
+            return instance        
+

@@ -10,6 +10,6 @@ def validate_start_date_and_end_date(start_date, end_date):
 
 def validate_camp(camp):
     if camp not in CampEnum.labels:
-        raise serializers.ValidationError(detail="Camp name is invalid.")
-    return camp    
+        raise serializers.ValidationError(detail="Camp name is invalid.") 
+
 

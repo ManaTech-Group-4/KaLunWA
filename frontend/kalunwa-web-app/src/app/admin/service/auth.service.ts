@@ -1,8 +1,8 @@
-import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { Admin, Profile } from '../model/user-model';
+import { Admin, Profile, ProfileReceive } from '../model/user-model';
 import * as jwtDecode from 'jwt-decode';
 import * as moment from 'moment';
 
@@ -13,6 +13,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
   }
+
 
   get refresh(): string {
     return localStorage.getItem('refresh')!;
@@ -43,7 +44,11 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{headers: {'Authorization': `Bearer ${this.access}`}, refresh: this.refresh}).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{refresh: this.refresh}, {headers: headers}).pipe(
       tap(() => {
         localStorage.removeItem('refresh');
         localStorage.removeItem('access');
@@ -53,8 +58,13 @@ export class AuthService {
   }
 
 
-  register(email: string, password: string){
-    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, {headers: {'Authorization': `Bearer ${this.access}`}, body: {email, password}});
+  register(newAdmin: FormData){
+    console.log(newAdmin);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, newAdmin, { headers: headers });
   }
 
 
@@ -92,7 +102,7 @@ export class AuthService {
   }
 
   getUsers(){
-    return this.http.get<Profile[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization':  `Bearer ${this.access}`}});
+    return this.http.get<ProfileReceive[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization':  `Bearer ${this.access}`}});
   }
 
 }

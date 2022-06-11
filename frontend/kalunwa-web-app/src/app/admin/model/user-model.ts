@@ -10,6 +10,15 @@ export class Admin {
 }
 
 export class Profile {
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  password: string;
+  image: File;
+}
+
+export class ProfileReceive {
   id: number;
   first_name: string;
   last_name: string;
@@ -19,4 +28,5 @@ export class Profile {
   is_superadmin: boolean;
   image: string;
 }
+
 

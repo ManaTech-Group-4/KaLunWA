@@ -62,18 +62,6 @@ export class EditProfileComponent implements OnInit {
       return;
     }
 
-    this.service.register(this.f.email.value, this.f.password.value)
-    .pipe(first())
-    .subscribe(
-        data => {
-          this.router.navigateByUrl("admin/admin-list");
-        },
-        error => {
-          this.loading = false;
-          this.profile.enable();
-        });
-
-    console.log("submitted");
 
   }
 

@@ -139,7 +139,6 @@ export class AddCollectiveComponent implements OnInit {
 
   onFileChange(imageInput:any){
     const file: File = imageInput.files[0];
-    const reader = new FileReader();
     if(!this.isFileImage(file))
       this.collective.controls["image"].setErrors({'incorrect': true});
     else{

@@ -45,8 +45,11 @@ router.register(r'cabinofficers', CabinOfficerViewSet, basename='cabinofficer')
 urlpatterns = router.urls
 
 urlpatterns += [
+    # gallery implementations
     path('events/<int:pk>/gallery/', EventGalleryListCreateView.as_view(), name='event-gallery-list'),
    path('projects/<int:pk>/gallery/', ProjectGalleryListCreateView.as_view(), name='project-gallery-list'),    
-   path('camps/<int:pk>/gallery/', CampGalleryListCreateView.as_view(), name='project-gallery-list')
+   path('camps/<int:pk>/gallery/', CampGalleryListCreateView.as_view(), name='camp-gallery-list')
+   # add image to contributor directly 
+   
 ]
 

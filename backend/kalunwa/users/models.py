@@ -50,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel): # permission f
 #     REQUIRED_FIELDS = []    
 
     def __str__(self):
-        return self.user_name
+        return self.username
 
     def get_role(self):
         pass

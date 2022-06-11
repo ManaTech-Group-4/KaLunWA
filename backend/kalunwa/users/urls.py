@@ -5,11 +5,12 @@ from .views import (
     UserCreateView,
     UserRetrieveUpdateDestroyView,     
     UserListView,
+    Regisiter
 )
 
 
 urlpatterns = [
-    path('register/', UserCreateView.as_view(), name='user-register'),
+    path('register/', Regisiter.as_view(), name='user-register'),
     path('logout/blacklist/',
             BlacklistTokenUpdateView.as_view(),
             name='token-blacklist'),    

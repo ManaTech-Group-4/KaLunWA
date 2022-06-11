@@ -12,6 +12,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
     RetrieveUpdateAPIView,
+    CreateAPIView,
 )
 from .permissions import (
     AuthenticatedAndReadOnly,
@@ -20,6 +21,7 @@ from .permissions import (
     SelfUserOnly
 )
 from .serializers import (
+    UserRegisterSerializer,
     UserSerializer, 
     CustomTokenObtainPairSerializer,
     UserChangePasswordSerializer,
@@ -46,19 +48,40 @@ class UserCreateView(APIView):
     change permission here: either admin or superadmin
     """
 
-    permission_classes = [SuperUserOnly] 
-    def post(self, request, format='json'):
+    # permission_classes = [SuperUserOnly] 
+    def post(self, request):
         """
         create signal to create a profile if user creation is successful 
         (if admin profile needs to be created) -> done
         """
-        serializer = UserSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
                 json = serializer.data
                 return Response(json, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Regisiter(CreateAPIView):
+    permission_classes = [SuperUserOnly]
+    queryset = User.objects.all()
+
+    def create(self, request):
+        """
+        create signal to create a profile if user creation is successful 
+        (if admin profile needs to be created) -> done
+        """
+        print(request.headers)
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                json = serializer.data
+                return Response(json, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
 
 
 class UserListView(ListAPIView):

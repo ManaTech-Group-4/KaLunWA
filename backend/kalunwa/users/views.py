@@ -29,7 +29,6 @@ from .serializers import (
 from .models import User
 from rest_framework.response import Response
 
-
 class CustomObtainTokenPairView(TokenObtainPairView):
     """
     Where users submit their credentials (email & password). Serves as the login
@@ -64,25 +63,24 @@ class UserCreateView(APIView):
 
 
 class Regisiter(CreateAPIView):
-    permission_classes = [SuperUserOnly]
+    permission_classes = [IsAuthenticated,  SuperUserOnly]
     queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
 
     def create(self, request):
         """
         create signal to create a profile if user creation is successful 
         (if admin profile needs to be created) -> done
-        """
-        print(request.headers)
+        """  
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:
                 json = serializer.data
-                return Response(json, status=status.HTTP_201_CREATED)
+                response = Response(json, status=status.HTTP_201_CREATED)
+                return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-
 
 class UserListView(ListAPIView):
     """

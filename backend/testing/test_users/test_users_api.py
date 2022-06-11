@@ -29,11 +29,11 @@ from kalunwa.users.models import (
 class BaseUserTestCase(APITestCase):
     user_credentials = {
         'email':'test@test.com',
-        'password':'test'        
+        'password':'test12345678'        
     }
     admin_credentials = {
         'email':'admin@test.com',
-        'password':'admin'
+        'password':'admin12345678'
     }    
 
     def create_user(self):
@@ -278,6 +278,12 @@ class UserRegistrationTestCase(BaseWithClientCredentialsTestCase):
         response = self.client.post(url, self.user_credentials)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_user_registration_normal_user(self):
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(token=tokens['access'])
+        url = reverse('user-register')
+        response = self.client.post(url, self.user_credentials)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)  
 
 class UserViewDetailTestCase(BaseWithClientCredentialsTestCase):
     """

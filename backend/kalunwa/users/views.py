@@ -72,6 +72,7 @@ class Regisiter(CreateAPIView):
         create signal to create a profile if user creation is successful 
         (if admin profile needs to be created) -> done
         """
+        print(request.headers)
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()

@@ -11,12 +11,10 @@ from rest_framework.permissions import(
 from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
-    RetrieveUpdateAPIView,
-    CreateAPIView,
+    ListCreateAPIView
 )
 from .permissions import (
     AuthenticatedAndReadOnly,
-    OwnersOnly,
     SuperUserOnly,
     SelfUserOnly
 )
@@ -62,24 +60,10 @@ class UserCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Regisiter(CreateAPIView):
-    permission_classes = [IsAuthenticated,  SuperUserOnly]
+class Regisiter(ListCreateAPIView):
+    permission_classes = [IsAuthenticated, SuperUserOnly ] 
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
-
-    def create(self, request):
-        """
-        create signal to create a profile if user creation is successful 
-        (if admin profile needs to be created) -> done
-        """  
-        serializer = UserRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                json = serializer.data
-                response = Response(json, status=status.HTTP_201_CREATED)
-                return response
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 class UserListView(ListAPIView):
@@ -97,6 +81,7 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     Authenticated Users would only be permitted to view user information. 
     """
     permission_classes = [
+        IsAuthenticated,
         SuperUserOnly | # SuperUsers can edit and delete user information.
         SelfUserOnly | # users account owners themselves can edit and delete their own user information.
         AuthenticatedAndReadOnly # authenticated users can only view
@@ -125,6 +110,8 @@ class BlacklistTokenUpdateView(APIView):
 
 
 class UserChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated, SuperUserOnly | SelfUserOnly]
+
     def get_object(self, pk):
         return get_object_or_404(User, pk=pk)
 

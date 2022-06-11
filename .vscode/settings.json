@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/1aac2b25-81ca-4c55-91b3-8f393f89fc39/microsoft.web/sites/subscriptions/1aac2b25-81ca-4c55-91b3-8f393f89fc39/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/kalunwa-backend",
+    "appService.deploySubpath": "."
+}

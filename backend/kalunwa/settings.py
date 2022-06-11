@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from datetime import timedelta
-# from decouple import config -> prod
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -154,21 +153,25 @@ CORS_ORIGIN_WHITELIST = (
 'http://localhost:8000',
 )
 
-
 # authentication
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',        
     ),
     'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler',
+
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
 
 }
 
 SIMPLE_JWT = {
 
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15), # minutes=15
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 
     # Set these to true if you want new refresh tokens when submitting one in 

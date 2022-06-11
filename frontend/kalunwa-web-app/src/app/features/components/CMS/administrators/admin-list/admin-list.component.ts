@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Admin, Profile } from 'src/app/admin/model/user-model';
+import { Admin, Profile, ProfileReceive } from 'src/app/admin/model/user-model';
 import { AuthService } from 'src/app/admin/service/auth.service';
 import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 
@@ -10,10 +10,10 @@ import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 })
 export class AdminListComponent implements OnInit {
 
-  admin_list: Profile[] = [];
+  admin_list: ProfileReceive[] = [];
   is_superadmin: boolean;
 
-  selectedAdmin:Profile;
+  selectedAdmin:ProfileReceive;
 
   constructor(private ref: ChangeDetectorRef, private service: AuthService) { }
 
@@ -26,7 +26,6 @@ export class AdminListComponent implements OnInit {
   }
 
   updateDisplay(newPage:number){
-    console.log(newPage,this.activePage);
     this.currentPage += (6*(newPage-this.activePage));
     if(this.currentPage < 0)
       this.currentPage = 0;
@@ -50,7 +49,7 @@ export class AdminListComponent implements OnInit {
     this.is_superadmin = this.service.currentAdmin.is_superadmin;
   }
 
-  displayInfo(admin:Profile){
+  displayInfo(admin:ProfileReceive){
     this.selectedAdmin = admin;
   }
 

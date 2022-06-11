@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { Profile } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 import { CustomValidators } from '../../shared/customValidation';
 
@@ -17,11 +18,13 @@ export class AddProfileComponent implements OnInit {
   profileImage:string;
   submitted= false;
   loading = false;
+  imgFile: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private service: AuthService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -44,7 +47,27 @@ export class AddProfileComponent implements OnInit {
 
 
 
-  onSubmit(){
+  onSubmit(imageInput:any){
+
+    const file: File = imageInput.files[0];
+    console.log(file, this.f);
+    var newAdmin = new FormData();
+    newAdmin.append('first_name',this.f.firstname.value);
+    newAdmin.append('last_name',this.f.lastname.value);
+    newAdmin.append('username',this.f.username.value);
+    newAdmin.append('email',this.f.email.value);
+    newAdmin.append('password',this.f.password.value);
+    newAdmin.append('image',this.f.image.value);
+    //  ={
+    //   "first_name": this.f.firstname.value,
+    //   "last_name": this.f.lastname.value,
+    //   "username": this.f.username.value,
+    //   "email": this.f.email.value,
+    //   "password": this.f.password.value,
+    //   "image": this.f.image.value
+
+    // };
+    console.log(newAdmin);
     this.submitted = true;
     this.loading = true;
     this.profile.disable();
@@ -54,7 +77,8 @@ export class AddProfileComponent implements OnInit {
       return;
     }
 
-    this.service.register(this.f.email.value, this.f.password.value)
+
+    this.service.register(newAdmin)
     .pipe(first())
     .subscribe(
         data => {
@@ -69,7 +93,8 @@ export class AddProfileComponent implements OnInit {
 
 
   onFileChange(imageInput:any){
-    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+    const file: File = imageInput.target.files[0];
 
     if(!this.isFileImage(file)){
       this.profile.controls["image"].setErrors({'incorrect': true});
@@ -80,33 +105,36 @@ export class AddProfileComponent implements OnInit {
 
       this.filename = file.name;
     }
-
-
-    if(imageInput.files && imageInput.files.length > 0){
-      const imgFile = imageInput.files[0];
+    if(imageInput.target.files && imageInput.target.files[0]){
       // File Preview
-      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
       reader.onload = () => {
         this.profileImage = reader.result as string;
+        this.profile.patchValue({
+          image: reader.result
+        });
+
       }
-      reader.readAsDataURL(imgFile)
+      // ChangeDetectorRef since file is loading outside the zone
+      this.cd.markForCheck();
     }
   }
 
   // Image Preview
-  showPreview(event:any) {
-    const file = event.target.files[0];
-    this.profile.patchValue({
-      image: file
-    });
-    this.profile.get('image')!.updateValueAndValidity()
-    // File Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profileImage = reader.result as string;
-    }
-    reader.readAsDataURL(file)
-  }
+  // showPreview(event:any) {
+  //   const file = event.target.files[0];
+  //   this.profile.patchValue({
+  //     image: file
+  //   });
+  //   this.profile.get('image')!.updateValueAndValidity()
+  //   // File Preview
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.profileImage = reader.result as string;
+  //   }
+  //   reader.readAsDataURL(file)
+  // }
 
 
   isFileImage(file: File) {

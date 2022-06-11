@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="profile" (ngSubmit)="onSubmit()">
+  <form [formGroup]="profile" (ngSubmit)="onSubmit(fileUpload)">
     <div class="header">
       <span>
         <button mat-button type="button" routerLink="/admin/admin-list"><mat-icon>arrow_left</mat-icon></button>
@@ -16,7 +16,7 @@
           <div class="profile-container">
             <img [src]="profileImage" [alt]="filename"/>
             <input type="file" class="file-input" id="fileImg"
-            accept="image/*" (change)="onFileChange(fileUpload)" #fileUpload formControlName="image"/>
+            accept="image/*" (change)="onFileChange($event)" #fileUpload />
 
             <div class="file-upload">
 

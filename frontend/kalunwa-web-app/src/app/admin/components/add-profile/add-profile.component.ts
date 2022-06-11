@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Profile } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
+import { CollectivePagesService } from '../../service/collective-pages.service';
 import { CustomValidators } from '../../shared/customValidation';
 
 @Component({
@@ -24,7 +25,8 @@ export class AddProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: AuthService,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private colservice: CollectivePagesService
   ) { }
 
   ngOnInit(): void {
@@ -104,6 +106,14 @@ export class AddProfileComponent implements OnInit {
       this.profile.controls["image"].setErrors(null);
 
       this.filename = file.name;
+
+      this.colservice.uploadImage(this.filename,file).subscribe(
+        (res) => {
+        },
+        (err) => {
+
+        });
+
     }
     if(imageInput.target.files && imageInput.target.files[0]){
       // File Preview

@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpR
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { Admin, Profile, ProfileReceive } from '../model/user-model';
+import { Admin, Profile, ProfileReceive} from '../model/user-model';
 import * as jwtDecode from 'jwt-decode';
 import * as moment from 'moment';
 
@@ -61,9 +61,9 @@ export class AuthService {
   register(newAdmin: FormData){
     console.log(newAdmin);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.access}`
     });
+
     return this.http.post(`http://127.0.0.1:8000/api/users/register/`, newAdmin, { headers: headers });
   }
 

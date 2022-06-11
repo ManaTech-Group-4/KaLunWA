@@ -20,6 +20,7 @@ from .permissions import (
     SelfUserOnly
 )
 from .serializers import (
+    UserRegisterSerializer,
     UserSerializer, 
     CustomTokenObtainPairSerializer,
     UserChangePasswordSerializer,
@@ -52,7 +53,7 @@ class UserCreateView(APIView):
         create signal to create a profile if user creation is successful 
         (if admin profile needs to be created) -> done
         """
-        serializer = UserSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             if user:

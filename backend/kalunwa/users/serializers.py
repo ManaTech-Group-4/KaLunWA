@@ -33,13 +33,13 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
     image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)
     is_superadmin = serializers.BooleanField(source='is_superuser', read_only=True)
-    date_added = serializers.CharField(source="created_at")
+    date_added = serializers.CharField(source="created_at", read_only=True) 
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
-    class Meta:
+    class Meta: 
         model = User 
         fields = [
-            'id',
+            'id', 
             'first_name',
             'last_name',
             'image', 
@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             ]
 
 
-class UserRegisterSerializer(serializers.Serializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
     """
      Use in UserCreateView
     """
@@ -58,14 +58,15 @@ class UserRegisterSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
     image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)    
+    # Ensure passwords are at least 8 characters long, no longer than 128
+    # characters, and can not be read by the client.
     password = serializers.CharField(
         max_length=128,
         min_length=8,
         write_only=True
     )         
+    date_added = serializers.CharField(source="created_at", read_only=True)     
 
-    # Ensure passwords are at least 8 characters long, no longer than 128
-    # characters, and can not be read by the client.
     class Meta:
         model = User
         fields = [
@@ -73,12 +74,15 @@ class UserRegisterSerializer(serializers.Serializer):
             'first_name',
             'last_name',
             'username',
+            'image',
             'email',
             'password',
+            'date_added',            
             ]    
         extra_kwargs = {
             'password': {'write_only': True}
         }
+    
 
     def create(self, validated_data): 
         # what if password is none during posting 

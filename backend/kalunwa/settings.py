@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-3@f(id^#8khy0r-zx#r@hi#cey9028avo2b5d#(k3%5)pxg5ks
 # SECRET_KEY = config("SECRET_KEY") -> prod
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['kalunwa-backend.azurewebsites.net']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -58,7 +58,6 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,7 +152,6 @@ MEDIA_URL = '/media/'
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:4200', # angular
 'http://localhost:8000',
-'https://yellow-sky-058b19a00.1.azurestaticapps.net/'
 )
 
 
@@ -205,10 +203,3 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(hours=2),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),    
 }
-
-#Static files (CSS, JavaScript, Images)
-
-STATIC_URL = '/static'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = BASE_DIR / 'staticfiles'

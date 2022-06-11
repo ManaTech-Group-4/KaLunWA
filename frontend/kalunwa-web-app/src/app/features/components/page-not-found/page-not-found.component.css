@@ -1,0 +1,17 @@
+div {
+  width: 100%;
+  height: 70vh;
+  background-color: #c5c5c5;
+  position: relative;
+}
+
+div p {
+  position: absolute;
+  width: 50%;
+  top: 40%;
+  left: 25%;
+  text-align: center;
+  font-size: 40px;
+  font-family: monserrat;
+}
+/*# sourceMappingURL=page-not-found.component.css.map */

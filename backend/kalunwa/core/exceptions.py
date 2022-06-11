@@ -19,7 +19,8 @@ in Table: '{protected_obj.__class__.__name__}'-- "
         response =Response( {
             "detail": f"Cannot delete record due to protected references in \
 other tables, namely -> {protected_objects_in_string}"
-        }
+        },
+        status=status.HTTP_400_BAD_REQUEST        
         )
 
         # {<CabinOfficer: Camp Zero Waste Publicity Cabin, Other: lastname 3>}

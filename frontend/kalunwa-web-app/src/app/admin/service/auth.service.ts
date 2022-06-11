@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { Admin } from '../model/user-model';
+import { Admin, Profile } from '../model/user-model';
 import * as jwtDecode from 'jwt-decode';
 import * as moment from 'moment';
 
@@ -43,7 +43,7 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{headers: {'Authorization': "Bearer " + this.access}, refresh: this.refresh}).pipe(
+    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{headers: {'Authorization': `Bearer ${this.access}`}, refresh: this.refresh}).pipe(
       tap(() => {
         localStorage.removeItem('refresh');
         localStorage.removeItem('access');
@@ -51,6 +51,11 @@ export class AuthService {
         console.log("logged out");
       })
     )
+  }
+
+
+  register(email: string, password: string){
+    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, {headers: {'Authorization': `Bearer ${this.access}`}, body: {email, password}})
   }
 
 
@@ -73,9 +78,9 @@ export class AuthService {
     return moment(expiresAt);
   }
 
-  get adminName(): string{
+  get currentAdmin(): Admin{
     const jwtToken = <Admin> jwtDecode.default(localStorage.getItem('access')!);
-    return jwtToken.email;
+    return jwtToken;
   }
 
 
@@ -88,7 +93,7 @@ export class AuthService {
   }
 
   getUsers(){
-    return this.http.get<Admin[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization': "Bearer " + this.access}});
+    return this.http.get<Profile[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization':  `Bearer ${this.access}`}});
   }
 
 }

@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.admin_name = this.authService.adminName;
+    this.admin_name = this.authService.currentAdmin.first_name;
   }
 
   toggleSidebar(){

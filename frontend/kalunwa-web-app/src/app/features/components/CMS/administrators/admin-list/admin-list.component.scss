@@ -61,6 +61,9 @@
                         margin-right: 8px;
                     }
                 }
+                td:nth-child(2){
+                  text-align: left;
+                }
             }
             thead{
                 .table-header{

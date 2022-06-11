@@ -1,14 +1,13 @@
 <div class="container">
     <div class="profile" *ngIf="selectedAdmin">
-        <img src="{{selectedAdmin.picture}}" alt="picture">
+        <img src="{{selectedAdmin.image}}" onerror="this.src='../../assets/images/person-icon.jpg'" >
         <h4>{{selectedAdmin.username}}</h4>
         <h5>username</h5>
         <hr>
         <p>First Name: {{selectedAdmin.first_name}}</p>
         <p>Last Name: {{selectedAdmin.last_name}}</p>
         <p>Email: {{selectedAdmin.email}}</p>
-        <p>Role: {{selectedAdmin.role}}</p>
-        <p>Date Added: {{selectedAdmin.date_added}}</p>
+        <p>Role: {{selectedAdmin.is_superadmin?'Super Admin':'Admin'}}</p>
     </div>
 
     <div class="admin-list">
@@ -29,9 +28,9 @@
             <tbody>
                 <tr  class="table-content" *ngFor="let item of admin_list | slice:currentPage:lastPage" (click)="displayInfo(item)">
                     <td>{{item.id}}</td>
-                    <td id="username"><img [src]="item.picture" alt="picture" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
-                    <td>{{item.date_added}}</td>
-                    <td><mat-icon >edit</mat-icon> <mat-icon>delete</mat-icon></td>
+                    <td id="username"><img [src]="item.image" onerror="this.src='../../assets/images/person-icon.jpg'" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
+                    <td>asdsda</td>
+                    <td><mat-icon *ngIf="!item.is_superadmin && is_superadmin" routerLink="/admin/edit-admin">edit</mat-icon> <mat-icon *ngIf="!item.is_superadmin">delete</mat-icon></td>
                 </tr>
             </tbody>
         </table>

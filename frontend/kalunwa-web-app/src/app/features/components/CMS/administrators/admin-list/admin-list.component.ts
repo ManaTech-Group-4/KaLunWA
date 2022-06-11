@@ -1,4 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Admin, Profile } from 'src/app/admin/model/user-model';
+import { AuthService } from 'src/app/admin/service/auth.service';
 import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 
 @Component({
@@ -8,112 +10,12 @@ import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 })
 export class AdminListComponent implements OnInit {
 
-  admin_list: AdminListModel[] = [
-    {
-      id:1,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:2,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:3,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:4,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:5,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:6,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:7,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:8,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:9,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:10,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-  ]
+  admin_list: Profile[] = [];
+  is_superadmin: boolean;
 
-  selectedAdmin?:AdminListModel = this.admin_list[0];
+  selectedAdmin:Profile;
 
-  constructor(private ref: ChangeDetectorRef) { }
+  constructor(private ref: ChangeDetectorRef, private service: AuthService) { }
 
   activePage:number = 1;
   currentPage = 0;
@@ -141,9 +43,15 @@ export class AdminListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.service.getUsers().subscribe(
+      data => {this.admin_list = data;
+              this.selectedAdmin  = this.admin_list[0];
+            }
+    )
+    this.is_superadmin = this.service.currentAdmin.is_superadmin;
   }
 
-  displayInfo(admin:AdminListModel){
+  displayInfo(admin:Profile){
     this.selectedAdmin = admin;
   }
 

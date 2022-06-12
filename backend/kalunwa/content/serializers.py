@@ -374,6 +374,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
     def create(self, validated_data):
         image_id = validated_data.pop('image')
         camp_image = get_object_or_404(Image, pk=image_id)
+        
         name = validated_data.pop('name')
         camp_name = get_value_by_label(name, CampEnum)
 
@@ -388,16 +389,14 @@ class CampPageSerializer(FlexFieldsModelSerializer):
         image_id = validated_data.pop('image')
         camp_image = get_object_or_404(Image, pk=image_id)
         instance.image = camp_image
+        
         camp = validated_data.pop('name')
         camp_name = get_value_by_label(camp, CampEnum)
         instance.name = camp_name
 
         # update the rest of the attributes
         for key, value in validated_data.items():
-        # setattr updates an instance's attribute (key) with the value
             setattr(instance, key, value) 
-        # always do instance.save() when editing an attribute, because assignment
-        # itself does not commit to the database 
         instance.save()
         return instance
 
@@ -441,7 +440,6 @@ class ContributorSerializer(FlexFieldsModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        # pop stuff that needs to be processed
         image_id = validated_data.pop('image')
         contributor_image = get_object_or_404(Image, pk=image_id)
         instance.image = contributor_image
@@ -449,12 +447,10 @@ class ContributorSerializer(FlexFieldsModelSerializer):
         category = validated_data.pop('category')
         category_value = get_value_by_label(category, Contributor.Categories)
         instance.category = category_value
-        # update the rest of the attributes
+
         for key, value in validated_data.items():
-        # setattr updates an instance's attribute (key) with the value
             setattr(instance, key, value) 
-        # always do instance.save() when editing an attribute, because assignment
-        # itself does not commit to the database 
+
         instance.save()
         return instance
 
@@ -680,8 +676,6 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             camp=camp,
             image=camp_leader_image,
             **validated_data)
-    #no need to override update since image only needs ID in string
-    #to take care converting KEY to Label 
 
     def update(self, instance, validated_data):
         image_id = validated_data.pop('image')

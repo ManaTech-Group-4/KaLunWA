@@ -18,4 +18,4 @@ class MultipleFieldLookupORMixin(object):
                 filter[field] = self.kwargs[field]
             except Exception:
                 pass
-        return get_object_or_404(queryset, **filter) 
+        return get_object_or_404(queryset, **filter)

@@ -1,12 +1,17 @@
 from django.db.models import Sum
-from .models import CampEnum, Contributor, Event, Image, Jumbotron, Announcement, Project, News
+from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import NotFound
+from rest_framework import status
+from django.db.models import Sum
+from kalunwa.core.views import MultipleFieldLookupORMixin
+from .models import Contributor, Event, Image, Jumbotron, Announcement, Project, News
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from .serializers import (AnnouncementSerializer,  CabinOfficerSerializer, CampLeaderSerializer, 
                         CampPageSerializer, CommissionerSerializer, ContributorSerializer, 
                         DemographicsSerializer, EventSerializer,ImageSerializer, JumbotronSerializer,
                          OrgLeaderSerializer, ProjectSerializer, NewsSerializer) 
 from rest_framework.response import Response
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -112,11 +117,12 @@ class CampLeaderViewSet(viewsets.ModelViewSet):
     #position only accepts KEY from choices enums eg. DIR
 
 
-class CampPageViewSet(viewsets.ModelViewSet):
+class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
     model = CampPage
     serializer_class = CampPageSerializer
     filter_backends = [CampNameInFilter, QueryLimitBackend]   
     queryset = CampPage.objects.all()
+    lookup_fields = ['id', 'slug']
 
 
 class DemographicsViewSet(viewsets.ModelViewSet):
@@ -130,12 +136,9 @@ class DemographicsViewSet(viewsets.ModelViewSet):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
 
 
-
 class ContributorViewset(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     queryset = Contributor.objects.all()
-
-
 # -----------------------------------------------------------------------------    
 # tester for gallery 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -153,7 +156,6 @@ class ImageViewSet(viewsets.ModelViewSet):
             event = Event.objects.get(pk=event_pk).prefetch_related('gallery')
             return event.gallery.all()
         return super().get_queryset() 
-
 
 
 class EventGalleryListCreateView(ListCreateAPIView):
@@ -228,18 +230,23 @@ class ProjectGalleryListCreateView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class CampGalleryListCreateView(ListCreateAPIView):
+class CampPageGalleryListCreateView(MultipleFieldLookupORMixin, ListCreateAPIView):
     """
-    Allows the creation of an Image object directly to the related Project. 
+    Allows the creation of an Image object directly to the related Camp. 
     Will be called when the user wants to upload a new image in the gallery.
     """
     serializer_class = ImageSerializer
-    lookup_fields = ['pk']
+    lookup_fields = ['id', 'slug']
 
-    def get_project_object(self):
-        camp_id = self.kwargs['pk']
-        print(camp_id)
-        return get_object_or_404(CampPage, pk=camp_id)
+    def get_camp_object(self):
+        for field in self.lookup_fields:
+            try:                                  # Get the result with one or more fields.
+                look_up_value = self.kwargs[field]
+                kwargs = {f'{field}' : look_up_value}                 
+                return CampPage.objects.get(**kwargs)
+            except KeyError: # Key error, look up field not in url 
+                pass
+        raise NotFound(detail="Camp page does not exist.", code=status.HTTP_404_NOT_FOUND)
 
     def get_queryset(self): # get list of images related to the camp
         camp = self.get_camp_object()

@@ -31,6 +31,7 @@ class Image(AuthoredModel):
     name = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/content/')
     tags = models.ManyToManyField(Tag, related_name='images', blank=True) # blank=true allows 0 tags
+    last_updated_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, related_name='images')
 
     def __str__(self) -> str:
         return str(self.id) + '. ' + self.name

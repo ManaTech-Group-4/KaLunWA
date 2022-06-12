@@ -52,13 +52,16 @@
         border-radius: 10px;
         min-width: 30vw;
         height:fit-content;
-        margin-left: 20vw;
+        margin-left: 15vw;
         .header{
             background-color: #536B3C;
             border-radius: 10px 10px 0 0;
             color: #fafafa;
             margin-bottom: 8px;
             padding: 8px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             h2{
                 text-align: center;
                 font-family: monserrat;
@@ -69,48 +72,14 @@
             width: 100%;
             background-color: rgb(228, 228, 228);
             display: block;
-            .label{
-                align-items: center;
-                padding: 15px 30px;
+            padding-top: 19px;
+            .slide-section{
                 display: flex;
                 flex-direction: row;
-                align-items: center;
-                text-align: center;
                 justify-content: center;
-                p{
-                    font-size: 15px;
-                    color: #536B3C;
-                    margin: 0;
+                .mat-icon{
+                    color: #3D512C;
                 }
-                select{
-                    width: auto;
-                    margin: 0 15px;
-                    padding: 8px 10px;
-                    border: 1px solid #536B3C;
-                    border-radius: 10px;
-                    font-family: monserrat;
-                    font-size: 13px;
-                    color:#536B3C;
-                    option{
-                        box-shadow: none;
-                        &:focus{
-                            background-color: #5C7437d2;
-                            color: #fafafa;
-                            border: none;
-                        }
-                    }
-                    &:focus{
-                        outline: none;
-                        
-                    }
-                }
-                button{
-                    color: #536B3C;
-                }
-                
-            }
-            &:last-child{
-                border-radius: 0 0 10px 10px;
             }
         }
     }

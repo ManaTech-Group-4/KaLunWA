@@ -9,20 +9,47 @@ import { EventspageService } from 'src/app/features/service/eventspage.service';
 import { ProjectItemService } from '../../../projects/service/project-item.service';
 import { EventsResponseModel } from 'src/app/features/models/events-response-model';
 import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
-
+import {FormGroup,FormControl} from '@angular/forms'
 @Component({
   selector: 'app-cms-homepage',
   templateUrl: './cms-homepage.component.html',
   styleUrls: ['./cms-homepage.component.scss']
 })
 export class CmsHomepageComponent implements OnInit {
-  constructor(private projectService: ProjectItemService, private eventsService: EventspageService, private newsService: NewsService) { }
+  constructor(private projectService: ProjectItemService, private eventsService: EventspageService) { }
 
   public jumbotron = [] as EventsResponseModel[];
   public events = [] as EventsResponseModel[];
   public projects = [] as EventsResponseModel[];
 
   sectionChoice: string = 'jumbotron';
+  slides: number = 1;
+
+  chosen: Array<any>=[
+    0
+  ];
+
+  log(value:any){
+    this.chosen.push(value);
+    console.log(this.chosen);
+
+  }
+  onChange(index:number, value:any) {   
+    this.chosen[index]=this.jumbotron.filter(x=>x.id!=value)
+  }
+
+  slide1=new FormGroup({
+    id:new FormControl(null)
+  })
+  slide2=new FormGroup({
+    id:new FormControl(null)
+  })
+  slide3=new FormGroup({
+    id:new FormControl(null)
+  })
+  form=new FormGroup({
+    id:new FormControl(null)
+  })
 
   details: SinglePageListModel={
     id: 1,
@@ -55,6 +82,19 @@ export class CmsHomepageComponent implements OnInit {
   reset(id:string) {
     var dropDown = document.getElementById(id) as HTMLSelectElement;
     dropDown.selectedIndex = 0;
-}
+  }
+
+  addSlide(){
+    this.slides++;
+  }
+
+  deleteSlide(){
+    if (this.slides>1){
+      this.slides--;
+    }
+    else{
+      alert("Minimum of 1 slide needed");
+    }
+  }
 
 }

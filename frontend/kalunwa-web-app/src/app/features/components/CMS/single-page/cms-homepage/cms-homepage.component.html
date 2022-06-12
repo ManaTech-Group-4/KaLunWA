@@ -12,16 +12,61 @@
         <div *ngIf="sectionChoice =='jumbotron'">
             <div class="header">
                 <h2>Jumbotron</h2>
+                <button mat-raised-button *ngIf="slides < 5" (click)="addSlide()" color="primary"><mat-icon>add</mat-icon> Add Slide</button>
+                <button mat-raised-button *ngIf="slides == 5" disabled><mat-icon>add</mat-icon> Add Slide</button>
             </div>
             <div class="dropdown">
-                <div class="label">
-                    <p>Slide 1</p>
-                    <select id="slide1">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('slide1')"><mat-icon>delete</mat-icon></button>
+                <!--
+                <div class="slide-section" *ngFor="let i of [].constructor(slides); let index = index">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Slide {{index+1}}</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <ng-container *ngFor="let item of jumbotron">
+                                <mat-option [value]="item.title" *ngIf="chosen.exclude(item.id)" (click)="chosen[i]=item.id">{{item.title}}</mat-option>
+                            </ng-container>
+                            
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button><mat-icon>update</mat-icon></button>
+                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
                 </div>
+                -->
+                <!--*ngFor="let i of [].constructor(slides); let index = index"-->
+                <div class="slide-section" >
+                    <form [formGroup]="slide1">
+                        <select type="number" class="form-control" formControlName="id" >
+                            <option hidden value="null">Please Select Item</option>
+                            <ng-container *ngFor="let name of jumbotron" >
+                                <option *ngIf="!(chosen.includes(slide1.get('id')!.value))" [ngValue]="name.id" (click)="log(slide1.get('id')!.value)">
+                                    {{ name.title }}
+                                </option>
+                            </ng-container>
+                            
+                        </select>
+                    </form>
+                    <form [formGroup]="slide2">
+                        <select type="number" class="form-control" formControlName="id" >
+                            <option hidden value="null">Please Select Item</option>
+                            <ng-container *ngFor="let name of jumbotron" >
+                                <option *ngIf="!(chosen.includes(slide2.get('id')!.value))" [ngValue]="name.id" >
+                                    {{ name.title }}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </form>
+                    <form [formGroup]="slide3">
+                        <select type="number" class="form-control" formControlName="id" >
+                            <option hidden value="null">Please Select Item</option>
+                            <ng-container *ngFor="let name of jumbotron" >
+                                <option *ngIf="!(chosen.includes(slide3.get('id')!.value))" [ngValue]="name.id">
+                                    {{ name.title }}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </form>
+                </div>
+                
             </div>
         </div>
         <div *ngIf="sectionChoice=='event'">
@@ -31,26 +76,41 @@
             <div class="dropdown">
                 <div class="label">
                     <p>Event 1</p>
-                    <select id="event1">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
+                    <form [formGroup]="form">
+                        <select type="number"
+                        class="form-control" formControlName="id" >
+                           <option hidden value="null" >Please Select Item</option>
+                           <option *ngFor="let name of events">
+                              {{ name.title }}
+                             </option>
+                          </select>
+                    </form>
                     <button mat-icon-button (click)="reset('event1')"><mat-icon>delete</mat-icon></button>
                 </div>
                 <div class="label">
                     <p>Event 2</p>
-                    <select id="event2">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
+                    <form [formGroup]="form">
+                        <select type="number"
+                        class="form-control" formControlName="id" >
+                           <option hidden value="null" >Please Select Item</option>
+                           <option *ngFor="let name of events">
+                              {{ name.title }}
+                             </option>
+                          </select>
+                    </form>
                     <button mat-icon-button (click)="reset('event2')"><mat-icon>delete</mat-icon></button>
                 </div>
                 <div class="label">
                     <p>Event 3</p>
-                    <select id="event3">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
+                    <form [formGroup]="form">
+                        <select type="number"
+                        class="form-control" formControlName="id" >
+                           <option hidden value="null" >Please Select Item</option>
+                           <option *ngFor="let name of events">
+                              {{ name.title }}
+                             </option>
+                          </select>
+                    </form>
                     <button mat-icon-button (click)="reset('event3')"><mat-icon>delete</mat-icon></button>
                 </div>
             </div>

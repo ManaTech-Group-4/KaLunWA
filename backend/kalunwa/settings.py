@@ -50,8 +50,6 @@ INSTALLED_APPS = [
     'kalunwa.core.apps.CoreConfig',
     'kalunwa.content.apps.ContentConfig',
     'kalunwa.users.apps.UsersConfig',
-    'kalunwa.core.apps.CoreConfig',
-    'kalunwa.content.apps.ContentConfig',
     'kalunwa.page_containers.apps.PageContainersConfig',
 ]
 

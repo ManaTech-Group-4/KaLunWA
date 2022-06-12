@@ -30,7 +30,8 @@ other tables, namely -> {protected_objects_in_string}"
         # print(exc.__annotations__)
         response = Response(
             {
-                "detail": str(exc.__cause__)
+                "detail": str(exc.__cause__),
+                "code":"integrity-error"
             },
             status=status.HTTP_400_BAD_REQUEST
         )

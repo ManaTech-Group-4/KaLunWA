@@ -480,8 +480,12 @@ class DemographicsSerializer(serializers.ModelSerializer):
 
 
 class CommissionerSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position', validators=[])
-    category = serializers.CharField(source='get_category', validators=[]) 
+    """
+    Overriding to allow writes, though this gets rid of the custom validation
+    as provided by django
+    """
+    position = serializers.CharField()
+    category = serializers.CharField() 
 
     class Meta:
         model = Commissioner
@@ -509,40 +513,34 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
     def validate(self, data):
         if data['category'] not in Commissioner.Categories.labels:
             raise serializers.ValidationError(
-                "Commissioner category invalid."
+                f"Commissioner category invalid. Accepted are {Commissioner.Categories.labels}."
             )
 
         if data['position'] not in Commissioner.Positions.labels:
             raise serializers.ValidationError(
-                "Commissioner position invalid."
+                f"Commissioner position invalid. Accepted are {Commissioner.Positions.labels}."
             )            
+        return data
 
     def create(self, validated_data):
-        category = validated_data.get('category')
+        category = validated_data.pop('category')
         category_value = get_value_by_label(category, Commissioner.Categories)
-        position = validated_data.get('position')
+        position = validated_data.pop('position')
         position_value = get_value_by_label(position, Commissioner.Positions)        
-        image_id = validated_data.get('image')
-        commissioner_image = get_object_or_404(Image, pk=image_id)
 
         return  Commissioner.objects.create(
             category=category_value,
             position=position_value,
-            image=commissioner_image,
             **validated_data)
 
     def update(self, instance, validated_data):
-        category = validated_data.get('category')
+        category = validated_data.pop('category')
         category_value = get_value_by_label(category, Commissioner.Categories)
         instance.category = category_value
 
-        position = validated_data.get('position')
+        position = validated_data.pop('position')
         position_value = get_value_by_label(position, Commissioner.Positions)        
         instance.position = position_value
-
-        image_id = validated_data.get('image')
-        commissioner_image = get_object_or_404(Image, pk=image_id)
-        instance.image = commissioner_image
 
         for key, value in validated_data.items():
             setattr(instance, key, value) 
@@ -550,14 +548,25 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
         instance.save()
         return instance        
 
+    def to_representation(self, instance):
+        data = super(CommissionerSerializer, self).to_representation(instance)
+        position = data.get('position', None) 
+        category = data.get('category', None)        
+        # when getting record, change presentation 
+        if position is not None:
+            data['position'] = instance.get_position() 
+        if category is not None:
+            data['category'] = instance.get_category()                          
+        return data
+
 
 # will have separate serializer when posting 
     # position & category cannot be posted given the use of a get method
     # unless the to_internal value is changed
 class CabinOfficerSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position', validators=[])
-    camp = serializers.CharField(source='get_camp', validators=[])
-    category = serializers.CharField(source='get_category', validators=[]) 
+    position = serializers.CharField(validators=[])
+    camp = serializers.CharField(validators=[])
+    category = serializers.CharField(validators=[]) 
 
     class Meta:
         model = CabinOfficer
@@ -588,22 +597,19 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
 
         if data['category'] not in CabinOfficer.Categories.labels:
             raise serializers.ValidationError(
-                "CabinOfficer category invalid."
+                f"CabinOfficer category invalid. Accepted are {CabinOfficer.Categories.labels}"
             )
 
         if data['position'] not in CabinOfficer.Positions.labels:
             raise serializers.ValidationError(
-                "CabinOfficer position invalid."
-            )            
+                f"CabinOfficer position invalid. Accepted are {CabinOfficer.Positions.labels}"
+            )
         return data
-
     
-    def create(self, validated_data):
-        image_id = validated_data.get('image')
-        cabin_officer_image = get_object_or_404(Image, pk=image_id)        
-        category = validated_data.get('category')
+    def create(self, validated_data):      
+        category = validated_data.pop('category')
         category_value = get_value_by_label(category, CabinOfficer.Categories)
-        position = validated_data.get('position')
+        position = validated_data.pop('position')
         position_value = get_value_by_label(position, CabinOfficer.Positions)        
         camp = validated_data.pop('camp')
         camp = get_value_by_label(camp, CampEnum)
@@ -612,32 +618,42 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
             category=category_value,
             position=position_value,
             camp=camp,
-            image=cabin_officer_image,
             **validated_data)
 
     def update(self, instance, validated_data):
-        category = validated_data.get('category')
+        category = validated_data.pop('category')
         category_value = get_value_by_label(category, CabinOfficer.Categories)
         instance.category = category_value
 
-        position = validated_data.get('position')
+        position = validated_data.pop('position')
         position_value = get_value_by_label(position, CabinOfficer.Positions)        
         instance.position = position_value
         
-        image_id = validated_data.get('image')
-        cabin_officer_image = get_object_or_404(Image, pk=image_id)
-        instance.image = cabin_officer_image
-
         for key, value in validated_data.items():
             setattr(instance, key, value) 
 
         instance.save()
         return instance 
 
+
+    def to_representation(self, instance):
+        data = super(CabinOfficerSerializer, self).to_representation(instance)
+        position = data.get('position', None) 
+        camp = data.get('camp', None) 
+        category = data.get('category', None)        
+        # when getting record, change presentation 
+        if position is not None:
+            data['position'] = instance.get_position()
+        if camp is not None:
+            data['camp'] = instance.get_camp()    
+        if category is not None:
+            data['category'] = instance.get_category()                          
+        return data
+
 # prep for about us 
 class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerializer):
-    position = serializers.CharField(source='get_position', validators=[])
-    camp = serializers.CharField(source='get_camp', validators=[])   
+    position = serializers.CharField( validators=[])
+    camp = serializers.CharField( validators=[])   
     name = serializers.CharField(source='get_fullname', read_only=True)
 
     class Meta:
@@ -669,14 +685,11 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         validate_camp(data['camp'])
         if data['position'] not in CampLeader.Positions.labels:
             raise serializers.ValidationError(
-                "Camp Leader category invalid."
+            f"Organization Leader position invalid. Expected are {CampLeader.Positions.labels}"
             )       
         return data
 
     def create(self, validated_data):
-        image_id = validated_data.pop('image')
-        camp_leader_image = get_object_or_404(Image, pk=image_id)
-
         position = validated_data.pop('position')
         position_value = get_value_by_label(position, CampLeader.Positions)
 
@@ -686,14 +699,12 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         return  CampLeader.objects.create(
             position=position_value,
             camp=camp,
-            image=camp_leader_image,
             **validated_data)
 
     def update(self, instance, validated_data):
-        image_id = validated_data.pop('image')
-        camp_leader_image = get_object_or_404(Image, pk=image_id)
-        instance.image = camp_leader_image
-
+        """
+        Does not support patch, must have all fields
+        """
         position = validated_data.pop('position')
         position_value = get_value_by_label(position, CampLeader.Positions)
         instance.position = position_value
@@ -707,6 +718,17 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
 
         instance.save()        
         return instance
+
+    def to_representation(self, instance):
+        data = super(CampLeaderSerializer, self).to_representation(instance)
+        position = data.get('position', None) 
+        camp = data.get('camp', None) 
+        # when getting record, change presentation 
+        if position is not None:
+            data['position'] = instance.get_position()
+        if camp is not None:
+            data['camp'] = instance.get_camp()            
+        return data
 
 
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
@@ -758,7 +780,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
 
     def to_representation(self, instance):
         data = super(OrgLeaderSerializer, self).to_representation(instance)
-        position = data.get('position') 
+        position = data.get('position', None) 
         # when getting record, change presentation 
         if position is not None:
             data['position'] = instance.get_position()

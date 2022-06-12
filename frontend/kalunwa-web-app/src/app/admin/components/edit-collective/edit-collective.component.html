@@ -17,7 +17,7 @@
           <input matInput formControlName="title">
         </mat-form-field>
       </div>
-      <div class="form-row" *ngIf="collectiveType !='announcement' && collectiveType != 'news'">
+      <div class="form-row">
         <mat-form-field appearance="fill">
           <mat-label>Date</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="start_date" (dateChange)="updateStatus()">
@@ -26,7 +26,7 @@
           <mat-datepicker #picker ></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" >
+        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
           <mat-label>End Date</mat-label>
           <input matInput [matDatepicker]="endpicker" formControlName="end_date"  (dateChange)="updateStatus()">
           <mat-hint>MM/DD/YYYY</mat-hint>
@@ -34,7 +34,7 @@
           <mat-datepicker #endpicker></mat-datepicker>
         </mat-form-field>
       </div>
-      <div class="form-row" *ngIf="collectiveType !='announcement' && collectiveType != 'news'">
+      <div class="form-row">
         <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
           <mat-label>Status</mat-label>
           <input matInput disabled [value]="status">

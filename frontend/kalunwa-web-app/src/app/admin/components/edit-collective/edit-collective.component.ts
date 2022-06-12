@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CollectivePagesService } from '../../service/collective-pages.service';
 
 @Component({
-  selector: 'app-add-collective',
-  templateUrl: './add-collective.component.html',
-  styleUrls: ['./add-collective.component.scss']
+  selector: 'app-edit-collective',
+  templateUrl: './edit-collective.component.html',
+  styleUrls: ['./edit-collective.component.scss']
 })
-export class AddCollectiveComponent implements OnInit {
+export class EditCollectiveComponent implements OnInit {
   collective: FormGroup;
   submitted= false;
   collectiveType: string | null= "project";
@@ -21,20 +21,45 @@ export class AddCollectiveComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: CollectivePagesService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private router: Router) { }
 
   ngOnInit(): void {
-      this.collective = this.formBuilder.group({
-      title: ['',Validators.required],
-      start_date: [null],
-      end_date: [null],
-      camp: ['',Validators.required],
-      description: ['',Validators.required],
-      image:[null]
+    this.collective = this.formBuilder.group({
+    title: ['',Validators.required],
+    start_date: [null],
+    end_date: [null],
+    camp: ['',Validators.required],
+    description: ['',Validators.required],
+    image:[null]
     });
 
+    // const collectiveId = this.route.snapshot.paramMap.get("id");
+    // console.log(collectiveId);
+    // if(collectiveId == "")
+    //   this.isAdd = true;
+    // else
+    //   this.isAdd = false;
+
     this.collectiveType = this.route.snapshot.paramMap.get("collective-type");
+
+    // if(!this.isAdd){
+    //   if(this.collectiveType == "project"){
+    //         this.service.getProjectDetails(collectiveId)
+    //             .pipe(first())
+    //             .subscribe(x => this.collective.patchValue(x));
+    //   }
+    //   else if(this.collectiveType == "event"){
+    //     this.service.getEventDetails(collectiveId)
+    //         .pipe(first())
+    //         .subscribe(x => this.collective.patchValue(x));
+    //   }
+    //   else if(this.collectiveType == "news"){
+    //     this.service.getNewsDetails(collectiveId)
+    //         .pipe(first())
+    //         .subscribe(x => this.collective.patchValue(x));
+    //   }
+    // }
+
     this.profileImage = "../../assets/images/place.jpg";
   }
 
@@ -48,27 +73,29 @@ export class AddCollectiveComponent implements OnInit {
     }
 
     this.processFile(imageInput);
+
+    // if(this.isAdd){
+    //   this.processFile(imageInput);
+    //   this.createCollective();
+    // }
+    // else{
+    //   this.updateCollective();
+    // }
+
   }
 
   private createCollective(id:number){
 
-    let newItem: any;
-    if(this.collectiveType != 'news' && this.collectiveType != 'announcements')
-      newItem = {
-        'title': this.f.title.value,
-        'start_date': this.f.start_date.value,
-        'end_date': this.f.end_date.value,
-        'camp': this.f.camp.value,
-        'description': this.f.description.value,
-        'image': id
-      };
 
-    else
-      newItem = {
-        'title': this.f.title.value,
-        'description': this.f.description.value,
-        'image': id
-      };
+    const newItem = {
+      'title': this.f.title.value,
+      'start_date': this.f.start_date.value,
+      'end_date': this.f.end_date.value,
+      'status': this.status,
+      'camp': this.f.camp.value,
+      'description': this.f.description.value,
+      'image': id
+    };
 
 
     if(this.collectiveType=="project"){
@@ -108,6 +135,18 @@ export class AddCollectiveComponent implements OnInit {
       );
     }
   }
+
+  // private updateCollective(){
+  //   if(this.collectiveType=="project"){
+  //     this.service.updateProject();
+  //   }
+  //   if(this.collectiveType=="event"){
+  //     this.service.updateEvent();
+  //   }
+  //   if(this.collectiveType=="news"){
+  //     this.service.updateNews();
+  //   }
+  // }
 
   updateStatus(){
     let now = new Date();
@@ -185,6 +224,7 @@ export class AddCollectiveComponent implements OnInit {
       return "";
     return this.service.printDate(date);
   }
+
 
 
 }

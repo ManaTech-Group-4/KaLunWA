@@ -2,11 +2,11 @@
   <table class="table">
       <tr class="table-header">
         <td><h1>Collective Pages</h1></td>
-        <td colspan="3"><button mat-raised-button routerLink='/admin/collective-add-edit/{{selected}}/'><mat-icon>note_add</mat-icon> Add {{selected | titlecase}}</button><button mat-button><mat-icon class="delete">delete_forever</mat-icon></button></td>
+        <td colspan="4"><button mat-raised-button routerLink='/admin/collective-add/{{selected}}/'><mat-icon>note_add</mat-icon> Add {{selected | titlecase}}</button></td>
       </tr>
 
       <tr class="chiplist">
-        <td colspan="4">
+        <td colspan="5">
         <mat-chip-list>
           <mat-chip (click)="changeCollection('project')"  [style.background-color]="selected == 'project'? '#7bad49': '#c1c1c1'"  [style.border]="selected == 'project'? 'none': '2px solid black'" [style.color]="selected == 'project'? 'white': 'black'">Projects</mat-chip>
           <mat-chip (click)="changeCollection('event')"  [style.background-color]="selected == 'event'? '#7bad49': '#c1c1c1'"  [style.border]="selected == 'event'? 'none': '2px solid black'" [style.color]="selected == 'event'? 'white': 'black'">Events</mat-chip>
@@ -18,14 +18,17 @@
       <tr class="col-header">
           <th>Title</th>
           <th>Date Created</th>
-          <th *ngIf="selected != 'news'">Camp</th>
-          <th *ngIf="selected != 'news'">Ongoing</th>
+          <th *ngIf="selected != 'news' && selected != 'announcement'">Camp</th>
+          <th *ngIf="selected != 'news' && selected != 'announcement'">Status</th>
+          <th>Actions</th>
       </tr>
-      <tr  class="table-content" *ngFor="let item of displayList | slice:currentPage:lastPage" routerLink='/admin/collective-add-edit/{{selected}}/{{item.id}}'>
+      <tr  class="table-content" *ngFor="let item of displayList | slice:currentPage:lastPage">
         <td width="40%"><mat-checkbox color="primary">{{item.title}}</mat-checkbox>
-        <td width="20%">{{item.start_date}}</td>
+        <td width="20%">{{item.created_at}}</td>
         <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.camp}}</td>
         <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.status}}</td>
+        <td id="actions"><mat-icon [routerLink]="['/admin/edit-collective/{{selected}}',item.id]">edit</mat-icon> <mat-icon >delete</mat-icon></td>
+
       </tr>
       <tr *ngIf="!displayList || displayList.length < 1" class="empty-case">
         <th colspan="4">{{selected | titlecase}} is empty</th>

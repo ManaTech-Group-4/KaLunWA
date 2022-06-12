@@ -88,6 +88,14 @@ div{
           td:first-child, th:first-child{
             text-align: left;
           }
+          td:last-child, th:last-child{
+            text-align: right;
+          }
+          #actions{
+            mat-icon{
+              cursor:pointer;
+            }
+          }
       }
       .col-header{
           background-color: #dbdbdb;

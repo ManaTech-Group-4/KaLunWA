@@ -283,28 +283,6 @@ class NewsSerializer(FlexFieldsModelSerializer):
             ),
         }        
 
-    # def create(self, validated_data):
-    #     image_id = validated_data.pop('image')
-    #     print(image_id)
-    #     news_image = get_object_or_404(Image, pk=image_id)
-
-    #     return News.objects.create(
-    #         image=news_image,            
-    #         **validated_data
-    #         )
-
-    def update(self, instance, validated_data):
-        image_id = validated_data.pop('image')
-        news_image = get_object_or_404(Image, pk=image_id)
-        instance.image = news_image
-        
-        # update the rest of the attributes
-        for key, value in validated_data.items():
-            setattr(instance, key, value) 
-
-        instance.save()          
-        return instance
-
 class AnnouncementSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Announcement
@@ -409,7 +387,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
 
 
 class ContributorSerializer(FlexFieldsModelSerializer):
-    category = serializers.CharField(source='get_category', validators=[]) 
+    category = serializers.CharField() 
 
     class Meta:
         model = Contributor
@@ -431,27 +409,20 @@ class ContributorSerializer(FlexFieldsModelSerializer):
 
     def validate(self, data): 
         if data['category'] not in Contributor.Categories.labels:
-            raise serializers.ValidationError("Contributor category is invalid.")
+            raise serializers.ValidationError(f"Contributor category is invalid. \
+Accepted are: {Contributor.Categories.labels}")
         return data
 
     def create(self, validated_data):
-        image_id = validated_data.pop('image')
-        contributor_image = get_object_or_404(Image, pk=image_id)
-
         category = validated_data.pop('category')
         category_value = get_value_by_label(category, Contributor.Categories)
 
         return Contributor.objects.create(
-            image=contributor_image,
             category=category_value,
             **validated_data
         )
 
     def update(self, instance, validated_data):
-        image_id = validated_data.pop('image')
-        contributor_image = get_object_or_404(Image, pk=image_id)
-        instance.image = contributor_image
-
         category = validated_data.pop('category')
         category_value = get_value_by_label(category, Contributor.Categories)
         instance.category = category_value
@@ -461,6 +432,15 @@ class ContributorSerializer(FlexFieldsModelSerializer):
 
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        data = super(CabinOfficerSerializer, self).to_representation(instance)
+        category = data.get('category', None) 
+        # when getting record, change presentation 
+
+        if category is not None:
+            data['category'] = instance.get_category()                          
+        return data
 
 #-------------------------------------------------------------------------------
 #  serializes all data fields

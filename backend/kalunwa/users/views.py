@@ -60,7 +60,7 @@ class UserCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Regisiter(ListCreateAPIView):
+class Register(ListCreateAPIView):
     permission_classes = [IsAuthenticated, SuperUserOnly ] 
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer

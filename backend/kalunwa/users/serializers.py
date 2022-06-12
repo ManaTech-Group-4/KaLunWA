@@ -57,7 +57,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     last_name = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    image = serializers.ImageField(allow_empty_file=True, allow_null=True, required=False)    
+    image = serializers.ImageField(required=False, allow_empty_file=True, allow_null=True,)    
     # Ensure passwords are at least 8 characters long, no longer than 128
     # characters, and can not be read by the client.
     password = serializers.CharField(

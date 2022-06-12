@@ -10,15 +10,17 @@ class CampEnum(models.TextChoices):
     GENERAL = 'GNRL', 'General'
     
 
-class AuthoredModel(TimestampedModel):
-    # created_by (User)
-    # last_updated_by (User)
+class AuthoredModel(TimestampedModel): 
+    """
+    Put under a class that would have its editor and time tracked.
+    """
+    last_updated_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
 
     class Meta(TimestampedModel.Meta):
         abstract=True
 
 
-class Tag(AuthoredModel):
+class Tag(TimestampedModel):
     name = models.CharField(db_index=True, unique=True, max_length=50)
     
     def __str__(self) -> str:
@@ -226,7 +228,7 @@ class CabinOfficer(LeaderBase):
         return f'{self.get_category_display()}'     
 
 
-class Contributor(models.Model):
+class Contributor(AuthoredModel):
     class Categories(models.TextChoices):
         SPONSOR = 'SR', 'Sponsor'
         PARTNER = 'PR', 'Partner'

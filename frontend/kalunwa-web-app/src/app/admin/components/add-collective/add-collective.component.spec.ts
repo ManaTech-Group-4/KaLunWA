@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { routes } from 'src/app/app-routing.module';
@@ -18,7 +19,7 @@ describe('AddCollectiveComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ AddCollectiveComponent ],
-      imports:[ReactiveFormsModule, FormsModule, HttpClientModule,RouterTestingModule.withRoutes(routes),MatSelectModule, MatFormFieldModule, MatInputModule, BrowserAnimationsModule ]
+      imports:[ReactiveFormsModule, FormsModule, HttpClientModule,RouterTestingModule.withRoutes(routes), MatSnackBarModule ]
     })
     .compileComponents();
   });
@@ -29,7 +30,4 @@ describe('AddCollectiveComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

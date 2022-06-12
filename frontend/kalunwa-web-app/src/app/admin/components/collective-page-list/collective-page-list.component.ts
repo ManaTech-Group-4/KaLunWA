@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
 import { CollectivePageModel } from '../../model/collective-page-model';
 import { CollectivePagesService } from '../../service/collective-pages.service';
 
@@ -23,36 +26,58 @@ export class CollectivePageListComponent implements OnInit {
   lastPage = 4;
   selected="project";
 
-  constructor(private service:CollectivePagesService,private ref: ChangeDetectorRef) { }
+  constructor(private service:CollectivePagesService,
+    private ref: ChangeDetectorRef,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
 
     ngOnInit(): void {
-      const projSub = this.service.getProjectList().subscribe(
-        (data) => {
-          this.projects = data;
-          this.displayList = this.projects;
-          projSub.unsubscribe();
-        }
-      );
-      const eventSub = this.service.getEventList().subscribe(
-        (data) => {
-          this.events = data;
-          eventSub.unsubscribe();
-        }
-      );
-      const newsSub = this.service.getNewsList().subscribe(
-        (data) => {
-          this.news = data;
-          newsSub.unsubscribe();
-        }
-      );
-      const annSub = this.service.getAnnouncementList().subscribe(
-        (data) => {
-          this.announcement = data;
-          annSub.unsubscribe();
-        }
-      );
+      this.getEvent();
+      this.getNews();
+      this.getAnnouncement();
+      this.getProject();
     }
+
+  getProject(){
+    const projSub = this.service.getProjectList().subscribe(
+      (data) => {
+        this.projects = data;
+        this.displayList = this.projects;
+        projSub.unsubscribe();
+      }
+    );
+  }
+
+  getEvent(){
+    const eventSub = this.service.getEventList().subscribe(
+      (data) => {
+        this.events = data;
+        this.displayList = this.events;
+        eventSub.unsubscribe();
+      }
+    );
+  }
+  getNews(){
+    const newsSub = this.service.getNewsList().subscribe(
+      (data) => {
+        this.news = data;
+        this.displayList = this.news;
+        newsSub.unsubscribe();
+      }
+    );
+  }
+  getAnnouncement(){
+    const annSub = this.service.getAnnouncementList().subscribe(
+      (data) => {
+        this.announcement = data;
+        this.displayList = this.announcement;
+        annSub.unsubscribe();
+      }
+    );
+  }
+
+
 
   detectIfChanges(){
     this.ref.detectChanges();
@@ -70,7 +95,73 @@ export class CollectivePageListComponent implements OnInit {
 
     this.activePage = newPage;
     this.ref.detectChanges();
-    console.log(this.currentPage, this.lastPage);
+  }
+
+  deleteItem(id:number, name:string){
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      width: '250px',
+      data: `Do you like to delete the ${this.selected} ${name}`,
+    });
+
+
+
+    const dialogSubscribe = dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        if(this.selected == "project"){
+          const deleteSub = this.service.deleteProject(id).subscribe(
+            res =>{
+              this.getProject();
+              this.updateDisplay(this.activePage);
+              this.snackBar.open(`Successfully deleted ${this.selected}`, `Close`, {duration: 5000});
+              deleteSub.unsubscribe();
+            },
+            err =>{
+              console.log(err);
+            }
+          );
+        }
+        else if(this.selected == "event"){
+          const deleteSub = this.service.deleteEvent(id).subscribe(
+            res =>{
+              this.getEvent();
+              this.updateDisplay(this.activePage);
+              this.snackBar.open(`Successfully deleted ${this.selected}`, `Close`, {duration: 5000});
+              deleteSub.unsubscribe();
+            },
+            err =>{
+              console.log(err);
+            }
+          );
+          }
+        else if(this.selected == "news"){
+          const deleteSub = this.service.deleteNews(id).subscribe(
+            res =>{
+              this.getNews();
+              this.updateDisplay(this.activePage);
+              this.snackBar.open(`Successfully deleted ${this.selected}`, `Close`, {duration: 5000});
+              deleteSub.unsubscribe();
+            },
+            err =>{
+              console.log(err);
+            }
+          );
+        }
+        else if(this.selected == "announcement"){
+          const deleteSub = this.service.deleteAnnouncement(id).subscribe(
+            res =>{
+              this.getAnnouncement();
+              this.updateDisplay(this.activePage);
+              this.snackBar.open(`Successfully deleted ${this.selected}`, `Close`, {duration: 5000});
+              deleteSub.unsubscribe();
+            },
+            err =>{
+              console.log(err);
+            }
+          );
+        }
+      }
+    dialogSubscribe.unsubscribe();
+    });
   }
 
 

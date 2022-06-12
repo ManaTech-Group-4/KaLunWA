@@ -6,42 +6,35 @@
         <button mat-button type="button" routerLink="/admin/collective"><mat-icon>arrow_left</mat-icon></button>
         Collective Pages
       </span>
-      <span><button mat-raised-button type="submit">Save {{collectiveType | titlecase}}</button>
-        <button mat-button type="button"><mat-icon class="delete">delete_forever</mat-icon></button></span>
+      <span><button mat-raised-button type="submit">Update {{collectiveType | titlecase}}</button></span>
     </div>
     <div class="body">
-      <h1>New {{collectiveType | titlecase}}</h1>
+      <h1>Update {{collectiveType | titlecase}}</h1>
       <div class="form-row">
         <mat-form-field appearance="fill">
           <mat-label>Title</mat-label>
           <input matInput formControlName="title">
         </mat-form-field>
       </div>
-      <div class="form-row">
+      <div class="form-row" *ngIf="collectiveType !='announcement' && collectiveType != 'news'">
         <mat-form-field appearance="fill">
           <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="start_date" (dateChange)="updateStatus()">
+          <input matInput [matDatepicker]="picker" formControlName="start_date">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker ></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
+        <mat-form-field appearance="fill" >
           <mat-label>End Date</mat-label>
-          <input matInput [matDatepicker]="endpicker" formControlName="end_date"  (dateChange)="updateStatus()">
+          <input matInput [matDatepicker]="endpicker" formControlName="end_date" >
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
           <mat-datepicker #endpicker></mat-datepicker>
         </mat-form-field>
       </div>
-      <div class="form-row">
-        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
-          <mat-label>Status</mat-label>
-          <input matInput disabled [value]="status">
-        </mat-form-field>
-      </div>
-      <div class="form-row">
-        <mat-form-field appearance="fill" *ngIf="collectiveType!='announcement'">
+      <div class="form-row"  *ngIf="collectiveType !='announcement' && collectiveType != 'news'">
+        <mat-form-field appearance="fill">
           <mat-label>Camps</mat-label>
           <mat-select formControlName="camp">
             <mat-option value="Baybayon">Baybayon</mat-option>
@@ -59,11 +52,16 @@
           <textarea matInput formControlName="description"></textarea>
         </mat-form-field>
       </div>
-      <div class="form-row" >
-
+      <div class="form-row"  *ngIf="collectiveType =='announcement'">
+        <mat-form-field appearance="fill">
+          <mat-label>Meta Description</mat-label>
+          <textarea matInput formControlName="meta_description"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="form-row" [style.visibility]="collectiveType=='announcement'?'hidden':'visible'">
         <mat-label style="margin:10px">{{collectiveType| titlecase}} Picture</mat-label>
-        <div class="profile-container">
-          <img [src]="profileImage" [alt]="fileName"/>
+        <div class="profile-container" >
+          <img [src]="profileImage" [alt]="fileName" />
           <input type="file" class="file-input" id="fileImg"
           accept="image/*" (change)="onFileChange($event)" #fileUpload />
 

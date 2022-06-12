@@ -50,6 +50,7 @@ import { AdminTemplateComponent } from './admin/components/admin-template/admin-
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { EditCollectiveComponent } from './admin/components/edit-collective/edit-collective.component';
+import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { EditCollectiveComponent } from './admin/components/edit-collective/edit
     CollectivePageListComponent,
     AddCollectiveComponent,
     EditCollectiveComponent,
+    ConfirmDialog
   ],
   entryComponents:[
     MembersDialogComponent

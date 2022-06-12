@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollectivePagesService } from '../../service/collective-pages.service';
 
@@ -12,7 +13,6 @@ export class AddCollectiveComponent implements OnInit {
   collective: FormGroup;
   submitted= false;
   collectiveType: string | null= "project";
-  status = "";
   fileName="";
   collection:any;
   profileImage:string;
@@ -21,7 +21,8 @@ export class AddCollectiveComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: CollectivePagesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -29,8 +30,9 @@ export class AddCollectiveComponent implements OnInit {
       title: ['',Validators.required],
       start_date: [null],
       end_date: [null],
-      camp: ['',Validators.required],
+      camp: [''],
       description: ['',Validators.required],
+      meta_description: [''],
       image:[null]
     });
 
@@ -43,17 +45,21 @@ export class AddCollectiveComponent implements OnInit {
   onSubmit(imageInput:any){
     this.submitted = true;
 
+    console.log(this.collective);
+
     if(this.collective.invalid){
       return;
     }
-
-    this.processFile(imageInput);
+    if(this.collectiveType != 'announcement')
+      this.processFile(imageInput);
+    else
+      this.createCollective(0);
   }
 
   private createCollective(id:number){
-
+    console.log(this.collectiveType);
     let newItem: any;
-    if(this.collectiveType != 'news' && this.collectiveType != 'announcements')
+    if(this.collectiveType != 'news' && this.collectiveType != 'announcement')
       newItem = {
         'title': this.f.title.value,
         'start_date': this.f.start_date.value,
@@ -63,12 +69,19 @@ export class AddCollectiveComponent implements OnInit {
         'image': id
       };
 
-    else
+    else if(this.collectiveType == 'news')
       newItem = {
         'title': this.f.title.value,
         'description': this.f.description.value,
         'image': id
       };
+
+    else if(this.collectiveType == 'announcement')
+    newItem = {
+      'title': this.f.title.value,
+      'description': this.f.description.value,
+      'meta_description': this.f.meta_description.value
+    };
 
 
     if(this.collectiveType=="project"){
@@ -76,6 +89,7 @@ export class AddCollectiveComponent implements OnInit {
         suc => {
           console.log('success');
           this.router.navigateByUrl("admin/collective");
+          this.snackBar.open(`Successfully created a new ${this.collectiveType}`, `Close`, {duration: 5000});
           addSubscribe.unsubscribe;
         },
         err => {
@@ -88,6 +102,7 @@ export class AddCollectiveComponent implements OnInit {
         suc => {
           console.log('success');
           this.router.navigateByUrl("admin/collective");
+          this.snackBar.open(`Successfully created a new ${this.collectiveType}`, `Close`, {duration: 5000});
           addSubscribe.unsubscribe;
         },
         err => {
@@ -100,6 +115,7 @@ export class AddCollectiveComponent implements OnInit {
         suc => {
           console.log('success');
           this.router.navigateByUrl("admin/collective");
+          this.snackBar.open(`Successfully created a new ${this.collectiveType}`, `Close`, {duration: 5000});
           addSubscribe.unsubscribe;
         },
         err => {
@@ -107,28 +123,18 @@ export class AddCollectiveComponent implements OnInit {
         }
       );
     }
-  }
-
-  updateStatus(){
-    let now = new Date();
-    if(this.f.start_date.value != null && this.f.end_date.value != null){
-      if(this.f.start_date.value > now){
-        this.status="Upcoming";
-        if(this.f.start_date.value > this.f.endDate.value)
-          this.collective.controls["end_date"].setErrors({'incorrect': true});
-        else
-          this.collective.controls["end_date"].setErrors(null);
-      }
-      else{
-        this.status="Ongoing";
-        if(this.f.end_date.value < now )
-          this.status="Past";
-
-        if(this.f.start_date.value > this.f.end_date.value)
-          this.collective.controls["end_date"].setErrors({'incorrect': true});
-        else
-          this.collective.controls["end_date"].setErrors(null);
-      }
+    if(this.collectiveType=="announcement"){
+      const addSubscribe = this.service.addAnnoucement(newItem).subscribe(
+        suc => {
+          console.log('success');
+          this.router.navigateByUrl("admin/collective");
+          this.snackBar.open(`Successfully created a new ${this.collectiveType}`, `Close`, {duration: 5000});
+          addSubscribe.unsubscribe;
+        },
+        err => {
+          console.log(err);
+        }
+      );
     }
   }
 

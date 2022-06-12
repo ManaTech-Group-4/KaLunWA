@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IndivEventsModel } from 'src/app/features/models/indiv-event-model';
+import { AnnoucementModel } from 'src/app/features/models/news-model';
 import { CollectivePageModel } from '../model/collective-page-model';
 import { AuthService } from './auth.service';
 
@@ -9,6 +10,9 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class CollectivePagesService {
+  headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.access}`
+    });
 
   constructor(private http: HttpClient,private auth: AuthService) { }
 
@@ -28,33 +32,47 @@ export class CollectivePagesService {
 
 
   addProject(newProject:any){
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.access}`
-    });
-    return this.http.post(`http://127.0.0.1:8000/api/projects/`, newProject, {headers:headers});
+    return this.http.post(`http://127.0.0.1:8000/api/projects/`, newProject, {headers:this.headers});
   }
-  updateProject(){
-    console.log("project updated");
+  updateProject(upProject:any, id:string | null){
+    return this.http.put(`http://127.0.0.1:8000/api/projects/${id}/`, upProject, {headers:this.headers});
   }
+  deleteProject(id:number){
+    return this.http.delete(`http://127.0.0.1:8000/api/projects/${id}/`, {headers:this.headers});
+  }
+
+
 
   addEvent(newEvent:any){
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.access}`
-    });
-    return this.http.post(`http://127.0.0.1:8000/api/events/`, newEvent, {headers:headers});
+    return this.http.post(`http://127.0.0.1:8000/api/events/`, newEvent, {headers:this.headers});
   }
-  updateEvent(){
-    console.log("Event updated");
+  updateEvent(upEvent:any, id:string | null){
+    return this.http.put(`http://127.0.0.1:8000/api/events/${id}/`, upEvent, {headers:this.headers});
+  }
+  deleteEvent(id:number){
+    return this.http.delete(`http://127.0.0.1:8000/api/events/${id}/`, {headers:this.headers});
   }
 
+
   addNews(newNews:any){
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.auth.access}`
-    });
-    return this.http.post(`http://127.0.0.1:8000/api/news/`, newNews, {headers:headers});
+    return this.http.post(`http://127.0.0.1:8000/api/news/`, newNews, {headers:this.headers});
   }
-  updateNews(){
-    console.log("News updated");
+  updateNews(upNews:any, id:string | null){
+    return this.http.put(`http://127.0.0.1:8000/api/news/${id}/`, upNews, {headers:this.headers});
+  }
+  deleteNews(id:number){
+    return this.http.delete(`http://127.0.0.1:8000/api/news/${id}/`, {headers:this.headers});
+  }
+
+
+  addAnnoucement(newAnnoucements:any){
+    return this.http.post(`http://127.0.0.1:8000/api/announcements/`, newAnnoucements, {headers:this.headers});
+  }
+  updateAnnoucement(upAnnouncement:any, id:string | null){
+    return this.http.put(`http://127.0.0.1:8000/api/announcements/${id}/`, upAnnouncement, {headers:this.headers});
+  }
+  deleteAnnouncement(id:number){
+    return this.http.delete(`http://127.0.0.1:8000/api/announcements/${id}/`, {headers:this.headers});
   }
 
 
@@ -84,6 +102,9 @@ export class CollectivePagesService {
     return this.http.get<IndivEventsModel>(address);
   }
 
+  getAnnoucement(annoucementId: string | null) : Observable<AnnoucementModel>{
+    return this.http.get<AnnoucementModel>(`http://127.0.0.1:8000/api/announcements/${annoucementId}/?omit=updated_at,last_updated_by`);
+  }
 
   printDate(date: Date){
     let month = "";

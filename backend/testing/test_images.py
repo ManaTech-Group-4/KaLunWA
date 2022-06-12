@@ -19,7 +19,10 @@ from kalunwa.content.models import (
     Image
 )
 
-class ImageUploadTestCase(APITestCase):     
+from testing.base_test_case import BaseWithClientCredentialsTestCase
+
+
+class ImageUploadTestCase(BaseWithClientCredentialsTestCase):     
     """
     Post valid image upload. Uses multipart/form-data.
     - status create OK, 201 
@@ -32,6 +35,8 @@ class ImageUploadTestCase(APITestCase):
         # using set up here to reset image file, as we would have to seek
             # for the file to not be empty (upload raises invalid due to empty file
             # if this is not done)
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])            
         self.image_file = get_test_image_file()
 
     def test_valid_upload(self):

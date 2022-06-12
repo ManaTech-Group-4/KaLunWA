@@ -398,13 +398,7 @@ class UpdateHomepageContainerEventsTestCase(APITestCase):
             content_type="application/json") 
         ## TEST
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        error_message = {
-        "message": ('UNIQUE constraint failed: '
-                    'page_containers_pagecontainedevent.container_id, '
-                    'page_containers_pagecontainedevent.event_id')
-        }
-        self.assertDictEqual(error_message, response.data)
-
+        self.assertEqual('integrity-error', response.data['code'])
 
 class DeleteHomepageEventTestCase(APITestCase):
     @classmethod

@@ -351,7 +351,7 @@ class UpdateHomepageContainerProjectsTestCase(APITestCase):
         self.assertEqual(contained_project.section_order, old_data['section_order'])
 
 
-    def test_error_on_update_homepage_project_duplicate_container_jumbo(self):
+    def test_error_on_update_with_same_container_and_project(self):
         """
         updating with the same container and project would create a new record,
         provided the section_order is different. 
@@ -397,12 +397,7 @@ class UpdateHomepageContainerProjectsTestCase(APITestCase):
             content_type="application/json") 
         ## TEST
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        error_message = {
-        "message": ('UNIQUE constraint failed: '
-                    'page_containers_pagecontainedproject.container_id, '
-                    'page_containers_pagecontainedproject.project_id')
-        }
-        self.assertDictEqual(error_message, response.data)
+        self.assertEqual('integrity-error', response.data['code'])
 
 
 class DeleteHomepageProjectTestCase(APITestCase):

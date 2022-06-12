@@ -360,25 +360,39 @@ class UserChangePasswordTestCase(BaseWithClientCredentialsTestCase):
         self.assertEqual(new_password, user.password)
 
         
-# class UserPutTestCase(BaseWithClientCredentialsTestCase):
-#     """
-#     Only superuser, or self (user) can delete a user record. 
-#     """
-#     def create_to_update_user(self):
-#         to_update_user = User.objects.create(
-#             email="update@gmail.com",
-#             password="update me"
-#         )
-#         return to_update_user        
+class UserDeleteTestCase(BaseWithClientCredentialsTestCase):
+    """
+    Only superuser, or self (user) can delete a user record. 
+    """
+    def create_to_delete_user(self):
+        to_delete_user = User.objects.create(
+            email="delete@gmail.com",
+            password="delete me"
+        )
+        return to_delete_user        
 
-#     def test_user_updates_with_valid_email_via_put(self):
-#         self.load_user_client_credentials()
-#         url = reverse('user-detail', kwargs={"pk":1}) # only one user created, thus pk=1
-#         new_data = {
-#             "email" : "newemail@gmail.com"
-#         }
-#         response = self.client.put(url, new_data)
-#         print(response.data)
-#         self.assertEqual(status.HTTP_200_OK, response.status_code)
-# test user delete 
-# test user logout
+    def test_user_deletes_self(self):
+        self.load_user_client_credentials()
+        url = reverse('user-detail', kwargs={"pk":1}) # only one user created, thus pk=1
+        response = self.client.delete(url)
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_superuser_deletes_a_user(self):
+        self.load_superuser_client_credentials()
+        to_delete_user = self.create_to_delete_user()        
+        url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
+        response = self.client.delete(url)
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)     
+
+    def test_normal_user_deletes_another_user(self):
+        self.load_user_client_credentials()
+        to_delete_user = self.create_to_delete_user()      
+        url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
+        response = self.client.delete(url)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)    
+
+    def test_unauthenticated_client_attempts_delete(self):
+        to_delete_user = self.create_to_delete_user()            
+        url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
+        response = self.client.delete(url)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code) 

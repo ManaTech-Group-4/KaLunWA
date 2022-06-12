@@ -37,8 +37,8 @@ from kalunwa.content.models import(
     Project,     
 )
 from rest_framework import status
-#-------------------------------------------------------------------------------
-# HomePage Website
+# #-------------------------------------------------------------------------------
+# # HomePage Website
 
 class HomepageJumbotronsTestCase(APITestCase):
     """
@@ -126,7 +126,7 @@ class HomepageJumbotronsTestCase(APITestCase):
             'subtitle' : expected_jumbotron.subtitle,
             'image' : {'image':image_url}
         }
-
+        response_jumbotron.pop('last_updated_by', None)
         self.assertDictEqual(response_jumbotron, expected_jumbotron_data)
 
 
@@ -212,7 +212,8 @@ class HomepageEventsTestCase(APITestCase):
             'id' : expected_event.id,
             'title' : expected_event.title,
             'image' : { 'image' : image_url}
-        } 
+        }    
+        event.pop('last_updated_by', None)            
         self.assertDictEqual(event, expected_event_data)
     
 
@@ -382,6 +383,7 @@ class HomepageNewsTestCase(APITestCase):
             'description' : expected_news.description,
             'image' : {'image' : image_url}
         } 
+        news.pop('last_updated_by', None)  
         self.assertDictEqual(news, expected_news_data)
 
 #-------------------------------------------------------------------------------
@@ -505,10 +507,10 @@ class AboutUsCampsTestCase(APITestCase):
                 'image' : {
                     'id' : 2,
                     'image': leader_image_url,
-                }
-
-            }            
+                },             
+            },          
         }   
+        camp.pop('last_updated_by', None)
         self.assertDictEqual(camp, expected_camp_data)
 
 
@@ -572,11 +574,12 @@ class AboutUsLeadersTestCase(APITestCase):
                 'image' : image_url
                 }
         }
+        response_leader.pop('last_updated_by', None)          
         self.assertDictEqual(expected_leader_data, response_leader)      
 
 
-# ------------------------------------------------------------------------------
-# website list and views
+# # ------------------------------------------------------------------------------
+# # website list and views
 
 class EventGetTestCase(APITestCase):
     """
@@ -643,6 +646,7 @@ class EventGetTestCase(APITestCase):
             'updated_at': to_expected_iso_format(expected_event.updated_at),
             'status': StatusEnum.PAST.value # based on dates set
         }
+        response_event.pop('last_updated_by', None)      
         self.assertDictEqual(expected_event_data, response_event)
   
     def test_get_event_gallery(self):
@@ -761,6 +765,8 @@ class EventGetTestCase(APITestCase):
             },
             'category' : expected_contributor.category.label
         } 
+        response_contrib_data = response_contributor[0]
+        response_contrib_data.pop('last_updated_by', None)        
         self.assertDictEqual(response_contributor[0], expected_contributor_data)
         
 
@@ -830,6 +836,7 @@ class ProjectGetTestCase(APITestCase):
             'updated_at': to_expected_iso_format(expected_project.updated_at),
             'status': StatusEnum.PAST.value # based on dates set
         }
+        response_project.pop('last_updated_by', None)        
         self.assertDictEqual(expected_project_data, response_project)
 
     def test_get_project_gallery(self):
@@ -883,7 +890,7 @@ class ProjectGetTestCase(APITestCase):
         expected_gallery_data = {
             'id':image.id,
             'image': get_expected_image_url(image.image.name, request)
-        } 
+        }      
         self.assertDictEqual(gallery[0], expected_gallery_data)
     
     def test_get_project_contributors(self):
@@ -943,7 +950,10 @@ class ProjectGetTestCase(APITestCase):
             },
             'category' : expected_contributor.category.label
         } 
-        self.assertDictEqual(response_contributor[0], expected_contributor_data)
+ 
+        response_contributor_data = response_contributor[0]                 
+        response_contributor_data.pop('last_updated_by', None)              
+        self.assertDictEqual(response_contributor_data, expected_contributor_data)
 
 
 class CampGetTestCase(APITestCase):
@@ -1003,6 +1013,7 @@ class CampGetTestCase(APITestCase):
             'created_at': to_expected_iso_format(expected_camp.created_at),
             'updated_at': to_expected_iso_format(expected_camp.updated_at)
         }
+        response_camp.pop('last_updated_by', None)        
         self.assertDictEqual(expected_camp_data, response_camp)
         
     def test_get_camp_gallery(self):
@@ -1052,7 +1063,7 @@ class CampGetTestCase(APITestCase):
         expected_gallery_data = {
             'id':image.id,
             'image': get_expected_image_url(image.image.name, request)
-        } 
+        }           
         self.assertDictEqual(gallery[0], expected_gallery_data)   
 
 
@@ -1094,6 +1105,7 @@ class AnnouncementGetTestCase(APITestCase):
             'created_at': to_expected_iso_format(expected_announcement.created_at), 
             'updated_at': to_expected_iso_format(expected_announcement.updated_at),                      
         }
+        response_announcement.pop('last_updated_by', None)        
         self.assertDictEqual(expected_announcement_data, response_announcement)        
 
         
@@ -1121,6 +1133,7 @@ class AnnouncementLatestTestCase(APITestCase):
             'meta_description' : expected_announcement.meta_description,             
             'description' : expected_announcement.description,                
         }        
+        response_announcement.pop('last_updated_by', None)                              
         self.assertDictEqual(latest_announcement_data, response_announcement)
             
 
@@ -1166,29 +1179,8 @@ class NewsGetTestCase(APITestCase):
             'created_at': to_expected_iso_format(expected_news.created_at), 
             'updated_at': to_expected_iso_format(expected_news.updated_at),                      
         }
-
+        response_news.pop('last_updated_by', None)  
         self.assertDictEqual(expected_news_data, response_news)        
 
-# ---------------------------------------------------------------------------        
-# Post end-points
-# covers post serializer 
-
-class NewsSerializerTestCase(APITestCase):
-    @classmethod
-    def setUpTestData(cls) -> None:
-        # create image
-        image = Image.objects.create(
-                name='image_1',
-                image=get_test_image_file(),
-            )          
-
-        cls.news = News.objects.create(
-                title = 'News 1',
-                description= 'description 1',
-                image = Image.objects.get(pk=1),
-                is_published=True,
-            )        
-        
-    # def test_news_validation_post(self):
-    #     response = self.client.post(reverse('news-list'))
+# # ---------------------------------------------------------------------------        
 

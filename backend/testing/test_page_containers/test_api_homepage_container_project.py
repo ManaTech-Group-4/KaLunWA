@@ -123,6 +123,7 @@ class GetHomepageContainerProjectsTestCase(APITestCase):
 
             }
         ## TEST
+        response_contained_project['project'].pop('last_updated_by')        
         self.assertDictEqual(expected_data, response_contained_project['project'])
 
 

@@ -53,7 +53,6 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             path=url,
             data=encode_multipart(data = dict(name="test", image=self.image_file), boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
-           # HTTP_AUTHORIZATION=f"Token {self.token.key}" # -> to add when authentication is implemented
         )        
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
     
@@ -67,7 +66,6 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             path=url,
             data=encode_multipart(data = dict(image=self.image_file, name="test"), boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
-           # HTTP_AUTHORIZATION=f"Token {self.token.key}" # -> to add when authentication is implemented
         )        
         response_image_data = json.loads(response.content) # json to py data types
         # create request to generate image url 
@@ -87,6 +85,7 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             'created_at': to_expected_iso_format(expected_image.created_at),
             'updated_at': to_expected_iso_format(expected_image.updated_at)
         }
+        response_image_data.pop('last_updated_by', None)
         self.assertDictEqual(expected_image_data, response_image_data)
 
     def test_empty_image_file_upload(self):
@@ -100,7 +99,6 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             path=url,
             data=encode_multipart(data = dict(image=self.image_file, name="test"), boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
-        # HTTP_AUTHORIZATION=f"Token {self.token.key}" # -> to add when authentication is implemented
         )  
         error = response.data['image'][0] # error_detail object
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
@@ -117,7 +115,6 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             path=url,
             data=encode_multipart(data = dict(image=image, name="test"), boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
-        # HTTP_AUTHORIZATION=f"Token {self.token.key}" # -> to add when authentication is implemented
         )  
         error = response.data['image'][0]
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
@@ -135,7 +132,6 @@ class ImageUploadTestCase(BaseWithClientCredentialsTestCase):
             path=url,
             data=encode_multipart(data = dict(name="test"), boundary=BOUNDARY),
             content_type=MULTIPART_CONTENT,
-        # HTTP_AUTHORIZATION=f"Token {self.token.key}" # -> to add when authentication is implemented
         )  
         error = response.data['image'][0]
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)

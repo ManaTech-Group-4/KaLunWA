@@ -111,6 +111,7 @@ class GetHomepageContainerJumbotronsTestCase(APITestCase):
             'updated_at': to_expected_iso_format(jumbotron.updated_at),
             }
         ## TEST
+        response_contained_jumbotron['jumbotron'].pop('last_updated_by', None)        
         self.assertDictEqual(expected_data, response_contained_jumbotron['jumbotron'])
 
 

@@ -124,6 +124,7 @@ class GetHomepageContainerEventsTestCase(APITestCase):
 
             }
         ## TEST
+        response_contained_event['event'].pop('last_updated_by', None)
         self.assertDictEqual(expected_data, response_contained_event['event'])
 
 

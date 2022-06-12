@@ -25,32 +25,6 @@ export class CmsHomepageComponent implements OnInit {
   sectionChoice: string = 'jumbotron';
   slides: number = 1;
 
-  chosen: Array<any>=[
-    0
-  ];
-
-  log(value:any){
-    this.chosen.push(value);
-    console.log(this.chosen);
-
-  }
-  onChange(index:number, value:any) {   
-    this.chosen[index]=this.jumbotron.filter(x=>x.id!=value)
-  }
-
-  slide1=new FormGroup({
-    id:new FormControl(null)
-  })
-  slide2=new FormGroup({
-    id:new FormControl(null)
-  })
-  slide3=new FormGroup({
-    id:new FormControl(null)
-  })
-  form=new FormGroup({
-    id:new FormControl(null)
-  })
-
   details: SinglePageListModel={
     id: 1,
     page: "Homepage",
@@ -88,6 +62,10 @@ export class CmsHomepageComponent implements OnInit {
     this.slides++;
   }
 
+  updateSlide(){
+    alert("slide updated");
+  }
+  
   deleteSlide(){
     if (this.slides>1){
       this.slides--;

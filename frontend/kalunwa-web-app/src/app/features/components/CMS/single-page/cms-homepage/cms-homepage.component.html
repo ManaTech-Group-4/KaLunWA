@@ -24,7 +24,7 @@
                             <mat-option *ngFor="let item of jumbotron" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                     <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
                 </div>                
             </div>
@@ -42,8 +42,7 @@
                             <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
                 <div class="slide-section">
                     <mat-form-field appearance="fill" class="label">
@@ -53,8 +52,7 @@
                             <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
                 <div class="slide-section">
                     <mat-form-field appearance="fill" class="label">
@@ -64,8 +62,7 @@
                             <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
             </div>
         </div>
@@ -82,8 +79,7 @@
                             <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
                 <div class="slide-section">
                     <mat-form-field appearance="fill" class="label">
@@ -93,8 +89,7 @@
                             <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
                 <div class="slide-section">
                     <mat-form-field appearance="fill" class="label">
@@ -104,8 +99,7 @@
                             <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button><mat-icon>update</mat-icon></button>
-                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
             </div>
         </div>

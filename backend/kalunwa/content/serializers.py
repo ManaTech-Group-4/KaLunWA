@@ -49,6 +49,7 @@ class ImageSerializer(FlexFieldsModelSerializer):
             'tags',
             'created_at',
             'updated_at',
+            'last_updated_by',                          
         )
 
         expandable_fields = {
@@ -68,6 +69,7 @@ class JumbotronSerializer(FlexFieldsModelSerializer):
             'image',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )    
 
         expandable_fields = {
@@ -121,6 +123,7 @@ class OccurenceSerializer(FlexFieldsSerializerMixin, serializers.Serializer):
             'camp', # choices serializer            
             'created_at',
             'updated_at',  
+            'last_updated_by',              
             'status',
         )
 
@@ -269,6 +272,7 @@ class NewsSerializer(FlexFieldsModelSerializer):
             'image',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )
 
         expandable_fields = {
@@ -310,6 +314,7 @@ class AnnouncementSerializer(FlexFieldsModelSerializer):
             'description',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )
 # if there's no fields to do extra processes to, create & update don't need to 
 # be overwritten
@@ -333,6 +338,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
             'camp_leader',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )
 
         expandable_fields = {
@@ -411,6 +417,7 @@ class ContributorSerializer(FlexFieldsModelSerializer):
             'name',
             'image', 
             'category',
+            'last_updated_by',             
         )
 
         expandable_fields = {
@@ -467,6 +474,7 @@ class DemographicsSerializer(serializers.ModelSerializer):
             'member_count',
             'created_at',
             'updated_at',
+            'last_updated_by',                         
         )
 
 
@@ -486,6 +494,7 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
             'image',
             'created_at',
             'updated_at',
+            'last_updated_by',         
         )
 
         expandable_fields = {
@@ -562,6 +571,7 @@ class CabinOfficerSerializer(FlexFieldsModelSerializer):
             'camp',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )
         
         expandable_fields = {
@@ -643,6 +653,7 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
             'motto', 
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )    
 
         expandable_fields = {
@@ -713,6 +724,7 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
             'image',
             'created_at',
             'updated_at',
+            'last_updated_by',             
         )
 
         expandable_fields = {

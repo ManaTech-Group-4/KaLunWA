@@ -34,7 +34,28 @@ from rest_framework.generics import (
 )
 
 
-class EventViewSet(viewsets.ModelViewSet):
+class AssignLastUpdatedBy:
+    def assign_editor(self, instance):
+        # after applying serializer changes, assign user and save.         
+        instance.last_updated_by = self.request.user
+        instance.save()
+
+    def perform_create(self, serializer):
+        """
+        Override perform create to allow the assignment of the user after it had 
+        been successfully saved.
+        Cannot be done in signals since it cannot access requests, given edits
+        are done model-level only.
+        """
+        instance = serializer.save()
+        self.assign_editor(instance)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self.assign_editor(instance)    
+
+    
+class EventViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     model = Event
     queryset = Event.objects.all() # prefetch_related
     serializer_class = EventSerializer
@@ -42,8 +63,15 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_fields = ['is_featured']
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-class ProjectViewSet(viewsets.ModelViewSet):
+
+class ProjectViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     model = Project
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -52,14 +80,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
     filterset_fields = ['is_featured']
 
 
-class NewsViewSet(viewsets.ModelViewSet):
+class NewsViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     queryset = News.objects.all()
     filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class AnnouncementViewSet(viewsets.ModelViewSet):      
+class AnnouncementViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):      
     serializer_class = AnnouncementSerializer
     queryset = Announcement.objects.all()
     filter_backends = [QueryLimitBackend]
@@ -67,14 +95,14 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
 
 
-class JumbotronViewSet(viewsets.ModelViewSet):
+class JumbotronViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     queryset = Jumbotron.objects.all()
     serializer_class = JumbotronSerializer
     filter_backends = [DjangoFilterBackend, QueryLimitBackend]
     filterset_fields = ['is_featured']   
 
 
-class OrgLeaderViewSet(viewsets.ModelViewSet):
+class OrgLeaderViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
     queryset = OrgLeader.objects.all()
     filter_backends = [OrgLeaderPositionFilter]
@@ -84,28 +112,28 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
 
     #delete function default in viewsets
 
-class CabinOfficerViewSet(viewsets.ModelViewSet):
+class CabinOfficerViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer
     queryset = CabinOfficer.objects.all()
     filter_backends = [CampFilter, CabinOfficerCategoryFilter]    
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class CommissionerViewSet(viewsets.ModelViewSet):
+class CommissionerViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = CommissionerSerializer
     queryset = Commissioner.objects.all()
     filter_backends = [CommissionerCategoryFilter]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-class CampLeaderViewSet(viewsets.ModelViewSet): 
+class CampLeaderViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet): 
     serializer_class = CampLeaderSerializer
     queryset = CampLeader.objects.all()
     filter_backends = [CampFilter, CampLeaderPositionFilter]
     permission_classes = [IsAuthenticatedOrReadOnly]               
 
 
-class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
+class CampPageViewSet(AssignLastUpdatedBy, MultipleFieldLookupORMixin, viewsets.ModelViewSet): 
     model = CampPage
     serializer_class = CampPageSerializer
     filter_backends = [CampNameInFilter, QueryLimitBackend]   
@@ -114,7 +142,7 @@ class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]      
 
 
-class DemographicsViewSet(viewsets.ModelViewSet):
+class DemographicsViewSet(AssignLastUpdatedBy,viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
     queryset = Demographics.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]               
@@ -124,13 +152,13 @@ class DemographicsViewSet(viewsets.ModelViewSet):
         return Response(Demographics.objects.aggregate(total_members=Sum('member_count')))
 
 
-class ContributorViewset(viewsets.ModelViewSet):
+class ContributorViewset(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     queryset = Contributor.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]                   
 # -----------------------------------------------------------------------------    
-# tester for gallery 
-class ImageViewSet(viewsets.ModelViewSet):
+
+class ImageViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     """
     A simple ViewSet for listing or retrieving images.
     """

@@ -12,7 +12,13 @@ from kalunwa.content.models import (
     Commissioner,
     CabinOfficer
 )
+from kalunwa.page_containers.models import (
+    PageContainer,
+) 
+# ----------- Org Struct Page container
 
+PageContainer.objects.create(name='organization structure')
+print('create organization structure page container')
 
 #------------ Org Leaders (ExeComm, Directors)
 

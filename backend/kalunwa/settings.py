@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',    
 
-    # user apps
+    # user apps (loading configurations for flexibility e.g. readying signals))
     'kalunwa.core.apps.CoreConfig',
     'kalunwa.content.apps.ContentConfig',
     'kalunwa.users.apps.UsersConfig',
+    'kalunwa.core.apps.CoreConfig',
+    'kalunwa.content.apps.ContentConfig',
     'kalunwa.page_containers.apps.PageContainersConfig',
 ]
 

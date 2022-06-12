@@ -434,7 +434,7 @@ Accepted are: {Contributor.Categories.labels}")
         return instance
 
     def to_representation(self, instance):
-        data = super(CabinOfficerSerializer, self).to_representation(instance)
+        data = super(ContributorSerializer, self).to_representation(instance)
         category = data.get('category', None) 
         # when getting record, change presentation 
 

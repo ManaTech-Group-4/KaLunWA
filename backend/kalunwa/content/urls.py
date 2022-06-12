@@ -15,7 +15,8 @@ from .views import (
     ProjectViewSet, 
     CampPageGalleryListCreateView,
     ProjectGalleryListCreateView,     
-    EventGalleryListCreateView,    
+    EventGalleryListCreateView,   
+    ContributorViewset, 
 )
 
 router = DefaultRouter()
@@ -33,6 +34,7 @@ router.register(r'orgleaders', OrgLeaderViewSet, basename='orgleader')
 router.register(r'commissioners', CommissionerViewSet, basename='commissioner')
 router.register(r'campleaders', CampLeaderViewSet, basename='campleader')
 router.register(r'cabinofficers', CabinOfficerViewSet, basename='cabinofficer')
+router.register(r'contributors', ContributorViewset, basename='contributor')
 urlpatterns = router.urls
 
 urlpatterns += [

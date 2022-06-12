@@ -283,14 +283,15 @@ class NewsSerializer(FlexFieldsModelSerializer):
             ),
         }        
 
-    def create(self, validated_data):
-        image_id = validated_data.pop('image')
-        news_image = get_object_or_404(Image, pk=image_id)
+    # def create(self, validated_data):
+    #     image_id = validated_data.pop('image')
+    #     print(image_id)
+    #     news_image = get_object_or_404(Image, pk=image_id)
 
-        return News.objects.create(
-            image=news_image,            
-            **validated_data
-            )
+    #     return News.objects.create(
+    #         image=news_image,            
+    #         **validated_data
+    #         )
 
     def update(self, instance, validated_data):
         image_id = validated_data.pop('image')

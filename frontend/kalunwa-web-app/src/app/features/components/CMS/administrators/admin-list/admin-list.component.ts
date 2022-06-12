@@ -15,6 +15,7 @@ export class AdminListComponent implements OnInit {
 
   admin_list: ProfileReceive[] = [];
   is_superadmin: boolean;
+  adminId:number;
 
   selectedAdmin:ProfileReceive;
 
@@ -47,7 +48,13 @@ export class AdminListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getList();
-    this.is_superadmin = this.service.currentAdmin.is_superadmin;
+    const currentAdminSub = this.service.currentAdmin.subscribe(
+      (res: ProfileReceive)=>{
+        this.adminId = res.id;
+        this.is_superadmin = res.is_superadmin;
+        currentAdminSub.unsubscribe();
+      }
+    );
   }
 
   getList(){

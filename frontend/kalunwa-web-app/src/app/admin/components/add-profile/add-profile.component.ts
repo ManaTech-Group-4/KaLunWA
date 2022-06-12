@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
@@ -28,7 +29,7 @@ export class AddProfileComponent implements OnInit {
     private service: AuthService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private colservice: CollectivePagesService
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +45,7 @@ export class AddProfileComponent implements OnInit {
       {validators: CustomValidators.mustMatch('password', 'repassword')}
     );
 
+
     this.profileImage = "../../assets/images/person-icon.jpg";
   }
 
@@ -53,15 +55,23 @@ export class AddProfileComponent implements OnInit {
 
   onSubmit(imageInput:any){
 
+
+    // stop here if form is invalid
+    if (this.profile.invalid) {
+      return;
+    }
+
     const file: File = imageInput.files[0];
-    console.log(file, this.f);
     var newAdmin = new FormData();
     newAdmin.append('first_name',this.f.firstname.value);
     newAdmin.append('last_name',this.f.lastname.value);
     newAdmin.append('username',this.f.username.value);
     newAdmin.append('email',this.f.email.value);
     newAdmin.append('password',this.f.password.value);
-    // newAdmin.append('image',this.f.image.value);
+    //no image added by the user
+    if(file)
+      newAdmin.append('image',file);
+
     //  ={
     //   "first_name": this.f.firstname.value,
     //   "last_name": this.f.lastname.value,
@@ -71,15 +81,10 @@ export class AddProfileComponent implements OnInit {
     //   "image": this.f.image.value
 
     // };
-    console.log(newAdmin);
     this.submitted = true;
     this.loading = true;
     this.profile.disable();
 
-    // stop here if form is invalid
-    if (this.profile.invalid) {
-      return;
-    }
 
 
     const regSubscribe = this.service.register(newAdmin)
@@ -87,11 +92,13 @@ export class AddProfileComponent implements OnInit {
     .subscribe(
         () => {
           this.router.navigateByUrl("admin/admin-list");
+          this.snackBar.open(`Successfully Created ${this.f.username.value}'s details`, `Close`, {duration: 5000})
           regSubscribe.unsubscribe();
         },
         () => {
           this.loading = false;
           this.profile.enable();
+          this.profile.controls["email"].setErrors({'incorrect': true});
           regSubscribe.unsubscribe();
         });
 
@@ -110,13 +117,6 @@ export class AddProfileComponent implements OnInit {
       this.profile.controls["image"].setErrors(null);
 
       this.filename = file.name;
-
-      this.colservice.uploadImage(this.filename,file).subscribe(
-        (res) => {
-        },
-        (err) => {
-
-        });
 
     }
     if(imageInput.target.files && imageInput.target.files[0]){
@@ -161,7 +161,7 @@ export class AddProfileComponent implements OnInit {
       return 'You must enter a value';
     }
 
-    return this.f.email.hasError('email') ? 'Not a valid email' : '';
+    return this.f.email.hasError('email') ? 'Not a valid email' : 'Email already exists.';
   }
   getErrorPassMessage() {
     if (this.f.password.hasError('required')) {

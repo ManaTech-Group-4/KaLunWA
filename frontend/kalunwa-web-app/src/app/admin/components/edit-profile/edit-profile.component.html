@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="profile" (ngSubmit)="onSubmitDetails()">
+  <form [formGroup]="profile" (ngSubmit)="onSubmitDetails(fileUpload)">
     <div class="header">
       <span>
         <button mat-button type="button" routerLink="/admin/admin-list"><mat-icon>arrow_left</mat-icon></button>
@@ -14,7 +14,7 @@
       <div class="form-row">
           <mat-label style="margin:10px">Profile Picture</mat-label>
           <div class="profile-container">
-            <img [src]="profileImage" [alt]="filename"/>
+            <img [src]="profileImage" onerror="this.src='../../assets/images/person-icon.jpg'" [alt]="filename"/>
             <input type="file" class="file-input" id="fileImg"
             accept="image/*" (change)="onFileChange(fileUpload)" #fileUpload formControlName="image"/>
 
@@ -66,10 +66,13 @@
       <span>
         Change Admin Password
       </span>
-      <span><button mat-raised-button type="submit" color="primary">Update Password</button></span>
+      <span><button mat-raised-button type="submit" color="primary" (click)="OnChangePass()">Update Password</button></span>
     </div>
     <div class="body">
       <div class="form-row">
+
+      <span *ngIf="loadingPass" class="loadSpinner"><mat-spinner></mat-spinner></span>
+      <h1 id="error-alert"  *ngIf="submittedPass">Admin creation unsuccessful.</h1>
         <mat-form-field appearance="fill">
           <mat-label>Old Password</mat-label>
           <input matInput type="password"  formControlName="oldpassword"/>

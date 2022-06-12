@@ -57,8 +57,12 @@ export class AuthService {
     )
   }
 
+  getImage(id:number){
+    return this.http.get(`http://127.0.0.1:8000/api/gallery/${id}`);
+  }
 
-  register(newAdmin: FormData){
+
+   register(newAdmin: FormData){
     console.log(newAdmin);
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.access}`
@@ -73,6 +77,15 @@ export class AuthService {
     });
 
     return this.http.put(`http://127.0.0.1:8000/api/users/${id}/`, updateAdmin, { headers: headers });
+  }
+
+
+  updatePassword(newPassword: FormData, id:string|null){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.put(`http://127.0.0.1:8000/api/users/${id}/change-password/`, newPassword, { headers: headers });
   }
 
 
@@ -105,9 +118,9 @@ export class AuthService {
     return moment(expiresAt);
   }
 
-  get currentAdmin(): Admin{
+  get currentAdmin(){
     const jwtToken = <Admin> jwtDecode.default(localStorage.getItem('access')!);
-    return jwtToken;
+    return this.getUserById(jwtToken.user_id.toString());
   }
 
 

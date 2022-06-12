@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Profile, ProfileReceive } from '../../model/user-model';
@@ -14,11 +15,13 @@ import { CustomValidators } from '../../shared/customValidation';
 export class EditProfileComponent implements OnInit {
   profile: FormGroup;
   updatePass: FormGroup;
-  isAdd = false;
+  isNewImage = false;
   filename = "";
   profileImage:string;
   submitted= false;
+  submittedPass = false;
   loading = false;
+  loadingPass = false;
   selectedProfile:ProfileReceive;
   userId:string | null;
 
@@ -26,14 +29,17 @@ export class EditProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get("id");
+    this.profileImage = "../../assets/images/person-icon.jpg";
     const userSubscribe = this.service.getUserById(this.userId).subscribe(
       data =>{
       this.selectedProfile = data;
+      this.profileImage = this.selectedProfile.image;
       this.profile = this.formBuilder.group({
         image: [this.selectedProfile.image],
         firstname:[this.selectedProfile.first_name, Validators.required],
@@ -53,7 +59,6 @@ export class EditProfileComponent implements OnInit {
       {validators: CustomValidators.mustMatch('newpassword', 'repassword')}
     );
 
-    this.profileImage = "../../assets/images/person-icon.jpg";
   }
 
   get f() { return this.profile.controls;}
@@ -62,23 +67,25 @@ export class EditProfileComponent implements OnInit {
 
 
 
-  onSubmitDetails(){
-    this.submitted = true;
-    this.loading = true;
-    this.profile.disable();
-
+  onSubmitDetails(imageInput:any){
     // stop here if form is invalid
-    if (this.profile.invalid) {
+    if (!this.f.email.valid) {
+      this.submitted = true;
       return;
     }
+
+    this.loading = true;
+    this.profile.disable();
+    const file: File = imageInput.files[0];
 
     var newAdmin = new FormData();
     newAdmin.append('first_name',this.f.firstname.value);
     newAdmin.append('last_name',this.f.lastname.value);
     newAdmin.append('username',this.f.username.value);
+    if(this.isNewImage)
+    newAdmin.append('image',file);
     newAdmin.append('email',this.f.email.value);
 
-    console.log(newAdmin);
 
 
     const editSubscribe = this.service.updateUser(newAdmin, this.userId)
@@ -87,17 +94,54 @@ export class EditProfileComponent implements OnInit {
         () => {
           this.router.navigateByUrl("admin/admin-list");
           editSubscribe.unsubscribe();
+          this.snackBar.open(`Successfully Updated ${this.f.username.value}'s details`, `Close`, {duration: 3000});
         },
-        () => {
+        (err) => {
+          this.submitted = true;
           this.loading = false;
           this.profile.enable();
+          this.profile.controls["email"].setErrors({'incorrect': true});
           editSubscribe.unsubscribe();
         });
 
 
   }
 
+  OnChangePass(){
+    this.updatePass.controls["oldpassword"].setErrors({'incorrect': false});
+    this.submittedPass = true;
+    // stop here if form is invalid
+    if (this.form2.invalid) {
+      return;
+    }
 
+    this.loadingPass = true;
+    this.updatePass.disable();
+
+    var newPass = new FormData();
+    newPass.append('password',this.form2.oldpassword.value);
+    newPass.append('new_password',this.form2.newpassword.value);
+
+
+
+    const editSubscribe = this.service.updatePassword(newPass, this.userId)
+    .pipe(first())
+    .subscribe(
+        () => {
+          this.router.navigateByUrl("admin/admin-list");
+          this.snackBar.open(`Successfully Updated ${this.f.username.value}'s password`, `Close`, {duration: 3000});
+          editSubscribe.unsubscribe();
+        },
+        (err) => {
+          this.loadingPass = false;
+          this.updatePass.enable();
+          this.updatePass.controls["oldpassword"].setErrors({'incorrect': true});
+        });
+
+
+  }
+
+  //inserting file in image input
   onFileChange(imageInput:any){
     const file: File = imageInput.files[0];
 
@@ -109,6 +153,7 @@ export class EditProfileComponent implements OnInit {
       this.profile.controls["image"].setErrors(null);
 
       this.filename = file.name;
+      this.isNewImage = true;
       console.log(this.filename)
     }
 
@@ -149,8 +194,7 @@ export class EditProfileComponent implements OnInit {
     if (this.f.email.hasError('required')) {
       return 'You must enter a value';
     }
-
-    return this.f.email.hasError('email') ? 'Not a valid email' : '';
+    return this.f.email.hasError('email') ? 'Not a valid email' : 'Email already exists';
   }
   getErrorPassMessage() {
     if (this.form2.newpassword.hasError('required')) {

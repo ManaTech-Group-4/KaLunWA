@@ -5,7 +5,7 @@ from kalunwa.users.models import User
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from kalunwa.page_containers.models import PageContainer
 from .models import (
     OrgLeader,
@@ -53,7 +53,7 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
 # -- signals to update single page's update at and their *editors
     # *to add
 
-# post save to update org structure's updated at
+
 @receiver(post_save, sender=OrgLeader, dispatch_uid='org_leader_updates_org_struct_container')
 @receiver(post_save, sender=CabinOfficer, dispatch_uid='cabin_officer_updates_org_struct_container')
 @receiver(post_save, sender=Commissioner, dispatch_uid='commissioner_updates_org_struct_container')
@@ -63,12 +63,13 @@ def update_org_struct_details(sender, instance, *args, **kwargs):
     This updates the organization structure page's editor and updated at, 
     when changes are made to the organization leaders. 
     Called specifically after a successful save. 
+
     """
     try:
-        org_struct_container = PageContainer.objects.get(slug='organization_structure')
+        org_struct_container = PageContainer.objects.get(slug='organization-structure')
         org_struct_container.updated_at = timezone.now()
-        # updated with editor as well .. 
-        #  org_struct_container.edited_by = instance.edited_by 
+        if instance.pk: # if the object is still being created
+            org_struct_container.last_updated_by = instance.last_updated_by        
         org_struct_container.save()
     except ObjectDoesNotExist: 
         pass 
@@ -84,8 +85,9 @@ def update_demographics_details(sender, instance, *args, **kwargs):
     try:
         demographics_page_container = PageContainer.objects.get(slug='demographics')
         demographics_page_container.updated_at = timezone.now()
-        # updated with editor as well .. 
-        #  demographics.edited_by = instance.edited_by 
-        demographics_page_container.save()
-    except ObjectDoesNotExist: 
+        if instance.pk: # instance exicts
+            demographics_page_container.last_updated_by = instance.last_updated_by        
+            demographics_page_container.save()
+    except PageContainer.DoesNotExist: 
         pass 
+

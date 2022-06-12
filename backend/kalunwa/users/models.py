@@ -48,10 +48,6 @@ class User(AbstractBaseUser, PermissionsMixin): # permission for django faciliti
     # a username field is default for login, so we override it to use the 
     # email instead
     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = []    
-
-    def __str__(self):
-        return self.user_name
 
     def get_role(self):
         pass

@@ -21,10 +21,10 @@ from .serializers import (
     PageContainerSerializer,
     PageContainerReadSerializer,
     )
-# Create your views here.
+from kalunwa.content.views import AssignLastUpdatedBy
 
-class PageContainerListView(ListCreateAPIView):
-    # permission_classes = (IsAuthenticatedOrReadOnly,)    
+class PageContainerListView(AssignLastUpdatedBy, ListCreateAPIView):
+    permission_classes=[IsAuthenticatedOrReadOnly]   
     queryset = PageContainer.objects.all()
 
     def get_serializer_class(self):
@@ -33,10 +33,11 @@ class PageContainerListView(ListCreateAPIView):
         return PageContainerSerializer
 
 
-class PageContainerDetailView(MultipleFieldLookupORMixin, RetrieveUpdateDestroyAPIView):
+class PageContainerDetailView(AssignLastUpdatedBy, MultipleFieldLookupORMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainer.objects.all()
     serializer_class = PageContainerSerializer
     lookup_fields = ['slug', 'id']
+    permission_classes=[IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':        
@@ -44,20 +45,37 @@ class PageContainerDetailView(MultipleFieldLookupORMixin, RetrieveUpdateDestroyA
         return PageContainerSerializer
 
 
-class PageContainedJumbotronDetailView(RetrieveUpdateDestroyAPIView):
+class DestroyAndAssignObjectToHomePageMixin:
+    def assign_editor_to_homepage(self):
+        # grab request user, assign it to homepage. though we have to grab 
+        # homepage before deletion happens
+        try:
+            homepage = PageContainer.objects.get(name='homepage')
+            homepage.last_updated_by = self.request.user
+            homepage.save()
+        except Exception:
+            pass
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        # update whoever deleted / removed the link of the two 
+        self.assign_editor_to_homepage()
+        
+
+class PageContainedJumbotronDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedJumbotron.objects.all()
     serializer_class = PageContainedJumbotronSerializer
+    permission_classes=[IsAuthenticatedOrReadOnly]
 
-class PageContainedEventDetailView(RetrieveUpdateDestroyAPIView):
+
+
+class PageContainedEventDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedEvent.objects.all()
     serializer_class = PageContainedEventSerializer    
+    permission_classes=[IsAuthenticatedOrReadOnly]    
 
 
-class PageContainedProjectDetailView(RetrieveUpdateDestroyAPIView):
+class PageContainedProjectDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedProject.objects.all() 
-    serializer_class = PageContainedProjectSerializer       
-
-# /api/page-containers/<lookup>
-# /api/page-containers/<slug:slug>/contained_jumbotrons/<int:>
-# /api/page-containers/organization-structure
-
+    serializer_class = PageContainedProjectSerializer   
+    permission_classes=[IsAuthenticatedOrReadOnly]        

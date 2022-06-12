@@ -32,13 +32,16 @@ from django.shortcuts import get_object_or_404
 from rest_framework.generics import (
     ListCreateAPIView
 )
+from django.contrib.auth.models import AnonymousUser
 
 
 class AssignLastUpdatedBy:
     def assign_editor(self, instance):
-        # after applying serializer changes, assign user and save.         
-        instance.last_updated_by = self.request.user
-        instance.save()
+        """ after applying serializer changes, assign user and save. """
+        if not (self.request.user is AnonymousUser):
+            # anonymous user is returned in open views (dont need auth)
+            instance.last_updated_by = self.request.user
+            instance.save()
 
     def perform_create(self, serializer):
         """
@@ -47,7 +50,10 @@ class AssignLastUpdatedBy:
         Cannot be done in signals since it cannot access requests, given edits
         are done model-level only.
         """
+        # instance is created here, and signals the presave. 
+        # presave check if it exists, which it does not since it's the creation process
         instance = serializer.save()
+        # after it's created, it gets assigned then.
         self.assign_editor(instance)
 
     def perform_update(self, serializer):
@@ -108,9 +114,7 @@ class OrgLeaderViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     filter_backends = [OrgLeaderPositionFilter]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    #position only accepts KEY from choices enums eg. LDR
 
-    #delete function default in viewsets
 
 class CabinOfficerViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = CabinOfficerSerializer

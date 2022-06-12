@@ -67,6 +67,14 @@ export class AuthService {
     return this.http.post(`http://127.0.0.1:8000/api/users/register/`, newAdmin, { headers: headers });
   }
 
+  updateUser(updateAdmin: FormData, id:string|null){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.put(`http://127.0.0.1:8000/api/users/${id}/`, updateAdmin, { headers: headers });
+  }
+
 
   delete(id:number){
     const headers = new HttpHeaders({
@@ -113,6 +121,10 @@ export class AuthService {
 
   getUsers(){
     return this.http.get<ProfileReceive[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization':  `Bearer ${this.access}`}});
+  }
+
+  getUserById(id:string | null){
+    return this.http.get<ProfileReceive>(`http://127.0.0.1:8000/api/users/${id}/`,{headers: {'Authorization':  `Bearer ${this.access}`}});
   }
 
 }

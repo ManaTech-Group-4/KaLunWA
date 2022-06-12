@@ -82,15 +82,17 @@ export class AddProfileComponent implements OnInit {
     }
 
 
-    this.service.register(newAdmin)
+    const regSubscribe = this.service.register(newAdmin)
     .pipe(first())
     .subscribe(
-        data => {
+        () => {
           this.router.navigateByUrl("admin/admin-list");
+          regSubscribe.unsubscribe();
         },
-        error => {
+        () => {
           this.loading = false;
           this.profile.enable();
+          regSubscribe.unsubscribe();
         });
 
   }

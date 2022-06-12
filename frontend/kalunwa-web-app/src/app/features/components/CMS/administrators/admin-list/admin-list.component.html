@@ -30,7 +30,7 @@
                     <td>{{item.id}}</td>
                     <td id="username"><img [src]="item.image" onerror="this.src='../../assets/images/person-icon.jpg'" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
                     <td>asdsda</td>
-                    <td><mat-icon *ngIf="!item.is_superadmin && is_superadmin" routerLink="/admin/edit-admin">edit</mat-icon> <mat-icon *ngIf="!item.is_superadmin && is_superadmin"(click)='deleteUser(item.id, item.username)'>delete</mat-icon></td>
+                    <td><mat-icon *ngIf="!item.is_superadmin && is_superadmin" [routerLink]="['/admin/edit-admin',item.id]">edit</mat-icon> <mat-icon *ngIf="!item.is_superadmin && is_superadmin"(click)='deleteUser(item.id, item.username)'>delete</mat-icon></td>
                 </tr>
             </tbody>
         </table>

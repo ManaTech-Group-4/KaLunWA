@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { Profile, ProfileReceive } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 import { CustomValidators } from '../../shared/customValidation';
 
@@ -18,21 +19,30 @@ export class EditProfileComponent implements OnInit {
   profileImage:string;
   submitted= false;
   loading = false;
+  selectedProfile:ProfileReceive;
+  userId:string | null;
 
   constructor(
     private formBuilder: FormBuilder,
     private service: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.profile = this.formBuilder.group({
-      image: [null],
-      firstname:['', Validators.required],
-      lastname:['', Validators.required],
-      username:['', Validators.required],
-      email:['', [Validators.required, Validators.email]]
-    }
+    this.userId = this.route.snapshot.paramMap.get("id");
+    const userSubscribe = this.service.getUserById(this.userId).subscribe(
+      data =>{
+      this.selectedProfile = data;
+      this.profile = this.formBuilder.group({
+        image: [this.selectedProfile.image],
+        firstname:[this.selectedProfile.first_name, Validators.required],
+        lastname:[this.selectedProfile.last_name, Validators.required],
+        username:[this.selectedProfile.username, Validators.required],
+        email:[this.selectedProfile.email, [Validators.required, Validators.email]]
+      });
+      userSubscribe.unsubscribe();
+      }
     );
 
     this.updatePass = this.formBuilder.group({
@@ -52,7 +62,7 @@ export class EditProfileComponent implements OnInit {
 
 
 
-  onSubmit(){
+  onSubmitDetails(){
     this.submitted = true;
     this.loading = true;
     this.profile.disable();
@@ -61,6 +71,28 @@ export class EditProfileComponent implements OnInit {
     if (this.profile.invalid) {
       return;
     }
+
+    var newAdmin = new FormData();
+    newAdmin.append('first_name',this.f.firstname.value);
+    newAdmin.append('last_name',this.f.lastname.value);
+    newAdmin.append('username',this.f.username.value);
+    newAdmin.append('email',this.f.email.value);
+
+    console.log(newAdmin);
+
+
+    const editSubscribe = this.service.updateUser(newAdmin, this.userId)
+    .pipe(first())
+    .subscribe(
+        () => {
+          this.router.navigateByUrl("admin/admin-list");
+          editSubscribe.unsubscribe();
+        },
+        () => {
+          this.loading = false;
+          this.profile.enable();
+          editSubscribe.unsubscribe();
+        });
 
 
   }

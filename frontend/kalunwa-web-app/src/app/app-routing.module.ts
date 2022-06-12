@@ -69,7 +69,7 @@ export const routes: Routes = [
       {path: "cms-camp/:camp-type", component:CmsCampComponent},
       {path: "admin-list", component: AdminListComponent},
       {path: "add-admin", component: AddProfileComponent},
-      {path: "edit-admin", component: EditProfileComponent}
+      {path: "edit-admin/:id", component: EditProfileComponent}
     ]
   },
   {path: "**", component: PageNotFoundComponent}];

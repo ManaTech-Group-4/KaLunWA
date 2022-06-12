@@ -3,8 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from 'src/app/admin/dialogs/confirm-dialog/confirm-dialog';
 import { Admin, Profile, ProfileReceive } from 'src/app/admin/model/user-model';
 import { AuthService } from 'src/app/admin/service/auth.service';
-import { DialogsService } from 'src/app/admin/service/dialogs.service';
-import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 
 @Component({
   selector: 'app-admin-list',
@@ -61,7 +59,6 @@ export class AdminListComponent implements OnInit {
     this.service.getUsers().subscribe(
       data => {this.admin_list = data;
               this.selectedAdmin  = this.admin_list[0];
-              console.log(data);
             }
     )
   }

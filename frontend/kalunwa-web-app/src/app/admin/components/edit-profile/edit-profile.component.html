@@ -16,7 +16,7 @@
           <div class="profile-container">
             <img [src]="profileImage" onerror="this.src='../../assets/images/person-icon.jpg'" [alt]="filename"/>
             <input type="file" class="file-input" id="fileImg"
-            accept="image/*" (change)="onFileChange(fileUpload)" #fileUpload formControlName="image"/>
+            accept="image/*" (change)="onFileChange(fileUpload)" #fileUpload />
 
             <div class="file-upload">
 
@@ -33,15 +33,15 @@
       <div class="form-row">
         <mat-form-field appearance="fill" >
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstname"/>
-          <mat-error *ngIf="f.firstname.hasError('required')">First Name is required</mat-error>
+          <input matInput formControlName="first_name"/>
+          <mat-error *ngIf="f.first_name.hasError('required')">First Name is required</mat-error>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field appearance="fill" >
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastname"/>
-          <mat-error *ngIf="f.lastname.hasError('required')">Last Name is required</mat-error>
+          <input matInput formControlName="last_name"/>
+          <mat-error *ngIf="f.last_name.hasError('required')">Last Name is required</mat-error>
         </mat-form-field>
       </div>
       <div class="form-row">

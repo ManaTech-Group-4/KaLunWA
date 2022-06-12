@@ -38,18 +38,20 @@ export class EditProfileComponent implements OnInit {
     this.profileImage = "../../assets/images/person-icon.jpg";
     const userSubscribe = this.service.getUserById(this.userId).subscribe(
       data =>{
+        this.profile.patchValue(data);
       this.selectedProfile = data;
       this.profileImage = this.selectedProfile.image;
-      this.profile = this.formBuilder.group({
-        image: [this.selectedProfile.image],
-        firstname:[this.selectedProfile.first_name, Validators.required],
-        lastname:[this.selectedProfile.last_name, Validators.required],
-        username:[this.selectedProfile.username, Validators.required],
-        email:[this.selectedProfile.email, [Validators.required, Validators.email]]
-      });
       userSubscribe.unsubscribe();
       }
     );
+
+    this.profile = this.formBuilder.group({
+      image: [],
+      first_name:['', Validators.required],
+      last_name:['', Validators.required],
+      username:['', Validators.required],
+      email:['', [Validators.required, Validators.email]]
+    });
 
     this.updatePass = this.formBuilder.group({
       oldpassword:['', [Validators.required, Validators.minLength(8)]],
@@ -79,8 +81,8 @@ export class EditProfileComponent implements OnInit {
     const file: File = imageInput.files[0];
 
     var newAdmin = new FormData();
-    newAdmin.append('first_name',this.f.firstname.value);
-    newAdmin.append('last_name',this.f.lastname.value);
+    newAdmin.append('first_name',this.f.first_name.value);
+    newAdmin.append('last_name',this.f.last_name.value);
     newAdmin.append('username',this.f.username.value);
     if(this.isNewImage)
     newAdmin.append('image',file);

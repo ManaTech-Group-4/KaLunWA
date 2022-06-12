@@ -709,11 +709,8 @@ class CampLeaderSerializer(FlexFieldsSerializerMixin, serializers.ModelSerialize
         return instance
 
 
-
-
 class OrgLeaderSerializer(FlexFieldsModelSerializer):
-    position = serializers.CharField(source='get_position', validators=[])
-
+    position = serializers.CharField(validators=[])
     class Meta:
         model = OrgLeader
         fields = (
@@ -738,33 +735,31 @@ class OrgLeaderSerializer(FlexFieldsModelSerializer):
     def validate(self, data): # object-level validation
         if data['position'] not in OrgLeader.Positions.labels:
             raise serializers.ValidationError(
-            "Organization Leader position invalid."
+            f"Organization Leader position invalid. Expected are {OrgLeader.Positions.labels}"
             )            
         return data
 
     def create(self, validated_data):
-        position = validated_data.get('position')
-        position_value = get_value_by_label(position)
-        image_id = validated_data.pop('image')
-        org_lead_image = get_object_or_404(Image, pk=image_id)
-
+        position = validated_data.pop('position')
+        position_value = get_value_by_label(position, OrgLeader.Positions)
         return  OrgLeader.objects.create(
-            image=org_lead_image,
             position=position_value,
             **validated_data)
 
     def update(self, instance, validated_data):
         position = validated_data.pop('position')
-        position_value = get_value_by_label(position)
+        position_value = get_value_by_label(position, OrgLeader.Positions )
         instance.position = position_value
-
-        image_id = validated_data.pop('image')
-        org_lead_image = get_object_or_404(Image, pk=image_id)
-        instance.image = org_lead_image
 
         for key, value in validated_data.items():
             setattr(instance, key, value) 
+        instance.save()        
+        return instance        
 
-            instance.save()        
-            return instance        
-
+    def to_representation(self, instance):
+        data = super(OrgLeaderSerializer, self).to_representation(instance)
+        position = data.get('position') 
+        # when getting record, change presentation 
+        if position is not None:
+            data['position'] = instance.get_position()
+        return data

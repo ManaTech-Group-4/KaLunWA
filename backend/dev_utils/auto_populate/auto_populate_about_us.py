@@ -14,7 +14,7 @@ from kalunwa.page_containers.models import PageContainer
 
 #-------------------------------------------------------------------------------
 # demographics page_container
-PageContainer.objects.create(name='demographics')
+# PageContainer.objects.create(name='demographics')
 
 # demographics record details
 

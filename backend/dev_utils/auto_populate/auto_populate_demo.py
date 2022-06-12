@@ -85,7 +85,9 @@ print('populated org struct people')
 exec(open("dev_utils/auto_populate/auto_populate_homepage_container.py").read())
 print('created homepage container')
 #-------------------------------------------------------------------------------
+# create actual contributors
+exec(open("dev_utils/auto_populate/auto_populate_contributors.py").read())
+print('Contributors')
+#-------------------------------------------------------------------------------
 print('end of script')
-
-
 # exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())

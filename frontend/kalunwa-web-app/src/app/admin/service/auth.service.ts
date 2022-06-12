@@ -68,6 +68,16 @@ export class AuthService {
   }
 
 
+  delete(id:number){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.delete(`http://127.0.0.1:8000/api/users/${id}/`, { headers: headers });
+  }
+
+
+
   // refreshToken() {
   //   if (moment().isBetween(this.getExpiration().subtract(1, 'days'), this.getExpiration())) {
   //     return this.http.post(

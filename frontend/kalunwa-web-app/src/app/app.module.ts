@@ -56,6 +56,7 @@ import { CmsCampComponent } from 'src/app/features/components/CMS/single-page/cm
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
 import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
 import { EditProfileComponent } from './admin/components/edit-profile/edit-profile.component';
+import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
 
 
 @NgModule({
@@ -105,6 +106,7 @@ import { EditProfileComponent } from './admin/components/edit-profile/edit-profi
     AdminListComponent,
     AddProfileComponent,
     EditProfileComponent,
+    ConfirmDialog
   ],
   entryComponents:[
     MembersDialogComponent

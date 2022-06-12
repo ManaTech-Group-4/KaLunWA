@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
 import { Profile } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 import { CollectivePagesService } from '../../service/collective-pages.service';
@@ -59,7 +61,7 @@ export class AddProfileComponent implements OnInit {
     newAdmin.append('username',this.f.username.value);
     newAdmin.append('email',this.f.email.value);
     newAdmin.append('password',this.f.password.value);
-    newAdmin.append('image',this.f.image.value);
+    // newAdmin.append('image',this.f.image.value);
     //  ={
     //   "first_name": this.f.firstname.value,
     //   "last_name": this.f.lastname.value,

@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from 'src/app/admin/dialogs/confirm-dialog/confirm-dialog';
 import { Admin, Profile, ProfileReceive } from 'src/app/admin/model/user-model';
 import { AuthService } from 'src/app/admin/service/auth.service';
+import { DialogsService } from 'src/app/admin/service/dialogs.service';
 import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 
 @Component({
@@ -15,7 +18,9 @@ export class AdminListComponent implements OnInit {
 
   selectedAdmin:ProfileReceive;
 
-  constructor(private ref: ChangeDetectorRef, private service: AuthService) { }
+  constructor(private ref: ChangeDetectorRef,
+    private service: AuthService,
+    private dialog: MatDialog) { }
 
   activePage:number = 1;
   currentPage = 0;
@@ -41,16 +46,50 @@ export class AdminListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getList();
+    this.is_superadmin = this.service.currentAdmin.is_superadmin;
+  }
+
+  getList(){
     this.service.getUsers().subscribe(
       data => {this.admin_list = data;
               this.selectedAdmin  = this.admin_list[0];
+              console.log(data);
             }
     )
-    this.is_superadmin = this.service.currentAdmin.is_superadmin;
   }
 
   displayInfo(admin:ProfileReceive){
     this.selectedAdmin = admin;
+  }
+
+
+  deleteUser(id:number, name: string){
+
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      width: '250px',
+      data: `Do you like to delete the admin ${name}`,
+    });
+
+    const dialogSubscribe = dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        const deleteSub = this.service.delete(id).subscribe(
+          () => {
+            console.log('success');
+            this.getList();
+            this.updateDisplay(this.activePage);
+            deleteSub.unsubscribe();
+          },
+          (err) => {
+            console.log('err');
+            deleteSub.unsubscribe();
+          }
+        );
+      }
+      dialogSubscribe.unsubscribe();
+    });
+
+
   }
 
 }

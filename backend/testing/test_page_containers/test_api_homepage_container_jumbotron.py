@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory
+from testing.base_test_case import BaseWithClientCredentialsTestCase
 from testing.utils import  (
     get_test_image_file,
     get_expected_image_url,
@@ -115,7 +116,7 @@ class GetHomepageContainerJumbotronsTestCase(APITestCase):
         self.assertDictEqual(expected_data, response_contained_jumbotron['jumbotron'])
 
 
-class UpdateHomepageContainerJumbotronsTestCase(APITestCase):
+class UpdateHomepageContainerJumbotronsTestCase(BaseWithClientCredentialsTestCase):
     """
     # test update page_contained_jumbotrons from homepage    
     - update the jumbotron id of a section 
@@ -129,6 +130,10 @@ class UpdateHomepageContainerJumbotronsTestCase(APITestCase):
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
+
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])  
 
     def test_update_homepage_jumbotron_expected(self):
         """
@@ -377,12 +382,16 @@ class UpdateHomepageContainerJumbotronsTestCase(APITestCase):
         self.assertEqual('integrity-error', response.data['code'])
 
 
-class DeleteHomepageJumbotronTestCase(APITestCase):
+class DeleteHomepageJumbotronTestCase(BaseWithClientCredentialsTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
-    
+
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])  
+
     def test_delete_contained_jumbotron(self):
         """
         delete a contained jumbotron using its id.
@@ -406,8 +415,6 @@ class DeleteHomepageJumbotronTestCase(APITestCase):
         url = reverse('page-contained-jumbotron-detail', args=[page_contained_jumbotron.id])
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
-
-# test delete page_contained_jumbotrons using another endpoint
 
         
 

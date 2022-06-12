@@ -22,7 +22,7 @@ from kalunwa.page_containers.models import (
     PageContainer,
     PageContainedProject,
 )
-
+from testing.base_test_case import BaseWithClientCredentialsTestCase
 
 class GetHomepageContainerProjectsTestCase(APITestCase): 
     """
@@ -127,7 +127,7 @@ class GetHomepageContainerProjectsTestCase(APITestCase):
         self.assertDictEqual(expected_data, response_contained_project['project'])
 
 
-class UpdateHomepageContainerProjectsTestCase(APITestCase):
+class UpdateHomepageContainerProjectsTestCase(BaseWithClientCredentialsTestCase):
     """
     # test update page_contained_projects from homepage    
     - update the project id of a section 
@@ -141,6 +141,10 @@ class UpdateHomepageContainerProjectsTestCase(APITestCase):
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
+    
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])        
 
     def test_update_homepage_project_expected(self):
         """
@@ -401,13 +405,18 @@ class UpdateHomepageContainerProjectsTestCase(APITestCase):
         self.assertEqual('integrity-error', response.data['code'])
 
 
-class DeleteHomepageProjectTestCase(APITestCase):
+class DeleteHomepageProjectTestCase(BaseWithClientCredentialsTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
     
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])     
+    
     def test_delete_contained_project(self):
+        
         """
         delete a contained project using its id.
         mock:
@@ -432,8 +441,3 @@ class DeleteHomepageProjectTestCase(APITestCase):
         url = reverse('page-contained-project-detail', args=[page_contained_project.id])
         response = self.client.delete(url)
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
-
-# test delete page_contained_projects using another endpoint
-
-        
-

@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase, APIRequestFactory
 from kalunwa.content.serializers import StatusEnum
+from testing.base_test_case import BaseWithClientCredentialsTestCase
 from testing.utils import  (
     HOMEPAGE_EXPANDED_JUMBO_DETAIL_URL,
     get_test_image_file,
@@ -25,7 +26,7 @@ from kalunwa.page_containers.models import (
 )
 
 
-class GetHomepageContainerEventsTestCase(APITestCase): 
+class GetHomepageContainerEventsTestCase(BaseWithClientCredentialsTestCase): 
     """
     # test get page_contained_events from homepage
     """
@@ -34,6 +35,10 @@ class GetHomepageContainerEventsTestCase(APITestCase):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
         cls.view = PageContainerDetailView.as_view()
+
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])  
 
     # api/page-containers/homepage/
     def test_get_homepage_events(self):    
@@ -128,7 +133,7 @@ class GetHomepageContainerEventsTestCase(APITestCase):
         self.assertDictEqual(expected_data, response_contained_event['event'])
 
 
-class UpdateHomepageContainerEventsTestCase(APITestCase):
+class UpdateHomepageContainerEventsTestCase(BaseWithClientCredentialsTestCase):
     """
     # test update page_contained_events from homepage    
     - update the event id of a section 
@@ -142,6 +147,10 @@ class UpdateHomepageContainerEventsTestCase(APITestCase):
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
+
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])  
 
     def test_update_homepage_event_expected(self):
         """
@@ -401,11 +410,15 @@ class UpdateHomepageContainerEventsTestCase(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual('integrity-error', response.data['code'])
 
-class DeleteHomepageEventTestCase(APITestCase):
+class DeleteHomepageEventTestCase(BaseWithClientCredentialsTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.image_file = get_test_image_file()
         cls.request_factory = APIRequestFactory()
+
+    def setUp(self) -> None:
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens['access'])  
     
     def test_delete_contained_event(self):
         """

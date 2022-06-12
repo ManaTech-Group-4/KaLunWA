@@ -41,18 +41,15 @@ class EventViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
     permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_fields = ['is_featured']
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     model = Project
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, CampFilter, QueryLimitBackend]
+    permission_classes = [IsAuthenticatedOrReadOnly]    
     filterset_fields = ['is_featured']
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
 
 
 class NewsViewSet(viewsets.ModelViewSet):
@@ -60,7 +57,6 @@ class NewsViewSet(viewsets.ModelViewSet):
     filter_backends = [ExcludeIDFilter, QueryLimitBackend]    
     serializer_class = NewsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):      
@@ -82,7 +78,6 @@ class OrgLeaderViewSet(viewsets.ModelViewSet):
     serializer_class = OrgLeaderSerializer
     queryset = OrgLeader.objects.all()
     filter_backends = [OrgLeaderPositionFilter]
-    # parser_classes = [MultiPartParser, FormParser]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     #position only accepts KEY from choices enums eg. LDR
@@ -95,17 +90,12 @@ class CabinOfficerViewSet(viewsets.ModelViewSet):
     filter_backends = [CampFilter, CabinOfficerCategoryFilter]    
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    #position only accepts KEY from choices enums eg. DIR
-
 
 class CommissionerViewSet(viewsets.ModelViewSet):
     serializer_class = CommissionerSerializer
     queryset = Commissioner.objects.all()
     filter_backends = [CommissionerCategoryFilter]
     permission_classes = [IsAuthenticatedOrReadOnly]
-
-    #position only accepts KEY from choices enums eg. CHF cat = GAE
-
 
 
 class CampLeaderViewSet(viewsets.ModelViewSet): 
@@ -114,8 +104,6 @@ class CampLeaderViewSet(viewsets.ModelViewSet):
     filter_backends = [CampFilter, CampLeaderPositionFilter]
     permission_classes = [IsAuthenticatedOrReadOnly]               
 
-    #position only accepts KEY from choices enums eg. DIR
-
 
 class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
     model = CampPage
@@ -123,13 +111,13 @@ class CampPageViewSet(MultipleFieldLookupORMixin, viewsets.ModelViewSet):
     filter_backends = [CampNameInFilter, QueryLimitBackend]   
     queryset = CampPage.objects.all()
     lookup_fields = ['id', 'slug']
+    permission_classes = [IsAuthenticatedOrReadOnly]      
 
 
 class DemographicsViewSet(viewsets.ModelViewSet):
     serializer_class = DemographicsSerializer
     queryset = Demographics.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]               
-
 
     @action(detail=False, url_path='total-members')
     def total_members(self, request):
@@ -139,6 +127,7 @@ class DemographicsViewSet(viewsets.ModelViewSet):
 class ContributorViewset(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     queryset = Contributor.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]                   
 # -----------------------------------------------------------------------------    
 # tester for gallery 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -149,6 +138,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     # prefetched so that related objects are cached, and query only hits db once
     queryset = Image.objects.prefetch_related('gallery_events', 'gallery_projects', 'gallery_camps') 
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAuthenticatedOrReadOnly]                   
 
     def get_queryset(self):
         event_pk = self.request.query_params.get(f'has_event', None)      
@@ -165,6 +155,7 @@ class EventGalleryListCreateView(ListCreateAPIView):
     """
     serializer_class = ImageSerializer
     lookup_fields = ['pk']
+    permission_classes = [IsAuthenticatedOrReadOnly]               
 
     def get_event_object(self):
         event_id = self.kwargs['pk']
@@ -201,6 +192,7 @@ class ProjectGalleryListCreateView(ListCreateAPIView):
     """
     serializer_class = ImageSerializer
     lookup_fields = ['pk']
+    permission_classes = [IsAuthenticatedOrReadOnly]        
 
     def get_project_object(self):
         project_id = self.kwargs['pk']
@@ -237,6 +229,7 @@ class CampPageGalleryListCreateView(MultipleFieldLookupORMixin, ListCreateAPIVie
     """
     serializer_class = ImageSerializer
     lookup_fields = ['id', 'slug']
+    permission_classes = [IsAuthenticatedOrReadOnly]        
 
     def get_camp_object(self):
         for field in self.lookup_fields:
@@ -273,6 +266,7 @@ class CampPageGalleryListCreateView(MultipleFieldLookupORMixin, ListCreateAPIVie
         
 class ImageUploadView(APIView): 
     parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsAuthenticatedOrReadOnly]        
 
     def post(self, request, format=None):
         print(request.data)

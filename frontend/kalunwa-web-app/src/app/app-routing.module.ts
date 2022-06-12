@@ -54,7 +54,7 @@ export const routes: Routes = [
       {path: "single-page-list", component: SinglePageListComponent},
       {path: "cms-homepage", component: CmsHomepageComponent},
       {path: "collective", component: CollectivePageListComponent},
-      {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
+      {path: "collective-add/:collective-type", component:AddCollectiveComponent},
       {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
     ]
   },

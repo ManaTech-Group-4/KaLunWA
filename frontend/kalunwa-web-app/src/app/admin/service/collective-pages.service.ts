@@ -1,47 +1,57 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IndivEventsModel } from 'src/app/features/models/indiv-event-model';
 import { CollectivePageModel } from '../model/collective-page-model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollectivePagesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private auth: AuthService) { }
 
   getProjectList(): Observable<CollectivePageModel[]>{
-    return this.http.get<any>("http://127.0.0.1:8000/api/projects/?omit=image,updated_at,created_at,description,end_date");
+    return this.http.get<any>("http://127.0.0.1:8000/api/projects/?omit=image,updated_at,description,end_date");
   }
   getEventList(): Observable<CollectivePageModel[]>{
-    return this.http.get<any>("http://127.0.0.1:8000/api/events/?omit=image,updated_at,created_at,description,end_date");
+    return this.http.get<any>("http://127.0.0.1:8000/api/events/?omit=image,updated_at,description,end_date");
   }
 
   getAnnouncementList(): Observable<CollectivePageModel[]>{
-    return this.http.get<any>("http://127.0.0.1:8000/api/announcements/?updated_at,created_at,description,end_date");
+    return this.http.get<any>("http://127.0.0.1:8000/api/announcements/?updated_at,description,end_date");
   }
   getNewsList(): Observable<CollectivePageModel[]>{
-    return this.http.get<any>("http://127.0.0.1:8000/api/news/?omit=image,updated_at,created_at,description,end_date");
+    return this.http.get<any>("http://127.0.0.1:8000/api/news/?omit=image,updated_at,description,end_date");
   }
 
 
-  addProject(){
-    console.log("project added");
+  addProject(newProject:any){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/projects/`, newProject, {headers:headers});
   }
   updateProject(){
     console.log("project updated");
   }
 
-  addEvent(){
-    console.log("Event added");
+  addEvent(newEvent:any){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/events/`, newEvent, {headers:headers});
   }
   updateEvent(){
     console.log("Event updated");
   }
 
-  addNews(){
-    console.log("News added");
+  addNews(newNews:any){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/news/`, newNews, {headers:headers});
   }
   updateNews(){
     console.log("News updated");
@@ -50,11 +60,14 @@ export class CollectivePagesService {
 
   public uploadImage(fileName:string, image:any) {
     const formData = new FormData();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.auth.access}`
+    });
 
     formData.append("image", image);
     formData.append("name", fileName);
     console.log(image);
-    return this.http.post('http://127.0.0.1:8000/api/gallery/', formData);
+    return this.http.post('http://127.0.0.1:8000/api/gallery/', formData, {headers: headers});
   }
 
   getEventDetails(eventId: string | null) : Observable<IndivEventsModel>{

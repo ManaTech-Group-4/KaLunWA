@@ -27,28 +27,31 @@ export class CollectivePageListComponent implements OnInit {
 
 
     ngOnInit(): void {
-      this.service.getProjectList().subscribe(
+      const projSub = this.service.getProjectList().subscribe(
         (data) => {
           this.projects = data;
           this.displayList = this.projects;
+          projSub.unsubscribe();
         }
       );
-      this.service.getEventList().subscribe(
+      const eventSub = this.service.getEventList().subscribe(
         (data) => {
           this.events = data;
+          eventSub.unsubscribe();
         }
       );
-      this.service.getNewsList().subscribe(
+      const newsSub = this.service.getNewsList().subscribe(
         (data) => {
           this.news = data;
+          newsSub.unsubscribe();
         }
       );
-      this.service.getAnnouncementList().subscribe(
+      const annSub = this.service.getAnnouncementList().subscribe(
         (data) => {
           this.announcement = data;
+          annSub.unsubscribe();
         }
       );
-        console.log(this.projects);
     }
 
   detectIfChanges(){

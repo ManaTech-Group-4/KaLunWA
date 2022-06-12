@@ -23,10 +23,32 @@ describe('AddProfileComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddProfileComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should require valid email', () => {
+    component.f.email.setValue({
+      "email": "invalidemail"
+    });
+
+    expect(component.f.email.valid).toEqual(false);
+  });
+
+
+  it('password and confirm password should match', () => {
+    component.f.password.setValue(
+      {'password': "adasdasdasd"}
+    );
+    component.f.repassword.setValue(
+      {'repassword': "aaadasdasdasd"}
+    );
+
+    expect(component.f.repassword.valid).toEqual(false);
+  });
+
 });

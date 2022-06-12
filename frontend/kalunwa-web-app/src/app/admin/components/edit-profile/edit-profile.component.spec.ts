@@ -29,4 +29,25 @@ describe('EditProfileComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+
+  it('should require valid email', () => {
+    component.f.email.setValue({
+      "email": "invalidemail"
+    });
+
+    expect(component.f.email.valid).toEqual(false);
+  });
+
+
+  it('password and confirm password should match', () => {
+    component.form2.newpassword.setValue(
+      {'newpassword': "adasdasdasd"}
+    );
+    component.form2.repassword.setValue(
+      {'repassword': "aaadasdasdasd"}
+    );
+
+    expect(component.form2.repassword.valid).toEqual(false);
+  });
 });

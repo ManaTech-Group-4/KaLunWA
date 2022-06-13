@@ -46,15 +46,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',    
 
-<<<<<<< HEAD
-    # user apps (loading configurations for flexibility e.g. readying signals))
-    'kalunwa.core.apps.CoreConfig',
-    'kalunwa.content.apps.ContentConfig',
-=======
     # user apps
     'kalunwa.core.apps.CoreConfig',
     'kalunwa.content.apps.ContentConfig', 
->>>>>>> main
     'kalunwa.users.apps.UsersConfig',
     'kalunwa.page_containers.apps.PageContainersConfig',
 ]
@@ -167,14 +161,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',     
     ),
     'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler',
-<<<<<<< HEAD
-
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ]
-
-=======
->>>>>>> main
 }
 
 SIMPLE_JWT = {

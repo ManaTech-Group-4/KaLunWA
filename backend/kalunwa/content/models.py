@@ -57,7 +57,7 @@ class ContentBase(AuthoredModel):
 
 
 class News(ContentBase):
-    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return self.title

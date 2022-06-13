@@ -17,9 +17,11 @@ from .serializers import (
     PageContainerReadSerializer,
     )
 from kalunwa.content.views import AssignLastUpdatedBy
+from kalunwa.users.permissions import AuthenticatedAndReadOnly
+
 
 class PageContainerListView(AssignLastUpdatedBy, ListCreateAPIView):
-    permission_classes=[IsAuthenticatedOrReadOnly]   
+    permission_classes=[AuthenticatedAndReadOnly]   
     queryset = PageContainer.objects.all()
 
     def get_serializer_class(self):
@@ -32,7 +34,7 @@ class PageContainerDetailView(AssignLastUpdatedBy, MultipleFieldLookupORMixin, R
     queryset = PageContainer.objects.all()
     serializer_class = PageContainerSerializer
     lookup_fields = ['slug', 'id']
-    permission_classes=[IsAuthenticatedOrReadOnly]
+    permission_classes=[AuthenticatedAndReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':        
@@ -60,17 +62,17 @@ class DestroyAndAssignObjectToHomePageMixin:
 class PageContainedJumbotronDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedJumbotron.objects.all()
     serializer_class = PageContainedJumbotronSerializer
-    permission_classes=[IsAuthenticatedOrReadOnly]
+    permission_classes=[AuthenticatedAndReadOnly]
 
 
 
 class PageContainedEventDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedEvent.objects.all()
     serializer_class = PageContainedEventSerializer    
-    permission_classes=[IsAuthenticatedOrReadOnly]    
+    permission_classes=[AuthenticatedAndReadOnly]    
 
 
 class PageContainedProjectDetailView(DestroyAndAssignObjectToHomePageMixin, RetrieveUpdateDestroyAPIView):
     queryset = PageContainedProject.objects.all() 
     serializer_class = PageContainedProjectSerializer   
-    permission_classes=[IsAuthenticatedOrReadOnly]        
+    permission_classes=[AuthenticatedAndReadOnly]        

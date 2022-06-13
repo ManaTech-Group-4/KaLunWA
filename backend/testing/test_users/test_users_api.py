@@ -20,67 +20,7 @@ from rest_framework import status
 from kalunwa.users.models import (
     User,
 )
-<<<<<<< HEAD
 from testing.base_test_case import BaseUserTestCase, BaseWithClientCredentialsTestCase
-=======
-
-
-class BaseUserTestCase(APITestCase):
-    user_credentials = {
-        'email':'test@test.com',
-        'password':'test12345678'        
-    }
-    admin_credentials = {
-        'email':'admin@test.com',
-        'password':'admin12345678'
-    }    
-
-    def create_user(self):
-        user = User.objects.create_user(
-            email=self.user_credentials['email'],
-            password=self.user_credentials['password']
-        )
-        return user
-
-    def create_superuser(self):
-        superuser = User.objects.create_superuser(
-            email=self.admin_credentials['email'],
-            password=self.admin_credentials['password']
-        )
-        return superuser
-
-    def get_superuser_tokens(self):
-        """
-        creates a superuser and returns superuser tokens.
-        """
-        self.create_superuser()
-        url = reverse('token-obtain-pair')
-        response = self.client.post(url, self.admin_credentials)   
-        return response.data  
-
-    def get_user_tokens(self):
-        """
-        creates a user and returns user tokens.
-        """        
-        self.create_user()
-        url = reverse('token-obtain-pair')
-        response = self.client.post(url, self.user_credentials)   
-        return response.data     
-
-class BaseWithClientCredentialsTestCase(BaseUserTestCase):
-    def load_user_client_credentials(self, token=None):
-        if not token:
-            tokens = self.get_user_tokens()
-            token = tokens['access']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
-
-    def load_superuser_client_credentials(self, token=None):
-        if not token:
-            tokens = self.get_superuser_tokens()
-            token = tokens['access']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)   
-
->>>>>>> main
 
 class UserLoginTestCase(BaseUserTestCase):
 
@@ -393,8 +333,4 @@ class UserDeleteTestCase(BaseWithClientCredentialsTestCase):
         to_delete_user = self.create_to_delete_user()            
         url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
         response = self.client.delete(url)
-<<<<<<< HEAD
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)          
-=======
-        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code) 
->>>>>>> main

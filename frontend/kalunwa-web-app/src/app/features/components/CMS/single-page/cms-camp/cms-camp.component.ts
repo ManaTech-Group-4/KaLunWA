@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ImageSnippet } from 'src/app/admin/model/collective-page-model';
 import { SinglePageService } from 'src/app/features/service/single-page.service';
 
 @Component({
@@ -16,7 +15,6 @@ export class CmsCampComponent implements OnInit {
   submitted= false;
   headerFileName="";
   contentFileName="";
-  selectedFile: ImageSnippet;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -75,7 +73,6 @@ export class CmsCampComponent implements OnInit {
 
       reader.addEventListener('load', (event: any) => {
 
-        this.selectedFile = new ImageSnippet(event.target.result, file);
 
         this.service.uploadImage(this.headerFileName,file).subscribe(
           (res) => {

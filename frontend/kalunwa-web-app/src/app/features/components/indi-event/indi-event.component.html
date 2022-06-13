@@ -5,9 +5,9 @@
 
   <div class="content">
       <div class="date">
-          <h5 class="start">{{event.start_date}}</h5>
+          <h5 class="start">{{event.start_date|  date: 'dd/MM/yyyy'}}</h5>
 
-          <h5 class="end">{{event.end_date}}</h5>
+          <h5 class="end">{{event.end_date|  date: 'dd/MM/yyyy'}}</h5>
       </div>
       <img src="{{event.image.image}}" alt="{{event.title}}_img">
       <p>{{event.description}}</p>

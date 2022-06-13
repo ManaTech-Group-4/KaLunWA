@@ -48,8 +48,8 @@
     .info-panel{
         display: block;
         padding: 8px;
-        background-color: #fafafa;
         border-radius: 10px;
+        overflow:hidden;
         min-width: 30vw;
         height:fit-content;
         margin-left: 15vw;
@@ -57,7 +57,6 @@
             background-color: #536B3C;
             border-radius: 10px 10px 0 0;
             color: #fafafa;
-            margin-bottom: 8px;
             padding: 8px;
             display: flex;
             flex-direction: row;
@@ -70,9 +69,10 @@
         }
         .dropdown{
             width: 100%;
-            background-color: rgb(228, 228, 228);
+            background-color: rgb(255, 255, 255);
             display: block;
             padding-top: 19px;
+            border-radius: 0px 0px 10px 10px;
             .slide-section{
                 display: flex;
                 flex-direction: row;

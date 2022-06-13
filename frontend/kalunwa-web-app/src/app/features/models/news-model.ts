@@ -8,3 +8,10 @@ export interface NewsResponseModel{
   },
   date: string;
 }
+export interface AnnoucementModel{
+  id: number;
+  title: string;
+  description: string;
+  meta_description: string;
+  created_at: Date;
+}

@@ -1,0 +1,81 @@
+.container{
+  background-color: rgb(228, 228, 228);
+  padding: 30px 60px;
+  font-family: monserrat;
+  height: calc(100vh - 88px);
+  form{
+    background:white;
+    border-radius: 15px;
+    overflow: hidden;
+    width:70%;
+    margin:auto;
+    .header{
+      background-color: #7bad49;
+      display:flex;
+      color: #fafafa;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width:95%;
+      padding:0% 2.5%;
+      height: 50px;
+    }
+    .body{
+      padding: 50px 0px;
+      h1{
+        font-size:30px;
+        font-family: monserrat;
+        font-weight: 400;
+        width: 60%;
+        margin:auto;
+      }
+      .form-row{
+        width: 60%;
+        margin:auto;
+        mat-form-field{
+          margin:10px;
+        }
+        .profile-container{
+          width:300px;
+          height:300px;
+          border: 2px solid #536b3cc0;
+          position:relative;
+          display: flex;
+          justify-content: center;
+          overflow: hidden;
+          margin:10px;
+          img{
+            width:100%;
+            object-fit: cover;
+            position:absolute;
+            z-index: 0;
+          }
+          .file-upload{
+            z-index: 5;
+            position:absolute;
+            bottom:0;
+            font-size: 10px;
+            width: 95%;
+            height: 40px;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 2.5%;
+            background: rgba(207, 207, 207, 0.551);
+            button{
+              width: 30px;
+              height: 30px;
+              line-height: 30px;
+              mat-icon{
+                width:20px;
+                height:20px;
+                font-size: 20px;
+                line-height: 20px;
+              }
+            }
+          }
+        }
+      }
+   }
+  }
+}

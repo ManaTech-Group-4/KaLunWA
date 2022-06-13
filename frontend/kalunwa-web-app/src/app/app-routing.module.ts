@@ -25,6 +25,7 @@ import { CollectivePageListComponent } from './admin/components/collective-page-
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { EditCollectiveComponent } from './admin/components/edit-collective/edit-collective.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -55,7 +56,7 @@ export const routes: Routes = [
       {path: "cms-homepage", component: CmsHomepageComponent},
       {path: "collective", component: CollectivePageListComponent},
       {path: "collective-add/:collective-type", component:AddCollectiveComponent},
-      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent}
+      {path: "collective-edit/:collective-type/:id", component:EditCollectiveComponent}
     ]
   },
   {path: "**", component: PageNotFoundComponent}];

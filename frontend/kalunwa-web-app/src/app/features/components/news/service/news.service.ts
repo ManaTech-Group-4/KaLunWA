@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IndivNewsModel } from 'src/app/features/models/indiv-news-model';
-import { NewsResponseModel } from 'src/app/features/models/news-model';
+import { AnnoucementModel, NewsResponseModel } from 'src/app/features/models/news-model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +23,9 @@ export class NewsService {
   public getLatestNews(newsId:string | null): Observable<{id: number, title: string}[]>{
     let address  = 'http://127.0.0.1:8000/api/news/?id__not='+newsId+'&query_limit=3';
     return this.http.get<{id: number, title: string}[]>(address);
+  }
+
+  getAnnoucement() : Observable<AnnoucementModel>{
+    return this.http.get<AnnoucementModel>(`http://127.0.0.1:8000/api/announcements/?omit=updated_at,last_updated_by&query_limit=1`);
   }
 }

@@ -23,11 +23,11 @@
           <th>Actions</th>
       </tr>
       <tr  class="table-content" *ngFor="let item of displayList | slice:currentPage:lastPage">
-        <td width="40%"><mat-checkbox color="primary">{{item.title}}</mat-checkbox>
+        <td width="40%">{{item.title}}</td>
         <td width="20%">{{item.created_at}}</td>
         <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.camp}}</td>
         <td *ngIf="selected != 'news' && selected != 'announcement'" width="20%">{{item.status}}</td>
-        <td id="actions"><mat-icon [routerLink]="['/admin/edit-collective/{{selected}}',item.id]">edit</mat-icon> <mat-icon >delete</mat-icon></td>
+        <td id="actions"><mat-icon [routerLink]="['/admin/collective-edit/',selected, item.id]">edit</mat-icon> <mat-icon (click)="deleteItem(item.id, item.title)">delete</mat-icon></td>
 
       </tr>
       <tr *ngIf="!displayList || displayList.length < 1" class="empty-case">

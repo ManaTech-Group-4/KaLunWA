@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 from datetime import timedelta
-# from decouple import config -> prod
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -48,10 +47,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',    
 
     # user apps
-    'kalunwa.core',
-    'kalunwa.content',
-    'kalunwa.users',
-    'kalunwa.page_containers',
+    'kalunwa.core.apps.CoreConfig',
+    'kalunwa.content.apps.ContentConfig', 
+    'kalunwa.users.apps.UsersConfig',
+    'kalunwa.page_containers.apps.PageContainersConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,16 +153,14 @@ CORS_ORIGIN_WHITELIST = (
 'http://localhost:8000',
 )
 
-
 # authentication
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',     
     ),
     'EXCEPTION_HANDLER':'kalunwa.core.exceptions.custom_exception_handler',
-
 }
 
 SIMPLE_JWT = {

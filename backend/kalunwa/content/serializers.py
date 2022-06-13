@@ -7,7 +7,6 @@ from .models import Contributor, Image, Jumbotron, Tag, Announcement, Event, Pro
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
 from .validators import validate_start_date_and_end_date
-from kalunwa.core.utils import to_formal_mdy
 
 
 class StatusEnum(Enum):

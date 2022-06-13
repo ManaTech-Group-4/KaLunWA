@@ -1,4 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AdminListComponent } from './admin-list.component';
 
@@ -8,7 +10,8 @@ describe('AdminListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminListComponent ]
+      declarations: [ AdminListComponent ],
+      imports: [ HttpClientTestingModule, MatDialogModule]
     })
     .compileComponents();
   });
@@ -17,9 +20,5 @@ describe('AdminListComponent', () => {
     fixture = TestBed.createComponent(AdminListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });

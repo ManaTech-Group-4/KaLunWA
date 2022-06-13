@@ -7,11 +7,11 @@ from kalunwa.users.models import (
 class BaseUserTestCase(APITestCase):
     user_credentials = {
         'email':'test@test.com',
-        'password':'test'        
+        'password':'test123456'        
     }
     admin_credentials = {
         'email':'admin@test.com',
-        'password':'admin'
+        'password':'admin123456'
     }    
 
     def create_user(self):

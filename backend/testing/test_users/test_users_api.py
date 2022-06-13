@@ -42,7 +42,7 @@ class UserLoginTestCase(BaseUserTestCase):
         ## SET-UP
         user_credentials = {
             "email" : "test2@test.com",
-            "password" : "test"
+            "password" : "test123456"
         }
         url = reverse('token-obtain-pair')
         response = self.client.post(url, user_credentials) 

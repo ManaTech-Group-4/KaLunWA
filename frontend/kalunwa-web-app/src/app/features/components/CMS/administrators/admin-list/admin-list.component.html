@@ -21,7 +21,6 @@
                 <tr class="col-header">
                     <th>ID</th>
                     <th>Username</th>
-                    <th>Date Added</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -29,7 +28,7 @@
                 <tr  class="table-content" *ngFor="let item of admin_list | slice:currentPage:lastPage" (click)="displayInfo(item)">
                     <td>{{item.id}}</td>
                     <td id="username"><img [src]="item.image" onerror="this.src='../../assets/images/person-icon.jpg'" style="border-radius:50%; height:30px; width:30px">{{item.username}}</td>
-                    <td>asdsda</td>
+
                     <td><mat-icon *ngIf="is_superadmin || adminId == item.id" [routerLink]="['/admin/edit-admin',item.id]">edit</mat-icon> <mat-icon *ngIf="!item.is_superadmin && is_superadmin"(click)='deleteUser(item.id, item.username)'>delete</mat-icon></td>
                 </tr>
             </tbody>

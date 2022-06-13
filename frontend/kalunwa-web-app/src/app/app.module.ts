@@ -60,6 +60,7 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     JumbotronComponent,
     FooterComponent,
     AboutCampComponent,
+    routeComponents,
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,

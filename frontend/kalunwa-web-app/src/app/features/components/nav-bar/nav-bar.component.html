@@ -23,13 +23,10 @@
         <a mat-button class="submenu" href="about#history">History</a>
         <a mat-button class="submenu" href="about#advocate">Advocates Covenant</a>
         <a mat-button class="submenu" href="about#camps">Camps</a>
-        <a mat-button>Finances</a>
-        <a mat-button>FAQs</a>
-        <a mat-button href="org-struct">Organization Structure</a>
-        <a mat-button>Member Demographics</a>
+        <a mat-button routerLink="/org-struct">Organization Structure</a>
       </div>
     </li>
-    <li><a mat-button href="contact-us">Contact Us</a></li>
+    <li><a mat-button routerLink="/contact-us">Contact Us</a></li>
   </ul>
-  <button mat-flat-button color="primary" onclick="location.href = '/join-us';">Join Us</button>
+  <button mat-flat-button color="primary" routerLink = '/join-us'>Join Us</button>
 </mat-toolbar>

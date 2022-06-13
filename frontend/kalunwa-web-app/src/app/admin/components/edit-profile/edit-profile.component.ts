@@ -111,9 +111,9 @@ export class EditProfileComponent implements OnInit {
 
   OnChangePass(){
     this.updatePass.controls["oldpassword"].setErrors({'incorrect': false});
-    this.submittedPass = true;
     // stop here if form is invalid
     if (this.form2.invalid) {
+      this.submittedPass = true;
       return;
     }
 

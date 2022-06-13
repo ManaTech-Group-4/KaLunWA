@@ -30,7 +30,6 @@ export class NewsComponent implements OnInit {
     const announcementSub = this.newsService.getAnnoucement().subscribe(
       (res:any) => {
         this.announcement = res[0];
-        announcementSub.unsubscribe();
       }
     )
     this.newsDisplay$ = this.newsList$;
@@ -42,7 +41,6 @@ export class NewsComponent implements OnInit {
         news.filter(item => item.id != newsId))
     ).subscribe(news => {
       this.latestNews = news.map(item => item.title) as string[];
-      newSub.unsubscribe();
     });
   }
 

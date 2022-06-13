@@ -32,6 +32,7 @@ import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
+import { EditProfileComponent } from './admin/components/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -56,14 +57,20 @@ export const routes: Routes = [
   {path: "login", component: AdminHomeComponent},
   {path: "admin", component: AdminTemplateComponent, canActivate: [AuthGuard],
     children:[
-      {path: '', redirectTo: 'dashboard', pathMatch:"full"},
+      {path: '', redirectTo: 'admin-list', pathMatch:"full"},
       {path: "dashboard", component: DashboardComponent},
       {path: "single-page-list", component: SinglePageListComponent},
-      {path: "cms-homepage", component: CmsOrgStructComponent},
+      {path: "cms-homepage", component: CmsHomepageComponent},
       {path: "cms-org-struct", component: CmsOrgStructComponent},
       {path: "collective", component: CollectivePageListComponent},
       {path: "collective-add/:collective-type", component:AddCollectiveComponent},
-      {path: "collective-edit/:collective-type/:id", component:EditCollectiveComponent}
+      {path: "collective-edit/:collective-type/:id", component:EditCollectiveComponent},
+      {path: "newsletter", component:NewsletterComponent},
+      {path: "audit", component:AuditLogsComponent},
+      {path: "cms-camp/:camp-type", component:CmsCampComponent},
+      {path: "admin-list", component: AdminListComponent},
+      {path: "add-admin", component: AddProfileComponent},
+      {path: "edit-admin/:id", component: EditProfileComponent}
     ]
   },
   {path: "**", component: PageNotFoundComponent}];
@@ -98,5 +105,6 @@ export const routeComponents = [HomepageComponent,
                                 CmsCampComponent,
                                 AdminListComponent,
                                 CmsHomepageComponent,
-                                AddProfileComponent
+                                AddProfileComponent,
+                                EditProfileComponent
                               ];

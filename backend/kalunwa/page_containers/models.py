@@ -5,12 +5,11 @@ from kalunwa.content.models import (
     Project,
 )
 from kalunwa.core.models import TimestampedModel
-
+from kalunwa.content.models import AuthoredModel
 # Create your models here.
-class PageContainer(TimestampedModel):
+class PageContainer(AuthoredModel, TimestampedModel):
     name = models.CharField(max_length=225, unique=True)
     slug = models.SlugField(max_length = 255, null = True, blank = True, unique=True)
-    # edited_by
     jumbotrons = models.ManyToManyField(Jumbotron, through='PageContainedJumbotron')
     events = models.ManyToManyField(Event, through='PageContainedEvent')    
     projects = models.ManyToManyField(Project, through='PageContainedProject')        

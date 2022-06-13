@@ -1,1 +1,0 @@
-default_app_config = 'kalunwa.page_containers.apps.PageContainersConfig'

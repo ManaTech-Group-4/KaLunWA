@@ -50,14 +50,8 @@ import { CmsOrgStructComponent } from 'src/app/features/components/CMS/single-pa
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
-import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
-import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
-import { CmsCampComponent } from 'src/app/features/components/CMS/single-page/cms-camp/cms-camp.component';
-import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
-import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
-import { EditProfileComponent } from './admin/components/edit-profile/edit-profile.component';
+import { EditCollectiveComponent } from './admin/components/edit-collective/edit-collective.component';
 import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
-
 
 @NgModule({
   declarations: [
@@ -66,7 +60,6 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     JumbotronComponent,
     FooterComponent,
     AboutCampComponent,
-    routeComponents,
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
@@ -100,12 +93,7 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     AdminTemplateComponent,
     CollectivePageListComponent,
     AddCollectiveComponent,
-    NewsletterComponent,
-    AuditLogsComponent,
-    CmsCampComponent,
-    AdminListComponent,
-    AddProfileComponent,
-    EditProfileComponent,
+    EditCollectiveComponent,
     ConfirmDialog
   ],
   entryComponents:[

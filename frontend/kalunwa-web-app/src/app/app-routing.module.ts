@@ -24,14 +24,14 @@ import { AdminTemplateComponent } from './admin/components/admin-template/admin-
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
 import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
-import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { EditCollectiveComponent } from './admin/components/edit-collective/edit-collective.component';
 import { CmsOrgStructComponent } from './features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { NewsletterComponent } from './features/components/CMS/newsletter/newsletter.component';
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp/cms-camp.component';
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
+import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
 import { AddProfileComponent } from './admin/components/add-profile/add-profile.component';
-import { EditProfileComponent } from './admin/components/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -59,17 +59,11 @@ export const routes: Routes = [
       {path: '', redirectTo: 'dashboard', pathMatch:"full"},
       {path: "dashboard", component: DashboardComponent},
       {path: "single-page-list", component: SinglePageListComponent},
-      {path: "cms-homepage", component: CmsHomepageComponent},
+      {path: "cms-homepage", component: CmsOrgStructComponent},
       {path: "cms-org-struct", component: CmsOrgStructComponent},
       {path: "collective", component: CollectivePageListComponent},
-      {path: "collective-add-edit/:collective-type", redirectTo: "collective-add-edit/:collective-type/", pathMatch: "full" },
-      {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent},
-      {path: "newsletter", component:NewsletterComponent},
-      {path: "audit", component:AuditLogsComponent},
-      {path: "cms-camp/:camp-type", component:CmsCampComponent},
-      {path: "admin-list", component: AdminListComponent},
-      {path: "add-admin", component: AddProfileComponent},
-      {path: "edit-admin/:id", component: EditProfileComponent}
+      {path: "collective-add/:collective-type", component:AddCollectiveComponent},
+      {path: "collective-edit/:collective-type/:id", component:EditCollectiveComponent}
     ]
   },
   {path: "**", component: PageNotFoundComponent}];
@@ -99,7 +93,6 @@ export const routeComponents = [HomepageComponent,
                                 DashboardComponent,
                                 SinglePageListComponent,
                                 CmsOrgStructComponent,
-                                CmsHomepageComponent,
                                 NewsletterComponent,
                                 AuditLogsComponent,
                                 CmsCampComponent,

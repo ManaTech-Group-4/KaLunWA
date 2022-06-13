@@ -10,9 +10,13 @@ from kalunwa.content.models import (
     CampPage, 
     Demographics, 
 )
+from kalunwa.page_containers.models import PageContainer
 
 #-------------------------------------------------------------------------------
-# demographics
+# demographics page_container
+# PageContainer.objects.create(name='demographics')
+
+# demographics record details
 
 Demographics.objects.create(
     location = 'Tagbilaran',

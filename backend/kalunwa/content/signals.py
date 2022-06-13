@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from .models import Demographics, Image
+from .models import CampPage, Demographics, Image
 from kalunwa.users.models import User
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,6 +13,12 @@ from .models import (
     Commissioner,
     CampLeader
 )
+from kalunwa.core.utils import unique_slugify
+
+
+@receiver(pre_save, sender=CampPage, dispatch_uid='create_camp_slug')
+def pre_save(sender, instance, *args, **kwargs):
+   instance.slug = unique_slugify(instance, instance.name)
 
 # These two auto-delete files from filesystem when they are unneeded:
 ## Delete file under image field

@@ -3,6 +3,8 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework import validators as drf_validators
 from rest_flex_fields.serializers import FlexFieldsModelSerializer, FlexFieldsSerializerMixin
+
+from kalunwa.users.serializers import UserSerializer
 from .models import CampEnum, Contributor, Image, Jumbotron, Tag, Announcement, Event, Project, News 
 from .models import Demographics, CampPage, OrgLeader, Commissioner, CampLeader, CabinOfficer
 from enum import Enum
@@ -34,6 +36,7 @@ class TagSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             )
+
 
 
 class ImageSerializer(FlexFieldsModelSerializer):
@@ -207,6 +210,12 @@ class EventSerializer(OccurenceSerializer, serializers.ModelSerializer):
         end_date = validated_data.pop('end_date')        
         instance.end_date = iso_to_datetime(end_date)
 
+        # gallery = validated_data.pop('gallery', None)
+        # print(gallery)
+        # print(instance.gallery)        
+
+        # instance.gallery.set(gallery)
+
         # update the rest of the attributes
         for key, value in validated_data.items():
         # setattr updates an instance's attribute (key) with the value
@@ -311,6 +320,7 @@ class CampPageSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'name',
+            'slug',
             'description',
             'tagline',
             'image',
@@ -386,8 +396,10 @@ class CampPageSerializer(FlexFieldsModelSerializer):
         return instance
 
 
+
 class ContributorSerializer(FlexFieldsModelSerializer):
     category = serializers.CharField() 
+    # last_updated_by = UserSerializer(read_only=True )         
 
     class Meta:
         model = Contributor
@@ -514,6 +526,7 @@ class CommissionerSerializer(FlexFieldsModelSerializer):
             **validated_data)
 
     def update(self, instance, validated_data):
+        
         category = validated_data.pop('category')
         category_value = get_value_by_label(category, Commissioner.Categories)
         instance.category = category_value

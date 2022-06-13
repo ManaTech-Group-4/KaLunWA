@@ -8,6 +8,7 @@ div{
         width: 100%;
         border-radius: 10px;
         background-color: #fafafa;
+        border-collapse: collapse;
         tr{
             height: 50px;
             td{
@@ -15,7 +16,7 @@ div{
             }
         }
         .table-header{
-            background-color: #7bad49;
+            background-color: #536B3C;
             th{
                 &:first-child{
                     border-radius:10px 10px 0 0;
@@ -28,7 +29,7 @@ div{
         .table-content{
             color: #233620;
             &:hover{
-                background-color: #a9cf6b;
+                background-color: #5C7437d2;
                 color: #fafafa;
             }
             .page_name{

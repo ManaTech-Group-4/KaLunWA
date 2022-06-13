@@ -2,11 +2,6 @@ from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView
 )
-from rest_framework.permissions import (
-    AllowAny,
-     IsAuthenticated, 
-     IsAuthenticatedOrReadOnly
-)
 from kalunwa.core.views import MultipleFieldLookupORMixin
 from kalunwa.page_containers.models import (
     PageContainedJumbotron,

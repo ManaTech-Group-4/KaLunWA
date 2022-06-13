@@ -1,8 +1,8 @@
-import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { Admin } from '../model/user-model';
+import { Admin, Profile, ProfileReceive} from '../model/user-model';
 import * as jwtDecode from 'jwt-decode';
 import * as moment from 'moment';
 
@@ -13,6 +13,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
   }
+
 
   get refresh(): string {
     return localStorage.getItem('refresh')!;
@@ -43,7 +44,11 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{headers: {'Authorization': "Bearer " + this.access}, refresh: this.refresh}).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.access}`
+    });
+    return this.http.post(`http://127.0.0.1:8000/api/users/logout/blacklist/`,{refresh: this.refresh}, {headers: headers}).pipe(
       tap(() => {
         localStorage.removeItem('refresh');
         localStorage.removeItem('access');
@@ -51,6 +56,47 @@ export class AuthService {
       })
     )
   }
+
+  getImage(id:number){
+    return this.http.get(`http://127.0.0.1:8000/api/gallery/${id}`);
+  }
+
+
+   register(newAdmin: FormData){
+    console.log(newAdmin);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.post(`http://127.0.0.1:8000/api/users/register/`, newAdmin, { headers: headers });
+  }
+
+  updateUser(updateAdmin: FormData, id:string|null){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.put(`http://127.0.0.1:8000/api/users/${id}/`, updateAdmin, { headers: headers });
+  }
+
+
+  updatePassword(newPassword: FormData, id:string|null){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.put(`http://127.0.0.1:8000/api/users/${id}/change-password/`, newPassword, { headers: headers });
+  }
+
+
+  delete(id:number){
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.access}`
+    });
+
+    return this.http.delete(`http://127.0.0.1:8000/api/users/${id}/`, { headers: headers });
+  }
+
 
 
   // refreshToken() {
@@ -72,9 +118,9 @@ export class AuthService {
     return moment(expiresAt);
   }
 
-  get adminName(): string{
+  get currentAdmin(){
     const jwtToken = <Admin> jwtDecode.default(localStorage.getItem('access')!);
-    return jwtToken.email;
+    return this.getUserById(jwtToken.user_id.toString());
   }
 
 
@@ -87,7 +133,11 @@ export class AuthService {
   }
 
   getUsers(){
-    return this.http.get<Admin[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization': "Bearer " + this.access}});
+    return this.http.get<ProfileReceive[]>(`http://127.0.0.1:8000/api/users`,{headers: {'Authorization':  `Bearer ${this.access}`}});
+  }
+
+  getUserById(id:string | null){
+    return this.http.get<ProfileReceive>(`http://127.0.0.1:8000/api/users/${id}/`,{headers: {'Authorization':  `Bearer ${this.access}`}});
   }
 
 }

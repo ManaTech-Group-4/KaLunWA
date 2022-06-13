@@ -46,6 +46,7 @@ import { SinglePageListComponent } from './features/components/CMS/single-page/s
 import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
 import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
+import { CmsOrgStructComponent } from 'src/app/features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
 import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
 import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
 import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
@@ -59,7 +60,6 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     JumbotronComponent,
     FooterComponent,
     AboutCampComponent,
-    routeComponents,
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
@@ -88,6 +88,7 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     AdminHomeComponent,
     SinglePageListComponent,
     VisitorLandingComponent,
+    CmsOrgStructComponent,
     CmsHomepageComponent,
     AdminTemplateComponent,
     CollectivePageListComponent,

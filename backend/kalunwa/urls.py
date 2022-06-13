@@ -35,8 +35,8 @@ urlpatterns = [
             path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
             path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),                
             path('', include('kalunwa.content.urls')),
-            path('users/', include('kalunwa.users.urls')),              
             path('', include('kalunwa.page_containers.urls')),                  
+            path('users/', include('kalunwa.users.urls')),                
         ]
         )
     )

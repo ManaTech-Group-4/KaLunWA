@@ -26,8 +26,9 @@ export class CollectivePagesService {
   }
 
 
-  addProject(){
-    console.log("project added");
+  addProject(newProject:any){
+    console.log("here");
+    return this.http.post(`http://127.0.0.1:8000/api/projects/`, newProject).subscribe();
   }
   updateProject(){
     console.log("project updated");

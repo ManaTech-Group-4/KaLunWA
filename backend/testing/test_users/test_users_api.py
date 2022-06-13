@@ -29,11 +29,11 @@ from kalunwa.users.models import (
 class BaseUserTestCase(APITestCase):
     user_credentials = {
         'email':'test@test.com',
-        'password':'test'        
+        'password':'test12345678'        
     }
     admin_credentials = {
         'email':'admin@test.com',
-        'password':'admin'
+        'password':'admin12345678'
     }    
 
     def create_user(self):
@@ -44,18 +44,25 @@ class BaseUserTestCase(APITestCase):
         return user
 
     def create_superuser(self):
-        User.objects.create_superuser(
+        superuser = User.objects.create_superuser(
             email=self.admin_credentials['email'],
             password=self.admin_credentials['password']
         )
+        return superuser
 
     def get_superuser_tokens(self):
+        """
+        creates a superuser and returns superuser tokens.
+        """
         self.create_superuser()
         url = reverse('token-obtain-pair')
         response = self.client.post(url, self.admin_credentials)   
         return response.data  
 
     def get_user_tokens(self):
+        """
+        creates a user and returns user tokens.
+        """        
         self.create_user()
         url = reverse('token-obtain-pair')
         response = self.client.post(url, self.user_credentials)   
@@ -72,7 +79,7 @@ class BaseWithClientCredentialsTestCase(BaseUserTestCase):
         if not token:
             tokens = self.get_superuser_tokens()
             token = tokens['access']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)        
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)   
 
 
 class UserLoginTestCase(BaseUserTestCase):
@@ -278,6 +285,13 @@ class UserRegistrationTestCase(BaseWithClientCredentialsTestCase):
         response = self.client.post(url, self.user_credentials)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_user_registration_normal_user(self):
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(token=tokens['access'])
+        url = reverse('user-register')
+        response = self.client.post(url, self.user_credentials)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) 
+
 
 class UserViewDetailTestCase(BaseWithClientCredentialsTestCase):
     """
@@ -327,6 +341,25 @@ class UserViewListTestCase(BaseWithClientCredentialsTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)  
 
 
+class UserChangePasswordTestCase(BaseWithClientCredentialsTestCase):
+
+    def user_changes_password_with_correct_old_password(self):
+        tokens = self.get_user_tokens()
+        self.load_user_client_credentials(tokens["access"]) 
+        url = reverse('user-change-password')
+        new_password = 12345678
+        user = User.objects.first()
+        response = self.client.post(
+            url,
+            {
+                "old_password" : user.password,
+                "new_password" : new_password
+            }
+            )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(new_password, user.password)
+
+        
 class UserDeleteTestCase(BaseWithClientCredentialsTestCase):
     """
     Only superuser, or self (user) can delete a user record. 
@@ -362,28 +395,4 @@ class UserDeleteTestCase(BaseWithClientCredentialsTestCase):
         to_delete_user = self.create_to_delete_user()            
         url = reverse('user-detail', kwargs={"pk":to_delete_user.id})
         response = self.client.delete(url)
-        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)          
-
-
-# class UserPutTestCase(BaseWithClientCredentialsTestCase):
-#     """
-#     Only superuser, or self (user) can delete a user record. 
-#     """
-#     def create_to_update_user(self):
-#         to_update_user = User.objects.create(
-#             email="update@gmail.com",
-#             password="update me"
-#         )
-#         return to_update_user        
-
-#     def test_user_updates_with_valid_email_via_put(self):
-#         self.load_user_client_credentials()
-#         url = reverse('user-detail', kwargs={"pk":1}) # only one user created, thus pk=1
-#         new_data = {
-#             "email" : "newemail@gmail.com"
-#         }
-#         response = self.client.put(url, new_data)
-#         print(response.data)
-#         self.assertEqual(status.HTTP_200_OK, response.status_code)
-# test user delete 
-# test user logout
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code) 

@@ -70,18 +70,12 @@ export class AddCollectiveComponent implements OnInit {
   onSubmit(imageInput:any){
     this.submitted = true;
 
-    console.log(this.collective.value);
-    console.log("------");
-    console.log("+++++++");
-    console.log(this.f.image.value);
-
     if(this.collective.invalid){
       return;
     }
 
     if(this.isAdd){
       this.processFile(imageInput);
-      this.createCollective();
     }
     else{
       this.updateCollective();
@@ -89,9 +83,28 @@ export class AddCollectiveComponent implements OnInit {
 
   }
 
-  private createCollective(){
+  private createCollective(id: number){
+    // const formData = new FormData();
+    // formData.append('title', this.f.title.value);
+    // formData.append('start_date', this.f.start_date.value);
+    // formData.append('end_date', this.f.end_date.value);
+    // formData.append('status', this.f.status.value);
+    // formData.append('camp', this.f.camp.value);
+    // formData.append('description', this.f.description.value);
+    // formData.append('image', id);
+
+    const newProject = {
+      'title': this.f.title.value,
+      'start_date': this.f.start_date.value,
+      'end_date': this.f.end_date.value,
+      'status': this.status,
+      'camp': this.f.camp.value,
+      'description': this.f.description.value,
+      'image': id
+    };
+
     if(this.collectiveType=="project"){
-      this.service.addProject();
+      this.service.addProject(newProject);
     }
     if(this.collectiveType=="event"){
       this.service.addEvent();
@@ -115,7 +128,6 @@ export class AddCollectiveComponent implements OnInit {
 
   updateStatus(){
     let now = new Date();
-    console.log(this.f.start_date.value, this.f.end_date.value);
     if(this.f.start_date.value != null && this.f.end_date.value != null){
       if(this.f.start_date.value > now){
         this.status="Upcoming";
@@ -139,7 +151,6 @@ export class AddCollectiveComponent implements OnInit {
 
   onFileChange(imageInput:any){
     const file: File = imageInput.files[0];
-    const reader = new FileReader();
     if(!this.isFileImage(file))
       this.collective.controls["image"].setErrors({'incorrect': true});
     else{
@@ -160,17 +171,16 @@ export class AddCollectiveComponent implements OnInit {
         this.selectedFile = new ImageSnippet(event.target.result, file);
 
         this.service.uploadImage(this.fileName,file).subscribe(
-          (res) => {
+          (res:any) => {
+            this.createCollective(res.id);
+
           },
           (err) => {
-
+            console.log("Err");
           })
         });
 
         reader.readAsDataURL(file);
-      }
-      else{
-
       }
     }
 

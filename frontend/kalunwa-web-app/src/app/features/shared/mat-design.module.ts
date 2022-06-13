@@ -21,6 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 const MATERIAL = [
   MatToolbarModule,
@@ -43,7 +44,8 @@ const MATERIAL = [
   MatNativeDateModule,
   MatFormFieldModule,
   BrowserAnimationsModule,
-  BrowserModule
+  BrowserModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

@@ -83,7 +83,6 @@ export class AppPaginationComponent implements OnChanges {
   }
 
   scrollDown(){
-    let y =  document.querySelector('.event-card')?.getBoundingClientRect().top;
     window.scrollTo({top: 250, behavior: 'smooth'});
 
   }

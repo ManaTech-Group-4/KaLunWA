@@ -7,7 +7,7 @@
         </div>
 
         <div class="profile">
-            <a routerLink="/admin/admin-list">{{admin_name}}<img src="../../assets/images/person-icon.jpg" alt="person"></a>
+            <a routerLink="/admin/admin-list">{{admin_name}}<img  [src]="adminImage" onerror="this.src='../../assets/images/person-icon.jpg'" alt="person"></a>
         </div>
     </mat-toolbar-row>
 </mat-toolbar>

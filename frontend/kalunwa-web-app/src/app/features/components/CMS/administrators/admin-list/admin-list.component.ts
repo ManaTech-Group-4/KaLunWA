@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from 'src/app/admin/dialogs/confirm-dialog/confirm-dialog';
+import { Admin, Profile, ProfileReceive } from 'src/app/admin/model/user-model';
+import { AuthService } from 'src/app/admin/service/auth.service';
 
 @Component({
   selector: 'app-admin-list',
@@ -8,112 +11,15 @@ import { AdminListModel } from 'src/app/features/models/CMS/admin-list-model';
 })
 export class AdminListComponent implements OnInit {
 
-  admin_list: AdminListModel[] = [
-    {
-      id:1,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:2,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:3,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:1,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:2,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:3,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:1,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-    {
-      id:2,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_2",
-      first_name: "Juan",
-      last_name: "Dela Cruz",
-      email: "jdcruz@gmail.com",
-      role: "Admin",
-      date_added: "04/05/21",
-    },
-    {
-      id:3,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_3",
-      first_name: "Joferlyn",
-      last_name: "Robs",
-      email: "doc.joferlyn@gmail.com",
-      role: "Admin",
-      date_added: "09/12/21",
-    },
-    {
-      id:1,
-      picture: "assets/images/person-icon.jpg",
-      username: "admin_1",
-      first_name: "Jose",
-      last_name: "Rizal",
-      email: "j.riz@gmail.com",
-      role: "Super Admin",
-      date_added: "12/30/21",
-    },
-  ]
-  
-  selectedAdmin?:AdminListModel = this.admin_list[0];
+  admin_list: ProfileReceive[] = [];
+  is_superadmin: boolean;
+  adminId:number;
 
-  constructor(private ref: ChangeDetectorRef) { }
+  selectedAdmin:ProfileReceive;
+
+  constructor(private ref: ChangeDetectorRef,
+    private service: AuthService,
+    private dialog: MatDialog) { }
 
   activePage:number = 1;
   currentPage = 0;
@@ -124,7 +30,6 @@ export class AdminListComponent implements OnInit {
   }
 
   updateDisplay(newPage:number){
-    console.log(newPage,this.activePage);
     this.currentPage += (6*(newPage-this.activePage));
     if(this.currentPage < 0)
       this.currentPage = 0;
@@ -137,14 +42,58 @@ export class AdminListComponent implements OnInit {
     this.activePage = newPage;
     let y =  document.querySelector('.table-content')?.getBoundingClientRect().top;
     window.scrollTo({top: y! + window.scrollY - 80, behavior: 'smooth'});
-    console.log(this.currentPage, this.lastPage);
   }
 
   ngOnInit(): void {
+    this.getList();
+    const currentAdminSub = this.service.currentAdmin.subscribe(
+      (res: ProfileReceive)=>{
+        this.adminId = res.id;
+        this.is_superadmin = res.is_superadmin;
+        currentAdminSub.unsubscribe();
+      }
+    );
   }
 
-  displayInfo(admin:AdminListModel){
+  getList(){
+    this.service.getUsers().subscribe(
+      data => {this.admin_list = data;
+              this.selectedAdmin  = this.admin_list[0];
+            }
+    )
+  }
+
+  displayInfo(admin:ProfileReceive){
     this.selectedAdmin = admin;
+  }
+
+
+  deleteUser(id:number, name: string){
+
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      width: '250px',
+      data: `Do you like to delete the admin ${name}`,
+    });
+
+    const dialogSubscribe = dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        const deleteSub = this.service.delete(id).subscribe(
+          () => {
+            console.log('success');
+            this.getList();
+            this.updateDisplay(this.activePage);
+            deleteSub.unsubscribe();
+          },
+          (err) => {
+            console.log('err');
+            deleteSub.unsubscribe();
+          }
+        );
+      }
+      dialogSubscribe.unsubscribe();
+    });
+
+
   }
 
 }

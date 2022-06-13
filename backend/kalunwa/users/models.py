@@ -2,12 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from kalunwa.core.models import TimestampedModel
 
-# user profile
-    # first_name = models.CharField(max_length=150, blank=True) -> profile
-    # last_name = models.CharField(max_length=150, blank=True)    
-    # image = 
-    # created 
 
 class CustomAccountManager(BaseUserManager):
 
@@ -38,11 +34,14 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin): # permission for django facilities
+class User(AbstractBaseUser, PermissionsMixin, TimestampedModel): # permission for django facilities
+    first_name = models.CharField(max_length=255, blank=True, default='')
+    last_name = models.CharField(max_length=255, blank=True, default='')   
+    username = models.CharField(max_length=255, blank=True, default='')   
     email = models.EmailField(unique=True)
-    start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='images/profile-photos/', null=True, blank=True)  
 
     objects = CustomAccountManager()
     # a username field is default for login, so we override it to use the 
@@ -51,7 +50,10 @@ class User(AbstractBaseUser, PermissionsMixin): # permission for django faciliti
 #     REQUIRED_FIELDS = []    
 
     def __str__(self):
-        return self.user_name
+        return self.username
 
     def get_role(self):
         pass
+
+    def get_fullname(self):
+        return f'{self.first_name} {self.last_name}'

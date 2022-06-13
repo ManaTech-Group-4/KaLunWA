@@ -60,15 +60,6 @@ urlpatterns += [
             }, 
             ), name = 'camp-list'  
     ),
-    path('camps/<slug:slug>/', CampPageViewSet.as_view(
-            {
-                'get': 'retrieve',
-                'put': 'update',
-                'patch': 'partial_update',
-                'delete': 'destroy'
-            },
-            ), name = 'camp-detail'              
-    ),
     path('camps/<int:pk>/', CampPageViewSet.as_view(
             {
                 'get': 'retrieve',
@@ -78,5 +69,13 @@ urlpatterns += [
             },
             ), name = 'camp-detail'              
     ),
-
+    path('camps/<slug:slug>/', CampPageViewSet.as_view( 
+            {
+                'get': 'retrieve',
+                'put': 'update',
+                'patch': 'partial_update',
+                'delete': 'destroy'
+            },
+            ), name = 'camp-detail'              
+    ),
 ]

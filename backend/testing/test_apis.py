@@ -494,6 +494,7 @@ class AboutUsCampsTestCase(APITestCase):
         expected_camp_data = {
             'id': expected_camp.pk,
             'name' : expected_camp.get_name_display(),
+            'slug': expected_camp.slug,
             'description' : expected_camp.description,
             'tagline' : expected_camp.tagline,
             'image' : {
@@ -999,13 +1000,15 @@ class CampGetTestCase(APITestCase):
             image = Image.objects.create(name = 'name', image = self.image_file)
         )        
 
-        response = self.client.get(reverse('camp-detail', args=[1]))
+        response = self.client.get(reverse('camp-detail', kwargs={'pk':1}))
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         response_camp = response.data
 
         expected_camp_data = {
             'id' : expected_camp.id,
             'name': CampEnum.GENERAL.label,
+            'slug': expected_camp.slug,
             'description': expected_camp.description,
             'tagline': expected_camp.tagline,
             'image' : expected_camp.image.pk, 

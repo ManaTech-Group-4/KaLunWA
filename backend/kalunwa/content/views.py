@@ -134,7 +134,8 @@ class CampLeaderViewSet(AssignLastUpdatedBy, viewsets.ModelViewSet):
     serializer_class = CampLeaderSerializer
     queryset = CampLeader.objects.all()
     filter_backends = [CampFilter, CampLeaderPositionFilter]
-    permission_classes = [IsAuthenticatedOrReadOnly]               
+    permission_classes = [IsAuthenticatedOrReadOnly]    
+    lookup_fields = ['pk', 'slug']           
 
 
 class CampPageViewSet(AssignLastUpdatedBy, MultipleFieldLookupORMixin, viewsets.ModelViewSet): 
@@ -142,7 +143,7 @@ class CampPageViewSet(AssignLastUpdatedBy, MultipleFieldLookupORMixin, viewsets.
     serializer_class = CampPageSerializer
     filter_backends = [CampNameInFilter, QueryLimitBackend]   
     queryset = CampPage.objects.all()
-    lookup_fields = ['id', 'slug']
+    lookup_fields = ['pk', 'slug']
     permission_classes = [IsAuthenticatedOrReadOnly]      
 
 

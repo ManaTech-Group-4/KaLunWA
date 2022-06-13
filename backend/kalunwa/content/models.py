@@ -10,15 +10,17 @@ class CampEnum(models.TextChoices):
     GENERAL = 'GNRL', 'General'
     
 
-class AuthoredModel(TimestampedModel):
-    # created_by (User)
-    # last_updated_by (User)
+class AuthoredModel(TimestampedModel): 
+    """
+    Put under a class that would have its editor and time tracked.
+    """
+    last_updated_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
 
     class Meta(TimestampedModel.Meta):
         abstract=True
 
 
-class Tag(AuthoredModel):
+class Tag(TimestampedModel):
     name = models.CharField(db_index=True, unique=True, max_length=50)
     
     def __str__(self) -> str:
@@ -29,6 +31,7 @@ class Image(AuthoredModel):
     name = models.CharField(max_length=50) 
     image = models.ImageField(upload_to='images/content/')
     tags = models.ManyToManyField(Tag, related_name='images', blank=True) # blank=true allows 0 tags
+    last_updated_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, related_name='images')
 
     def __str__(self) -> str:
         return str(self.id) + '. ' + self.name
@@ -54,7 +57,7 @@ class ContentBase(AuthoredModel):
 
 
 class News(ContentBase):
-    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT, default =' ')
+    image = models.OneToOneField(Image, related_name='news', on_delete=models.PROTECT)
 
     def __str__(self) -> str:
         return self.title
@@ -108,6 +111,7 @@ class Demographics(AuthoredModel):
 
 class CampPage(AuthoredModel):
     name = models.CharField(choices=CampEnum.choices, max_length=5, unique=True)
+    slug = models.SlugField(max_length = 255, null = True, blank = True, unique=True)
     tagline = models.CharField(max_length=225)
     description = models.TextField()
     image = models.OneToOneField(Image, related_name='camp', on_delete=models.PROTECT) 
@@ -225,7 +229,7 @@ class CabinOfficer(LeaderBase):
         return f'{self.get_category_display()}'     
 
 
-class Contributor(models.Model):
+class Contributor(AuthoredModel):
     class Categories(models.TextChoices):
         SPONSOR = 'SR', 'Sponsor'
         PARTNER = 'PR', 'Partner'

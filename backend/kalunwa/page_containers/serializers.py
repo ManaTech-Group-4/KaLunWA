@@ -111,6 +111,7 @@ class PageContainerReadSerializer(FlexFieldsModelSerializer):
             'slug',          
             'created_at',
             'updated_at',
+            'last_updated_by',
         )
         read_only_fields = (
             'slug',

@@ -51,13 +51,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 #-------------------------------------------------------------------------------
 # create superuser
-superuser = User.objects.create_user(email='superadmin@gmail.com', password='admin123')     
+superuser = User.objects.create_user(email='superadmin@gmail.com', password='admin12345')     
 superuser.is_superuser=True
 superuser.is_staff=True
 superuser.save()
 print('populated superuser')
 # create normal user
-superuser = User.objects.create_user(email='admin@gmail.com', password='admin123')     
+superuser = User.objects.create_user(email='admin@gmail.com', password='admin12345')     
 superuser.save()
 print('populated normal admin user')
 #-------------------------------------------------------------------------------
@@ -85,7 +85,9 @@ print('populated org struct people')
 exec(open("dev_utils/auto_populate/auto_populate_homepage_container.py").read())
 print('created homepage container')
 #-------------------------------------------------------------------------------
+# create actual contributors
+exec(open("dev_utils/auto_populate/auto_populate_contributors.py").read())
+print('Contributors')
+#-------------------------------------------------------------------------------
 print('end of script')
-
-
 # exec(open("dev_utils/auto_populate/auto_populate_demo.py").read())

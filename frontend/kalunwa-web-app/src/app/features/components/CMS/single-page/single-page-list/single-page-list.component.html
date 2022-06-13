@@ -1,11 +1,10 @@
 <div>
     <table class="table">
         <tr class="table-header">
-            <th colspan="4">Single Pages List</th>
+            <th colspan="3">Single Pages List</th>
         </tr>
         <tr class="col-header">
             <th>Page</th>
-            <th>Status</th>
             <th>Updated By</th>
             <th>Last Updated</th>
         </tr>
@@ -16,7 +15,6 @@
             <td class="page_name" *ngIf="item.page == 'Lasang'" routerLink="/admin/cms-camp/{{item.page}}">{{item.page}}</td>
             <td class="page_name" *ngIf="item.page == 'Suba'" routerLink="/admin/cms-camp/{{item.page}}">{{item.page}}</td>
             <td class="page_name" *ngIf="item.page == 'Zero Waste'" routerLink="/admin/cms-camp/{{item.page}}">{{item.page}}</td>
-            <td>{{item.status}}</td>
             <td>{{item.updated_by}}</td>
             <td>{{item.last_updated}}</td>
         </tr>

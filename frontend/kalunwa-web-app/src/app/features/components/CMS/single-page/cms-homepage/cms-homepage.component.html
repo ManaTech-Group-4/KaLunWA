@@ -12,16 +12,21 @@
         <div *ngIf="sectionChoice =='jumbotron'">
             <div class="header">
                 <h2>Jumbotron</h2>
+                <button mat-raised-button *ngIf="slides < 5" (click)="addSlide()" color="primary"><mat-icon>add</mat-icon> Add Slide</button>
+                <button mat-raised-button *ngIf="slides == 5" disabled><mat-icon>add</mat-icon> Add Slide</button>
             </div>
             <div class="dropdown">
-                <div class="label">
-                    <p>Slide 1</p>
-                    <select id="slide1">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of jumbotron">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('slide1')"><mat-icon>delete</mat-icon></button>
-                </div>
+                <div class="slide-section" *ngFor="let i of [].constructor(slides); let index = index">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Slide {{index+1}}</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of jumbotron" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
+                    <button mat-icon-button (click)="deleteSlide()"><mat-icon>delete</mat-icon></button>
+                </div>                
             </div>
         </div>
         <div *ngIf="sectionChoice=='event'">
@@ -29,29 +34,35 @@
                 <h2>Featured Events</h2>
             </div>
             <div class="dropdown">
-                <div class="label">
-                    <p>Event 1</p>
-                    <select id="event1">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('event1')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Event 1</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
-                <div class="label">
-                    <p>Event 2</p>
-                    <select id="event2">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('event2')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Event 2</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
-                <div class="label">
-                    <p>Event 3</p>
-                    <select id="event3">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of events">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('event3')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Event 3</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of events" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
             </div>
         </div>
@@ -60,29 +71,35 @@
                 <h2>Featured Projects</h2>
             </div>
             <div class="dropdown">
-                <div class="label">
-                    <p>Project 1</p>
-                    <select id="proj1">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of projects">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('proj1')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Project 1</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
-                <div class="label">
-                    <p>Project 2</p>
-                    <select id="proj2">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of projects">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('proj2')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Project 2</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
-                <div class="label">
-                    <p>Project 3</p>
-                    <select id="proj3">
-                        <option disabled selected value> -- none selected -- </option>
-                        <option *ngFor="let item of projects">{{item.title}}</option>
-                    </select>
-                    <button mat-icon-button (click)="reset('proj3')"><mat-icon>delete</mat-icon></button>
+                <div class="slide-section">
+                    <mat-form-field appearance="fill" class="label">
+                        <mat-label>Project 3</mat-label>
+                        <mat-select>
+                            <mat-option>None</mat-option>
+                            <mat-option *ngFor="let item of projects" [value]="item.id">{{item.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button (click)="updateSlide()"><mat-icon>update</mat-icon></button>
                 </div>
             </div>
         </div>

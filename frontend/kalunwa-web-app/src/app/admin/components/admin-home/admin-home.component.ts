@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { Admin } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
 
 @Component({
@@ -50,7 +49,7 @@ export class AdminHomeComponent implements OnInit {
         .pipe(first())
         .subscribe(
             data => {
-              this.router.navigateByUrl("admin/dashboard");
+              this.router.navigateByUrl("admin/admin-list");
             },
             error => {
               this.isInvalid = true;

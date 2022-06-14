@@ -53,13 +53,6 @@ export class HomepageComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // this.homeService.getHomepage()
-    //   .subscribe((data: HomepageContainer) => {
-    //     this.events = data.page_contained_events;
-    //     this.projects = data.page_contained_projects;
-    //     console.log(this.events);
-    //     console.log(this.projects);
-    //   });
 
 
     this.homeService.getHomepage().subscribe((data: homepageInfo.HomepageContainer) => {

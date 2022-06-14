@@ -1,4 +1,4 @@
-<h1 class='no-events' *ngIf='!news || news.length < 1'>No event matched</h1>
+<h1 class='no-events' *ngIf='!news || news.length < 1'>No news available</h1>
 <mat-card class="event-card" *ngFor="let event of news | slice: currentPage:lastPage">
 
   <img mat-card-image src="{{event.image.image}}">

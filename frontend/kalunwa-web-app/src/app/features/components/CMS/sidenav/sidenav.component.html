@@ -25,10 +25,10 @@
             Collective
         </a>
     </div>
-    <a mat-list-item routerLink="/admin/newsletter" routerLinkActive="list-item-active" (click)="resetDropdown()">
+    <!-- <a mat-list-item routerLink="/admin/newsletter" routerLinkActive="list-item-active" (click)="resetDropdown()">
         <mat-icon>photo_library</mat-icon>
         Gallery
-    </a>
+    </a> -->
     <a mat-list-item routerLink="/admin/admin-list" routerLinkActive="list-item-active" (click)="resetDropdown()">
         <mat-icon>supervisor_account</mat-icon>
         Administrators
@@ -39,4 +39,5 @@
         Audit Logs
     </a>
     -->
+    <a id="logout" (click)="logout()"><mat-icon style="transform: scaleX(-1);">logout</mat-icon></a>
 </mat-nav-list>

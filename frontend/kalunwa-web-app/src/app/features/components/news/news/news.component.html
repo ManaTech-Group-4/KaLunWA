@@ -16,7 +16,7 @@
       <img src="assets/images/annoucement.png" class="speaker"/>
       <div class="announcement-header">
         <h2>{{announcement.description}}</h2>
-        <p>{{announcement.created_at}}</p>
+        <p>{{announcement.created_at |  date: 'dd/MM/yyyy'}}</p>
         <p id="content">{{announcement.meta_description}}</p>
       </div>
     </div>

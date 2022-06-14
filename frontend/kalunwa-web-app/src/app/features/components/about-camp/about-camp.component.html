@@ -13,6 +13,7 @@
   <div class="content" [style.background]="colors[group.value]">
     <h1>{{camps[group.value]?.name}}</h1>
     <p>{{camps[group.value]?.description}}</p>
+    <p class="see-more" [routerLink]="['/',campLinks[group.value]]">See More ></p>
     <div class="leader">
       <img src="{{camps[group.value]?.camp_leader?.image?.image}}"/>
       <span>

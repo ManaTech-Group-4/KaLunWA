@@ -13,7 +13,8 @@ export class AboutCampComponent implements OnInit {
 
   displayCampIndex = 0;
   camps : AboutCampModel[]=[];
-  colors = ["#D9B863","#3F6218","#1C8BD4","#88BB4E"];
+  campLinks = ['lasang', 'zero-waste', 'baybayon', 'suba']
+  colors = ["#3F6218","#88BB4E","#D9B863","#1C8BD4"];
 
 
   displayCamp: AboutCampModel = this.camps[0];

@@ -1,0 +1,25 @@
+.gallery-container{
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: calc(100vw - 260px);
+    h1{
+        font-size: 50px;
+        font-family: monserrat;
+        color: #233620;
+    }
+    .cards{
+        display: flex;
+        flex-direction: row;
+        .mat-card{
+            background-color: rgba(0, 0, 0, 0.0);
+            min-width: 15vw;
+            width: auto;
+            height: 275px;
+            padding:0;
+            margin: 10px;
+        }
+    }
+}

@@ -30,6 +30,7 @@ import { NewsletterComponent } from './features/components/CMS/newsletter/newsle
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 import { CmsCampComponent } from './features/components/CMS/single-page/cms-camp/cms-camp.component';
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
+import { CmsGalleryComponent } from './features/components/CMS/cms-gallery/cms-gallery.component';
 
 export const routes: Routes = [
   {path: '', component: VisitorLandingComponent,
@@ -64,6 +65,7 @@ export const routes: Routes = [
       {path: "collective-add-edit/:collective-type/:id", component:AddCollectiveComponent},
       {path: "newsletter", component:NewsletterComponent},
       {path: "audit", component:AuditLogsComponent},
+      {path: "gallery", component:CmsGalleryComponent},
       {path: "cms-camp/:camp-type", component:CmsCampComponent},
       {path: "admin-list", component: AdminListComponent},
     ]

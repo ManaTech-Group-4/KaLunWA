@@ -54,7 +54,7 @@ import { NewsletterComponent } from './features/components/CMS/newsletter/newsle
 import { AuditLogsComponent } from './features/components/CMS/audit-logs/audit-logs.component';
 import { CmsCampComponent } from 'src/app/features/components/CMS/single-page/cms-camp/cms-camp.component';
 import { AdminListComponent } from './features/components/CMS/administrators/admin-list/admin-list.component';
-
+import { CmsGalleryComponent } from './features/components/CMS/cms-gallery/cms-gallery.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +101,7 @@ import { AdminListComponent } from './features/components/CMS/administrators/adm
     AuditLogsComponent,
     CmsCampComponent,
     AdminListComponent,
+    CmsGalleryComponent,
   ],
   entryComponents:[
     MembersDialogComponent

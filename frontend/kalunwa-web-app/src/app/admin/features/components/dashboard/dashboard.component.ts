@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/admin/service/auth.service';
+import { AuthService } from '../../service/auth.service';
 import { DashboardModel } from 'src/app/features/models/CMS/dashboard-model';
 
 @Component({

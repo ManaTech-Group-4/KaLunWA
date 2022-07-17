@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialog } from 'src/app/admin/dialogs/confirm-dialog/confirm-dialog';
-import { Admin, Profile, ProfileReceive } from 'src/app/admin/model/user-model';
-import { AuthService } from 'src/app/admin/service/auth.service';
+import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
+import { Admin, Profile, ProfileReceive } from '../../model/user-model';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-admin-list',

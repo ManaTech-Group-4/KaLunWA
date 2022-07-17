@@ -1,15 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EventsModel } from 'src/app/features/models/events';
-import { HomepageService } from 'src/app/features/service/homepage.service';
-import { NewsService } from '../../../news/service/news.service';
-import { HomeNewsModel } from 'src/app/features/models/home-news';
 import { SinglePageListModel } from 'src/app/features/models/CMS/single-page-list-model';
-import { JumbotronModel } from 'src/app/features/models/slides-model';
 import { EventspageService } from 'src/app/features/service/eventspage.service';
-import { ProjectItemService } from '../../../projects/service/project-item.service';
+import { ProjectItemService } from '../../../../../features/components/projects/service/project-item.service';
 import { EventsResponseModel } from 'src/app/features/models/events-response-model';
-import { ProjectResponseModel } from 'src/app/features/models/project-response-model';
-import {FormGroup,FormControl} from '@angular/forms'
 @Component({
   selector: 'app-cms-homepage',
   templateUrl: './cms-homepage.component.html',
@@ -65,7 +58,7 @@ export class CmsHomepageComponent implements OnInit {
   updateSlide(){
     alert("slide updated");
   }
-  
+
   deleteSlide(){
     if (this.slides>1){
       this.slides--;

@@ -67,8 +67,6 @@ export class EditProfileComponent implements OnInit {
 
   get form2() { return this.updatePass.controls;}
 
-
-
   onSubmitDetails(imageInput:any){
     // stop here if form is invalid
     if (!this.f.email.valid) {
@@ -84,15 +82,15 @@ export class EditProfileComponent implements OnInit {
     newAdmin.append('first_name',this.f.first_name.value);
     newAdmin.append('last_name',this.f.last_name.value);
     newAdmin.append('username',this.f.username.value);
-    if(this.isNewImage)
-    newAdmin.append('image',file);
-    newAdmin.append('email',this.f.email.value);
 
-
+    if(this.isNewImage) {
+      newAdmin.append('image',file);
+      newAdmin.append('email',this.f.email.value);
+    }
 
     const editSubscribe = this.service.updateUser(newAdmin, this.userId)
-    .pipe(first())
-    .subscribe(
+      .pipe(first())
+      .subscribe(
         () => {
           this.router.navigateByUrl("admin/admin-list");
           editSubscribe.unsubscribe();
@@ -105,8 +103,6 @@ export class EditProfileComponent implements OnInit {
           this.profile.controls["email"].setErrors({'incorrect': true});
           editSubscribe.unsubscribe();
         });
-
-
   }
 
   OnChangePass(){

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProfileReceive } from 'src/app/admin/model/user-model';
-import { AuthService } from 'src/app/admin/service/auth.service';
+import { ProfileReceive } from '../../model/user-model';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-header',

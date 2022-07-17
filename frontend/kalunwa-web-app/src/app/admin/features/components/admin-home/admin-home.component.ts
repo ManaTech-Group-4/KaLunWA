@@ -39,24 +39,24 @@ export class AdminHomeComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.loginForm.invalid) {
-        return;
+      return;
     }
     this.loginForm.disable();
 
     this.isInvalid = false;
     this.loading = true;
     this.authService.login(this.f.email.value, this.f.password.value)
-        .pipe(first())
-        .subscribe(
-            data => {
-              this.router.navigateByUrl("admin/admin-list");
-            },
-            error => {
-              this.isInvalid = true;
-              console.log(this.isInvalid);
-              this.loading = false;
-              this.loginForm.enable();
-            });
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.router.navigateByUrl("admin/admin-list");
+        },
+        error => {
+          this.isInvalid = true;
+          console.log(this.isInvalid);
+          this.loading = false;
+          this.loginForm.enable();
+        });
   }
 
   getErrorMessage(field: string): string {

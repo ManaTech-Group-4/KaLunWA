@@ -1,13 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
-import { Profile } from '../../model/user-model';
 import { AuthService } from '../../service/auth.service';
-import { CollectivePagesService } from '../../service/collective-pages.service';
 import { CustomValidators } from '../../shared/customValidation';
 
 @Component({
@@ -104,21 +100,17 @@ export class AddProfileComponent implements OnInit {
 
   }
 
-
   onFileChange(imageInput:any){
     const reader = new FileReader();
     const file: File = imageInput.target.files[0];
-
     if(!this.isFileImage(file)){
       this.profile.controls["image"].setErrors({'incorrect': true});
       return;
     }
-    else{
-      this.profile.controls["image"].setErrors(null);
 
-      this.filename = file.name;
+    this.profile.controls["image"].setErrors(null);
+    this.filename = file.name;
 
-    }
     if(imageInput.target.files && imageInput.target.files[0]){
       // File Preview
       reader.readAsDataURL(file);

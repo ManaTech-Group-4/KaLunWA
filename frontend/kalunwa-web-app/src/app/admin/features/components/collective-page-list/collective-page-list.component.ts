@@ -1,8 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ConfirmDialog } from '../../dialogs/confirm-dialog/confirm-dialog';
 import { CollectivePageModel } from '../../model/collective-page-model';
 import { CollectivePagesService } from '../../service/collective-pages.service';
@@ -26,7 +24,7 @@ export class CollectivePageListComponent implements OnInit {
   lastPage = 4;
   selected="project";
 
-  constructor(private service:CollectivePagesService,
+  constructor(private service: CollectivePagesService,
     private ref: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar) { }

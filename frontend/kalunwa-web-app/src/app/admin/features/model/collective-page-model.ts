@@ -1,4 +1,4 @@
-export class CollectivePageModel {
+export interface CollectivePageModel extends test {
   id: number;
   title: string;
   created_at: string;
@@ -7,3 +7,6 @@ export class CollectivePageModel {
   checked: boolean;
 }
 
+export interface test {
+  test: string
+}

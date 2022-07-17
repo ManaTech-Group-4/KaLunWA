@@ -38,20 +38,20 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatListModule} from '@angular/material/list';
-import { DashboardComponent } from './features/components/CMS/dashboard/dashboard.component';
-import { HeaderComponent } from './features/components/CMS/header/header.component';
-import { SidenavComponent } from './features/components/CMS/sidenav/sidenav.component';
+import { DashboardComponent } from './admin/features/components/dashboard/dashboard.component';
+import { HeaderComponent } from './admin/features/components/header/header.component';
+import { SidenavComponent } from './admin/features/components/sidenav/sidenav.component';
 import { AppPaginationComponent } from './features/components/app-pagination/app-pagination.component';
-import { SinglePageListComponent } from './features/components/CMS/single-page/single-page-list/single-page-list.component';
-import { AdminHomeComponent } from './admin/components/admin-home/admin-home.component';
+import { SinglePageListComponent } from './admin/features/components/single-page/single-page-list/single-page-list.component';
+import { AdminHomeComponent } from './admin/features/components/admin-home/admin-home.component';
 import { VisitorLandingComponent } from './features/components/visitor-landing/visitor-landing.component';
-import { CmsHomepageComponent } from './features/components/CMS/single-page/cms-homepage/cms-homepage.component';
-import { CmsOrgStructComponent } from 'src/app/features/components/CMS/single-page/cms-org-struct/cms-org-struct.component';
-import { AdminTemplateComponent } from './admin/components/admin-template/admin-template.component';
-import { CollectivePageListComponent } from './admin/components/collective-page-list/collective-page-list.component';
-import { AddCollectiveComponent } from './admin/components/add-collective/add-collective.component';
-import { EditCollectiveComponent } from './admin/components/edit-collective/edit-collective.component';
-import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
+import { CmsHomepageComponent } from './admin/features/components/single-page/cms-homepage/cms-homepage.component';
+import { CmsOrgStructComponent } from './admin/features/components/single-page/cms-org-struct/cms-org-struct.component';
+import { AdminTemplateComponent } from './admin/features/components/admin-template/admin-template.component';
+import { CollectivePageListComponent } from './admin/features/components/collective-page-list/collective-page-list.component';
+import { AddCollectiveComponent } from './admin/features/components/add-collective/add-collective.component';
+import { EditCollectiveComponent } from './admin/features/components/edit-collective/edit-collective.component';
+import { ConfirmDialog } from './admin/features/dialogs/confirm-dialog/confirm-dialog';
 
 @NgModule({
   declarations: [
@@ -60,7 +60,6 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     JumbotronComponent,
     FooterComponent,
     AboutCampComponent,
-    routeComponents,
     OrgStructureComponent,
     MembersDialogComponent,
     IndiEventComponent,
@@ -95,16 +94,17 @@ import { ConfirmDialog } from './admin/dialogs/confirm-dialog/confirm-dialog';
     CollectivePageListComponent,
     AddCollectiveComponent,
     EditCollectiveComponent,
-    ConfirmDialog
+    ConfirmDialog,
+    routeComponents
   ],
   entryComponents:[
     MembersDialogComponent
   ],
   imports: [
+    MatDesignModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatDesignModule,
     HttpClientModule,
     MatCarouselModule.forRoot(),
     ReactiveFormsModule,
